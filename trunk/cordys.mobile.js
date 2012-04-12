@@ -7,9 +7,9 @@ if (!$.cordys) $.cordys = {};
 function getURLParameter(url, name) {
 	return (url.search.search( new RegExp("[\?\&]"+name+"=([^\&]*)") ) >= 0) ? RegExp.$1 : "";
 }
-function addURLParameter(url, name, value, skipEncode) {
+function addURLParameter(url, name, value) {
 	var parSeparator = url.indexOf("?") < 0 ? "?" : "&";
-	url = url + parSeparator + name + "=" + (skipEncode ? value : encodeURIComponent(value));
+	url = url + parSeparator + name + "=" + encodeURIComponent(value);
 	return url;
 }
 function getCookie(cookieName)
@@ -27,7 +27,12 @@ function deleteAllCookies()
 }
 
 function loginIntoCordys() {
-	$.mobile.changePage( "/cordys/html5/login.htm", { transition: "pop", changeHash: false } );
+	if ($.mobile) {
+		$.mobile.changePage( "/cordys/html5/login.htm", { transition: "pop", changeHash: false } );
+	}
+	else {
+		// open login differently, using showDialog?
+	}
 }
 
 function loadScript(url, callback, async, cache) {
