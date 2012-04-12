@@ -2,10 +2,32 @@
 
 	if (!$.cordys) $.cordys = {};
 
+	$.ajaxSetup({
+		converters: {
+			"xml json": function( data ) {
+				if (!$.xml2json) loadScript("/cordys/html5/jquery/jquery.xml2json.js");
+				return $.xml2json($(data).find("Body").children()[0]);
+			}
+		}
+	});
+
 	$.cordys.ajax = function(options) {
 		var opts = $.extend({}, $.cordys.ajax.defaults, options);
 		opts.url = configureGatewayUrl(opts.url, options);
 		if (!opts.url) return null;
+		opts.dataFilter = function(data) {
+			// Remove the null and nil attributes on empty nodes, otherwise xml2json converts it into an object
+			$(data).find("[null]").each(function() {
+				var attributes = $.map(this.attributes, function(item) {
+					return item.name;
+				});
+				var $this = $(this);
+				$.each(attributes, function(i, item) {
+					$this.removeAttr(item);
+				});
+			});
+			return data;
+		};
 		if (!opts.data) {
 			opts.data = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body>" +
 				"<" + opts.method + " xmlns='" + opts.namespace + "'>";
