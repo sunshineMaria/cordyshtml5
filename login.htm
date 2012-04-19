@@ -32,10 +32,17 @@
 		<script type="text/javascript">
 			var __cordysSAMLArtCookieName, __cordysCheckName;
 
-			$("#loginDialog").on('pageinit', function() {
-				prelogin();
-				$("#btnLogin").bind("click", login);
-			});
+			$("#loginDialog")
+				.on('pageinit', function() {
+					prelogin();
+					$("#btnLogin").bind("click", login);
+					$("#inputName").focus();
+				})
+				.keydown(function (event) {
+					if (event.keyCode == 13) { // Enter
+						$("#btnLogin").trigger("click");
+					}
+				});
 			function prelogin() {
 				deleteAllCookies();
 				$.ajax({

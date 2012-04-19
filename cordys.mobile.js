@@ -47,3 +47,4 @@ function loadScript(url, callback, async, cache) {
 };
 
 loadScript("/cordys/html5/src/cordys.ajax.js");
+loadScript("/cordys/html5/src/cordys.model.js");
