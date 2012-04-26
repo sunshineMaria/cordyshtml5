@@ -26,9 +26,10 @@ function deleteAllCookies()
 	}
 }
 
+var cordysLoginUrl = "/cordys/html5/login.htm";
 function loginIntoCordys() {
 	if ($.mobile) {
-		$.mobile.changePage( "/cordys/html5/login.htm", { transition: "pop", changeHash: false } );
+		$.mobile.changePage( cordysLoginUrl, { transition: "pop", changeHash: false } );
 	}
 	else {
 		// open login differently, using showDialog?
