@@ -1,4 +1,19 @@
-﻿;(function (window, $, undefined) {
+﻿/**
+ * Copyright (c) 2012 Cordys
+ * Author: Piet Kruysse
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+;(function (window, $, undefined) {
 
 	if (!$.cordys) $.cordys = {};
 	if (!$.cordys.ajax) loadScript("/cordys/html5/src/cordys.ajax.js");
@@ -9,68 +24,39 @@
 		if (typeof(ko) !== "undefined") {
 			this[this.objectName] = ko.observableArray();
 			this.selectedItem = ko.observable();
-		}
-		else {
+		} else {
 			this[this.objectName] = [];
 		}
 
 		this.readSettings = {
-		//	_success : settings.read.success,
 			success : function(data) {
-				self[self.objectName] = (typeof(ko) !== "undefined") ? ko.observableArray() : [];
-			debugger;
 				var objects = getObjects(data, self.objectName);
-				for (var i=0; i<objects.length; i++) {
-					self[self.objectName].push(objects[i]);
-				}
-				if (typeof(self[self.objectName]) == "function") {
-					if (settings.read.success) settings.read.success(self[self.objectName]());
-				}
-				else {
-					if (settings.read.success) settings.read.success(self[self.objectName]);
-				}
-
-			return;
-				if (data.tuple) data = data.tuple;
-				//var dataObjects = $(data).find(self.objectName);
-				if (typeof(ko) !== "undefined") {
-					if ($.isArray(data)) {
-						for (var i=0; i<data.length; i++) {
-							self[self.objectName].push(data[i][self.objectName] || data[i].old[self.objectName]);
-						}
+				if (typeof(self[self.objectName]) === "function") { // in case of knockout
+					self[self.objectName](objects);
+					if (settings.read.success) {
+						settings.read.success(self[self.objectName]());
 					}
-					else {
-						if (data) self[self.objectName].push(data[self.objectName] || data.old[self.objectName]);
+				} else {
+					self[self.objectName] = objects;
+					if (settings.read.success) {
+						settings.read.success(self[self.objectName]);
 					}
-					if (settings.read.success) settings.read.success(self[self.objectName]());
-				}
-				else {
-					if ($.isArray(data)) {
-						self[self.objectName] = $.map(data, function(tuple, index) {
-							return tuple.old[self.objectName];
-						});
-					}
-					else {
-						if (data) self[self.objectName] = [data.old[self.objectName]];
-					}
-					if (settings.read.success) settings.read.success(self[self.objectName]);
 				}
 			}
 		}
-	//	settings.read.success = this.settings.success;
-
+		// Do the same for createSettings/updateSettings/deleteSettings
 
 		this.create = function(createSettings) {
-			$.cordys.ajax($.extend({}, settings.defaults, settings.create, this.createSettings, createSettings))
+			$.cordys.ajax($.extend({}, settings.defaults, settings.create, self.createSettings, createSettings))
 		};
 		this.read = function(readSettings) { 
-			$.cordys.ajax($.extend({}, settings.defaults, settings.read, this.readSettings, readSettings))
+			$.cordys.ajax($.extend({}, settings.defaults, settings.read, self.readSettings, readSettings))
 		};
 		this.update = function(updateSettings) { 
-			$.cordys.ajax($.extend({}, settings.defaults, settings.update, this.updateSettings, updateSettings))
+			$.cordys.ajax($.extend({}, settings.defaults, settings.update, self.updateSettings, updateSettings))
 		};
 		this['delete'] = function(deleteSettings) {
-			$.cordys.ajax($.extend({}, settings.defaults, settings['delete'], this.deleteSettings, deleteSettings))
+			$.cordys.ajax($.extend({}, settings.defaults, settings['delete'], self.deleteSettings, deleteSettings))
 		};
 	};
 
@@ -119,33 +105,4 @@
 		return result;
 	};
 
-/*
-Example usage:
-	var empModel = new $.cordys.model({
-		objectName: 'Employees',
-		defaults: {
-			namespace: "http://schemas.cordys.com/NW",
-			dataType: 'json'
-		},
-		create: {},
-		read: {
-			method: "GetEmployeesObjects",
-			namespace: "http://schemas.cordys.com/NW",
-			parameters: [
-				{name: "fromEmployeeID", value: "0"},
-				{name: "toEmployeeID", value: "99"}
-			],
-			dataType: 'json',	// the xml result will be converted into js objects
-			success: function(data) {
-				var html = $("#employeeTemplate").render(data);
-				$('#employeeList')
-					.html(html)
-					.listview("refresh");
-			}
-		},
-		update: {},
-		'delete': {}
-	});
-
-*/
 })(window, jQuery)

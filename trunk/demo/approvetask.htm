@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>Worklist</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"/> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js" type="text/javascript"></script>
+	
+	<script src="/cordys/html5/knockout/knockout-2.0.0.js" type="text/javascript"></script>	
+	<script src="/cordys/html5/cordys.mobile.js" type="text/javascript"></script>
+
+</head> 
+
+<body> 
+
+	<div data-role="page" id="approvePage">
+		<div data-role="header" data-theme="b">
+			<a id="btnBack" href="#mainPage" data-role="button" data-icon="back">Back</a>
+			<h1>Approve</h1>
+		</div>
+
+		<div data-role="content" data-theme="b">
+			<ul data-role="listview" data-inset="true" id="detailView" data-bind="foreach: Task">
+				<li data-role="heading" data-theme="c" data-mini="true">
+					<div>
+						<a class="ui-link-inherit">
+							<h3 class="ui-li-heading"><span data-bind="text:TaskData.ApplicationData.ApproveTask.header">Approve Task</span></h3>
+						</a>
+					</div>
+				</li>
+				<li data-role="fieldcontain" data-mini="true">
+					<div data-bind="foreach: $root.fields">
+						<div >
+							<label for="fldName" class="ui-input-text" data-bind="text:label">Name</label>
+							<input type="text" readonly='true' id="fldName" data-bind="value:value" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+					</div>
+				</li>
+				<li data-role="fieldcontain" data-mini="true">
+					<div data-role="controlgroup" data-type="horizontal" data-theme="d" data-bind="foreach: TaskData.ApplicationData.ApproveTask.options.option">
+						<a data-role="button" data-theme="c" data-bind="click:completeTask"><span data-bind="text:label"></span></a>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+<script type="text/javascript">
+	var taskDetailModel, prevPage;
+	$("#approvePage").bind( 'pageshow',function(event, ui) {
+//	debugger;
+		//if (taskModel) taskModel.read();
+		if (taskModel && taskModel.selectedItem()) {
+			taskDetailModel.read({parameters:[
+				{name:"TaskId", value:taskModel.selectedItem().TaskId},
+				{name:"ReturnTaskData ", value:"true"}
+			]});
+		}
+	});
+	$("#approvePage").on( 'pageinit',function(event, ui) {
+			taskDetailModel = new $.cordys.model({
+				objectName: "Task",
+				defaults: {
+					namespace: "http://schemas.cordys.com/notification/workflow/1.0",
+					dataType: "json"
+				},
+				create: {},
+				read: {
+					method: "GetTask",
+					success: function(data) {
+						$.cordys.ajax({
+							method: "GetBusinessIdentifierValues",
+							namespace: "http://schemas.cordys.com/pim/queryinstancedata/1.0",
+							dataType: 'json',
+							parameters: [
+								{name:"processInstanceID",value:taskDetailModel.Task()[0].ProcessInstanceId}
+							],
+							success: function(data) {
+								var identifiers = data.tuple.sort(function(a, b) {
+									return parseInt(a.old.BusinessIdentifier.Sequence) > parseInt(b.old.BusinessIdentifier.Sequence);
+								});
+								taskDetailModel.fields([]);
+								$.each(identifiers, function(index, value) {
+									taskDetailModel.fields.push({label:this.old.BusinessIdentifier.Description,value:this.old.BusinessIdentifier.Value});
+								})
+							}
+						});
+//						taskDetailModel.fields([]);
+//						var taskData = data[0].TaskData.ApplicationData.ApproveTask;
+//						if (taskData.fields && taskData.fields.field && taskData.fields.field.length > 0) {
+//							for (var i=0; i<taskData.fields.field.length; i++) {
+//								taskDetailModel.fields.push(taskData.fields.field[i]);
+//							}
+//						} else {
+//							var inputMsg = taskData.inputMessage;
+//							for (var i in inputMsg) {
+//								if (i != "xmlns" && typeof(inputMsg[i]) == "object") {
+//									taskDetailModel.fields.push({label:i,value:inputMsg[i]});
+//								}
+//							}
+//						}
+					}
+				}
+			});
+			taskDetailModel.fields = ko.observableArray();
+			ko.applyBindings(taskDetailModel, document.getElementById("approvePage"));
+	});
+	function completeTask(btnData) {
+		$.cordys.ajax({
+			method: "PerformTaskAction",
+			namespace: "http://schemas.cordys.com/notification/workflow/1.0",
+			dataType: 'json',
+			parameters: [
+				{name:"TaskId",value:taskDetailModel.Task()[0].TaskId},
+				{name:"Action",value:"COMPLETE"},
+				{name:"Data",value:function(){return("<ApproveTask_ApproveTaskDefaultDeliveryModel_OP xmlns='http://schemas.cordys.com/approve'><response>"+btnData.value+"</response></ApproveTask_ApproveTaskDefaultDeliveryModel_OP>")}}
+			]
+		});
+		$("#btnBack").click();
+	}
+</script>
+	</div>
+
+</body>
+</html>

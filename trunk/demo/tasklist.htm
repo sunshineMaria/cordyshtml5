@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html> 
 <html> 
 	<head> 
-	<title>Worklist</title> 
+	<title>Tasklist</title> 
 	<meta name="viewport" content="width=device-width, initial-scale=1"/> 
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
@@ -22,15 +22,57 @@
 				create: {},
 				read: {
 					method: "GetTasks",
-					iteratorSize: 50
+					parameters: [
+						{name:"OrderBy",value:"Task.StartDate DESC"}
+					]
 				}
 			});
+			ko.bindingHandlers.date = { 
+				update: function(element, valueAccessor) { 
+					ko.utils.unwrapObservable(valueAccessor()); //just to create a dependency
+					var dt = getDateFromXML(valueAccessor());
+					if (dt) $(element).text(dt.toDateString() + " " + dt.toLocaleTimeString()); 
+				}
+			};
 			ko.applyBindings(taskModel);
 			taskModel.read();
 		});
+		var re_longDT = new RegExp("^(\\d{4})\-(\\d{2})\-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})[.]?(\\d{0,9})(\\d*)?([Z+\-].*)?$");
+		function getDateFromXML(XMLValue)
+		{
+			// Parse the xmlvalue and create a date object with the right values
+			var found = XMLValue.search(re_longDT);
+			var dObject;
+			if (found >= 0)
+			{
+				dObject = new Date(RegExp.$2+"/"+RegExp.$3+"/"+RegExp.$1+" "+RegExp.$4+":"+RegExp.$5+":"+RegExp.$6+" +000")
+			}
+			return dObject;
+		}
 		function selectTask() {
 			return function(data) {
 				if (taskModel.selectedItem) taskModel.selectedItem(data);
+
+				var taskDetails = $.cordys.ajax({
+						method: "GetTask",
+						namespace: "http://schemas.cordys.com/notification/workflow/1.0",
+						dataType: 'json',
+						parameters: [
+							{name:"TaskId",value:taskModel.selectedItem().TaskId},
+							{name:"ReturnTaskData",value:"true"},
+							{name:"RetrievePossibleActions",value:"true"}
+						],
+						success: function(data) {
+							var url = data.tuple.old.Task.url;
+							if (url.search(/\.htm$/) > 0) {
+								url = addURLParameter(url, "taskId", data.tuple.old.Task.TaskId);
+								$.mobile.changePage( url, { transition: "pop", changeHash: false } );
+							}
+							else {
+								$.mobile.changePage( "#detailsPage", { transition: "pop", changeHash: false } );
+							}
+						}
+					});
 			}
 		}
 	</script>
@@ -43,6 +85,7 @@
 		<div data-role="header" data-theme="b">
 			<a href="http://www.cordys.com" data-icon="back">Cordys</a>
 			<h1>Tasklist</h1>
+			<a href="#" data-icon="refresh"data-role="button" onclick="taskModel.read()">Refresh</a>
 		</div>
 
 		<div data-role="content" data-theme="b">
@@ -54,9 +97,9 @@
 			<ul id="workList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
 				<li>
 					<div >
-						<a href="#detailsPage" data-transition="pop" class="ui-link-inherit" data-bind="click:selectTask($data)">
-							<h3 class="ui-li-heading" data-bind="text:Activity">{{:Activity}}</h3>
-							<p class="ui-li-desc"><span data-bind="text:StartDate"></span>&nbsp;<span data-bind="text:State"></p>
+						<a href="#" data-transition="pop" class="ui-link-inherit" data-bind="click:selectTask($data)">
+							<h3 class="ui-li-heading" data-bind="text:Activity">Activity</h3>
+							<p class="ui-li-desc"><span data-bind="date:StartDate"></span>&nbsp;<span data-bind="text:State"></p>
 						</a>
 					</div>
 				</li>
@@ -66,19 +109,19 @@
 
 	<div data-role="page" id="detailsPage">
 		<div data-role="header" data-theme="b">
-			<a href="#mainPage" data-role="button" data-icon="back" data-rel="back">Back to Tasklist</a>
+			<a href="#mainPage" data-role="button" data-icon="back" data-rel="back">Tasklist</a>
 			<h1>Task</h1>
 		</div>
 		<div data-role="content" data-theme="b">
 			<ul data-role="listview" data-inset="true" id="detailView">
-				<li data-role="heading" data-theme="c">
+				<li data-role="heading" data-theme="c" data-mini="true">
 					<div data-bind="with: selectedItem">
 						<a class="ui-link-inherit">
 							<h3 class="ui-li-heading"><span data-bind="text:Activity"></span></h3>
 						</a>
 					</div>
 				</li>
-				<li data-role="fieldcontain">
+				<li data-role="fieldcontain" data-mini="true">
 					<div data-bind="with: selectedItem">
 						<div >
 							<label for="fldProcess" class="ui-input-text">Process</label>
@@ -122,10 +165,12 @@
 				dataType: 'json',
 				parameters: [
 					{name:"TaskId",value:taskModel.selectedItem().TaskId},
+					{name:"ReturnTaskData",value:"true"},
 					{name:"RetrievePossibleActions",value:"true"}
 				],
 				success: function(data) {
-					debugger;
+				//	debugger;
+				//	alert("task: " + JSON.stringify(data.tuple.old.Task.TaskData));
 				}
 			});
 	});
