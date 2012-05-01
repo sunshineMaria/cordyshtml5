@@ -90,7 +90,7 @@
 					type:"POST",
 					data:requestString,
 					success:function (data) {
-						var artifact = $(data).find("AssertionArtifact").text();
+						var artifact = $(data).find("AssertionArtifact, samlp\\:AssertionArtifact").text();
 						if (!artifact) {
 							alert("Invalid username and/or password !");
 							$("#inputName").focus();

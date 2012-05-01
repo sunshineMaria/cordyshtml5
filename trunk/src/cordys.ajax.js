@@ -21,7 +21,7 @@
 		converters: {
 			"xml json": function( data ) {
 				if (!$.xml2json) loadScript("/cordys/html5/jquery/jquery.xml2json.js");
-				return $.xml2json($(data).find("Body").children()[0]);
+				return $.xml2json($(data).find("Body, SOAP\\:Body").children()[0]);
 			}
 		}
 	});
