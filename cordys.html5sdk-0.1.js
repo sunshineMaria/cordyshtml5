@@ -33,7 +33,8 @@ function loginIntoCordys(loginUrl) {
 	}
 	else {
 		loginUrl = loginUrl || "/cordys/html5/login.htm";
-		// open login differently, using showDialog?
+		window.showModalDialog(loginUrl);
+		window.location.reload();
 	}
 }
 
