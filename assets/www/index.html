@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Cordys</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--link rel="stylesheet" href="css/jquery.mobile-1.1.0.min.css"-->
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+	<header class="block header actionbar">
+		<div class="title icon back">
+			<h1 class="icon cordys ir">Cordys</h1>
+		</div>
+		<ul class="menu">
+			<li><button title="Add" class="icon add"
+					data-bind="click: ui.addServerDialog.show"></button></li>
+			<li><button title="Settings" class="icon settings"></button></li>
+		</ul>
+	</header>
+
+	<div class="block content">
+		<ul class="block list normal" data-bind="foreach: servers.data">
+			<li class="block">
+				<a data-bind="text: location, event: { longpress: $root.ui.serverList.longPress, click: $root.ui.serverList.startServer } "></a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="dialog hidden add-server"
+		data-bind="with: ui.addServerDialog.getExtension().data">
+		
+		<header class="title">
+			<h1>Add a new server</h1>
+		</header>
+		
+		<form data-bind="submit: $root.ui.addServerDialog.getExtension().add">
+			<label for="addserver-location"> Location:  </label>
+			<input id="addserver-location" data-bind="value: location"> 
+				
+			<label for="addserver-organization"> Organization: </label> 
+			<input id="addserver-organization" data-bind="value: organization">
+			
+			<label for="addserver-username"> Username: </label> 
+			<input id="addserver-username" data-bind="value: username"> 
+				
+			<label for="addserver-password"> Password: </label> 
+			<input id="addserver-password" type="password" 
+				data-bind="value: password">
+
+			<ul class="actions block list title">
+				<li><input type="button" value="Cancel" 
+					data-bind="click: $root.ui.addServerDialog.close"></li>
+				<li><input type="submit" value="Add"></li>
+			</ul>
+		</form>
+	</div>
+
+	<div class="dialog hidden edit-server"
+		data-bind="with: ui.serverList.selected">
+		<form>
+			<header class="title">
+				<h1>Edit a server</h1>
+				<button title="delete" class="icon delete"
+					data-bind="click: $root.ui.confirmDelete.show"></button>
+			</header>
+
+			<label for="editserver-location"> Location: </label> 
+			<input id="editserver-location" data-bind="value: location"> 
+			
+			<label for="editserver-organization"> Organization: </label>
+			<input id="editserver-organization" data-bind="value: organization"> 
+			
+			<label for="editserver-username"> Username: </label> 
+			<input id="editserver-username" data-bind="value: username"> 
+			
+			<label for="editserver-password"> Password: </label> 
+			<input id="editserver-password" type="password" 
+				data-bind="value: password">
+
+			<ul class="actions block list title">
+				<li><input type="button" value="Ok"
+					data-bind="click: $root.ui.editServerDialog.close"></li>
+			</ul>
+		</form>
+	</div>
+
+	<div class="dialog hidden tasks">
+		<iframe></iframe>
+	</div>
+
+	<div class="dialog hidden confirm-delete"
+		data-bind="with: ui.confirmDelete">
+		<form data-bind="submit: getExtension().delete">
+			<header class="title">
+				<h1>Are you sure you want to delete this server?</h1>
+			</header>
+
+			<dl data-bind="with: $root.ui.serverList.selected">
+				<dt>Location:</dt><dd data-bind="text: location"></dd>
+				<dt>Organization:</dt><dd data-bind="text: organization"></dd>
+				<dt>Username:</dt><dd data-bind="text: username"></dd>
+			</dl>
+
+			<ul class="actions block list title">
+				<li><input type="button" value="No" data-bind="click: close" class="no"></li>
+				<li><input type="submit" value="Yes" class="yes"></li>
+			</ul>
+		</form>
+	</div>
+
+	<div class="mask hidden"></div>
+
+	<script src="js/jquery-1.7.2.js"></script>
+	<script src="js/jquery.mobile-1.1.0.js"></script>
+	<script>
+		$.mobile.ajaxEnabled = false;
+		$.mobile.autoInitializePage = false;
+		$.mobile.hashListeningEnabled = false;
+		$.mobile.linkBindingEnabledv = false;
+		$.mobile.pushStateEnabled = false;
+
+		var DEBUG = true;
+	</script>
+
+	<script src="js/jquery.cookie.js"></script>
+	<script src="js/sha1.js"></script>
+	<script src="js/jquery.xml2json.js"></script>
+	<script src="js/cordys.html5sdk-0.1.js"></script>
+	<script src="js/cordys.ajax.js"></script>
+
+	<script src="js/cordova-1.7.0rc1.js"></script>
+	<script src="js/webintent.js"></script>
+
+	<script src="js/knockout-2.0.0.debug.js"></script>
+	<script src="js/knockout.mapping-latest.debug.js"></script>
+
+	<script src="js/plugins.js"></script>
+	<script src="js/index.js"></script>
+</body>
+</html>
