@@ -74,7 +74,7 @@
 				console.log(e, e.error());
 				var $response = $(e.error().responseXML);
 				var messCode = $response.find("MessageCode").text();
-				if (messCode.search(/Cordys.*AccessDenied/)>=0) {
+				if (messCode.search(/Cordys.*(AccessDenied|Artifact_Unbound)/)>=0) {
 					loginIntoCordys();
 				} else {
 					var err = $(e.error().responseXML).find("faultstring,error elem").text()
@@ -103,13 +103,15 @@
 		if (org) {
 			url = addURLParameter(url, "organization", org);
 		}
-		var samlArt = getCookie("\\w*_ct");
-		if (samlArt) {
-			url = addURLParameter(url, RegExp.$1, samlArt);
-		}
-		else {
-			loginIntoCordys(options.loginUrl);
-			return "";
+		var ctCookie = getCookie("\\w*_ct"); // cookie name can be different, when property gateway.csrf.cookiename is set
+		if (ctCookie) {
+			url = addURLParameter(url, RegExp.$1, ctCookie);
+		} else {
+			var saCookie = getCookie("\\w*_SAMLart");
+			if (!saCookie) {
+				loginIntoCordys(options.loginUrl);
+				return "";
+			}
 		}
 		return url;
 	}
