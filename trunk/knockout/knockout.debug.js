@@ -2960,4 +2960,484 @@ ko.exportSymbol('templateRewriting.applyMemoizedBindingsToNextSibling', ko.templ
                     var renderedNodesArray = executeTemplate(targetNodeOrNodeArray, renderMode, templateName, bindingContext, options);
                     if (renderMode == "replaceNode") {
                         targetNodeOrNodeArray = renderedNodesArray;
-                        firstTargetNode = getFirstNodeFromPossibleArr
+                        firstTargetNode = getFirstNodeFromPossibleArray(targetNodeOrNodeArray);
+                    }
+                },
+                null,
+                { 'disposeWhen': whenToDispose, 'disposeWhenNodeIsRemoved': activelyDisposeWhenNodeIsRemoved }
+            );
+        } else {
+            // We don't yet have a DOM node to evaluate, so use a memo and render the template later when there is a DOM node
+            return ko.memoization.memoize(function (domNode) {
+                ko.renderTemplate(template, dataOrBindingContext, options, domNode, "replaceNode");
+            });
+        }
+    };
+
+    ko.renderTemplateForEach = function (template, arrayOrObservableArray, options, targetNode, parentBindingContext) {
+        // Since setDomNodeChildrenFromArrayMapping always calls executeTemplateForArrayItem and then
+        // activateBindingsCallback for added items, we can store the binding context in the former to use in the latter.
+        var arrayItemContext;
+
+        // This will be called by setDomNodeChildrenFromArrayMapping to get the nodes to add to targetNode
+        var executeTemplateForArrayItem = function (arrayValue, index) {
+            // Support selecting template as a function of the data being rendered
+            var templateName = typeof(template) == 'function' ? template(arrayValue) : template;
+            arrayItemContext = parentBindingContext['createChildContext'](ko.utils.unwrapObservable(arrayValue));
+            arrayItemContext['$index'] = index;
+            return executeTemplate(null, "ignoreTargetNode", templateName, arrayItemContext, options);
+        }
+
+        // This will be called whenever setDomNodeChildrenFromArrayMapping has added nodes to targetNode
+        var activateBindingsCallback = function(arrayValue, addedNodesArray, index) {
+            activateBindingsOnContinuousNodeArray(addedNodesArray, arrayItemContext);
+            if (options['afterRender'])
+                options['afterRender'](addedNodesArray, arrayValue);
+        };
+
+        return ko.dependentObservable(function () {
+            var unwrappedArray = ko.utils.unwrapObservable(arrayOrObservableArray) || [];
+            if (typeof unwrappedArray.length == "undefined") // Coerce single value into array
+                unwrappedArray = [unwrappedArray];
+
+            // Filter out any entries marked as destroyed
+            var filteredArray = ko.utils.arrayFilter(unwrappedArray, function(item) {
+                return options['includeDestroyed'] || item === undefined || item === null || !ko.utils.unwrapObservable(item['_destroy']);
+            });
+
+            ko.utils.setDomNodeChildrenFromArrayMapping(targetNode, filteredArray, executeTemplateForArrayItem, options, activateBindingsCallback);
+
+        }, null, { 'disposeWhenNodeIsRemoved': targetNode });
+    };
+
+    var templateSubscriptionDomDataKey = '__ko__templateSubscriptionDomDataKey__';
+    function disposeOldSubscriptionAndStoreNewOne(element, newSubscription) {
+        var oldSubscription = ko.utils.domData.get(element, templateSubscriptionDomDataKey);
+        if (oldSubscription && (typeof(oldSubscription.dispose) == 'function'))
+            oldSubscription.dispose();
+        ko.utils.domData.set(element, templateSubscriptionDomDataKey, newSubscription);
+    }
+
+    ko.bindingHandlers['template'] = {
+        'init': function(element, valueAccessor) {
+            // Support anonymous templates
+            var bindingValue = ko.utils.unwrapObservable(valueAccessor());
+            if ((typeof bindingValue != "string") && (!bindingValue['name']) && (element.nodeType == 1 || element.nodeType == 8)) {
+                // It's an anonymous template - store the element contents, then clear the element
+                var templateNodes = element.nodeType == 1 ? element.childNodes : ko.virtualElements.childNodes(element),
+                    container = ko.utils.moveCleanedNodesToContainerElement(templateNodes); // This also removes the nodes from their current parent
+                new ko.templateSources.anonymousTemplate(element)['nodes'](container);
+            }
+            return { 'controlsDescendantBindings': true };
+        },
+        'update': function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var bindingValue = ko.utils.unwrapObservable(valueAccessor());
+            var templateName;
+            var shouldDisplay = true;
+
+            if (typeof bindingValue == "string") {
+                templateName = bindingValue;
+            } else {
+                templateName = bindingValue['name'];
+
+                // Support "if"/"ifnot" conditions
+                if ('if' in bindingValue)
+                    shouldDisplay = shouldDisplay && ko.utils.unwrapObservable(bindingValue['if']);
+                if ('ifnot' in bindingValue)
+                    shouldDisplay = shouldDisplay && !ko.utils.unwrapObservable(bindingValue['ifnot']);
+            }
+
+            var templateSubscription = null;
+
+            if ((typeof bindingValue === 'object') && ('foreach' in bindingValue)) { // Note: can't use 'in' operator on strings
+                // Render once for each data point (treating data set as empty if shouldDisplay==false)
+                var dataArray = (shouldDisplay && bindingValue['foreach']) || [];
+                templateSubscription = ko.renderTemplateForEach(templateName || element, dataArray, /* options: */ bindingValue, element, bindingContext);
+            } else {
+                if (shouldDisplay) {
+                    // Render once for this single data point (or use the viewModel if no data was provided)
+                    var innerBindingContext = (typeof bindingValue == 'object') && ('data' in bindingValue)
+                        ? bindingContext['createChildContext'](ko.utils.unwrapObservable(bindingValue['data'])) // Given an explitit 'data' value, we create a child binding context for it
+                        : bindingContext;                                                                       // Given no explicit 'data' value, we retain the same binding context
+                    templateSubscription = ko.renderTemplate(templateName || element, innerBindingContext, /* options: */ bindingValue, element);
+                } else
+                    ko.virtualElements.emptyNode(element);
+            }
+
+            // It only makes sense to have a single template subscription per element (otherwise which one should have its output displayed?)
+            disposeOldSubscriptionAndStoreNewOne(element, templateSubscription);
+        }
+    };
+
+    // Anonymous templates can't be rewritten. Give a nice error message if you try to do it.
+    ko.jsonExpressionRewriting.bindingRewriteValidators['template'] = function(bindingValue) {
+        var parsedBindingValue = ko.jsonExpressionRewriting.parseObjectLiteral(bindingValue);
+
+        if ((parsedBindingValue.length == 1) && parsedBindingValue[0]['unknown'])
+            return null; // It looks like a string literal, not an object literal, so treat it as a named template (which is allowed for rewriting)
+
+        if (ko.jsonExpressionRewriting.keyValueArrayContainsKey(parsedBindingValue, "name"))
+            return null; // Named templates can be rewritten, so return "no error"
+        return "This template engine does not support anonymous templates nested within its templates";
+    };
+
+    ko.virtualElements.allowedBindings['template'] = true;
+})();
+
+ko.exportSymbol('setTemplateEngine', ko.setTemplateEngine);
+ko.exportSymbol('renderTemplate', ko.renderTemplate);
+
+(function () {
+    // Simple calculation based on Levenshtein distance.
+    function calculateEditDistanceMatrix(oldArray, newArray, maxAllowedDistance) {
+        var distances = [];
+        for (var i = 0; i <= newArray.length; i++)
+            distances[i] = [];
+
+        // Top row - transform old array into empty array via deletions
+        for (var i = 0, j = Math.min(oldArray.length, maxAllowedDistance); i <= j; i++)
+            distances[0][i] = i;
+
+        // Left row - transform empty array into new array via additions
+        for (var i = 1, j = Math.min(newArray.length, maxAllowedDistance); i <= j; i++) {
+            distances[i][0] = i;
+        }
+
+        // Fill out the body of the array
+        var oldIndex, oldIndexMax = oldArray.length, newIndex, newIndexMax = newArray.length;
+        var distanceViaAddition, distanceViaDeletion;
+        for (oldIndex = 1; oldIndex <= oldIndexMax; oldIndex++) {
+            var newIndexMinForRow = Math.max(1, oldIndex - maxAllowedDistance);
+            var newIndexMaxForRow = Math.min(newIndexMax, oldIndex + maxAllowedDistance);
+            for (newIndex = newIndexMinForRow; newIndex <= newIndexMaxForRow; newIndex++) {
+                if (oldArray[oldIndex - 1] === newArray[newIndex - 1])
+                    distances[newIndex][oldIndex] = distances[newIndex - 1][oldIndex - 1];
+                else {
+                    var northDistance = distances[newIndex - 1][oldIndex] === undefined ? Number.MAX_VALUE : distances[newIndex - 1][oldIndex] + 1;
+                    var westDistance = distances[newIndex][oldIndex - 1] === undefined ? Number.MAX_VALUE : distances[newIndex][oldIndex - 1] + 1;
+                    distances[newIndex][oldIndex] = Math.min(northDistance, westDistance);
+                }
+            }
+        }
+
+        return distances;
+    }
+
+    function findEditScriptFromEditDistanceMatrix(editDistanceMatrix, oldArray, newArray) {
+        var oldIndex = oldArray.length;
+        var newIndex = newArray.length;
+        var editScript = [];
+        var maxDistance = editDistanceMatrix[newIndex][oldIndex];
+        if (maxDistance === undefined)
+            return null; // maxAllowedDistance must be too small
+        while ((oldIndex > 0) || (newIndex > 0)) {
+            var me = editDistanceMatrix[newIndex][oldIndex];
+            var distanceViaAdd = (newIndex > 0) ? editDistanceMatrix[newIndex - 1][oldIndex] : maxDistance + 1;
+            var distanceViaDelete = (oldIndex > 0) ? editDistanceMatrix[newIndex][oldIndex - 1] : maxDistance + 1;
+            var distanceViaRetain = (newIndex > 0) && (oldIndex > 0) ? editDistanceMatrix[newIndex - 1][oldIndex - 1] : maxDistance + 1;
+            if ((distanceViaAdd === undefined) || (distanceViaAdd < me - 1)) distanceViaAdd = maxDistance + 1;
+            if ((distanceViaDelete === undefined) || (distanceViaDelete < me - 1)) distanceViaDelete = maxDistance + 1;
+            if (distanceViaRetain < me - 1) distanceViaRetain = maxDistance + 1;
+
+            if ((distanceViaAdd <= distanceViaDelete) && (distanceViaAdd < distanceViaRetain)) {
+                editScript.push({ status: "added", value: newArray[newIndex - 1] });
+                newIndex--;
+            } else if ((distanceViaDelete < distanceViaAdd) && (distanceViaDelete < distanceViaRetain)) {
+                editScript.push({ status: "deleted", value: oldArray[oldIndex - 1] });
+                oldIndex--;
+            } else {
+                editScript.push({ status: "retained", value: oldArray[oldIndex - 1] });
+                newIndex--;
+                oldIndex--;
+            }
+        }
+        return editScript.reverse();
+    }
+
+    ko.utils.compareArrays = function (oldArray, newArray, maxEditsToConsider) {
+        if (maxEditsToConsider === undefined) {
+            return ko.utils.compareArrays(oldArray, newArray, 1)                 // First consider likely case where there is at most one edit (very fast)
+                || ko.utils.compareArrays(oldArray, newArray, 10)                // If that fails, account for a fair number of changes while still being fast
+                || ko.utils.compareArrays(oldArray, newArray, Number.MAX_VALUE); // Ultimately give the right answer, even though it may take a long time
+        } else {
+            oldArray = oldArray || [];
+            newArray = newArray || [];
+            var editDistanceMatrix = calculateEditDistanceMatrix(oldArray, newArray, maxEditsToConsider);
+            return findEditScriptFromEditDistanceMatrix(editDistanceMatrix, oldArray, newArray);
+        }
+    };
+})();
+
+ko.exportSymbol('utils.compareArrays', ko.utils.compareArrays);
+
+(function () {
+    // Objective:
+    // * Given an input array, a container DOM node, and a function from array elements to arrays of DOM nodes,
+    //   map the array elements to arrays of DOM nodes, concatenate together all these arrays, and use them to populate the container DOM node
+    // * Next time we're given the same combination of things (with the array possibly having mutated), update the container DOM node
+    //   so that its children is again the concatenation of the mappings of the array elements, but don't re-map any array elements that we
+    //   previously mapped - retain those nodes, and just insert/delete other ones
+
+    // "callbackAfterAddingNodes" will be invoked after any "mapping"-generated nodes are inserted into the container node
+    // You can use this, for example, to activate bindings on those nodes.
+
+    function fixUpVirtualElements(contiguousNodeArray) {
+        // Ensures that contiguousNodeArray really *is* an array of contiguous siblings, even if some of the interior
+        // ones have changed since your array was first built (e.g., because your array contains virtual elements, and
+        // their virtual children changed when binding was applied to them).
+        // This is needed so that we can reliably remove or update the nodes corresponding to a given array item
+
+        if (contiguousNodeArray.length > 2) {
+            // Build up the actual new contiguous node set
+            var current = contiguousNodeArray[0], last = contiguousNodeArray[contiguousNodeArray.length - 1], newContiguousSet = [current];
+            while (current !== last) {
+                current = current.nextSibling;
+                if (!current) // Won't happen, except if the developer has manually removed some DOM elements (then we're in an undefined scenario)
+                    return;
+                newContiguousSet.push(current);
+            }
+
+            // ... then mutate the input array to match this.
+            // (The following line replaces the contents of contiguousNodeArray with newContiguousSet)
+            Array.prototype.splice.apply(contiguousNodeArray, [0, contiguousNodeArray.length].concat(newContiguousSet));
+        }
+    }
+
+    function mapNodeAndRefreshWhenChanged(containerNode, mapping, valueToMap, callbackAfterAddingNodes, index) {
+        // Map this array value inside a dependentObservable so we re-map when any dependency changes
+        var mappedNodes = [];
+        var dependentObservable = ko.dependentObservable(function() {
+            var newMappedNodes = mapping(valueToMap, index) || [];
+
+            // On subsequent evaluations, just replace the previously-inserted DOM nodes
+            if (mappedNodes.length > 0) {
+                fixUpVirtualElements(mappedNodes);
+                ko.utils.replaceDomNodes(mappedNodes, newMappedNodes);
+                if (callbackAfterAddingNodes)
+                    callbackAfterAddingNodes(valueToMap, newMappedNodes);
+            }
+
+            // Replace the contents of the mappedNodes array, thereby updating the record
+            // of which nodes would be deleted if valueToMap was itself later removed
+            mappedNodes.splice(0, mappedNodes.length);
+            ko.utils.arrayPushAll(mappedNodes, newMappedNodes);
+        }, null, { 'disposeWhenNodeIsRemoved': containerNode, 'disposeWhen': function() { return (mappedNodes.length == 0) || !ko.utils.domNodeIsAttachedToDocument(mappedNodes[0]) } });
+        return { mappedNodes : mappedNodes, dependentObservable : dependentObservable };
+    }
+
+    var lastMappingResultDomDataKey = "setDomNodeChildrenFromArrayMapping_lastMappingResult";
+
+    ko.utils.setDomNodeChildrenFromArrayMapping = function (domNode, array, mapping, options, callbackAfterAddingNodes) {
+        // Compare the provided array against the previous one
+        array = array || [];
+        options = options || {};
+        var isFirstExecution = ko.utils.domData.get(domNode, lastMappingResultDomDataKey) === undefined;
+        var lastMappingResult = ko.utils.domData.get(domNode, lastMappingResultDomDataKey) || [];
+        var lastArray = ko.utils.arrayMap(lastMappingResult, function (x) { return x.arrayEntry; });
+        var editScript = ko.utils.compareArrays(lastArray, array);
+
+        // Build the new mapping result
+        var newMappingResult = [];
+        var lastMappingResultIndex = 0;
+        var nodesToDelete = [];
+        var newMappingResultIndex = 0;
+        var nodesAdded = [];
+        var insertAfterNode = null;
+        for (var i = 0, j = editScript.length; i < j; i++) {
+            switch (editScript[i].status) {
+                case "retained":
+                    // Just keep the information - don't touch the nodes
+                    var dataToRetain = lastMappingResult[lastMappingResultIndex];
+                    dataToRetain.indexObservable(newMappingResultIndex);
+                    newMappingResultIndex = newMappingResult.push(dataToRetain);
+                    if (dataToRetain.domNodes.length > 0)
+                        insertAfterNode = dataToRetain.domNodes[dataToRetain.domNodes.length - 1];
+                    lastMappingResultIndex++;
+                    break;
+
+                case "deleted":
+                    // Stop tracking changes to the mapping for these nodes
+                    lastMappingResult[lastMappingResultIndex].dependentObservable.dispose();
+
+                    // Queue these nodes for later removal
+                    fixUpVirtualElements(lastMappingResult[lastMappingResultIndex].domNodes);
+                    ko.utils.arrayForEach(lastMappingResult[lastMappingResultIndex].domNodes, function (node) {
+                        nodesToDelete.push({
+                          element: node,
+                          index: i,
+                          value: editScript[i].value
+                        });
+                        insertAfterNode = node;
+                    });
+                    lastMappingResultIndex++;
+                    break;
+
+                case "added":
+                    var valueToMap = editScript[i].value;
+                    var indexObservable = ko.observable(newMappingResultIndex);
+                    var mapData = mapNodeAndRefreshWhenChanged(domNode, mapping, valueToMap, callbackAfterAddingNodes, indexObservable);
+                    var mappedNodes = mapData.mappedNodes;
+
+                    // On the first evaluation, insert the nodes at the current insertion point
+                    newMappingResultIndex = newMappingResult.push({
+                        arrayEntry: editScript[i].value,
+                        domNodes: mappedNodes,
+                        dependentObservable: mapData.dependentObservable,
+                        indexObservable: indexObservable
+                    });
+                    for (var nodeIndex = 0, nodeIndexMax = mappedNodes.length; nodeIndex < nodeIndexMax; nodeIndex++) {
+                        var node = mappedNodes[nodeIndex];
+                        nodesAdded.push({
+                          element: node,
+                          index: i,
+                          value: editScript[i].value
+                        });
+                        if (insertAfterNode == null) {
+                            // Insert "node" (the newly-created node) as domNode's first child
+                            ko.virtualElements.prepend(domNode, node);
+                        } else {
+                            // Insert "node" into "domNode" immediately after "insertAfterNode"
+                            ko.virtualElements.insertAfter(domNode, node, insertAfterNode);
+                        }
+                        insertAfterNode = node;
+                    }
+                    if (callbackAfterAddingNodes)
+                        callbackAfterAddingNodes(valueToMap, mappedNodes, indexObservable);
+                    break;
+            }
+        }
+
+        ko.utils.arrayForEach(nodesToDelete, function (node) { ko.cleanNode(node.element) });
+
+        var invokedBeforeRemoveCallback = false;
+        if (!isFirstExecution) {
+            if (options['afterAdd']) {
+                for (var i = 0; i < nodesAdded.length; i++)
+                    options['afterAdd'](nodesAdded[i].element, nodesAdded[i].index, nodesAdded[i].value);
+            }
+            if (options['beforeRemove']) {
+                for (var i = 0; i < nodesToDelete.length; i++)
+                    options['beforeRemove'](nodesToDelete[i].element, nodesToDelete[i].index, nodesToDelete[i].value);
+                invokedBeforeRemoveCallback = true;
+            }
+        }
+        if (!invokedBeforeRemoveCallback && nodesToDelete.length) {
+            for (var i = 0; i < nodesToDelete.length; i++) {
+                var element = nodesToDelete[i].element;
+                if (element.parentNode)
+                    element.parentNode.removeChild(element);
+            }
+        }
+
+        // Store a copy of the array items we just considered so we can difference it next time
+        ko.utils.domData.set(domNode, lastMappingResultDomDataKey, newMappingResult);
+    }
+})();
+
+ko.exportSymbol('utils.setDomNodeChildrenFromArrayMapping', ko.utils.setDomNodeChildrenFromArrayMapping);
+ko.nativeTemplateEngine = function () {
+    this['allowTemplateRewriting'] = false;
+}
+
+ko.nativeTemplateEngine.prototype = new ko.templateEngine();
+ko.nativeTemplateEngine.prototype['renderTemplateSource'] = function (templateSource, bindingContext, options) {
+    var useNodesIfAvailable = !(ko.utils.ieVersion < 9), // IE<9 cloneNode doesn't work properly
+        templateNodesFunc = useNodesIfAvailable ? templateSource['nodes'] : null,
+        templateNodes = templateNodesFunc ? templateSource['nodes']() : null;
+
+    if (templateNodes) {
+        return ko.utils.makeArray(templateNodes.cloneNode(true).childNodes);
+    } else {
+        var templateText = templateSource['text']();
+        return ko.utils.parseHtmlFragment(templateText);
+    }
+};
+
+ko.nativeTemplateEngine.instance = new ko.nativeTemplateEngine();
+ko.setTemplateEngine(ko.nativeTemplateEngine.instance);
+
+ko.exportSymbol('nativeTemplateEngine', ko.nativeTemplateEngine);
+(function() {
+    ko.jqueryTmplTemplateEngine = function () {
+        // Detect which version of jquery-tmpl you're using. Unfortunately jquery-tmpl
+        // doesn't expose a version number, so we have to infer it.
+        // Note that as of Knockout 1.3, we only support jQuery.tmpl 1.0.0pre and later,
+        // which KO internally refers to as version "2", so older versions are no longer detected.
+        var jQueryTmplVersion = this.jQueryTmplVersion = (function() {
+            if ((typeof(jQuery) == "undefined") || !(jQuery['tmpl']))
+                return 0;
+            // Since it exposes no official version number, we use our own numbering system. To be updated as jquery-tmpl evolves.
+            try {
+                if (jQuery['tmpl']['tag']['tmpl']['open'].toString().indexOf('__') >= 0) {
+                    // Since 1.0.0pre, custom tags should append markup to an array called "__"
+                    return 2; // Final version of jquery.tmpl
+                }
+            } catch(ex) { /* Apparently not the version we were looking for */ }
+
+            return 1; // Any older version that we don't support
+        })();
+
+        function ensureHasReferencedJQueryTemplates() {
+            if (jQueryTmplVersion < 2)
+                throw new Error("Your version of jQuery.tmpl is too old. Please upgrade to jQuery.tmpl 1.0.0pre or later.");
+        }
+
+        function executeTemplate(compiledTemplate, data, jQueryTemplateOptions) {
+            return jQuery['tmpl'](compiledTemplate, data, jQueryTemplateOptions);
+        }
+
+        this['renderTemplateSource'] = function(templateSource, bindingContext, options) {
+            options = options || {};
+            ensureHasReferencedJQueryTemplates();
+
+            // Ensure we have stored a precompiled version of this template (don't want to reparse on every render)
+            var precompiled = templateSource['data']('precompiled');
+            if (!precompiled) {
+                var templateText = templateSource['text']() || "";
+                // Wrap in "with($whatever.koBindingContext) { ... }"
+                templateText = "{{ko_with $item.koBindingContext}}" + templateText + "{{/ko_with}}";
+
+                precompiled = jQuery['template'](null, templateText);
+                templateSource['data']('precompiled', precompiled);
+            }
+
+            var data = [bindingContext['$data']]; // Prewrap the data in an array to stop jquery.tmpl from trying to unwrap any arrays
+            var jQueryTemplateOptions = jQuery['extend']({ 'koBindingContext': bindingContext }, options['templateOptions']);
+
+            var resultNodes = executeTemplate(precompiled, data, jQueryTemplateOptions);
+            resultNodes['appendTo'](document.createElement("div")); // Using "appendTo" forces jQuery/jQuery.tmpl to perform necessary cleanup work
+
+            jQuery['fragments'] = {}; // Clear jQuery's fragment cache to avoid a memory leak after a large number of template renders
+            return resultNodes;
+        };
+
+        this['createJavaScriptEvaluatorBlock'] = function(script) {
+            return "{{ko_code ((function() { return " + script + " })()) }}";
+        };
+
+        this['addTemplate'] = function(templateName, templateMarkup) {
+            document.write("<script type='text/html' id='" + templateName + "'>" + templateMarkup + "</script>");
+        };
+
+        if (jQueryTmplVersion > 0) {
+            jQuery['tmpl']['tag']['ko_code'] = {
+                open: "__.push($1 || '');"
+            };
+            jQuery['tmpl']['tag']['ko_with'] = {
+                open: "with($1) {",
+                close: "} "
+            };
+        }
+    };
+
+    ko.jqueryTmplTemplateEngine.prototype = new ko.templateEngine();
+
+    // Use this one by default *only if jquery.tmpl is referenced*
+    var jqueryTmplTemplateEngineInstance = new ko.jqueryTmplTemplateEngine();
+    if (jqueryTmplTemplateEngineInstance.jQueryTmplVersion > 0)
+        ko.setTemplateEngine(jqueryTmplTemplateEngineInstance);
+
+    ko.exportSymbol('jqueryTmplTemplateEngine', ko.jqueryTmplTemplateEngine);
+})();
+});
+})(window,document,navigator);
