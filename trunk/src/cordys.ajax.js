@@ -43,18 +43,21 @@
 			});
 			return data;
 		};
-		if (typeof(opts.data) === "undefined" && opts.method && opts.namespace) {
+		if ((typeof(opts.data) === "undefined" || typeof(opts.data) === "function") && opts.method && opts.namespace) {
 			var dataStrings = [];
 			dataStrings.push("<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><");
 			dataStrings.push(opts.method);
 			dataStrings.push(" xmlns='");
 			dataStrings.push(opts.namespace);
 			dataStrings.push("'>");
+			if (typeof(opts.data) === "function") {
+				dataStrings.push(opts.data(opts));
+			}
 			if (opts.parameters) {
 				for (var i=0,len=opts.parameters.length; i<len; i++) {
 					var opt = opts.parameters[i];
 					dataStrings.push("<" + opt.name + ">");
-					dataStrings.push((typeof(opt.value) == "function" ? opt.value() : opt.value));
+					dataStrings.push((typeof(opt.value) === "function" ? opt.value() : opt.value));
 					dataStrings.push("</" + opt.name + ">");
 				}
 			}
