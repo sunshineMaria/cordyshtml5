@@ -14,6 +14,12 @@
 	             added handling of empty arrays, empty strings, and int/floats values.
 	Author:      Michael Schøler/2008-01-29
 	Web:         http://michael.hinnerup.net/blog/2008/01/26/converting-json-to-xml-and-xml-to-json/
+
+	Version:     0.10
+	Description: Do not handle int/floats differently (going wrong with large numbers)
+				 Added public method xml2js returning a JS object.
+	Author:      Piet Kruysse/2012-05-11
+
 */
 
 /*global alert */
@@ -30,6 +36,15 @@ var xmlJsonClass = {
 		var obj = this.toObj(nws);
 		var json = this.toJson(obj, xml.nodeName, "\t");
 		return "{\n" + tab + (tab ? json.replace(/\t/g, tab) : json.replace(/\t|\n/g, "")) + "\n}";
+	},
+
+	// Converts the XML Structure into a JS Object Structure
+	xml2js: function (xml) {
+		if (xml.nodeType === 9) {
+			// document node
+			xml = xml.documentElement;
+		}
+		return this.toObj(this.removeWhite(xml));
 	},
 
 	// Param "o":   JavaScript object
@@ -81,7 +96,7 @@ var xmlJsonClass = {
 			else {
 				if (v.toString() === "\"\"" || v.toString().length === 0) {
 					xml += ind + "<" + name + ">__EMPTY_STRING_</" + name + ">";
-				} 
+				}
 				else {
 					xml += ind + "<" + name + ">" + v.toString() + "</" + name + ">";
 				}
@@ -136,7 +151,7 @@ var xmlJsonClass = {
 							}
 							else if (n.nodeType === 4) {
 								// cdata node
-							 o["#cdata"] = this.escape(n.nodeValue);
+								o["#cdata"] = this.escape(n.nodeValue);
 							}
 							else if (o[n.nodeName]) {
 								// multiple occurence of element ..
@@ -206,7 +221,7 @@ var xmlJsonClass = {
 		var json = name ? ("\"" + name + "\"") : "";
 		if (o === "[]") {
 			json += (name ? ":[]" : "[]");
-		} 
+		}
 		else if (o instanceof Array) {
 			var n, i;
 			for (i = 0, n = o.length; i < n; i += 1) {
@@ -234,7 +249,7 @@ var xmlJsonClass = {
 //				json += (name && ":") + o;
 //			}
 //			else {
-				json += (name && ":") + "\"" + o + "\"";
+			json += (name && ":") + "\"" + o + "\"";
 //			}
 		}
 		else {
