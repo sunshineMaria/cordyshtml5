@@ -16,12 +16,15 @@
 ;(function (window, $, undefined) {
 
 	if (!$.cordys) $.cordys = {};
+	if (!$.cordys.json) {
+		loadScript("/cordys/html5/jquery/jsonxml.js");
+		$.cordys.json = xmlJsonClass;
+	}
 
 	$.ajaxSetup({
 		converters: {
 			"xml json": function( data ) {
-				if (!$.xml2json) loadScript("/cordys/html5/jquery/jquery.xml2json.js");
-				return $.xml2json($(data).find("Body, SOAP\\:Body").children()[0]);
+				return $.cordys.json.xml2js($(data).find("Body, SOAP\\:Body").children()[0]);
 			}
 		}
 	});
@@ -43,23 +46,15 @@
 			});
 			return data;
 		};
-		if ((typeof(opts.data) === "undefined" || typeof(opts.data) === "function") && opts.method && opts.namespace) {
+		if (typeof(opts.data) === "undefined" && opts.method && opts.namespace) {
 			var dataStrings = [];
 			dataStrings.push("<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><");
 			dataStrings.push(opts.method);
 			dataStrings.push(" xmlns='");
 			dataStrings.push(opts.namespace);
 			dataStrings.push("'>");
-			if (typeof(opts.data) === "function") {
-				dataStrings.push(opts.data(opts));
-			}
 			if (opts.parameters) {
-				for (var i=0,len=opts.parameters.length; i<len; i++) {
-					var opt = opts.parameters[i];
-					dataStrings.push("<" + opt.name + ">");
-					dataStrings.push((typeof(opt.value) === "function" ? opt.value() : opt.value));
-					dataStrings.push("</" + opt.name + ">");
-				}
+				dataStrings.push(getParameterString(opts.parameters));
 			}
 			if (opts.iteratorSize) {
 				dataStrings.push("<cursor id='0' ");
@@ -117,6 +112,32 @@
 			}
 		}
 		return url;
+	}
+
+	function getParameterString(parameters) {
+		var pStrings = [];
+		if ($.isArray(parameters)) {
+			for (var i=0,len=parameters.length; i<len; i++) {
+				var par = parameters[i];
+				pStrings.push("<" + par.name + ">");
+				pStrings.push((typeof(par.value) === "function" ? par.value() : par.value));
+				pStrings.push("</" + par.name + ">");
+			}
+		} else if (typeof(parameters) === "object") {
+			if ($.cordys.json) pStrings.push($.cordys.json.json2xml(parameters, ""));
+			else {
+				for (var par in parameters) {
+					pStrings.push("<" + par + ">");
+					pStrings.push((typeof(parameters[par]) === "function" ? parameters[par]() : parameters[par]));
+					pStrings.push("</" + par + ">");
+				}
+			}
+		} else if (typeof(parameters) === "function") {
+			pStrings.push(parameters());
+		} else if (typeof(parameters) === "string") {
+			pStrings.push(parameters);
+		}
+		return pStrings.join("");
 	}
 
 })(window, jQuery)
