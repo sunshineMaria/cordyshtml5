@@ -41,6 +41,8 @@
 		var	sProp, vContent, nLength = 0, sCollectedTxt = "",
 			vResult = bHighVerb ? {} : /* put here the default value for empty nodes: */ "";
 
+		if (bAttributes && oParentNode.getAttribute("null") === "true") bAttributes = false;	// skip the attributes, empty value will be returned
+
 		if (bChildren) {
 			for (var oNode, nChildId = 0; nChildId < oParentNode.childNodes.length; nChildId++) {
 			oNode = oParentNode.childNodes.item(nChildId);
