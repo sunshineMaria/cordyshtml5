@@ -100,7 +100,7 @@
 		if (org) {
 			url = addURLParameter(url, "organization", org);
 		}
-//*
+/*
 		var saName = localStorage.getItem("cordysSAMLArtCookieName");
 		if (saName) {
 			var saValue = localStorage.getItem(saName);
