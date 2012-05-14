@@ -17,8 +17,7 @@
 
 	if (!$.cordys) $.cordys = {};
 	if (!$.cordys.json) {
-		loadScript("/cordys/html5/jquery/jsonxml.js");
-		$.cordys.json = xmlJsonClass;
+		loadScript("/cordys/html5/jquery/jxon.js");
 	}
 
 	$.ajaxSetup({
@@ -101,6 +100,17 @@
 		if (org) {
 			url = addURLParameter(url, "organization", org);
 		}
+//*
+		var saName = localStorage.getItem("cordysSAMLArtCookieName");
+		if (saName) {
+			var saValue = localStorage.getItem(saName);
+			if (saValue) {
+				url = addURLParameter(url, "SAMLart", saValue);
+			} else {
+				loginIntoCordys(options.loginUrl);
+			}
+		}
+/*/
 		var ctCookie = getCookie("\\w*_ct"); // cookie name can be different, when property gateway.csrf.cookiename is set
 		if (ctCookie) {
 			url = addURLParameter(url, RegExp.$1, ctCookie);
@@ -111,6 +121,7 @@
 				return "";
 			}
 		}
+//*/
 		return url;
 	}
 
@@ -124,7 +135,7 @@
 				pStrings.push("</" + par.name + ">");
 			}
 		} else if (typeof(parameters) === "object") {
-			if ($.cordys.json) pStrings.push($.cordys.json.json2xml(parameters, ""));
+			if ($.cordys.json) pStrings.push($.cordys.json.js2xmlstring(parameters));
 			else {
 				for (var par in parameters) {
 					pStrings.push("<" + par + ">");
