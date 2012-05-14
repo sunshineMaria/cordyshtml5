@@ -14,9 +14,9 @@
 	};
 
 	$.cordys.json.js2xmlstring = function (oObjTree) {
-		var aNew = [];
-		loadObjTreeString(aNew, oObjTree);
-		return aNew.join("");
+		var oWrappedTree = {o:oObjTree};	// wrap oObjTree into an object to prevent error with multiple roots
+		var sXML = (new XMLSerializer()).serializeToString($.cordys.json.js2xml(oWrappedTree));
+		return sXML.slice(3, sXML.length-4); // remove the temporary object
 	};
 
 	var	sValueProp = "keyValue", sAttributesProp = "keyAttributes", sAttrPref = "@", /* you can customize these values */ 
@@ -24,9 +24,9 @@
 
 	function parseText (sValue) {
 		if (rIsNull.test(sValue)) { return null; }
-		if (rIsBool.test(sValue)) { return sValue.toLowerCase() === "true"; }
-		if (isFinite(sValue)) { return parseFloat(sValue); }
-		if (isFinite(Date.parse(sValue))) { return new Date(sValue); }
+	//	if (rIsBool.test(sValue)) { return sValue.toLowerCase() === "true"; }
+	//	if (isFinite(sValue)) { return parseFloat(sValue); }
+	//	if (isFinite(Date.parse(sValue))) { return new Date(sValue); }
 		return sValue;
 	}
 
@@ -129,44 +129,6 @@
 					oChild.appendChild(oXMLDoc.createTextNode(vValue.toString()));
 				}
 				oParentEl.appendChild(oChild);
-			}
-		}
-	}
-
-	function loadObjTreeString(aResult, oParentObj) {
-		var vValue, oChild;
-
-		if (oParentObj instanceof String || oParentObj instanceof Number || oParentObj instanceof Boolean) {
-			aResult.push(oParentObj.toString()); /* verbosity level is 0 */
-		} else if (oParentObj.constructor === Date) {
-			aResult.push(oParentObj.toGMTString());
-		}
-
-		for (var sName in oParentObj) {
-			if (isFinite(sName)) { continue; } /* verbosity level is 0 */
-			vValue = oParentObj[sName];
-			if (sName === sValueProp) {
-				if (vValue !== null && vValue !== true) { 
-					aResult.push(vValue.constructor === Date ? vValue.toGMTString() : String(vValue));
-				}
-			} else if (sName === sAttributesProp) { /* verbosity level is 3 */
-//				for (var sAttrib in vValue) { oParentEl.setAttribute(sAttrib, vValue[sAttrib]); }
-			} else if (sName.charAt(0) === sAttrPref) {
-//				oParentEl.setAttribute(sName.slice(1), vValue);
-			} else if (vValue.constructor === Array) {
-				for (var nItem = 0; nItem < vValue.length; nItem++) {
-					aResult.push("<" + sName + ">");
-					loadObjTreeString(aResult, vValue[nItem]);
-					aResult.push("</" + sName + ">");
-				}
-			} else {
-				aResult.push("<" + sName + ">");
-				if (vValue instanceof Object) {
-					loadObjTreeString(aResult, vValue);
-				} else if (vValue !== null && vValue !== true) {
-					aResult.push(vValue.toString());
-				}
-				aResult.push("</" + sName + ">");
 			}
 		}
 	}
