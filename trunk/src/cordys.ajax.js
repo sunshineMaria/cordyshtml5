@@ -32,19 +32,6 @@
 		var opts = $.extend({}, $.cordys.ajax.defaults, options);
 		opts.url = configureGatewayUrl(opts.url, opts);
 		if (!opts.url) return null;
-		if (typeof(opts.dataFilter) === "undefined") opts.dataFilter = function(data) {
-			// Remove the null and nil attributes on empty nodes, otherwise xml2json converts it into an object
-			$(data).find("[null]").each(function() {
-				var attributes = $.map(this.attributes, function(item) {
-					return item.name;
-				});
-				var $this = $(this);
-				$.each(attributes, function(i, item) {
-					$this.removeAttr(item);
-				});
-			});
-			return data;
-		};
 		if (typeof(opts.data) === "undefined" && opts.method && opts.namespace) {
 			var dataStrings = [];
 			dataStrings.push("<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><");
