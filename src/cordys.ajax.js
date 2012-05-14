@@ -53,7 +53,7 @@
 			dataStrings.push(opts.namespace);
 			dataStrings.push("'>");
 			if (opts.parameters) {
-				dataStrings.push(getParameterString(opts.parameters));
+				dataStrings.push(getParameterString(opts.parameters, opts));
 			}
 			if (opts.iteratorSize) {
 				dataStrings.push("<cursor id='0' ");
@@ -125,7 +125,7 @@
 		return url;
 	}
 
-	function getParameterString(parameters) {
+	function getParameterString(parameters, settings) {
 		var pStrings = [];
 		if ($.isArray(parameters)) {
 			for (var i=0,len=parameters.length; i<len; i++) {
@@ -144,7 +144,7 @@
 				}
 			}
 		} else if (typeof(parameters) === "function") {
-			pStrings.push(parameters());
+			pStrings.push(parameters(settings));
 		} else if (typeof(parameters) === "string") {
 			pStrings.push(parameters);
 		}
