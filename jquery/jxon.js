@@ -109,6 +109,7 @@
 		for (var sName in oParentObj) {
 			if (isFinite(sName)) { continue; } /* verbosity level is 0 */
 			vValue = oParentObj[sName];
+			if (typeof(vValue) === "function") vValue = vValue(); // in case of KO, value can be an observable.
 			if (sName === sValueProp) {
 				if (vValue !== null && vValue !== true) { 
 					oParentEl.appendChild(oXMLDoc.createTextNode(vValue.constructor === Date ? vValue.toGMTString() : String(vValue)));

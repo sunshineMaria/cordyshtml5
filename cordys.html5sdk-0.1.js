@@ -51,3 +51,6 @@ function loadScript(url, callback, async, cache) {
 
 loadScript("/cordys/html5/src/cordys.ajax.js");
 loadScript("/cordys/html5/src/cordys.model.js");
+loadScript("/cordys/html5/src/cordys.workflow.js");
+loadScript("/cordys/html5/src/cordys.process.js");
+loadScript("/cordys/html5/src/cordys.case.js");
