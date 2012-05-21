@@ -72,8 +72,8 @@
 					if (objects){
 						for (var objectKey in objects){
 							var object = objects[objectKey];
-							// get xml content for changed objects
-							if (object.lock && object.lock.isDirty()){
+							// get xml content for changed objects. Make sure we do not take objects marked for deletion
+							if (object._destroy !== true && object.lock && object.lock.isDirty()){
 								self.objectsToBeUpdated.push(object);
 								// let us get the old bo from the saved state
 								var oldObject = object.lock.getInitialState();
@@ -113,7 +113,107 @@
 						objectBeforeUpdation.lock._updateLock();
 					}
 				}
+				self.objectsToBeUpdated = null;
+			}
+		}
+		
+		this.synchronizeSettings = {
+			async : false,
+			parameters : function (settings){
+				var synchronizeContent = [];
+				self.objectsToBeSynchronized = [];
 
+				if (typeof(self[self.objectName]) === "function") { // in case of knockout
+					var objects = self[self.objectName]();
+
+					if (objects){
+						for (var objectKey in objects){
+							var object = objects[objectKey];
+							// check for persistence
+							if (object.lock){
+								// deleted object
+								if (object._destroy === true){
+									self.objectsToBeSynchronized.push(object);
+									// let us get the old bo from the initial saved state
+									var oldObject = object.lock.getInitialState();
+									// get the corresponding XML for the deleted object and add it to the deleteContent
+									synchronizeContent.push($.cordys.json.js2xmlstring({tuple:{old:{Employees:oldObject}}}));
+								}
+								else if (object.lock.isDirty()){
+									self.objectsToBeSynchronized.push(object);
+									// let us get the old bo from the saved state
+									var oldObject = object.lock.getInitialState();
+									// the objects here are Observavables, let us unmap to get the new bo
+									var newObject = ko.mapping.toJS(object);
+									// get the corresponding XML for the object and add it to the updateContent
+									synchronizeContent.push($.cordys.json.js2xmlstring({tuple:{old:{Employees:oldObject}, 'new':{Employees:newObject}}}));
+								}	
+							}
+							// not persisted - new
+							else if (object._destroy !== true){
+								// just double check whether it was an object deleted before persisting directly using KO API's
+								self.objectsToBeSynchronized.push(object);
+								// let us get the new bo by unwrapping the Observable
+								var newObject = ko.mapping.toJS(object);
+								// get the corresponding XML for the inserted object and add it to the insertContent
+								synchronizeContent.push($.cordys.json.js2xmlstring({tuple:{'new':{Employees:newObject}}}));
+
+							}
+						}
+					}
+
+				}
+				return synchronizeContent.join("");
+			},
+			beforeSend: function (xhr, settings){
+				return self.objectsToBeSynchronized.length > 0;
+			},
+			success: function (data){
+				// TODO - Merge all the merge implementations of all into this one
+				// let us get the updated tuples if we are using tuple protocol	
+				if (opts.useTupleProtocol){
+					var synchronizedObjects =  $.map($.isArray(data.tuple) ? data.tuple : [data.tuple], function(tuple){
+							return getObjects(tuple['new'] ? tuple['new'] : tuple['old'], self.objectName)
+						});
+				}
+
+				for (var count=0; count<self.objectsToBeSynchronized.length; count++){
+					var object = self.objectsToBeSynchronized[count];
+					// check for persistence
+					if (object.lock){
+							// deleted object
+							if (object._destroy === true){
+								self[self.objectName].remove(object);
+							}
+							else if (object.lock.isDirty()){
+								if (opts.useTupleProtocol){
+									var objectAfterUpdation = synchronizedObjects[count];
+									// let us merge the updated object back in case of tuple protocol and update the lock to it
+									object.lock._update(objectAfterUpdation);
+								}
+								else{
+									// other we update the lock to the latest state of the object
+									object.lock._updateLock();
+								}
+							}
+					}
+					// not persisted - new
+					else if (object._destroy !== true){
+						if (opts.useTupleProtocol){
+							var objectAfterInsertion = synchronizedObjects[count];
+							// let us set the lock with the inserted object we get from the backend
+							addOptimisticLock(self, objectAfterInsertion, object, false);
+							// let us also update the object with what we got from the backend
+							object.lock._update(objectAfterInsertion);
+						}
+						else{
+							// other we set the lock to the latest state of the object
+							addOptimisticLock(self, ko.mapping.toJS(object), object, false);
+						}
+					}
+
+				}
+				self.objectsToBeSynchronized = null;
 			}
 		}
 
@@ -127,8 +227,8 @@
 					if (objects){
 						for (var objectKey in objects){
 							var object = objects[objectKey];
-							// find deleted objects
-							if (object._destroy === true){
+							// find deleted objects which were already persisted
+							if (object.lock && object._destroy === true){
 								self.objectsToBeDeleted.push(object);
 								// let us get the old bo from the initial saved state
 								var oldObject = object.lock.getInitialState();
@@ -149,6 +249,7 @@
 				for (var count=0; count<self.objectsToBeDeleted.length; count++){
 					self[self.objectName].remove(self.objectsToBeDeleted[count]);
 				}
+				self.objectsToBeDeleted = null;
 			}
 		}
 
@@ -164,8 +265,8 @@
 					if (objects){
 						for (var objectKey in objects){
 							var object = objects[objectKey];
-							// find deleted objects
-							if (! object.lock){
+							// find objects to be inserted
+							if (! object.lock && object._destroy !== true){
 								self.objectsToBeInserted.push(object);
 								// let us get the new bo by unwrapping the Observable
 								var newObject = ko.mapping.toJS(object);
@@ -204,6 +305,7 @@
 						addOptimisticLock(self, ko.mapping.toJS(objectBeforeInsertion), objectBeforeInsertion, false);
 					}
 				}
+				self.objectsToBeInserted = null;
 			}
 		}
 
@@ -225,13 +327,33 @@
 			$.cordys.ajax($.extend({}, settings.defaults, settings['delete'], self.deleteSettings, deleteSettings));
 		};
 
+		this.synchronize = function(synchronizeSettings) { 
+			$.cordys.ajax($.extend({}, settings.defaults, settings.update, self.synchronizeSettings, synchronizeSettings));
+		};
+
 
 		this.addBusinessObject = function(object){
-			if (! object) return;
+			if (! object) return null;
 			if (! ko.isObservable(object)){
 				object =  ko.mapping.fromJS(object);
 			}
 			self[self.objectName].push(object);
+			return object;
+		}
+
+		this.removeBusinessObject = function(object){
+			if (! object) return null;
+			if (typeof(self[self.objectName]) !== "function") { // in case of no knockout
+				return null;
+			}
+			if (! object.lock){
+				// removing object not yet persisted. so let us just remove it
+				self[self.objectName].remove(object);
+			}
+			else{
+				// otherwise we just mark it with the KO destroy flag
+				self[self.objectName].destroy(object);
+			}
 			return object;
 		}
 
