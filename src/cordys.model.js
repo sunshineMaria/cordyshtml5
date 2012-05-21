@@ -48,13 +48,13 @@
 						objects[objectKey] = observableObject;
 					} 
 					self[self.objectName](objects);
-					if (settings.read.success) {
-						settings.read.success(self[self.objectName]());
+					if (self._readSuccess) {
+						self._readSuccess(self[self.objectName]());
 					}
 				} else {
 					self[self.objectName] = objects;
-					if (settings.read.success) {
-						settings.read.success(self[self.objectName]);
+					if (self._readSuccess) {
+						self._readSuccess(self[self.objectName]);
 					}
 				}
 			}
@@ -213,7 +213,8 @@
 		};
 
 		this.read = function(readSettings) { 
-			$.cordys.ajax($.extend({}, settings.defaults, settings.read, self.readSettings, readSettings));
+			self._readSuccess = (readSettings && readSettings.success) ? readSettings.success : settings.read.success;
+			$.cordys.ajax($.extend({}, settings.defaults, settings.read, readSettings, self.readSettings));
 		};
 
 		this.update = function(updateSettings) { 
