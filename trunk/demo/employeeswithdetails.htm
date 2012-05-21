@@ -43,8 +43,8 @@
 	}
 
 	function deleteSelectedEmployee() {
-		empModel.Employees.destroy(empModel.selectedItem());
-		empModel['delete']();
+		empModel.removeBusinessObject(empModel.selectedItem());
+		empModel.synchronize();
 	}
 
 	function addEmployee(){
@@ -177,14 +177,7 @@
 				$(".ui-btn-text", this).text("Edit");
 				$("#detailView :input").attr('disabled', 'disabled');
 				$("select", "#detailView").attr('disabled', 'disabled');
-				// let us update if we were in edit mode
-				if (detailsPageViewMode == "EDIT"){
-					empModel.update();
-				}
-				else{
-					// or create if we are in insert mode
-					empModel.create();
-				}
+				empModel.synchronize();
 				detailsPageViewMode = "VIEW";
 			}
 		});
