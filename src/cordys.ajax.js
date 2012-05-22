@@ -61,10 +61,16 @@
 				if (messCode.search(/Cordys.*(AccessDenied|Artifact_Unbound)/)>=0) {
 					loginIntoCordys();
 				} else {
-					var err = $(e.error().responseXML).find("faultstring,error elem").text()
-						|| e.responseText 
-						|| "General error, see response.";
-					alert("Error on read: '" + err + "'");
+					var showError = true;
+					if (opts.onError && typeof(opts.onError) === "function"){
+						showError = (opts.onError(e.error()) !== false);
+					}
+					if (showError){
+						var err = $(e.error().responseXML).find("faultstring,error elem").text()
+							|| e.responseText 
+							|| "General error, see response.";
+						alert("Error on read: '" + err + "'");
+					}
 				}
 			}
 		}
