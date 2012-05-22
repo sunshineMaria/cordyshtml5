@@ -18,7 +18,8 @@
 			objectName: "Employees",
 			defaults: {
 				namespace: "http://schemas.cordys.com/NW",
-				dataType: "json"
+				dataType: "json",
+				method: "UpdateEmployees"
 			},
 			read: {
 				method: "GetEmployeesObjects",
@@ -37,19 +38,39 @@
 			if (empModel.selectedItem) {
 				empModel.selectedItem(data);
 			}
+			detailsPageViewMode = "VIEW";
 		}
 	}
+
+	function deleteSelectedEmployee() {
+		empModel.removeBusinessObject(empModel.selectedItem());
+		empModel.synchronize();
+	}
+
+	function addEmployee(){
+		var newEmployee = empModel.addBusinessObject({Address: "",BirthDate: "",City: "",Country: "",Extension: "",FirstName: "",HireDate: "",HomePhone: "",LastName: "",Notes: "",Photo: "",PhotoPath: "",PostalCode: "",Region: "",ReportsTo: "",Title: "",TitleOfCourtesy: ""});
+		empModel.selectedItem(newEmployee);
+		detailsPageViewMode = "CREATE";
+	}
+
+	function revertChanges(){
+		empModel.revert();
+	}
 	</script>
+
 </head> 
+
 <body> 
+
 	<div data-role="page" id="mainPage">
 		<div data-role="header" data-theme="b">
 			<a href="http://www.cordys.com" data-icon="home">Cordys</a>
 			<h1>Employees</h1>
+			<a id="btnAdd" data-role="button" data-icon="add" href="#detailsPage" data-bind="click:addEmployee">Add</a>
 		</div>
 
 		<div data-role="content" data-theme="b">
-			<ul id="employeeList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Employees">
+			<ul id="employeeList" data-role="listview" data-split-icon="delete" data-split-theme="d" data-theme="c" data-inset="true" data-bind="foreach:Employees">
 				<li>
 					<a href="#detailsPage" data-transition="pop" class="ui-link-inherit" data-bind="click:selectEmployee($data)">
 						<!-- ko if: typeof(Photo)!=="undefined"--> 
@@ -59,14 +80,26 @@
 						<p class="ui-li-desc" data-bind="text:Address"></p>
 						<p class="ui-li-desc"><span data-bind="text:City"></span>&nbsp;<span data-bind="text:Country"></span></p>
 					</a>
+					<a href="#deleteConfirmation" data-rel="dialog" data-transition="slideup" data-bind="click:selectEmployee($data)">Delete</a>
 				</li>
 			</ul>
 		</div>
 	</div>
+	<div data-role="page" id="deleteConfirmation">
+		<div data-role="header" data-theme="e">
+			<h1>Delete Employee?</h1>
+		</div>
+		<div data-role="content" data-theme="d" data-bind="with: selectedItem">
+			<h4><span>Are you sure you want to delete employee</span><span data-bind="text: ' \'' +FirstName() + ' ' + LastName() + '\''"></span><span>?</span></h4>
+			<a data-role="button" data-inline="true" data-rel="back" data-theme="b" data-bind="click:deleteSelectedEmployee">Yes</a>
+			<a data-role="button" data-inline="true" data-rel="back" data-bind="click:revertChanges">No</a>
+		</div>
+	</div>
 	<div data-role="page" id="detailsPage">
 		<div data-role="header" data-theme="b">
-			<a href="#mainPage" data-role="button" data-icon="back" data-rel="back">Back</a>
+			<a href="#mainPage" data-role="button" data-icon="back" data-rel="back" data-bind="click:revertChanges">Back</a>
 			<h1>Employee Details</h1>
+			<a data-role="button" id="btnEdit">Edit</a>
 		</div>
 		<div data-role="content" data-theme="b">
 			<ul data-role="listview" id="detailView">
@@ -130,5 +163,41 @@
 			</ul>
 		</div>
 	</div>
+<script type="text/javascript">
+	$(function(){
+		$("#btnEdit").bind("click", function () {
+			if (detailsPageViewMode == "VIEW") {
+				$(".ui-btn-text", this).text("Done");
+				$("#detailView :input").removeAttr('disabled');
+				$("select", "#detailView").removeAttr('disabled');
+				$("#fldTitleOfCourtesy").select().focus();
+				detailsPageViewMode = "EDIT";
+			}
+			else {
+				$(".ui-btn-text", this).text("Edit");
+				$("#detailView :input").attr('disabled', 'disabled');
+				$("select", "#detailView").attr('disabled', 'disabled');
+				empModel.synchronize();
+				detailsPageViewMode = "VIEW";
+			}
+		});
+	});
+
+	$("#detailsPage").bind( 'pageshow',function(event, ui) {
+		if (detailsPageViewMode == "VIEW"){
+			$("#btnEdit .ui-btn-text").text("Edit");
+			$('#detailView').listview("refresh");
+			$("#detailView :input").attr('disabled','disabled');
+			$("select", "#detailView").attr('disabled','disabled');
+		}
+		else if (detailsPageViewMode == "CREATE"){
+			$(".ui-btn-text", "#btnEdit").text("Done");
+			$("#detailView :input").removeAttr('disabled');
+			$("select", "#detailView").removeAttr('disabled');
+			$("#fldTitleOfCourtesy").select().focus();
+		}
+	});
+</script>
+
 </body>
 </html>
