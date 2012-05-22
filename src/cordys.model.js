@@ -94,29 +94,18 @@
 			},
 
 			success: function (data){
-				// let us get the updated tuples if we are using tuple protocol	
-				if (opts.useTupleProtocol){
-					var updatedObjects =  $.map($.isArray(data.tuple) ? data.tuple : [data.tuple], function(tuple){
-							return getObjects(tuple['new'], self.objectName)
-						});
-				}
-				for (var count=0; count<self.objectsToBeUpdated.length; count++){
-					var objectBeforeUpdation = self.objectsToBeUpdated[count];
-					
-					if (opts.useTupleProtocol){
-						var objectAfterUpdation = updatedObjects[count];
-						// let us merge the updated object back in case of tuple protocol and update the lock to it
-						objectBeforeUpdation.lock._update(objectAfterUpdation);
-					}
-					else{
-						// other we update the lock to the latest state of the object
-						objectBeforeUpdation.lock._updateLock();
-					}
-				}
+				mergeUpdate(data, self.objectsToBeUpdated);
 				self.objectsToBeUpdated = null;
+			},
+
+			onError : function (error){
+				showError(error, "Error on Update");
+				handleError(error, self.objectsToBeUpdated);
+				self.objectsToBeUpdated = null;
+				return false;
 			}
 		}
-		
+
 		this.synchronizeSettings = {
 			async : false,
 			parameters : function (settings){
@@ -169,51 +158,15 @@
 				return self.objectsToBeSynchronized.length > 0;
 			},
 			success: function (data){
-				// TODO - Merge all the merge implementations of all into this one
-				// let us get the updated tuples if we are using tuple protocol	
-				if (opts.useTupleProtocol){
-					var synchronizedObjects =  $.map($.isArray(data.tuple) ? data.tuple : [data.tuple], function(tuple){
-							return getObjects(tuple['new'] ? tuple['new'] : tuple['old'], self.objectName)
-						});
-				}
-
-				for (var count=0; count<self.objectsToBeSynchronized.length; count++){
-					var object = self.objectsToBeSynchronized[count];
-					// check for persistence
-					if (object.lock){
-							// deleted object
-							if (object._destroy === true){
-								self[self.objectName].remove(object);
-							}
-							else if (object.lock.isDirty()){
-								if (opts.useTupleProtocol){
-									var objectAfterUpdation = synchronizedObjects[count];
-									// let us merge the updated object back in case of tuple protocol and update the lock to it
-									object.lock._update(objectAfterUpdation);
-								}
-								else{
-									// other we update the lock to the latest state of the object
-									object.lock._updateLock();
-								}
-							}
-					}
-					// not persisted - new
-					else if (object._destroy !== true){
-						if (opts.useTupleProtocol){
-							var objectAfterInsertion = synchronizedObjects[count];
-							// let us set the lock with the inserted object we get from the backend
-							addOptimisticLock(self, objectAfterInsertion, object, false);
-							// let us also update the object with what we got from the backend
-							object.lock._update(objectAfterInsertion);
-						}
-						else{
-							// other we set the lock to the latest state of the object
-							addOptimisticLock(self, ko.mapping.toJS(object), object, false);
-						}
-					}
-
-				}
+				mergeUpdate(data, self.objectsToBeSynchronized);
 				self.objectsToBeSynchronized = null;
+			},
+
+			onError : function (error){
+				showError(error, "Error on Update");
+				handleError(error, self.objectsToBeSynchronized);
+				self.objectsToBeSynchronized = null;
+				return false;
 			}
 		}
 
@@ -245,11 +198,15 @@
 			},
 
 			success: function (data){
-				// no special treatment for tuple protocol here. We just delete the objects
-				for (var count=0; count<self.objectsToBeDeleted.length; count++){
-					self[self.objectName].remove(self.objectsToBeDeleted[count]);
-				}
+				mergeUpdate(data, self.objectsToBeDeleted);
 				self.objectsToBeDeleted = null;
+			},
+
+			onError : function (error){
+				showError(error, "Error on Delete");
+				handleError(error, self.objectsToBeDeleted);
+				self.objectsToBeDeleted = null;
+				return false;
 			}
 		}
 
@@ -284,28 +241,15 @@
 			},
 
 			success: function (data){
-				// let us get the inserted tuples if we are using tuple protocol				
-				if (opts.useTupleProtocol){
-					var insertedObjects = getObjects(data, self.objectName);
-				}
-
-				for (var count=0; count<self.objectsToBeInserted.length; count++){
-					var objectBeforeInsertion = self.objectsToBeInserted[count];
-
-					if (opts.useTupleProtocol){
-						var objectAfterInsertion = insertedObjects[count];
-						// let us set the lock with the inserted object we get from the backend
-						addOptimisticLock(self, objectAfterInsertion, objectBeforeInsertion, false);
-						// let us also update the object with what we got from the backend
-						//?
-						objectBeforeInsertion.lock._update(objectAfterInsertion);
-					}
-					else{
-						// other we set the lock to the latest state of the object
-						addOptimisticLock(self, ko.mapping.toJS(objectBeforeInsertion), objectBeforeInsertion, false);
-					}
-				}
+				mergeUpdate(data, self.objectsToBeInserted);
 				self.objectsToBeInserted = null;
+			},
+
+			onError : function (error){
+				showError(error, "Error on Insert");
+				handleError(error, self.objectsToBeInserted);
+				self.objectsToBeInserted = null;
+				return false;
 			}
 		}
 
@@ -375,10 +319,7 @@
 							 }
 							 // also unmark ones for deletion. Remember that changed ones could have also been marked for deletion
 							 if (object._destroy === true){
-								 // KO Observable array does not have a undestroy, so let us just remove the destroy flag 
-								 object.valueWillMutate();
-								 object._destroy = false;
-								 object.valueHasMutated();
+								 object.lock._undestroy();
 							 }
 						}
 					}
@@ -389,11 +330,104 @@
 		this.clear = function() {
 			self[self.objectName].removeAll();
 		}
+
+		handleError = function(error, objectsToBeUpdated){
+			if (opts.useTupleProtocol){
+				debugger;
+				// let us find the tuples from the error detail
+				var tuples = $(error.responseXML).find("detail tuple");
+				for (var count=0; count<tuples.length; count++){
+					var tuple = tuples[count];
+					// check for tuples with an error
+					if ($(tuple).find("error").length > 0){
+						var faultNew = $(tuple).find("new")[0];
+						var faultOld = $(tuple).find("old")[0];
+						var objectBeforeUpdation = objectsToBeUpdated[count];
+
+						if (faultNew){
+							if (faultOld){
+								// it is an update failure
+								// get the latest persisted state into a json object
+								var currentPersistedState = getObjects($.cordys.json.xml2js(faultOld), self.objectName)[0];
+								// let us merge the tuples which has the error in it with the latest persisted state in it
+								objectBeforeUpdation.lock._update(currentPersistedState);
+							}
+							else{
+								// it is an insert failure
+
+							}
+						}
+						else{
+							// it is an delete failure
+							// get the latest persisted state into a json object
+							var currentPersistedState = getObjects($.cordys.json.xml2js(faultOld), self.objectName)[0];
+							// let us merge the tuples which has the error in it with the latest persisted state in it
+							objectBeforeUpdation.lock._update(currentPersistedState);
+							objectBeforeUpdation.lock._undestroy();
+						}
+					}
+				}
+			}
+		};
+
+		mergeUpdate = function (data, objectsToBeSynchronized){
+			// let us get the updated tuples if we are using tuple protocol
+			if (opts.useTupleProtocol){
+				var synchronizedObjects =  $.map($.isArray(data.tuple) ? data.tuple : [data.tuple], function(tuple){
+						return getObjects(tuple['new'] ? tuple['new'] : tuple['old'], self.objectName)
+				});
+			}
+
+			for (var count=0; count<objectsToBeSynchronized.length; count++){
+				var object = objectsToBeSynchronized[count];
+				// check for persistence
+				if (object.lock){
+					// deleted object
+					if (object._destroy === true){
+						self[self.objectName].remove(object);
+					}
+					else if (object.lock.isDirty()){
+						if (opts.useTupleProtocol){
+							var objectAfterUpdation = synchronizedObjects[count];
+							// let us merge the updated object back in case of tuple protocol and update the lock to it
+							object.lock._update(objectAfterUpdation);
+						}
+						else{
+							// other we update the lock to the latest state of the object
+							object.lock._updateLock();
+						}
+					}
+				}
+				// not persisted - new
+				else if (object._destroy !== true){
+					if (opts.useTupleProtocol){
+						var objectAfterInsertion = synchronizedObjects[count];
+						// let us set the lock with the inserted object we get from the backend
+						addOptimisticLock(self, objectAfterInsertion, object, false);
+						// let us also update the object with what we got from the backend
+						object.lock._update(objectAfterInsertion);
+					}
+					else{
+						// other we set the lock to the latest state of the object
+						addOptimisticLock(self, ko.mapping.toJS(object), object, false);
+					}
+				}
+			}
+		}
 	};
 
 	$.cordys.model.defaults = {
 		useTupleProtocol: true
 	}
+
+	showError = function(e, caption) {
+		var err = $(e.error().responseXML).find("faultstring,error elem").text()
+						|| e.responseText 
+						|| "General error, see response.";
+					alert(caption + " : '" + err + "'");
+		return false;
+	};
+
 
 	getObjects = function(obj, key, val) {
 		var objects = [];
@@ -445,8 +479,16 @@
 		// Strictly to be used internally for updating the state and the lock after successful update/insert
 		result._update = function(newData) {
 			_initialState = newData;
-			ko.mapping.fromJS(newData, {}, observableData);
+			ko.mapping.fromJS(newData, observableData);
 			this._updateLock(newData);
+		}
+
+		// Used internally for unmarking objects marked for deleteion
+		result._undestroy = function() {
+			// KO Observable array does not have a undestroy, so let us just remove the destroy flag after a change notification
+			model[model.objectName].valueWillMutate();
+			delete observableData._destroy;
+			model[model.objectName].valueHasMutated();
 		}
 
 		result.undo = function() {
