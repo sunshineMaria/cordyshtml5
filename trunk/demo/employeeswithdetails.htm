@@ -31,11 +31,11 @@
 		empModel.read();
 	});
 
+	// called on clicking an Employee
 	function selectEmployee(emp) {
 		return function(data) {
-			if (empModel.selectedItem) {
-				empModel.selectedItem(data);
-			}
+			// let us set the currently clicked item as the selected item to show in the detail page
+			empModel.selectedItem(data);
 		}
 	}
 	</script>
@@ -51,8 +51,11 @@
 			<ul id="employeeList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Employees">
 				<li>
 					<a href="#detailsPage" data-transition="pop" class="ui-link-inherit" data-bind="click:selectEmployee($data)">
-						<!-- ko if: typeof(Photo)!=="undefined"--> 
-							<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo().substring(104) }"/>
+						<!-- ko if: typeof(Photo)!=="undefined" && Photo--> 
+							<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo.substring(104) }"/>
+						<!-- /ko -->
+						<!-- ko if: typeof(Photo)==="undefined" || (!Photo)--> 
+							<img class="ui-li-thumb ui-corner-tl" src="/cordys/html5/demo/images/defaultphoto.jpg"/>
 						<!-- /ko --> 
 						<h3 class="ui-li-heading"><span data-bind="text:FirstName"></span>&nbsp;<span data-bind="text:LastName"></span></h3>
 						<p class="ui-li-desc" data-bind="text:Address"></p>
@@ -72,10 +75,13 @@
 				<li>
 					<div data-bind="with: selectedItem">
 						<a class="ui-link-inherit">
-							<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo().substring(104) }"/>
-							<!-- ko if: typeof(EmployeeID)!=="undefined"--> 
-								<h2 class="ui-li-heading" data-bind="text:EmployeeID"></h2>
+							<!-- ko if: typeof(Photo)!=="undefined" && Photo--> 
+								<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo.substring(104) }"/>
+							<!-- /ko -->
+							<!-- ko if: typeof(Photo)==="undefined" || (!Photo)--> 
+								<img class="ui-li-thumb ui-corner-tl" src="/cordys/html5/demo/images/defaultphoto.jpg"/>
 							<!-- /ko --> 
+							<h2 class="ui-li-heading" data-bind="text:EmployeeID"></h2>
 							<h3 class="ui-li-heading"><span data-bind="text:TitleOfCourtesy"></span>&nbsp;<span data-bind="text:FirstName"></span>&nbsp;<span data-bind="text:LastName"></span></h3>
 							<p class="ui-li-desc"><span data-bind="text:Title"></p>
 						</a>

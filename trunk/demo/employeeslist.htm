@@ -12,13 +12,14 @@
 
 	<script type="text/javascript">
 	$(function() {
+		// Create a new model
 		empModel = new $.cordys.model({
+			// Name of the Business Object
 			objectName: "Employees",
-			defaults: {
-				namespace: "http://schemas.cordys.com/NW",
-				dataType: "json"
-			},
 			read: {
+				// Settings for the read method
+				namespace: "http://schemas.cordys.com/NW",
+				dataType: "json",
 				method: "GetEmployeesObjects",
 				parameters: {
 					fromEmployeeID: "0",
@@ -26,7 +27,10 @@
 				}
 			}
 		});
+		// Activate Knockout to bind the UI
 		ko.applyBindings(empModel);
+		// Call the read method. This would fire the method with the namespace and parameters as specified in the read settings above.
+		// specified in the read 
 		empModel.read();
 	});
 	</script>
@@ -41,7 +45,12 @@
 		<div data-role="content" data-theme="b">
 			<ul id="employeeList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Employees">
 				<li>
-					<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo().substring(104) }"/>
+					<!-- ko if: typeof(Photo)!=="undefined" && Photo--> 
+						<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo.substring(104) }"/>
+					<!-- /ko -->
+					<!-- ko if: typeof(Photo)==="undefined" || (!Photo)--> 
+						<img class="ui-li-thumb ui-corner-tl" src="/cordys/html5/demo/images/defaultphoto.jpg"/>
+					<!-- /ko --> 
 					<h3 class="ui-li-heading"><span data-bind="text:FirstName"></span>&nbsp;<span data-bind="text:LastName"></span></h3>
 					<p class="ui-li-desc" data-bind="text:Address"></p>
 					<p class="ui-li-desc"><span data-bind="text:City"></span>&nbsp;<span data-bind="text:Country"></span></p>
