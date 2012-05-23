@@ -21,6 +21,9 @@
 				dataType: "json",
 				method: "UpdateEmployees"
 			},
+			update: {
+				method: "UpdateEmployees"
+			},
 			read: {
 				method: "GetEmployeesObjects",
 				parameters: {
@@ -73,9 +76,7 @@
 			<ul id="employeeList" data-role="listview" data-split-icon="delete" data-split-theme="d" data-theme="c" data-inset="true" data-bind="foreach:Employees">
 				<li>
 					<a href="#detailsPage" data-transition="pop" class="ui-link-inherit" data-bind="click:selectEmployee($data)">
-						<!-- ko if: typeof(Photo)!=="undefined"--> 
-							<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo().substring(104) }"/>
-						<!-- /ko --> 
+						<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: (Photo && Photo()) ? 'data:image/bmp;base64,' + Photo().substring(104) : '/cordys/html5/demo/images/defaultphoto.jpg' }"/>
 						<h3 class="ui-li-heading"><span data-bind="text:FirstName"></span>&nbsp;<span data-bind="text:LastName"></span></h3>
 						<p class="ui-li-desc" data-bind="text:Address"></p>
 						<p class="ui-li-desc"><span data-bind="text:City"></span>&nbsp;<span data-bind="text:Country"></span></p>
@@ -106,7 +107,7 @@
 				<li>
 					<div data-bind="with: selectedItem">
 						<a class="ui-link-inherit">
-							<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo().substring(104) }"/>
+							<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: (Photo && Photo()) ? 'data:image/bmp;base64,' + Photo().substring(104) : '/cordys/html5/demo/images/defaultphoto.jpg' }"/>
 							<!-- ko if: typeof(EmployeeID)!=="undefined"--> 
 								<h2 class="ui-li-heading" data-bind="text:EmployeeID"></h2>
 							<!-- /ko --> 

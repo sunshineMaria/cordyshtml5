@@ -17,36 +17,53 @@
 
 	if (!$.cordys) $.cordys = {};
 	if (!$.cordys.ajax) loadScript("/cordys/html5/src/cordys.ajax.js");
-	// let us add the ko mapping plugin
-	if (typeof(ko) !== "undefined" && (! ko.mapping)) loadScript("/cordys/html5/knockout/knockout.mapping-latest.js");
 
 
 	$.cordys.model = function(settings) {
 		var self = this;
-
 		var opts = $.extend({}, $.cordys.model.defaults, settings);
 		this.objectName = settings.objectName;
+
+		// set read-only - take readonly if set in opts, otherwise we see if one of the change settings is specified and then default to the model.defaults
+		this.isReadOnly = settings.hasOwnProperty("isReadOnly") ? (settings.isReadOnly === true) : 
+			(typeof(settings.create || settings.update || settings['delete']) === "undefined") ? $.cordys.model.defaults.isReadOnly : false;
+		if (this.isReadOnly !== true){
+			// let us add ko if the model is not readOnly
+			if (typeof(ko) === "undefined") loadScript("/cordys/html5/knockout/knockout-2.1.0.js");
+			// let us add the ko mapping plugin
+			if (typeof(ko) !== "undefined" && (! ko.mapping)) loadScript("/cordys/html5/knockout/knockout.mapping-latest.js");
+		}
+
 		if (typeof(ko) !== "undefined") {
+			// make the object collection observable
 			this[this.objectName] = ko.observableArray();
 			this.selectedItem = ko.observable();
 		} else {
 			this[this.objectName] = [];
+			// Selects an Item
+			this.selectedItem = function (selectedItem){
+				if (typeof (selectedItem) !== "undefined"){
+					this.__selectedItem = selectedItem;
+				}
+				return this.__selectedItem;
+			}
 		}
-
-
+	
+		// Handlers and settings for the read part
 		this.readSettings = {
 			success : function(data) {
 				var objects = getObjects(data, self.objectName);
-				
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
-					// let us add observable for identifying changes
-					for (var objectKey in objects)
-					{
-						var object = objects[objectKey];
-						var observableObject = ko.mapping.fromJS(object);
-						addOptimisticLock(self, object, observableObject, false);
-						objects[objectKey] = observableObject;
-					} 
+					if (self.isReadOnly !== true){
+						// let us make every attribute Observable for identifying changes and add lock if the model is not readOnly
+						for (var objectKey in objects)
+						{
+							var object = objects[objectKey];
+							var observableObject = ko.mapping.fromJS(object);
+							addOptimisticLock(self, object, observableObject, false);
+							objects[objectKey] = observableObject;
+						}
+					}
 					self[self.objectName](objects);
 					if (self._readSuccess) {
 						self._readSuccess(self[self.objectName]());
@@ -59,7 +76,8 @@
 				}
 			}
 		}
-		
+
+		// Handlers and settings for the update part
 		this.updateSettings = {
 			async : false,
 			parameters : function (settings){
@@ -106,6 +124,7 @@
 			}
 		}
 
+		// Handlers and settings for the Sync part
 		this.synchronizeSettings = {
 			async : false,
 			parameters : function (settings){
@@ -170,6 +189,7 @@
 			}
 		}
 
+		// Handlers and settings for the delete part
 		this.deleteSettings = {
 			async : false,
             parameters : function (settings){
@@ -211,7 +231,7 @@
 		}
 
 			
-
+		// Handlers and settings for the create part
 		this.createSettings = {
 			async : false,
 			parameters : function (settings){
@@ -253,29 +273,33 @@
 			}
 		}
 
-
+		// Sends all inserted objects to the backend
 		this.create = function(createSettings) {
 			$.cordys.ajax($.extend({}, settings.defaults, settings.create, self.createSettings, createSettings));
 		};
 
+		// Sends the get/read request
 		this.read = function(readSettings) { 
 			self._readSuccess = (readSettings && readSettings.success) ? readSettings.success : settings.read.success;
 			$.cordys.ajax($.extend({}, settings.defaults, settings.read, readSettings, self.readSettings));
 		};
 
+		// Sends all updated objects to the backend
 		this.update = function(updateSettings) { 
 			$.cordys.ajax($.extend({}, settings.defaults, settings.update, self.updateSettings, updateSettings));
 		};
 
+		// Sends all deleted objects to the backend.
 		this['delete'] = function(deleteSettings) {
 			$.cordys.ajax($.extend({}, settings.defaults, settings['delete'], self.deleteSettings, deleteSettings));
 		};
 
+		// Sends all local changes (inserted, updated, deleted objects) to the backend.
 		this.synchronize = function(synchronizeSettings) { 
 			$.cordys.ajax($.extend({}, settings.defaults, settings.update, self.synchronizeSettings, synchronizeSettings));
 		};
 
-
+		// Adds the specified Business Object
 		this.addBusinessObject = function(object){
 			if (! object) return null;
 			if (! ko.isObservable(object)){
@@ -285,6 +309,7 @@
 			return object;
 		}
 
+		// Removes the specified Business Object
 		this.removeBusinessObject = function(object){
 			if (! object) return null;
 			if (typeof(self[self.objectName]) !== "function") { // in case of no knockout
@@ -301,6 +326,7 @@
 			return object;
 		}
 
+		// Reverts all local changes
 		this.revert = function() {
 			if (typeof(self[self.objectName]) === "function") { // in case of knockout
 				var objects = self[self.objectName]();
@@ -327,10 +353,12 @@
 			}
 		}
 
+		// Clears the model
 		this.clear = function() {
 			self[self.objectName].removeAll();
 		}
 
+		// handles error in insert, update, delete, sync response. Updates the lock and current state to the current state from the response if specified
 		handleError = function(error, objectsToBeUpdated){
 			if (opts.useTupleProtocol){
 				debugger;
@@ -370,6 +398,7 @@
 			}
 		};
 
+		// merges the response received after insert, update, delete, sync with the current data
 		mergeUpdate = function (data, objectsToBeSynchronized){
 			// let us get the updated tuples if we are using tuple protocol
 			if (opts.useTupleProtocol){
@@ -416,10 +445,13 @@
 		}
 	};
 
+	// default settings for all instances
 	$.cordys.model.defaults = {
-		useTupleProtocol: true
+		useTupleProtocol: true,
+		isReadOnly : true
 	}
 
+	// Extracts the error and shows it with a caption
 	showError = function(e, caption) {
 		var err = $(e.error().responseXML).find("faultstring,error elem").text()
 						|| e.responseText 
@@ -428,7 +460,7 @@
 		return false;
 	};
 
-
+	// gets all the objects with the specified key name and value. Value is optional
 	getObjects = function(obj, key, val) {
 		var objects = [];
 		for (var i in obj) {
@@ -452,16 +484,19 @@
 		return objects;
 	};
 
+	// Adds lock. This stores the initial state, so that you can identify objects that are changes as well as know their old values
 	addOptimisticLock = function(model, data, observableData, isInitiallyDirty) {
 		var result = function() {}
 		var _initialState = data;
 		var _initialJSONString = ko.toJSON(observableData);
 		var _isInitiallyDirty = ko.observable(isInitiallyDirty);
 		
+		// Gets initial state of the objects
 		result.getInitialState = function() {
 			return _initialState;
 		}
 
+		// Returns if the object is changed
 		result.isDirty = ko.computed({
 				read:function() {
 					return observableData && (_isInitiallyDirty() || _initialJSONString !== ko.toJSON(observableData));
@@ -469,14 +504,14 @@
 				deferEvaluation : true
 		});
 
-		// Strictly to be used internally. Updates the lock to the current state of the object
+		// Strictly to be used internally. Updates the lock(the initial state) to the current state of the object
 		result._updateLock = function(data) {
 			_initialState = data ? data : ko.mapping.toJS(observableData); 
 			_initialJSONString = ko.toJSON(observableData);
 			_isInitiallyDirty(false);
 		};
 
-		// Strictly to be used internally for updating the state and the lock after successful update/insert
+		// Strictly to be used internally. Updates the current state and the lock after successful update/insert
 		result._update = function(newData) {
 			_initialState = newData;
 			ko.mapping.fromJS(newData, observableData);
@@ -491,6 +526,7 @@
 			model[model.objectName].valueHasMutated();
 		}
 
+		// Sets the object back to the initial state
 		result.undo = function() {
 			if (this.isDirty()){			
 				this._update(_initialState);
