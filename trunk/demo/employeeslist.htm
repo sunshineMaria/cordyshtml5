@@ -14,24 +14,26 @@
 	$(function() {
 		// Create a new model
 		empModel = new $.cordys.model({
-			// Name of the Business Object
-			objectName: "Employees",
+			objectName: "Employees", // Name of the Business Object
 			read: {
 				// Settings for the read method
 				namespace: "http://schemas.cordys.com/NW",
 				dataType: "json",
 				method: "GetEmployeesObjects",
+				// Parameters for the method
 				parameters: {
 					fromEmployeeID: "0",
 					toEmployeeID: "99"
 				}
 			}
 		});
-		// Activate Knockout to bind the UI
+
+		// Invoke Knockout to bind to our Model
 		ko.applyBindings(empModel);
+
 		// Call the read method. This would fire the method with the namespace and parameters as specified in the read settings above.
-		// specified in the read 
 		empModel.read();
+		
 	});
 	</script>
 </head> 
