@@ -24,13 +24,6 @@
 			businessIdentifiersModel;
 
 		this.getBusinessIdentifiers = function(processInstance, options) {
-			var processInstanceId = "";
-			if (typeof(processInstance) === "object") {
-				processInstanceId = processInstance.ProcessInstanceId;
-			} else {
-				processInstanceId = processInstance;
-			}
-			if (typeof(processInstanceId) === "function") processInstanceId = processInstanceId();
 			var callback = options.success;
 			options.success = function(data) {
 				var identifiers = data.sort(function(a, b) {
@@ -45,7 +38,7 @@
 				namespace: "http://schemas.cordys.com/pim/queryinstancedata/1.0",
 				dataType: 'json',
 				parameters: {
-					processInstanceID: processInstanceId
+					processInstanceID: getProcessInstanceId(processInstance)
 				}
 			}, options);
 			if (!self.businessIdentifiersModel) {
@@ -62,30 +55,23 @@
 			return self.businessIdentifiersModel;
 		};
 
-		this.startProcess = function(processId, processMessage, options) {
+		this.startProcess = function(processIdent, processMessage, options) {
 			options = options || {};
 			options.parameters = $.extend({type: "definition"}, options.parameters);
-			return this.executeProcess(processId, processMessage, options);
+			return this.executeProcess(processIdent, processMessage, options);
 		};
 
 		this.executeProcess = function(processInstance, processMessage, options) {
-			var processInstanceId = "";
-			if (typeof(processInstance) === "object") {
-				processInstanceId = processInstance.ProcessInstanceId;
-			} else {
-				processInstanceId = processInstance;
-			}
-			if (typeof(processInstanceId) === "function") processInstanceId = processInstanceId();
 			options = options || {};
 			if ($.isArray(options.parameters)) {
 				options.parameters = mergeArraysWithDistinctKey(options.parameters || [], [
-					{name:"receiver",	value: processInstanceId},
+					{name:"receiver",	value: getProcessInstanceId(processInstance)},
 					{name:"type",		value: "instance"},
 					{name:"message",	value: processMessage}
 				], "name");
 			} else {
 				options.parameters = $.extend({
-					receiver: processInstanceId,
+					receiver: getProcessInstanceId(processInstance),
 					type: "instance",
 					message: processMessage
 				}, options.parameters);
@@ -112,6 +98,12 @@
 			if (!found) result.push(this);
 		});
 		return result;
+	}
+
+	function getProcessInstanceId(processInstance) {
+		var id = (typeof(processInstance) === "object") ? processInstance.ProcessInstanceId : processInstance;
+		// If it is an observable, call the method to get the value, otherwise just return the value
+		return (typeof(id) === "function") ? id() : id;
 	}
 
 })(window, jQuery)

@@ -7,35 +7,20 @@
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js" type="text/javascript"></script>
 	
-	<script src="/cordys/html5/knockout/knockout-2.0.0.js" type="text/javascript"></script>	
-	<script src="/cordys/html5/cordys.mobile.js" type="text/javascript"></script>
+	<script src="/cordys/html5/knockout/knockout-2.1.0.js" type="text/javascript"></script>	
+	<script src="/cordys/html5/cordys.html5sdk-0.1.js" type="text/javascript"></script>
 
 	<script type="text/javascript">
-		var taskModel;
 		$(function() {
-			taskModel = new $.cordys.model({
-				objectName: "Task",
-				defaults: {
-					namespace: "http://schemas.cordys.com/notification/workflow/1.0",
-					dataType: "json"
-				},
-				create: {},
-				read: {
-					method: "GetTasks",
-					parameters: [
-						{name:"OrderBy",value:"Task.StartDate DESC"}
-					]
-				}
-			});
 			ko.bindingHandlers.date = { 
 				update: function(element, valueAccessor) { 
-					ko.utils.unwrapObservable(valueAccessor()); //just to create a dependency
-					var dt = getDateFromXML(valueAccessor());
+					var value = ko.mapping.toJS(valueAccessor());
+//					ko.utils.unwrapObservable(valueAccessor()); //just to create a dependency
+					var dt = getDateFromXML(value);
 					if (dt) $(element).text(dt.toDateString() + " " + dt.toLocaleTimeString()); 
 				}
 			};
-			ko.applyBindings(taskModel);
-			taskModel.read();
+			$.cordys.workflow.getTasks({context:$("#taskList")[0]});
 		});
 		var re_longDT = new RegExp("^(\\d{4})\-(\\d{2})\-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})[.]?(\\d{0,9})(\\d*)?([Z+\-].*)?$");
 		function getDateFromXML(XMLValue)
@@ -51,28 +36,7 @@
 		}
 		function selectTask() {
 			return function(data) {
-				if (taskModel.selectedItem) taskModel.selectedItem(data);
-
-				var taskDetails = $.cordys.ajax({
-						method: "GetTask",
-						namespace: "http://schemas.cordys.com/notification/workflow/1.0",
-						dataType: 'json',
-						parameters: [
-							{name:"TaskId",value:taskModel.selectedItem().TaskId},
-							{name:"ReturnTaskData",value:"true"},
-							{name:"RetrievePossibleActions",value:"true"}
-						],
-						success: function(data) {
-							var url = data.tuple.old.Task.url;
-							if (url.search(/\.htm$/) > 0) {
-								url = addURLParameter(url, "taskId", data.tuple.old.Task.TaskId);
-								$.mobile.changePage( url, { transition: "pop", changeHash: false } );
-							}
-							else {
-								$.mobile.changePage( "#detailsPage", { transition: "pop", changeHash: false } );
-							}
-						}
-					});
+				$.cordys.workflow.openTask(data);
 			}
 		}
 	</script>
@@ -85,21 +49,21 @@
 		<div data-role="header" data-theme="b">
 			<a href="http://www.cordys.com" data-icon="back">Cordys</a>
 			<h1>Tasklist</h1>
-			<a href="#" data-icon="refresh"data-role="button" onclick="taskModel.read()">Refresh</a>
+			<a href="#" data-icon="refresh"data-role="button" onclick="$.cordys.workflow.getTasks()">Refresh</a>
 		</div>
 
 		<div data-role="content" data-theme="b">
 			<div data-role="controlgroup" data-type="horizontal" data-theme="c">
-				<a href="tasklist.htm" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Personal Tasks</a>
+				<a href="#mainPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Personal Tasks</a>
 				<a href="worklist.htm" data-role="button" data-transition="fade" data-theme="c">Worklists</a>
 			</div>
 
-			<ul id="workList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
+			<ul id="taskList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
 				<li>
 					<div >
-						<a href="#" data-transition="pop" class="ui-link-inherit" data-bind="click:selectTask($data)">
-							<h3 class="ui-li-heading" data-bind="text:Activity.keyValue">Activity</h3>
-							<p class="ui-li-desc"><span data-bind="date:StartDate"></span>&nbsp;<span data-bind="text:State"></p>
+						<a href="#" data-transition="pop" class="ui-link-inherit" data-bind="click:$.cordys.workflow.openTask">
+							<h3 class="ui-li-heading" data-bind="text:Activity.text">Activity</h3>
+							<p class="ui-li-desc"><span data-bind="date:StartDate"></span>&nbsp;<span data-bind="text:State"></span></p>
 						</a>
 					</div>
 				</li>
@@ -117,7 +81,7 @@
 				<li data-role="heading" data-theme="c" data-mini="true">
 					<div data-bind="with: selectedItem">
 						<a class="ui-link-inherit">
-							<h3 class="ui-li-heading"><span data-bind="text:Activity"></span></h3>
+							<h3 class="ui-li-heading"><span data-bind="text:Activity.text"></span></h3>
 						</a>
 					</div>
 				</li>
@@ -133,7 +97,7 @@
 						</div>
 						<div >
 							<label for="fldAssignee" class="ui-input-text">Assignee</label>
-							<input type="text" readonly='true' id="fldAssignee" data-bind="value:Assignee" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+							<input type="text" readonly='true' id="fldAssignee" data-bind="value:Assignee.text" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
 						</div>
 						<div >
 							<label for="fldStartDate" class="ui-input-text">Start Date</label>
@@ -155,24 +119,7 @@
 	</div>
 <script type="text/javascript">
 	$("#mainPage").bind( 'pageshow',function(event, ui) {
-		if (taskModel) taskModel.read();
-	});
-	$("#detailsPage").bind( 'pageshow',function(event, ui) {
-	//	taskModel.read({method: "GetTask", parameters: [{name:"TaskId",value:taskModel.selectedItem().TaskId()}]});
-		var taskDetails = $.cordys.ajax({
-				method: "GetTask",
-				namespace: "http://schemas.cordys.com/notification/workflow/1.0",
-				dataType: 'json',
-				parameters: [
-					{name:"TaskId",value:taskModel.selectedItem().TaskId},
-					{name:"ReturnTaskData",value:"true"},
-					{name:"RetrievePossibleActions",value:"true"}
-				],
-				success: function(data) {
-				//	debugger;
-				//	alert("task: " + JSON.stringify(data.tuple.old.Task.TaskData));
-				}
-			});
+		$.cordys.workflow.getTasks();
 	});
 </script>
 

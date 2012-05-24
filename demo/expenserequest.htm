@@ -33,50 +33,44 @@
 				<input id="fldAmount" placeholder="" value="" type="text" />
 				<button id="btnSend" type="submit" data-theme="b">Send Request</button>
 			</div>
-		<script type="text/javascript">
+			<script type="text/javascript">
 
-			$("#requestPage")
-				.on('pageinit', function() {
-					$("#btnSend").bind("click", sendRequest);
-					$(":input").bind("change", function() {
-						$("#btnSend").button('enable');
+				$("#requestPage")
+					.on('pageinit', function() {
+						$("#btnSend").bind("click", sendRequest);
+						$(":input").bind("change", function() {
+							$("#btnSend").button('enable');
+						});
+						$("#fldName").focus();
+					})
+					.keydown(function (event) {
+						if (event.keyCode == 13) { // Enter
+							$("#btnSend").trigger("click");
+						}
 					});
-					$("#fldName").focus();
-				})
-				.keydown(function (event) {
-					if (event.keyCode == 13) { // Enter
-						$("#btnSend").trigger("click");
-					}
-				});
 
-			function sendRequest() {
-				$.cordys.ajax({
-					method: "ExecuteProcess",
-					namespace: "http://schemas.cordys.com/bpm/execution/1.0",
-					dataType: 'json',
-					parameters: [
-						{name:"receiver",value:"Expense Request Model"},
-						{name:"type",value:"definition"},
-						{name:"source",value:"Mobile"},
-						{name:"message", value: getInputMessage}
-					],
-					success: function(data) {
-						$("#btnSend").button('disable');
-					}
-				});
-			}
+				function sendRequest() {
+					$.cordys.process.startProcess("Expense Request Model", getInputMessage(), {
+						parameters:{source:"Mobile"},
+						success: function(data) {
+							$("#btnSend").button('disable');
+						}
+					});
+				}
 
-			function getInputMessage() {
-				var inputMessage = "<ExpenseRequest xmlns='http://schemas.cordys.com/default'>\
-										<Expense>\
-											<EmployeeName>"+$("#fldName").val()+"</EmployeeName>\
-											<Reason>"+$("#fldReason").val()+"</Reason>\
-											<Amount>"+$("#fldAmount").val()+"</Amount>\
-										</Expense>\
-									</ExpenseRequest>";
-				return inputMessage;
-			}
-		</script>
+				function getInputMessage() {
+					return {
+						ExpenseRequest: {
+							'@xmlns': 'http://schemas.cordys.com/default',
+							Expense: {
+								EmployeeName: $("#fldName").val(),
+								Reason: $("#fldReason").val(),
+								Amount: $("#fldAmount").val()
+							}
+						}
+					};
+				}
+			</script>
 		</div>
 
 	</body>

@@ -30,7 +30,7 @@
 			caseVariablesModel,
 			followupActivitiesModel;
 
-		this.createCase = function(caseModel, caseData, options) {
+		this.createCase = function(caseModel, caseVariables, caseData, options) {
 			options = getOptionsForCaseMethod("CreateCase", options, {
 				model: caseModel,
 				casedata: caseData
@@ -49,7 +49,7 @@
 				caseinstanceid: caseInstanceId,
 				activityinstanceid: {
 					'@activityid': activityId,
-					keyValue: activityInstanceId
+					text: activityInstanceId
 				}
 			});
 			return $.cordys.ajax(options);
@@ -68,7 +68,7 @@
 				caseinstanceid: caseInstanceId,
 				activityinstanceid: {
 					'@activityid': activityId,
-					keyValue: activityInstanceId
+					text: activityInstanceId
 				}
 			});
 			return $.cordys.ajax(options);
@@ -259,7 +259,7 @@
 				caseinstanceid: caseInstanceId,
 				activityinstanceid: {
 					'@activityid': activityId,
-					keyValue: activityInstanceId
+					text: activityInstanceId
 				}
 			});
 			return $.cordys.ajax(options);
@@ -276,7 +276,7 @@
 			options = getOptionsForCaseMethod("sendEvent", options, {
 				caseinstanceid: caseInstanceId,
 				event: {
-					keyValue: eventName,
+					text: eventName,
 					'@source': sourceId
 				}
 			});
@@ -297,7 +297,7 @@
 			return $.cordys.ajax(options);
 		};
 
-		this.updateCaseVariables = function(caseInstanceTask, caseData, options) {
+		this.updateCaseVariables = function(caseInstanceTask, caseVariables, options) {
 			var caseInstanceId = "";
 			if (typeof(caseInstanceTask) === "object") {
 				caseInstanceId = caseInstanceTask.ProcessInstanceId;
@@ -306,31 +306,17 @@
 			}
 			options = getOptionsForCaseMethod("UpdateCaseVariables", options, {
 				caseinstanceid: caseInstanceId,
-				casedata: caseData
+				casedata: {
+					data: {
+						"@xmlns:case": "http://schemas.cordys.com/casemanagement/1.0",
+						"@name": "case:casevariables",
+						"case:casevariables": caseVariables
+					}
+				}
 			});
 			return $.cordys.ajax(options);
 		};
 
-		/*
-	V	CreateCase						Executes the case model
-	V	CompleteActivity				Completes the case activity in the release state
-	V	CompleteActivityWithFollowup	Completes the case activity and plans for the follow up activities
-	V	GetActivityDefinition			get the complete definition of an activity.
-	V	GetActivityInstance				Provides the details of a activity instance
-	X	GetActivityInstances			Provides the details of the activity instances which are triggered by the case instance
-	V	GetBusinessEvents				Provides all the business events which are allowed to be raised from a case activity
-	V	GetCaseData						Fetches the data associated with the specified case instance
-	V	GetCaseInstance					Fetches the details of a case instance
-	X	GetCaseInstances				Fetches the details of the case instance(s) details based on the specified criteria like status, target and so on.
-	V	GetCaseVariables				Retrieves the details of the case variable associated with the case model
-	V	GetFollowupActivities			Returns all the follow-up activities for an activity instance
-	V	PlanActivities					Allows planning of activities
-	V	PlanIntermediateActivities		Allows planning of Intermediate follow-up type activities
-	V	SendEvent						Used to send a business event to a case instance
-	V	UpdateCaseData					Updates the data of a case instance
-	V	UpdateCaseVariables				Updates the case variables associated to a case instance
-		
-		*/
 		return this;
 	};
 
