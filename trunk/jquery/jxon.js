@@ -19,7 +19,35 @@
 		return sXML.slice(3, sXML.length-4); // remove the temporary object
 	};
 
-	var	sValueProp = "keyValue", sAttributesProp = "keyAttributes", sAttrPref = "@", /* you can customize these values */ 
+	$.cordys.json.find = function(obj, key, val) {
+		var obj = getObj(obj, key, val);
+		return obj.length===0 ? null : (obj.length===1 ? obj[0] : obj);
+	}
+
+	function getObj(obj, key, val) {
+		var objects = [];
+		for (var i in obj) {
+			if (!obj.hasOwnProperty(i)) continue;
+			if (typeof obj[i] == 'object') {
+				if (i == key) {
+					if ($.isArray(obj[i])) {
+						for (var j=0; j<obj[i].length; j++) {
+							objects.push(obj[i][j]);
+						}
+					} else {
+						objects.push(obj[i]);
+					}
+				} else {
+					objects = objects.concat(getObj(obj[i], key, val));
+				}
+			} else if (i == key && obj[key] == val) {
+				objects.push(obj);
+			}
+		}
+		return objects;
+	};
+
+	var	sValueProp = "text", sAttributesProp = "keyAttributes", sAttrPref = "@", /* you can customize these values */ 
 		aCache = [], rIsNull = /^\s*$/, rIsBool = /^(?:true|false)$/i;
 
 	function parseText (sValue) {

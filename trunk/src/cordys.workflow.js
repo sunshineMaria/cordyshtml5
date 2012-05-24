@@ -24,14 +24,9 @@
 			taskModel, worklistModel, taskDetailModel;
 
 		this.getTasks = function(options) {
-			options = $.extend({
-				method: "GetTasks",
-				namespace: "http://schemas.cordys.com/notification/workflow/1.0",
-				dataType: "json",
-				parameters: {
+			options = getOptionsForWorkflowMethod("GetTasks", options, {
 					OrderBy: "Task.StartDate DESC"
-				}
-			}, options);
+			});
 			if (!self.taskModel) {
 				self.taskModel = new $.cordys.model({
 					objectName: "Task",
@@ -45,14 +40,14 @@
 			return self.taskModel;
 		};
 		this.selectTask = function(data) {
-			if (self.taskModel.selectedItem) self.taskModel.selectedItem(data);
+			if (self.taskModel && self.taskModel.selectedItem) self.taskModel.selectedItem(data);
 		};
-		this.openTask = function(data, detailsPageId) {
-			if (data && self.taskModel.selectedItem) self.taskModel.selectedItem(data);
-			self.getTaskDetails(data, {success: function(tasks) {
-				var url = tasks[0].url();
-				if (url.search(/\.htm$/) > 0) {
-					url = addURLParameter(url, "taskId", tasks[0].TaskId());
+		this.openTask = function(task, detailsPageId) {
+			if (typeof(task) === "object" && self.taskModel && self.taskModel.selectedItem) self.taskModel.selectedItem(task);
+			self.getTaskDetails(task, {success: function(tasks) {
+				var url = tasks[0].url;
+				if (url.search(/\.html?$/) > 0) {
+					url = addURLParameter(url, "taskId", tasks[0].TaskId);
 					$.mobile.changePage( url, { transition: "pop", changeHash: false } );
 				}
 				else {
@@ -61,23 +56,11 @@
 			}})
 		};
 		this.getTaskDetails = function(task, options) {
-			var taskId;
-			if (typeof(task) === "object") {
-				taskId = task.TaskId;
-			} else {
-				taskId = task;
-			}
-			if (typeof(taskId) === "function") taskId = taskId();
-			options = $.extend({
-				method: "GetTask",
-				namespace: "http://schemas.cordys.com/notification/workflow/1.0",
-				dataType: 'json',
-				parameters: {
-					TaskId:taskId,
+			options = getOptionsForWorkflowMethod("GetTask", options, {
+					TaskId:getTaskId(task),
 					ReturnTaskData:"true",
 					RetrievePossibleActions:"true"
-				}
-			}, options);
+			});
 			if (!self.taskDetailModel) {
 				self.taskDetailModel = new $.cordys.model({
 					objectName: "Task",
@@ -91,14 +74,9 @@
 			return self.taskDetailModel;
 		};
 		this.getWorkLists = function(options) {
-			options = $.extend({
-				method: "GetAllTargets",
-				namespace: "http://schemas.cordys.com/notification/workflow/1.0",
-				dataType: "json",
-				parameters: {
+			options = getOptionsForWorkflowMethod("GetAllTargets", options, {
 					TaskCountRequired: "true"
-				}
-			}, options);
+			});
 			if (!self.worklistModel) {
 				self.worklistModel = new $.cordys.model({
 					objectName: "Target",
@@ -113,41 +91,17 @@
 		};
 
 		this.claimTask = function(task, options) {
-			var taskId;
-			if (typeof(task) === "object") {
-				taskId = task.TaskId;
-			} else {
-				taskId = task;
-			}
-			if (typeof(taskId) === "function") taskId = taskId();
-			options = $.extend({
-				method: "ClaimTask",
-				namespace: "http://schemas.cordys.com/notification/workflow/1.0",
-				dataType: 'json',
-				parameters: {
-					TaskId:taskId
-				}
-			}, options);
+			options = getOptionsForWorkflowMethod("ClaimTask", options, {
+					TaskId: getTaskId(task)
+			});
 			return $.cordys.ajax(options);
 		};
 		this.performTaskAction = function(task, taskData, action, options) {
-			var taskId;
-			if (typeof(task) === "object") {
-				taskId = task.TaskId;
-			} else {
-				taskId = task;
-			}
-			if (typeof(taskId) === "function") taskId = taskId();
-			options = $.extend({
-				method: "PerformTaskAction",
-				namespace: "http://schemas.cordys.com/notification/workflow/1.0",
-				dataType: 'json',
-				parameters: {
-					TaskId: taskId,
+			options = getOptionsForWorkflowMethod("PerformTaskAction", options, {
+					TaskId: getTaskId(task),
 					Action: action,
 					Data: taskData
-				}
-			}, options);
+			});
 			return $.cordys.ajax(options);
 		};
 
@@ -175,10 +129,25 @@
 		this.suspendTask = function(task, taskData, options) {
 			return this.performTaskAction(task, taskData, "SUSPEND", options);
 		};
-		// delegateTask
-		// forwardTask
 
 		return this;
 	};
+
+	function getOptionsForWorkflowMethod(methodName, options, defaultParameters) {
+		options = options || {};
+		options.parameters = $.extend(defaultParameters, options.parameters);
+		options = $.extend({
+			method: methodName,
+			namespace: "http://schemas.cordys.com/notification/workflow/1.0",
+			dataType: 'json'
+		}, options);
+		return options;
+	}
+
+	function getTaskId(task) {
+		var id = (typeof(task) === "object") ? task.TaskId : task;
+		// If it is an observable, call the method to get the value, otherwise just return the value
+		return (typeof(id) === "function") ? id() : id;
+	}
 
 })(window, jQuery)
