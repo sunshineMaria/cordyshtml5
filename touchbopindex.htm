@@ -284,7 +284,8 @@ if (name && value)
 						if (app) {
 							var url = app.url;
 							if (url.search(/\.html?$/) > 0) {
-								$.mobile.changePage( url, { transition: "fade", changeHash: true } );
+								//$.mobile.changePage( url, { transition: "fade", changeHash: true } );
+								document.location = url;
 							}
 						}
 					}
