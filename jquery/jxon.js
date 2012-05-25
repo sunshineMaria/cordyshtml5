@@ -1,5 +1,8 @@
 ﻿;(function (window, $, undefined) {
 
+	var	sValueProp = "text", sAttributesProp = "keyAttributes", sAttrPref = "@", /* you can customize these values */ 
+		aCache = [], rIsNull = /^\s*$/, rIsBool = /^(?:true|false)$/i;
+
 	if (!$.cordys) $.cordys = {};
 	$.cordys.json = {};
 	$.cordys.json.xml2js = function (oXMLParent, nVerbosity /* optional */, bFreeze /* optional */, bNesteAttributes /* optional */) {
@@ -19,9 +22,18 @@
 		return sXML.slice(3, sXML.length-4); // remove the temporary object
 	};
 
-	$.cordys.json.find = function(obj, key, val) {
-		var obj = getObj(obj, key, val);
+	$.cordys.json.find = function(obj, name, val) {
+		// Finding all the objects with a certain name.
+		// It returns:
+		// - null if nothing found
+		// - a single object if 1 result found
+		// - an array if multiple results found
+		var obj = getObj(obj, name, val);
 		return obj.length===0 ? null : (obj.length===1 ? obj[0] : obj);
+	}
+	$.cordys.json.findObjects = function(obj, name, val) {
+		// Finding all the objects with a certain name and always returns an array
+		return getObj(obj, name, val);
 	}
 
 	function getObj(obj, key, val) {
@@ -46,9 +58,6 @@
 		}
 		return objects;
 	};
-
-	var	sValueProp = "text", sAttributesProp = "keyAttributes", sAttrPref = "@", /* you can customize these values */ 
-		aCache = [], rIsNull = /^\s*$/, rIsBool = /^(?:true|false)$/i;
 
 	function parseText (sValue) {
 		if (rIsNull.test(sValue)) { return null; }
