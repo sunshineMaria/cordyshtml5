@@ -38,6 +38,10 @@
 			// make the object collection observable
 			this[this.objectName] = ko.observableArray();
 			this.selectedItem = ko.observable();
+			// let us bind automatically if the context is not set to null
+			/*if (settings.context !== null || settings.context !== false){
+				ko.applyBindings(self, typeof(settings.context) === "undefined" ? null : settings.context);
+			}*/
 		} else {
 			this[this.objectName] = [];
 			// Selects an Item
@@ -52,12 +56,32 @@
 		// Handlers and settings for the read part
 		this.readSettings = {
 			success : function(data) {
+				// clear the current cursor if there is one so that it doesn't get sent with all request
+				if (self.readSettings.parameters && self.readSettings.parameters.cursor){
+					delete self.readSettings.parameters.cursor;
+				}
+
 				var objects = getObjects(data, self.objectName);
+				var cursor = getObjects(data, "cursor")[0];
+				if (typeof(cursor) !== "undefined" && typeof(cursor['@id']) === "undefined" && typeof(self.cursor) !== "undefined" && typeof(self.cursor['@position']) !== "undefined"){
+					if (objects.length === 0){
+						cursor['@position'] = parseInt(self.cursor['@position']);
+						self.cursor = cursor;
+						self[self.objectName].valueWillMutate();
+						self[self.objectName].valueHasMutated();
+						return false;
+					}
+					else{
+						// in case we do not have an id copy the cursor position from the earlier one and adjust so that we know how to go previous
+						cursor['@position'] = parseInt(self.cursor['@position']) + parseInt(cursor['@numRows']);
+					}
+				}
+				
+				self.cursor = cursor ? cursor : null;
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
 					if (self.isReadOnly !== true){
 						// let us make every attribute Observable for identifying changes and add lock if the model is not readOnly
-						for (var objectKey in objects)
-						{
+						for (var objectKey in objects){
 							var object = objects[objectKey];
 							var observableObject = ko.mapping.fromJS(object);
 							addOptimisticLock(self, object, observableObject, false);
@@ -74,12 +98,43 @@
 						self._readSuccess(self[self.objectName]);
 					}
 				}
+				
+			}
+		}
+
+		// Common handlers for all the update methods. Can be over-ridden
+		this.defaultUpdateSettings = {
+			async : false,
+			beforeSend: function (xhr, settings){
+				// cancel the request if there is nothing to update or call the custom beforeSend handler (he can cancels it too)
+				return (self.objectsToBeUpdated.length > 0) && (self._beforeSend ? self._beforeSend(xhr, settings, self.objectsToBeUpdated) : true);
+			},
+
+			success: function (data, textStatus, jqXHR){
+				// invoke the custom success handler
+				if (self._success) self._success(data, textStatus, jqXHR);
+				// merge the insert, update, delete
+				mergeUpdate(data, self.objectsToBeUpdated);
+				self.objectsToBeUpdated = null;
+			},
+
+			error : function (jqXHR, textStatus, errorThrown){
+				handleError(jqXHR.error(), self.objectsToBeUpdated);
+				self.objectsToBeUpdated = null;
+
+				var showError = true;
+				if (opts._error && typeof(opts._error) === "function"){
+					showError = opts._error(jqXHR, textStatus, errorThrown, messCode, errorMessage) !== false;
+				}
+				if (showError){
+					showError(jqXHR.error(), "Error on Update");
+				}
+				return false;
 			}
 		}
 
 		// Handlers and settings for the update part
 		this.updateSettings = {
-			async : false,
 			parameters : function (settings){
 				var updateContent = [];
 				self.objectsToBeUpdated = [];
@@ -105,31 +160,14 @@
 
 				}
 				return updateContent.join("");
-			},
-
-			beforeSend: function (xhr, settings){
-				return self.objectsToBeUpdated.length > 0;
-			},
-
-			success: function (data){
-				mergeUpdate(data, self.objectsToBeUpdated);
-				self.objectsToBeUpdated = null;
-			},
-
-			onError : function (error){
-				showError(error, "Error on Update");
-				handleError(error, self.objectsToBeUpdated);
-				self.objectsToBeUpdated = null;
-				return false;
 			}
 		}
 
 		// Handlers and settings for the Sync part
 		this.synchronizeSettings = {
-			async : false,
 			parameters : function (settings){
 				var synchronizeContent = [];
-				self.objectsToBeSynchronized = [];
+				self.objectsToBeUpdated = [];
 
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
 					var objects = self[self.objectName]();
@@ -141,14 +179,14 @@
 							if (object.lock){
 								// deleted object
 								if (object._destroy === true){
-									self.objectsToBeSynchronized.push(object);
+									self.objectsToBeUpdated.push(object);
 									// let us get the old bo from the initial saved state
 									var oldObject = object.lock.getInitialState();
 									// get the corresponding XML for the deleted object and add it to the deleteContent
 									synchronizeContent.push($.cordys.json.js2xmlstring({tuple:{old:{Employees:oldObject}}}));
 								}
 								else if (object.lock.isDirty()){
-									self.objectsToBeSynchronized.push(object);
+									self.objectsToBeUpdated.push(object);
 									// let us get the old bo from the saved state
 									var oldObject = object.lock.getInitialState();
 									// the objects here are Observavables, let us unmap to get the new bo
@@ -160,7 +198,7 @@
 							// not persisted - new
 							else if (object._destroy !== true){
 								// just double check whether it was an object deleted before persisting directly using KO API's
-								self.objectsToBeSynchronized.push(object);
+								self.objectsToBeUpdated.push(object);
 								// let us get the new bo by unwrapping the Observable
 								var newObject = ko.mapping.toJS(object);
 								// get the corresponding XML for the inserted object and add it to the insertContent
@@ -172,29 +210,14 @@
 
 				}
 				return synchronizeContent.join("");
-			},
-			beforeSend: function (xhr, settings){
-				return self.objectsToBeSynchronized.length > 0;
-			},
-			success: function (data){
-				mergeUpdate(data, self.objectsToBeSynchronized);
-				self.objectsToBeSynchronized = null;
-			},
-
-			onError : function (error){
-				showError(error, "Error on Update");
-				handleError(error, self.objectsToBeSynchronized);
-				self.objectsToBeSynchronized = null;
-				return false;
 			}
 		}
 
 		// Handlers and settings for the delete part
 		this.deleteSettings = {
-			async : false,
             parameters : function (settings){
 				var deleteContent = [];
-				self.objectsToBeDeleted = [];
+				self.objectsToBeUpdated = [];
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
 					var objects = self[self.objectName]();
 					if (objects){
@@ -202,7 +225,7 @@
 							var object = objects[objectKey];
 							// find deleted objects which were already persisted
 							if (object.lock && object._destroy === true){
-								self.objectsToBeDeleted.push(object);
+								self.objectsToBeUpdated.push(object);
 								// let us get the old bo from the initial saved state
 								var oldObject = object.lock.getInitialState();
 								// get the corresponding XML for the deleted object and add it to the deleteContent
@@ -212,31 +235,15 @@
 					}
 				}
 				return deleteContent.join("");
-			},
-			beforeSend: function (xhr, settings){
-				return self.objectsToBeDeleted.length > 0;
-			},
-
-			success: function (data){
-				mergeUpdate(data, self.objectsToBeDeleted);
-				self.objectsToBeDeleted = null;
-			},
-
-			onError : function (error){
-				showError(error, "Error on Delete");
-				handleError(error, self.objectsToBeDeleted);
-				self.objectsToBeDeleted = null;
-				return false;
 			}
 		}
 
 			
 		// Handlers and settings for the create part
 		this.createSettings = {
-			async : false,
 			parameters : function (settings){
 				var insertContent = [];
-				self.objectsToBeInserted = [];
+				self.objectsToBeUpdated = [];
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
 					var objects = self[self.objectName]();
 					if (objects){
@@ -244,7 +251,7 @@
 							var object = objects[objectKey];
 							// find objects to be inserted
 							if (! object.lock && object._destroy !== true){
-								self.objectsToBeInserted.push(object);
+								self.objectsToBeUpdated.push(object);
 								// let us get the new bo by unwrapping the Observable
 								var newObject = ko.mapping.toJS(object);
 								// get the corresponding XML for the inserted object and add it to the insertContent
@@ -254,50 +261,88 @@
 					}
 				}
 				return insertContent.join("");
-			},
-
-			beforeSend: function (settings){
-				return self.objectsToBeInserted.length > 0;
-			},
-
-			success: function (data){
-				mergeUpdate(data, self.objectsToBeInserted);
-				self.objectsToBeInserted = null;
-			},
-
-			onError : function (error){
-				showError(error, "Error on Insert");
-				handleError(error, self.objectsToBeInserted);
-				self.objectsToBeInserted = null;
-				return false;
 			}
 		}
 
 		// Sends all inserted objects to the backend
 		this.create = function(createSettings) {
-			$.cordys.ajax($.extend({}, settings.defaults, settings.create, self.createSettings, createSettings));
+			self._beforeSend = (createSettings && createSettings.beforeSend) ? createSettings.beforeSend : settings.create.beforeSend;
+			self._success = (createSettings && createSettings.success) ? createSettings.success : settings.create.success;
+			return $.cordys.ajax($.extend({}, settings.defaults, settings.create, createSettings, self.defaultUpdateSettings, self.createSettings));
 		};
 
 		// Sends the get/read request
-		this.read = function(readSettings) { 
+		this.read = function(readSettings) {
+			var options = $.extend(true, {}, settings.defaults, settings.read, readSettings, self.readSettings);
 			self._readSuccess = (readSettings && readSettings.success) ? readSettings.success : settings.read.success;
-			$.cordys.ajax($.extend({}, settings.defaults, settings.read, readSettings, self.readSettings));
+			return $.cordys.ajax(options);
 		};
 
 		// Sends all updated objects to the backend
-		this.update = function(updateSettings) { 
-			$.cordys.ajax($.extend({}, settings.defaults, settings.update, self.updateSettings, updateSettings));
+		this.update = function(updateSettings) {
+			self._beforeSend = (updateSettings && updateSettings.beforeSend) ? updateSettings.beforeSend : settings.update.beforeSend;
+			self._success = (updateSettings && updateSettings.success) ? updateSettings.success : settings.update.success; 
+			return $.cordys.ajax($.extend({}, settings.defaults, settings.update, updateSettings, self.defaultUpdateSettings, self.updateSettings));
 		};
 
 		// Sends all deleted objects to the backend.
 		this['delete'] = function(deleteSettings) {
-			$.cordys.ajax($.extend({}, settings.defaults, settings['delete'], self.deleteSettings, deleteSettings));
+			self._beforeSend = (deleteSettings && deleteSettings.beforeSend) ? deleteSettings.beforeSend : settings['delete'].beforeSend;
+			self._success = (deleteSettings && deleteSettings.success) ? deleteSettings.success : settings['delete'].success; 
+			return $.cordys.ajax($.extend({}, settings.defaults, settings['delete'], deleteSettings, self.defaultUpdateSettings, self.deleteSettings));
 		};
 
 		// Sends all local changes (inserted, updated, deleted objects) to the backend.
-		this.synchronize = function(synchronizeSettings) { 
-			$.cordys.ajax($.extend({}, settings.defaults, settings.update, self.synchronizeSettings, synchronizeSettings));
+		this.synchronize = function(synchronizeSettings) {
+			self._beforeSend = (synchronizeSettings && synchronizeSettings.beforeSend) ? synchronizeSettings.beforeSend : settings.update.beforeSend;
+			self._success = (synchronizeSettings && synchronizeSettings.success) ? synchronizeSettings.success : settings.update.success;
+			return $.cordys.ajax($.extend({}, settings.defaults, settings.update, synchronizeSettings, self.defaultUpdateSettings, self.synchronizeSettings));
 		};
+
+		// Returns the number of Business Objects
+		this.getSize = function()
+		{
+			return (typeof(self[self.objectName]) === "function") ? self[self.objectName]().length : self[self.objectName].length;
+		}
+
+		// Gets the next set of records
+		this.getNextPage = function(nextPageSettings){
+			if (self.cursor){
+				self.readSettings.parameters = {cursor:self.cursor};
+			}
+			return this.read(nextPageSettings);
+		}
+
+		// Gets the previous set of records
+		this.getPreviousPage = function(previousPageSettings){
+			if (self.cursor){
+				var previousPosition = self.cursor['@position'] - (self.cursor['@numRows'] * 2);
+				self.cursor['@position'] = previousPosition < 0 ? 0 : previousPosition;
+				self.readSettings.parameters = {cursor:self.cursor};
+			}
+			return this.read(previousPageSettings);
+		}
+
+		// Returns true if there are more records to move forward in the cursor
+		this.hasNext = function(){
+			if (this.getSize() === 0) return false;
+			if (typeof(self.cursor) === "undefined" || typeof(self.cursor['@position']) === "undefined") return false;
+			if (typeof(self.cursor['@id']) === "undefined") return false;
+			var currentPosition = typeof(self.cursor['@position']) === "undefined" ? 0 : parseInt(self.cursor['@position']);
+			var currentMaxRows =  typeof(self.cursor['@maxRows']) === "undefined" ? 0 : parseInt(self.cursor['@maxRows']);
+			return (currentPosition < currentMaxRows);
+		}
+
+		// Returns true if there are records to move backwards in the cursor
+		this.hasPrevious = function(){
+			if (this.getSize() === 0) return false;
+			if (typeof(self.cursor) === "undefined") return false;
+			var currentPosition = typeof(self.cursor['@position']) === "undefined" ? 0 : parseInt(self.cursor['@position']);
+			if (currentPosition === 0) return false;
+
+			var numRows =  typeof(self.cursor['@numRows']) === "undefined" ? 0 : parseInt(self.cursor['@numRows']);
+			return (currentPosition > numRows);
+		}
 
 		// Adds the specified Business Object
 		this.addBusinessObject = function(object){
@@ -355,13 +400,18 @@
 
 		// Clears the model
 		this.clear = function() {
-			self[self.objectName].removeAll();
+			if (typeof(self[self.objectName]) === "function") { // in case of knockout
+				self[self.objectName].removeAll();
+			}
+			else{
+				self[self.objectName] = {};
+			}
+			self.cursor = null;
 		}
 
 		// handles error in insert, update, delete, sync response. Updates the lock and current state to the current state from the response if specified
 		handleError = function(error, objectsToBeUpdated){
 			if (opts.useTupleProtocol){
-				debugger;
 				// let us find the tuples from the error detail
 				var tuples = $(error.responseXML).find("detail tuple");
 				for (var count=0; count<tuples.length; count++){
@@ -381,8 +431,7 @@
 								objectBeforeUpdation.lock._update(currentPersistedState);
 							}
 							else{
-								// it is an insert failure
-
+								// it is an insert failure. we do not have anything to do here
 							}
 						}
 						else{
@@ -399,7 +448,7 @@
 		};
 
 		// merges the response received after insert, update, delete, sync with the current data
-		mergeUpdate = function (data, objectsToBeSynchronized){
+		mergeUpdate = function (data, objectsToBeUpdated){
 			// let us get the updated tuples if we are using tuple protocol
 			if (opts.useTupleProtocol){
 				var synchronizedObjects =  $.map($.isArray(data.tuple) ? data.tuple : [data.tuple], function(tuple){
@@ -407,8 +456,8 @@
 				});
 			}
 
-			for (var count=0; count<objectsToBeSynchronized.length; count++){
-				var object = objectsToBeSynchronized[count];
+			for (var count=0; count<objectsToBeUpdated.length; count++){
+				var object = objectsToBeUpdated[count];
 				// check for persistence
 				if (object.lock){
 					// deleted object
