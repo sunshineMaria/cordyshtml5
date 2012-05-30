@@ -127,7 +127,7 @@
 					showError = opts._error(jqXHR, textStatus, errorThrown, messCode, errorMessage) !== false;
 				}
 				if (showError){
-					showError(jqXHR.error(), "Error on Update");
+					showErrorDialog(jqXHR.error(), "Error on Update");
 				}
 				return false;
 			}
@@ -501,7 +501,7 @@
 	}
 
 	// Extracts the error and shows it with a caption
-	showError = function(e, caption) {
+	showErrorDialog = function(e, caption) {
 		var err = $(e.error().responseXML).find("faultstring,error elem").text()
 						|| e.responseText 
 						|| "General error, see response.";
