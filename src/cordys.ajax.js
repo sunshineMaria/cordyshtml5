@@ -42,35 +42,30 @@
 			if (opts.parameters) {
 				dataStrings.push(getParameterString(opts.parameters, opts));
 			}
-			if (opts.iteratorSize) {
-				dataStrings.push("<cursor id='0' ");
-				dataStrings.push("position='0' ");
-				dataStrings.push("numRows='" + opts.iteratorSize +  "' ");
-				dataStrings.push("maxRows='" + opts.iteratorSize + "' />");
-				// TODO: handle cursor from response to be used in subsequent calls
-			}
+
 			dataStrings.push("</" + opts.method + ">");
 			dataStrings.push("</SOAP:Body></SOAP:Envelope>");
 			opts.data = dataStrings.join("");
 		}
-		if (typeof(opts.error) === "undefined") {
-			opts.error=function (e) {
-				console.log(e, e.error());
-				var $response = $(e.error().responseXML);
-				var messCode = $response.find("MessageCode").text();
-				if (messCode.search(/Cordys.*(AccessDenied|Artifact_Unbound)/)>=0) {
-					loginIntoCordys();
-				} else {
-					var showError = true;
-					if (opts.onError && typeof(opts.onError) === "function"){
-						showError = (opts.onError(e.error()) !== false);
-					}
-					if (showError){
-						var err = $(e.error().responseXML).find("faultstring,error elem").text()
-							|| e.responseText 
-							|| "General error, see response.";
-						alert("Error on read: '" + err + "'");
-					}
+		if (opts.__error && typeof (opts.error) === "function"){
+			opts.__error = opts.error;
+		}
+		opts.error=function (jqXHR, textStatus, errorThrown) {
+			console.log(jqXHR, jqXHR.error());
+			var $response = $(jqXHR.error().responseXML);
+			var messCode = $response.find("MessageCode").text();
+			if (messCode.search(/Cordys.*(AccessDenied|Artifact_Unbound)/)>=0) {
+				loginIntoCordys();
+			} else {
+				var showError = true;
+				var errorMessage = $(jqXHR.error().responseXML).find("faultstring,error elem").text()
+						|| jqXHR.responseText 
+						|| "General error, see response.";
+				if (opts.__error && typeof(opts.__error) === "function"){
+					showError = opts.__error(jqXHR, textStatus, errorThrown, messCode, errorMessage) !== false;
+				}
+				if (showError){
+					alert("Error on read: '" + errorMessage + "'");
 				}
 			}
 		}
