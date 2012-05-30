@@ -39,22 +39,27 @@
 		
 		// Subscribe to any change in the collection of Employees to enable/disable the next, previous buttons
 		empModel.Employees.subscribe(function(){
+			// disable the previous button if there are no previous records in the cursor
 			$("#btnPrevious").toggleClass("ui-disabled", ! empModel.hasPrevious());
+			// disable the next button if we are at the end of the cursor
 			$("#btnNext").toggleClass("ui-disabled", ! empModel.hasNext());
 		});
 	});
 
+	// Called on clicking refresh button. Refreshes the page
 	function refresh()
 	{
 		empModel.clear();
 		empModel.read();
 	}
 
+	// Called on clicking the Next button. Gets the next set of records
 	function getNext()
 	{
 		empModel.getNextPage();
 	}
 
+	// Called on clicking the previous button. Gets the previous set of records
 	function getPrevious()
 	{
 		empModel.getPreviousPage();
