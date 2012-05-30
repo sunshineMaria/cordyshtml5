@@ -47,7 +47,7 @@
 			dataStrings.push("</SOAP:Body></SOAP:Envelope>");
 			opts.data = dataStrings.join("");
 		}
-		if (opts.__error && typeof (opts.error) === "function"){
+		if (typeof (opts.error) === "function"){
 			opts.__error = opts.error;
 		}
 		opts.error=function (jqXHR, textStatus, errorThrown) {
