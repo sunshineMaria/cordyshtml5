@@ -78,7 +78,10 @@
 		var	sProp, vContent, nLength = 0, sCollectedTxt = "",
 			vResult = bHighVerb ? {} : /* put here the default value for empty nodes: */ "";
 
-		if (bAttributes && oParentNode.getAttribute("null") === "true") bAttributes = false;	// skip the attributes, empty value will be returned
+		if (bAttributes && oParentNode.getAttribute("xsi:nil") === "true") {
+			bAttributes = false;	// skip the attributes
+			vResult = null;			// value will be 'null'
+		}
 
 		if (bChildren) {
 			for (var oNode, nChildId = 0; nChildId < oParentNode.childNodes.length; nChildId++) {
@@ -155,7 +158,7 @@
 				for (var sAttrib in vValue) { oParentEl.setAttribute(sAttrib, vValue[sAttrib]); }
 			} else if (sName.charAt(0) === sAttrPref) {
 				oParentEl.setAttribute(sName.slice(1), vValue);
-			} else if (vValue.constructor === Array) {
+			} else if (vValue !== null && vValue.constructor === Array) {
 				for (var nItem = 0; nItem < vValue.length; nItem++) {
 					oChild = oXMLDoc.createElement(sName);
 					loadObjTree(oXMLDoc, oChild, vValue[nItem]);
@@ -167,6 +170,10 @@
 					loadObjTree(oXMLDoc, oChild, vValue);
 				} else if (vValue !== null && vValue !== true) {
 					oChild.appendChild(oXMLDoc.createTextNode(vValue.toString()));
+				} else if (vValue === null) {
+					oChild.setAttribute("null", "true");
+					oChild.setAttribute("xsi:nil", "true");
+					oChild.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 				}
 				oParentEl.appendChild(oChild);
 			}
