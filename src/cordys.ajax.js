@@ -47,10 +47,10 @@
 			dataStrings.push("</SOAP:Body></SOAP:Envelope>");
 			opts.data = dataStrings.join("");
 		}
-		if (typeof (opts.error) === "function"){
+		if (typeof(opts.error) === "function") {
 			opts.__error = opts.error;
 		}
-		opts.error=function (jqXHR, textStatus, errorThrown) {
+		opts.error = function(jqXHR, textStatus, errorThrown) {
 			console.log(jqXHR, jqXHR.error());
 			var $response = $(jqXHR.error().responseXML);
 			var messCode = $response.find("MessageCode").text();
@@ -61,10 +61,10 @@
 				var errorMessage = $(jqXHR.error().responseXML).find("faultstring,error elem").text()
 						|| jqXHR.responseText 
 						|| "General error, see response.";
-				if (opts.__error && typeof(opts.__error) === "function"){
+				if (opts.__error && typeof(opts.__error) === "function") {
 					showError = opts.__error(jqXHR, textStatus, errorThrown, messCode, errorMessage) !== false;
 				}
-				if (showError){
+				if (showError) {
 					alert("Error on read: '" + errorMessage + "'");
 				}
 			}
