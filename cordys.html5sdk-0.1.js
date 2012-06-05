@@ -1,4 +1,4 @@
-﻿if (typeof(jQuery) == "undefined") {
+if (typeof(jQuery) == "undefined") {
 	throw 'jQuery is required, please ensure it is loaded before this library'; 
 //	document.write('<script src="/cordys/html5/jquery/jquery-1.7.1.min.js"><\/script>');
 };
@@ -49,8 +49,8 @@ function loadScript(url, callback, async, cache) {
 	});
 };
 
-loadScript("/cordys/html5/src/cordys.ajax.js");
-loadScript("/cordys/html5/src/cordys.model.js");
-loadScript("/cordys/html5/src/cordys.workflow.js");
-loadScript("/cordys/html5/src/cordys.process.js");
-loadScript("/cordys/html5/src/cordys.case.js");
+loadScript("/cordys/html5/plugins/cordys.ajax.js");
+loadScript("/cordys/html5/plugins/cordys.model.js");
+loadScript("/cordys/html5/plugins/cordys.workflow.js");
+loadScript("/cordys/html5/plugins/cordys.process.js");
+loadScript("/cordys/html5/plugins/cordys.case.js");
