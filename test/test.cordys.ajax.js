@@ -89,29 +89,29 @@
 			</Response>"
 	});
 
-//	test("Get Employees json", 2, function(){
-//		stop();
-//		$.cordys.ajax({
-//			method: "GetEmployeesObjects",
-//			namespace: "http://schemas.cordys.com/NW",
-//			parameters: {
-//				fromEmployeeID : "0",
-//				toEmployeeID : "3"
-//			},
-//			dataType: 'json',
-//			success: function(data) {
-//				equal(data.tuple.length, 3, "3 employees found");
-//				equal(data.tuple[0].old.Employees.LastName, "Davolio", "Davolio is first Employee");
-//				start();
-//			},
-//			error: function(jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
-//				ok(false, "error found: " + errorMessage);
-//				start();
-//				return false;
-//			}
-//		});
+	test("Get Employees json", 2, function(){
+		stop();
+		$.cordys.ajax({
+			method: "GetEmployeesObjects",
+			namespace: "http://schemas.cordys.com/NW",
+			parameters: {
+				fromEmployeeID : "0",
+				toEmployeeID : "3"
+			},
+			dataType: 'json',
+			success: function(data) {
+				equal(data.tuple.length, 3, "3 employees found");
+				equal(data.tuple[0].old.Employees.LastName, "Davolio", "Davolio is first Employee");
+				start();
+			},
+			error: function(jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
+				ok(false, "error found: " + errorMessage);
+				start();
+				return false;
+			}
+		});
 
-//	});
+	});
 
 	test("Get Employees xml", 2, function(){
 		stop();
