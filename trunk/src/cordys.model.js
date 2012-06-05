@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2012 Cordys
  * Author: Piet Kruysse
  *
@@ -119,7 +119,6 @@
 			},
 
 			error : function (jqXHR, textStatus, errorThrown){
-				debugger;
 				handleError(jqXHR.error(), self.objectsToBeUpdated);
 				self.objectsToBeUpdated = null;
 
@@ -507,7 +506,6 @@
 						|| e.responseText 
 						|| "General error, see response.";
 					alert(caption + " : '" + err + "'");
-					// $.mobile.changePage($('<div />').html(caption + " : '" + err + "'"));
 		return false;
 	};
 
