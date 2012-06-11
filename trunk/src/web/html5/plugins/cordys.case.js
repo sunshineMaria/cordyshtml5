@@ -31,6 +31,11 @@
 			followupActivitiesModel;
 
 		this.createCase = function(caseModel, caseVariables, caseData, options) {
+			if (caseVariables) {
+				caseData = caseData || {data:{}};
+				if (caseData.data.constructor !== Array) { caseData.data = [caseData.data]; }
+				caseData.data.push( getCaseVariablesData(caseVariables) );
+			}
 			options = getOptionsForCaseMethod("CreateCase", options, {
 				model: caseModel,
 				casedata: caseData
@@ -38,15 +43,14 @@
 			return $.cordys.ajax(options);
 		};
 		
-		this.completeActivity = function(caseInstanceTask, options) {
-			var caseInstanceId = activityId = activityInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-				activityId = caseInstanceTask.ActivityId;
-				activityInstanceId = caseInstanceTask.ParentTaskId;
+		this.completeActivity = function(caseInstance, options) {
+			var activityId = activityInstanceId = "";
+			if (typeof(caseInstance) === "object") {
+				activityId = caseInstance.ActivityId;
+				activityInstanceId = caseInstance.ParentTaskId;
 			}
 			options = getOptionsForCaseMethod("CompleteActivity", options, {
-				caseinstanceid: caseInstanceId,
+				caseinstanceid: getCaseInstanceId(caseInstance),
 				activityinstanceid: {
 					'@activityid': activityId,
 					text: activityInstanceId
@@ -55,17 +59,14 @@
 			return $.cordys.ajax(options);
 		};
 
-		this.completeActivityWithFollowup = function(caseInstanceTask, options) {
-			var caseInstanceId = activityId = activityInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-				activityId = caseInstanceTask.ActivityId;
-				activityInstanceId = caseInstanceTask.ParentTaskId;
-			} else {
-				caseInstanceId = caseInstanceTask;
+		this.completeActivityWithFollowup = function(caseInstance, options) {
+			var activityId = activityInstanceId = "";
+			if (typeof(caseInstance) === "object") {
+				activityId = caseInstance.ActivityId;
+				activityInstanceId = caseInstance.ParentTaskId;
 			}
 			options = getOptionsForCaseMethod("CompleteActivityWithFollowup", options, {
-				caseinstanceid: caseInstanceId,
+				caseinstanceid: getCaseInstanceId(caseInstance),
 				activityinstanceid: {
 					'@activityid': activityId,
 					text: activityInstanceId
@@ -74,16 +75,10 @@
 			return $.cordys.ajax(options);
 		};
 
-		this.getActivityDefinition = function(caseInstanceTask, options) {
-			var caseInstanceId = activityId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-				activityId = caseInstanceTask.ActivityId;
-			} else {
-				caseInstanceId = caseInstanceTask;
-			}
+		this.getActivityDefinition = function(caseInstance, options) {
+			var activityId = (typeof(caseInstance) === "object") ? caseInstance.ActivityId : "";
 			options = getOptionsForCaseMethod("GetActivityDefinition", options, {
-				caseinstanceid: caseInstanceId,
+				caseinstanceid: getCaseInstanceId(caseInstance),
 				activities: {
 					activityid: activityId
 				}
@@ -101,16 +96,10 @@
 			return self.activityDefinitionModel;
 		};
 
-		this.getActivityInstance = function(caseInstanceTask, options) {
-			var caseInstanceId = activityInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-				activityInstanceId = caseInstanceTask.ParentTaskId;
-			} else {
-				caseInstanceId = caseInstanceTask;
-			}
+		this.getActivityInstance = function(caseInstance, options) {
+			var activityInstanceId = (typeof(caseInstance) === "object") ? caseInstance.ParentTaskId : "";
 			options = getOptionsForCaseMethod("GetActivityInstance", options, {
-				caseinstanceid: caseInstanceId,
+				caseinstanceid: getCaseInstanceId(caseInstance),
 				activityinstanceid: activityInstanceId
 			});
 			if (!self.activityInstanceModel) {
@@ -126,14 +115,8 @@
 			return self.activityInstanceModel;
 		};
 
-		this.getBusinessEvents = function(caseInstanceTask, options) {
-			var caseInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-			} else {
-				caseInstanceId = caseInstanceTask;
-			}
-			options = getOptionsForCaseMethod("GetBusinessEvents", options, {caseinstanceid: caseInstanceId});
+		this.getBusinessEvents = function(caseInstance, options) {
+			options = getOptionsForCaseMethod("GetBusinessEvents", options, {caseinstanceid: getCaseInstanceId(caseInstance)});
 			if (!self.businessEventsModel) {
 				self.businessEventsModel = new $.cordys.model({
 					objectName: "events",
@@ -147,14 +130,8 @@
 			return self.businessEventsModel;
 		};
 
-		this.getCaseInstance = function(caseInstanceTask, options) {
-			var caseInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-			} else {
-				caseInstanceId = caseInstanceTask;
-			}
-			options = getOptionsForCaseMethod("GetCaseInstance", options, {caseinstanceid: caseInstanceId});
+		this.getCaseInstance = function(caseInstance, options) {
+			options = getOptionsForCaseMethod("GetCaseInstance", options, {caseinstanceid: getCaseInstanceId(caseInstance)});
 			if (!self.caseInstanceModel) {
 				self.caseInstanceModel = new $.cordys.model({
 					objectName: "CASE_INSTANCE",
@@ -168,14 +145,8 @@
 			return self.caseInstanceModel;
 		};
 
-		this.getCaseData = function(caseInstanceTask, options) {
-			var caseInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-			} else {
-				caseInstanceId = caseInstanceTask;
-			}
-			options = getOptionsForCaseMethod("GetCaseData", options, {caseinstanceid: caseInstanceId});
+		this.getCaseData = function(caseInstance, options) {
+			options = getOptionsForCaseMethod("GetCaseData", options, {caseinstanceid: getCaseInstanceId(caseInstance)});
 			if (!self.caseDataModel) {
 				self.caseDataModel = new $.cordys.model({
 					objectName: "data",
@@ -189,17 +160,27 @@
 			return self.caseDataModel;
 		};
 
-		this.getCaseVariables = function(caseInstanceTask, options) {
-			var caseInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-			} else {
-				caseInstanceId = caseInstanceTask;
+		this.getCaseVariables = function(caseInstance, options) {
+			options = getOptionsForCaseMethod("GetCaseVariables", options, {caseinstanceid: getCaseInstanceId(caseInstance)});
+			var callback = options.success;
+			options.success = function(data) {
+				// Get the case variables as an array of the variables, removing the case prefix.
+				var vars = data[0]["case:casevariables"],
+					variables = [];
+				for (var v in vars) {
+					if (typeof(vars[v]) === "object") {
+						var newVar = {};
+						newVar[v.replace(/^[^:]*:/,"")] = vars[v];
+						variables.push(newVar);
+					}
 			}
-			options = getOptionsForCaseMethod("GetCaseVariables", options, {caseinstanceid: caseInstanceId});
+				if (callback) {
+					callback(variables);
+				}
+			};
 			if (!self.caseVariablesModel) {
 				self.caseVariablesModel = new $.cordys.model({
-					objectName: "casevariables",
+					objectName: "data",
 					read: options
 				});
 				if (options.context) {
@@ -210,14 +191,8 @@
 			return self.caseVariablesModel;
 		};
 
-		this.getFollowupActivities = function(caseInstanceTask, options) {
-			var caseInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-			} else {
-				caseInstanceId = caseInstanceTask;
-			}
-			options = getOptionsForCaseMethod("GetFollowupActivities", options, {caseinstanceid: caseInstanceId});
+		this.getFollowupActivities = function(caseInstance, options) {
+			options = getOptionsForCaseMethod("GetFollowupActivities", options, {caseinstanceid: getCaseInstanceId(caseInstance)});
 			if (!self.followupActivitiesModel) {
 				self.followupActivitiesModel = new $.cordys.model({
 					objectName: "followups",
@@ -231,32 +206,26 @@
 			return self.followupActivitiesModel;
 		};
 
-		this.planActivities = function(caseInstanceTask, options) {
-			var caseInstanceId = activityId = activityInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-				activityId = caseInstanceTask.ActivityId;
-				activityInstanceId = caseInstanceTask.ParentTaskId;
-			} else {
-				caseInstanceId = caseInstanceTask;
+		this.planActivities = function(caseInstance, options) {
+			var activityId = activityInstanceId = "";
+			if (typeof(caseInstance) === "object") {
+				activityId = caseInstance.ActivityId;
+				activityInstanceId = caseInstance.ParentTaskId;
 			}
 			options = getOptionsForCaseMethod("PlanActivities", options, {
-				caseinstanceid: caseInstanceId
+				caseinstanceid: getCaseInstanceId(caseInstance)
 			});
 			return $.cordys.ajax(options);
 		};
 
-		this.planIntermediateActivities = function(caseInstanceTask, options) {
-			var caseInstanceId = activityId = activityInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-				activityId = caseInstanceTask.ActivityId;
-				activityInstanceId = caseInstanceTask.ParentTaskId;
-			} else {
-				caseInstanceId = caseInstanceTask;
+		this.planIntermediateActivities = function(caseInstance, options) {
+			var activityId = activityInstanceId = "";
+			if (typeof(caseInstance) === "object") {
+				activityId = caseInstance.ActivityId;
+				activityInstanceId = caseInstance.ParentTaskId;
 			}
 			options = getOptionsForCaseMethod("PlanIntermediateActivities", options, {
-				caseinstanceid: caseInstanceId,
+				caseinstanceid: getCaseInstanceId(caseInstance),
 				activityinstanceid: {
 					'@activityid': activityId,
 					text: activityInstanceId
@@ -265,16 +234,10 @@
 			return $.cordys.ajax(options);
 		};
 
-		this.sendEvent = function(caseInstanceTask, eventName, options) {
-			var caseInstanceId = sourceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-				sourceId = caseInstanceTask.ActivityId;
-			} else {
-				caseInstanceId = caseInstanceTask;
-			}
+		this.sendEvent = function(caseInstance, eventName, options) {
+			var sourceId = (typeof(caseInstance) === "object") ? caseInstance.ActivityId : "";
 			options = getOptionsForCaseMethod("sendEvent", options, {
-				caseinstanceid: caseInstanceId,
+				caseinstanceid: getCaseInstanceId(caseInstance),
 				event: {
 					text: eventName,
 					'@source': sourceId
@@ -283,35 +246,19 @@
 			return $.cordys.ajax(options);
 		};
 
-		this.updateCaseData = function(caseInstanceTask, caseData, options) {
-			var caseInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-			} else {
-				caseInstanceId = caseInstanceTask;
-			}
+		this.updateCaseData = function(caseInstance, caseData, options) {
 			options = getOptionsForCaseMethod("UpdateCaseData", options, {
-				caseinstanceid: caseInstanceId,
+				caseinstanceid: getCaseInstanceId(caseInstance),
 				casedata: caseData
 			});
 			return $.cordys.ajax(options);
 		};
 
-		this.updateCaseVariables = function(caseInstanceTask, caseVariables, options) {
-			var caseInstanceId = "";
-			if (typeof(caseInstanceTask) === "object") {
-				caseInstanceId = caseInstanceTask.ProcessInstanceId;
-			} else {
-				caseInstanceId = caseInstanceTask;
-			}
+		this.updateCaseVariables = function(caseInstance, caseVariables, options) {
 			options = getOptionsForCaseMethod("UpdateCaseVariables", options, {
-				caseinstanceid: caseInstanceId,
+				caseinstanceid: getCaseInstanceId(caseInstance),
 				casedata: {
-					data: {
-						"@xmlns:case": "http://schemas.cordys.com/casemanagement/1.0",
-						"@name": "case:casevariables",
-						"case:casevariables": caseVariables
-					}
+					data: getCaseVariablesData(caseVariables)
 				}
 			});
 			return $.cordys.ajax(options);
@@ -329,6 +276,27 @@
 			dataType: 'json'
 		}, options);
 		return options;
+	}
+
+	function getCaseInstanceId(caseInstance) {
+		var id = (typeof(caseInstance) === "object") 
+				? (caseInstance.ProcessInstanceId || caseInstance.CaseInstanceId || caseInstance.caseinstanceid) 
+				: caseInstance;
+		// If it is an observable, call the method to get the value, otherwise just return the value
+		return (typeof(id) === "function") ? id() : id;
+	}
+
+	function getCaseVariablesData(caseVars) {
+		var returnData = {
+			"@xmlns:case": "http://schemas.cordys.com/casemanagement/1.0",
+			"@name": "case:casevariables",
+			"case:casevariables": {}
+		};
+		for (var vName in caseVars) {
+			var newName = (vName.indexOf("case:") !== 0) ? "case:" + vName : vName;
+			returnData["case:casevariables"][newName] = caseVars[vName];
+		}
+		return returnData;
 	}
 
 })(window, jQuery)

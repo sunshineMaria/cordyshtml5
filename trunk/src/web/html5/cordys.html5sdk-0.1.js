@@ -1,5 +1,5 @@
 if (typeof(jQuery) == "undefined") {
-	throw 'jQuery is required, please ensure it is loaded before this library'; 
+	throw "jQuery is required, please ensure it is loaded before this library";
 //	document.write('<script src="/cordys/html5/jquery/jquery-1.7.1.min.js"><\/script>');
 };
 if (!$.cordys) $.cordys = {};
@@ -9,8 +9,7 @@ function getURLParameter(url, name) {
 }
 function addURLParameter(url, name, value) {
 	var parSeparator = url.indexOf("?") < 0 ? "?" : "&";
-	url = url + parSeparator + name + "=" + encodeURIComponent(value);
-	return url;
+	return url + parSeparator + name + "=" + encodeURIComponent(value);
 }
 function getCookie(cookieName)
 {
@@ -19,21 +18,26 @@ function getCookie(cookieName)
 function deleteAllCookies()
 {
 	var cookies = document.cookie.split(";");
-	for(var i=0; i < cookies.length; ++i)
-	{
+	for (var i=0; i < cookies.length; ++i) {
 		document.cookie = $.trim(cookies[i].split("=")[0]) + 
 				"=;expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/cordys";
 	}
 }
 
 function loginIntoCordys(loginUrl) {
-	if ($.mobile) {
-		loginUrl = loginUrl || "/cordys/html5/mobilelogin.htm";
-		$.mobile.changePage( loginUrl, { transition: "pop", changeHash: false } );
+	var isNative = getURLParameter(window.location, "startfrom");
+	if (isNative && $.cordys.cookie) {
+		$.cordys.cookie.getCookies(getURLParameter(window.location, "serverId"));
+		return;
 	}
-	else {
-		loginUrl = loginUrl || "/cordys/html5/login.htm";
-		window.showModalDialog(loginUrl);
+	var baseUrl = "/cordys/html5/";
+	if ($.mobile) {
+		$.mobile.changePage( loginUrl || baseUrl + "mobilelogin.htm", { 
+			transition: "pop", 
+			changeHash: false
+		});
+	} else {
+		window.showModalDialog(loginUrl || baseUrl + "login.htm");
 		window.location.reload();
 	}
 }

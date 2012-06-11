@@ -52,8 +52,8 @@
 					success:function (data) {
 						__cordysSAMLArtCookieName = $(data).find("SamlArtifactCookieName").text();
 						__cordysCheckName = $(data).find("CheckName").text();
-						localStorage.setItem("cordysSAMLArtCookieName", __cordysSAMLArtCookieName);
-						localStorage.setItem("cordysCheckName", __cordysCheckName);
+					//	localStorage.setItem("cordysSAMLArtCookieName", __cordysSAMLArtCookieName);
+					//	localStorage.setItem("cordysCheckName", __cordysCheckName);
 					},
 					error:function (e) {
 						console.log(e);
@@ -98,12 +98,12 @@
 							$("#inputName").focus();
 						}
 						else {
-							localStorage.setItem(__cordysSAMLArtCookieName, artifact);
+						//	localStorage.setItem(__cordysSAMLArtCookieName, artifact);
 							document.cookie=__cordysSAMLArtCookieName+"="+artifact+"; path=/cordys;";
 							if (__cordysCheckName) {
 								var chrsz = 16;
 								var ct = hex_sha1(artifact);
-								localStorage.setItem(__cordysCheckName, ct);
+						//		localStorage.setItem(__cordysCheckName, ct);
 								document.cookie=__cordysCheckName+"="+ct+"; path=/cordys;";
 							}
 							window.location.reload();
