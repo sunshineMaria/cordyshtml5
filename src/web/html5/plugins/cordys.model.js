@@ -16,7 +16,7 @@
 ;(function (window, $, undefined) {
 
 	if (!$.cordys) $.cordys = {};
-	if (!$.cordys.ajax) loadScript("/cordys/html5/src/cordys.ajax.js");
+	if (!$.cordys.ajax) loadScript("/cordys/html5/plugins/cordys.ajax.js");
 
 
 	$.cordys.model = function(settings) {
