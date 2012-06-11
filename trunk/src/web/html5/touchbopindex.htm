@@ -17,7 +17,6 @@
 				update: function(element, valueAccessor) { 
 					ko.utils.unwrapObservable(valueAccessor()); //just to create a dependency
 					var dt = getDateFromXML(valueAccessor());
-					//var dt = valueAccessor();
 					if (dt) $(element).text(dt.toDateString() + " " + dt.toLocaleTimeString()); 
 				}
 			};
@@ -189,7 +188,7 @@
 	</div>
 
 <script type="text/javascript">
-	$("#mainPage").bind( 'pageshow',function(event, ui) {
+	$("#mainPage").bind("pageshow",function(event, ui) {
 		if (taskModel) {
 			taskModel.read({
 				success: function(){
@@ -199,19 +198,19 @@
 		}
 	});
 	$("#worklistPage")
-		.bind( 'pageinit',function(event, ui) {
+		.bind("pageinit",function(event, ui) {
 			targetModel = $.cordys.workflow.getWorkLists({
 				context: document.getElementById("worklistPage")
 			});
 		})
-		.bind( 'pageshow',function(event, ui) {
+		.bind("pageshow",function(event, ui) {
 			if (targetModel) targetModel.read();
 		});
 	$("#workListTasksPage")
-		.bind( 'pageinit',function(event, ui) {
+		.bind("pageinit",function(event, ui) {
 			ko.applyBindings(taskModel, document.getElementById("workListTasksPage"));
 		})
-		.bind( 'pageshow',function(event, ui) {
+		.bind("pageshow",function(event, ui) {
 			if (taskModel) taskModel.read({
 				parameters: {
 					Target: {
@@ -222,7 +221,7 @@
 			});
 		});
 	$("#appsPage")
-		.bind( 'pageinit',function(event, ui) {
+		.bind("pageinit",function(event, ui) {
 			uiTasksModel = new $.cordys.model({
 				objectName: "resource",
 				read: {
@@ -232,7 +231,7 @@
 					parameters: {
 						tags: {
 							tag: {
-								"@name": "mobile"
+								"@name": "Mobile"
 							}
 						},
 						filter: {
