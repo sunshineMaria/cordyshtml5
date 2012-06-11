@@ -38,6 +38,12 @@
 					</div>
 				</li>
 				<li data-role="fieldcontain" data-mini="true">
+					<div >
+						<label for="fldComment" class="ui-input-text">Comment</label>
+						<input type="text" id="fldComment" />
+					</div>
+				</li>
+				<li data-role="fieldcontain" data-mini="true">
 					<div data-role="controlgroup" data-type="horizontal" data-theme="d" data-bind="foreach: TaskData.ApplicationData.ApproveTask.options.option">
 						<a data-role="button" data-theme="c" data-bind="click:completeTask"><span data-bind="text:$data['@label']"></span></a>
 					</div>
@@ -69,7 +75,8 @@
 				$.cordys.workflow.completeTask(taskDetailModel.Task()[0], {
 					ApproveTask_ApproveTaskDefaultDeliveryModel_OP: {
 						'@xmlns': 'http://schemas.cordys.com/approve',
-						response: btnData['@value']
+						response: btnData['@value'],
+						comment: document.getElementById("fldComment").value
 					}
 				});
 				$("#btnBack").click();
