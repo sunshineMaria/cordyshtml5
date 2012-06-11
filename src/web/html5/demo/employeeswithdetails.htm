@@ -13,6 +13,16 @@
 	<script type="text/javascript">
 	var empModel; // Reference to the model
 	$(function() {
+		ko.bindingHandlers.photo = { 
+			update: function(element, valueAccessor) { 
+				var value = valueAccessor();
+				if (value) {
+					element.src = 'data:image/bmp;base64,' + value.substring(104);
+				} else {
+					element.src="/cordys/html5/demo/images/defaultphoto.jpg";
+				}
+			}
+		};
 		// Create a new model
 		empModel = new $.cordys.model({
 			objectName: "Employees", // Name of the Business Object
@@ -55,12 +65,7 @@
 			<ul id="employeeList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Employees">
 				<li>
 					<a href="#detailsPage" data-transition="pop" class="ui-link-inherit" data-bind="click:selectEmployee($data)">
-						<!-- ko if: typeof(Photo)!=="undefined" && Photo--> 
-							<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo.substring(104) }"/>
-						<!-- /ko -->
-						<!-- ko if: typeof(Photo)==="undefined" || (!Photo)--> 
-							<img class="ui-li-thumb ui-corner-tl" src="/cordys/html5/demo/images/defaultphoto.jpg"/>
-						<!-- /ko --> 
+						<img class="ui-li-thumb ui-corner-tl" data-bind="photo:Photo"/>
 						<h3 class="ui-li-heading"><span data-bind="text:FirstName"></span>&nbsp;<span data-bind="text:LastName"></span></h3>
 						<p class="ui-li-desc" data-bind="text:Address"></p>
 						<p class="ui-li-desc"><span data-bind="text:City"></span>&nbsp;<span data-bind="text:Country"></span></p>
@@ -79,12 +84,7 @@
 				<li>
 					<div data-bind="with: selectedItem">
 						<a class="ui-link-inherit">
-							<!-- ko if: typeof(Photo)!=="undefined" && Photo--> 
-								<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: 'data:image/bmp;base64,' + Photo.substring(104) }"/>
-							<!-- /ko -->
-							<!-- ko if: typeof(Photo)==="undefined" || (!Photo)--> 
-								<img class="ui-li-thumb ui-corner-tl" src="/cordys/html5/demo/images/defaultphoto.jpg"/>
-							<!-- /ko --> 
+							<img class="ui-li-thumb ui-corner-tl" data-bind="photo:Photo"/>
 							<h2 class="ui-li-heading" data-bind="text:EmployeeID"></h2>
 							<h3 class="ui-li-heading"><span data-bind="text:TitleOfCourtesy"></span>&nbsp;<span data-bind="text:FirstName"></span>&nbsp;<span data-bind="text:LastName"></span></h3>
 							<p class="ui-li-desc"><span data-bind="text:Title"></p>

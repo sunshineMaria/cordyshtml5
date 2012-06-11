@@ -51,12 +51,6 @@
 			}
 			return dObject;
 		}
-function run(name, value) {
-if (name && value)
-	document.cookie=name+"="+value+"; path=/cordys;";
-
-//alert("cookie: " + document.cookie);
-}
 	</script>
 
 </head> 
@@ -64,11 +58,7 @@ if (name && value)
 <body> 
 
 	<div data-role="page" id="mainPage">
-		<div data-role="header" data-theme="b">
-			<h1>Tasklist</h1>
-		</div>
-
-		<div data-role="content" data-theme="b">
+		<div data-role="content" data-theme="d">
 			<div data-role="controlgroup" data-type="horizontal" data-theme="c">
 				<a href="#mainPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Tasks</a>
 				<a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c">Worklists</a>
@@ -93,7 +83,7 @@ if (name && value)
 			<a href="#mainPage" data-role="button" data-icon="back" data-rel="back">Tasklist</a>
 			<h1>Task</h1>
 		</div>
-		<div data-role="content" data-theme="b">
+		<div data-role="content" data-theme="d">
 			<ul data-role="listview" data-inset="true" id="detailView">
 				<li data-role="heading" data-theme="c" data-mini="true">
 					<div data-bind="with: selectedItem">
@@ -135,11 +125,7 @@ if (name && value)
 		</div>
 	</div>
 	<div data-role="page" id="worklistPage">
-		<div data-role="header" data-theme="b">
-			<h1>Worklists</h1>
-		</div>
-
-		<div data-role="content" data-theme="b">
+		<div data-role="content" data-theme="d">
 			<div data-role="controlgroup" data-type="horizontal">
 				<a href="#mainPage" data-role="button" data-transition="fade" data-theme="c">Tasks</a>
 				<a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Worklists</a>
@@ -168,7 +154,7 @@ if (name && value)
 			<h1>Tasklist</h1>
 		</div>
 
-		<div data-role="content" data-theme="b">
+		<div data-role="content" data-theme="d">
 			<ul id="Ul2" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
 				<li>
 					<div >
@@ -182,21 +168,18 @@ if (name && value)
 		</div>
 	</div>
 	<div data-role="page" id="appsPage">
-		<div data-role="header" data-theme="b">
-			<h1>UI Tasks</h1>
-		</div>
-
-		<div data-role="content" data-theme="b">
+		<div data-role="content" data-theme="d">
 			<div data-role="controlgroup" data-type="horizontal">
 				<a href="#mainPage" data-role="button" data-transition="fade" data-theme="c">Tasks</a>
 				<a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c">Worklists</a>
 				<a href="#appsPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Apps</a>
 			</div>
 
-			<ul id="Ul3" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:resource">
+			<ul id="Ul3" data-role="listview" data-theme="d" data-inset="true" data-bind="foreach:resource">
 				<li>
-					<div >
-						<a href="#" data-transition="pop" data-role="button" data-icon="gear" data-iconpos="right" data-bind="click:selectUITask($data)">
+					<div data-bind="template:{afterRender:renderApp}">
+						<a href="#" data-theme="b" data-transition="pop" 
+									data-bind="click:selectUITask($data)">
 							<h3><span data-bind="text:$data['@description']"></span></h3>
 						</a>
 					</div>
@@ -207,7 +190,13 @@ if (name && value)
 
 <script type="text/javascript">
 	$("#mainPage").bind( 'pageshow',function(event, ui) {
-		if (taskModel) taskModel.read();
+		if (taskModel) {
+			taskModel.read({
+				success: function(){
+					$("#workList").listview("refresh");
+				}
+			});
+		}
 	});
 	$("#worklistPage")
 		.bind( 'pageinit',function(event, ui) {
@@ -260,6 +249,9 @@ if (name && value)
 		.bind( 'pageshow',function(event, ui) {
 			if (uiTasksModel) uiTasksModel.read();
 		});
+	function renderApp(elmt, data) {
+	//	debugger;
+	}
 	function selectUITask() {
 		return function(data) {
 			if (uiTasksModel && uiTasksModel.selectedItem) uiTasksModel.selectedItem(data);

@@ -54,7 +54,7 @@
 			console.log(jqXHR, jqXHR.error());
 			var $response = $(jqXHR.error().responseXML);
 			var messCode = $response.find("MessageCode").text();
-			if (messCode.search(/Cordys.*(AccessDenied|Artifact_Unbound)/)>=0) {
+			if (messCode.search(/Cordys.*(AccessDenied|Artifact_Unbound)/)>=0 || jqXHR.statusText === "Forbidden") {
 				loginIntoCordys();
 			} else {
 				var showError = true;

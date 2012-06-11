@@ -130,6 +130,10 @@
 			return this.performTaskAction(task, taskData, "SUSPEND", options);
 		};
 
+		this.isCaseActivity = function(task) {
+			return (task && task.SourceType === "CASE");
+		};
+
 		return this;
 	};
 
