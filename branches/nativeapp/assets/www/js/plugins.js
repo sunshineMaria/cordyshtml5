@@ -9,3 +9,53 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 
 // place any jQuery/helper plugins in here, instead of separate, slower script files.
 
+(function($) {
+	
+
+	$.event.special.ihold = {
+		setup: function(data, namespaces, eventHandle) {
+			
+		},
+		teardown: function(namespaces) {
+			
+		},
+		add: function(handleObj) {
+			// $(handleObj.selector)
+			
+			/*var startTime, endTime;
+			var gbMove = false;
+
+			$(this).on('touchstart mousedown', handleObj.selector, function(e) {
+				e.preventDefault();
+				startTime = new Date().getTime();
+				gbMove = false;
+			})
+				.on('touchmove', handleObj.selector, function(e) {
+					e.preventDefault();
+					gbMove = true;
+				})
+
+				.on('touchend mouseup mouseleave', handleObj.selector, function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+					endTime = new Date().getTime();
+					if(!gbMove && (endTime-startTime) / 1000 > .75) {
+						handleObj.handler(e);
+					}
+				});*/
+			
+			$(this).hammer().on('hold', handleObj.handler);///*, 'li'*/, self.ui.serverList.longPress
+		},
+		remove: function(handleObj) {
+			// not implemented yet
+			//throw new Error('This method is not implemented yet.');
+			
+			$(this).hammer().off('hold', handleObj.handler);
+		},
+		_default: function(event) {
+			
+		}
+	};
+	
+	
+}) (jQuery)

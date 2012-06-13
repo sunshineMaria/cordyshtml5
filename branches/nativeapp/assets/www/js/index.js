@@ -1,125 +1,3 @@
-var Cordys = {
-	soap: {
-		prelogin: function() {
-			return '<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/"><SOAP:Body><GetPreLoginInfo xmlns="http://schemas.cordys.com/SSO/Runtime/1.0" /></SOAP:Body></SOAP:Envelope>';
-		},
-		login: function(username, password) {
-			// IssueInstant and RequestID should be different for every request
-			return '<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">' + 
-						'<SOAP:Header>' + 
-						'<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">' + 
-							'<wsse:UsernameToken xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">' + 
-								'<wsse:Username>' + username + '</wsse:Username>' + 
-								'<wsse:Password>' + password + '</wsse:Password>' + 
-							'</wsse:UsernameToken>' + 
-						'</wsse:Security>' + 
-					'</SOAP:Header>' + 
-					'<SOAP:Body>' + 
-						'<samlp:Request xmlns:samlp="urn:oasis:names:tc:SAML:1.0:protocol" MajorVersion="1" MinorVersion="1" IssueInstant="2012-02-28T18:53:10Z" RequestID="a2bcd8ab5a-342b-d320-aa89-c3de380cd13">' + 
-							'<samlp:AuthenticationQuery>' + 
-								'<saml:Subject xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion">' + 
-									'<saml:NameIdentifier Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">' + username + '</saml:NameIdentifier>' + 
-								'</saml:Subject>' + 
-							'</samlp:AuthenticationQuery>' + 
-						'</samlp:Request>' + 
-					'</SOAP:Body>' + 
-				'</SOAP:Envelope>';
-		}
-	},
-	
-	ajax: {
-		createPrelogin: function() {
-			return {
-				data: Cordys.soap.prelogin(),
-				contentType: 'text/xml; charset="utf-8"',
-				type: 'post',
-				dataType: 'xml'
-			};
-		},
-		createLogin: function(username, password) {
-			return {
-				data: Cordys.soap.login(username, password),
-				contentType: 'text/xml; charset="utf-8"',
-				type: 'post',
-				dataType: 'xml'
-			};
-		}
-	}
-};
-
-/**
- * @param jQuery
- *            location jQuery object, with the location of the dialog in the DOM
- *            tree.
- * @param object
- *            context An KnockoutJS object that represents the context of the
- *            data for the dialog.
- * @param object
- *            extend An literal object filled with methods, for the events: 
- *            - onBefore{method name} Would be fired before the super 
- *            	Dialog call. 
- *            - onAfter{method name} Would be fired after the super 
- *            	Dialog call.
- */
-function Dialog(location, context, extend) {
-	var self = this;
-	extend = extend || {};
-	
-	this.zIndex = 0;
-	this.location = location;
-	this.context = context;
-	this.clean = function() {
-		runExtension('onBeforeClean');
-		runExtension('onAfterClean');
-	};
-	this.show = function() {
-		runExtension('onBeforeShow');
-		
-		context.dialogStack.push(self);
-		context.ui.mask.show();
-		
-		var $dialog = self.location.removeClass('hidden');
-		
-		setTimeout(function() {
-			// Sets focus on the first input element
-			var inputs = $dialog.find('input'),
-				actions = inputs.parents('.actions');
-			
-			if (actions.length > 0) {
-				actions.find('input.no').first().focus();
-			} else {
-				inputs.first().focus();
-			}
-		}, 0);
-		
-		runExtension('onAfterShow');
-	};
-	this.close = function() {
-		runExtension('onBeforeClose');
-		
-		context.dialogStack.remove(self);
-		
-		self.location.addClass('hidden');
-		self.clean();
-		
-		runExtension('onAfterClose');
-	};
-	this.getExtension = function() {
-		return extend;
-	};
-	
-	/** @param string An extension method. */
-	function runExtension(method) {
-		var extensionMethod = extend[method];
-		if (extensionMethod) {
-			extensionMethod(self, $.Event(method));
-		}
-	}
-}
-
-
-
-
 function ViewModel() {
 	
 	var self = this;
@@ -127,25 +5,40 @@ function ViewModel() {
 	self.init = function() {
 		self.servers.init();
 		self.ui.serverList.init();
+		self.ui.createDemoServerDialog.getExtension().init();
+		self.deleteCookies.init();
 	};
 	
-	self.dialogStack = ko.observableArray([]);
+	self.pageStack = ko.observableArray([]);
+	self.pageStack.subscribe(function(newPageStack) {
+		$.each(newPageStack, function(_index, page) {
+			///page !== self.ui.serverListPage
+			page.hide();
+		});
+		
+		var lastPage = newPageStack[newPageStack.length - 1];
+		if (lastPage) {
+			lastPage.location.removeClass('hidden');
+		}
+	});
 	
+	
+	self.dialogStack = ko.observableArray([]);
 	self.dialogStack.subscribe(function(newDialogStack) {
 		
 		var i = 2;
 		
-		
 		// Two loops to avoid recalcuate
-		
+		// - calc
 		var dialogsNeedRepaint = $.grep(newDialogStack, function(dialog) {
 			if (i++ === dialog.zIndex === parseInt(dialog.location.css('zIndex'), 10)) {
-				// no need for recalc/repaint
+				// no need for recalcute/repaint
 				return false;
 			}
 			dialog.zIndex = i;
 			return true;
 		});
+		// - paint
 		$.each(dialogsNeedRepaint, function(_unused, dialog) {
 			dialog.location.css('zIndex', dialog.zIndex);
 		});
@@ -165,25 +58,158 @@ function ViewModel() {
 		}
 	});
 	
+	var selectedServers = ko.observableArray([]);
+	selectedServers.update = function() {
+		
+	};
+	
 	self.servers = {
-		data: ko.mapping.fromJS([]),
+		data: (function() {
+			var servers = JSON.parse(localStorage.servers || '[]');
+			
+			var mappedServers = $.map(servers, function(server) {
+				var data = server;
+				return ko.observable(new Server(data.location, data.organization, data.username, data.password, data.cookies));
+			});
+			
+			return ko.observableArray(mappedServers);
+		}) (),
+		selected: selectedServers,
+		setupCtCode: function(server) {
+			var prelogin = Cordys.ajax.createPrelogin();
+			prelogin.url = server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp';
+			
+			$.ajax(prelogin).done(function(data) {
+				if (true === DEBUG) {
+					alert('Prelogin succeed.');
+				}
+				
+				var login,
+					$data = $(data),
+					cookies = server.cookies;
+				
+				cookies.saml.name($data.find('SamlArtifactCookieName').text());//SamlArtifactsamlName
+				cookies.ct.name($data.find('CheckName').text());
+				
+				// load change to localStorage
+				self.servers.data.notifySubscribers(undefined, undefined);
+			}).fail(function() {
+				// Error
+			});
+		},
 		init: function() {
-			var servers = self.servers.data,
-				key = 'servers',
-				storeServers = JSON.parse(localStorage[key] || '[]') || [];
-			
-			self.servers.update(storeServers);
-			
-			servers.subscribe(function(newValue) {
-				localStorage.setItem(key, ko.toJSON(ko.utils.unwrapObservable(newValue)));
+			// on update do push to localstorage.
+			self.servers.data.subscribe(function(newValue) {
+				
+				//ko.toJSON(self.servers.data())
+				//localStorage.servers = ko.toJSON(ko.utils.unwrapObservable(newValue));
+				
+				localStorage.servers = ko.toJSON(ko.utils.unwrapObservable(self.servers.data()));
 			});
 		},
 		update: function(newValue) {
 			ko.mapping.fromJS(newValue, self.servers.data);
+		},
+		start: function(serverLocation) {
+			// search for server in localStorage - list
+			var serversWithSameLocation = self.servers.getServersByLocation(serverLocation);
+			
+			// if (already exists):
+			if (serversWithSameLocation.length > 0) {
+				
+				self.servers.selected(serversWithSameLocation);
+				
+				// Show the choose-a-server-or-create-new-one dialog, with 
+				// a list of servers that match the serverLocation variable.
+				self.ui.chooseServerOrAddNewDialog.show();
+				
+				return;
+			}
+			
+			
+			//  Fill fields of the add-dialog I now, because the exists in 
+			//	the url I got.
+			var data = self.ui.addServerDialog.getExtension().data;
+			data.location(serverLocation);
+			//log();
+			
+			//  Show add-dialog.
+			//self.ui.addServerDialog.show();
+			
+			//  After [Ok] or [cancel] button I want to retrieve an event,
+			//  And proceed with the code below.
+			
+			
+			// first delete all cookies
+			self.deleteCookies.doRemove(serverLocation);
+			
+			// secondly login - retrieve saml (code doesn't exists yet)
+			
+			
+			// start app in iframe
+			//self.ui.appDialog.getExtension().startApp(serverLocation);
+		},
+		login: function(server) {
+			
+		},
+		getServersByLocation: function(serverUrl) {
+			return $.grep(self.servers.data(), function(server) {
+				return server.location() === serverUrl;
+			});
+		}
+	};
+	
+	self.deleteCookies = {
+		location: undefined,
+		init: function() {
+			self.deleteCookies.location = $('iframe.deletecookies');
+		},
+		refresh: function() {
+			self.deleteCookies.location.contents()[0].location.reload();
+		}, 
+		doRemove: function(serverUrl) {
+			// https://testbop.cordys.com/cordys/html5/touchbop.deletecookies.htm
+			self.deleteCookies.location.prop('src', serverUrl + '/html5/touchbop.deletecookies.htm');
+			return self.deleteCookies.location;
 		}
 	};
 	
 	self.ui = {
+		actionBar: {
+			up: function() {
+				var page = self.pageStack.pop();
+				if (page && page !== self.ui.serverListPage) {
+					//console.log('This page is going to be removed:', page);
+					page.close();
+				}
+			}
+		},
+		serverListPage: new Page($('.page.server-list'), self, {
+			
+		}),
+		appShowPage: new Page($('.page.app-show'), self, {
+			appIframeLocation: $('.page.app-show').find('iframe'),
+			startApp: function(server, relativeAppUrl) {
+				// start the app
+				if (typeof relativeAppUrl !== 'string') {
+					relativeAppUrl = '/html5/touchbopindex.htm';
+				}
+				
+				var indexOfServer = (function() {
+					var id;
+					$.each(self.servers.data(), function(index, s) {
+						var serverObject = s();
+						if (serverObject == server) {
+							id = index;
+						}
+					});
+					return id;
+				})();
+				
+				var iframe = self.ui.appShowPage.getExtension().appIframeLocation;
+				iframe.prop('src', server.location() + relativeAppUrl + '?startfrom=native&org=' + server.organization() + '&serverId=' + indexOfServer);
+			}
+		}),
 		mask: {
 			location: $('.mask'),
 			show: function() {
@@ -192,26 +218,62 @@ function ViewModel() {
 			hide: function() {
 				self.ui.mask.location.addClass('hidden');
 			}
-		}
-	};
-	
-	
-	self.ui = $.extend(self.ui, {
-		addServerDialog: new Dialog($('.dialog.add-server'), self, {
-			data: {
-				location: ko.observable(),
-				username: ko.observable(),
-				password: ko.observable(),
-				organization: ko.observable(),
-				cookie: ko.observable()
+		},
+		createDemoServerDialog: new Dialog($('.dialog.create-demo'), self, {
+			createDemoServer: function() {
+				// on submit form
+				self.ui.addServerDialog.getExtension().data
+					.location('https://testbop.cordys.com')
+					.organization('CordysNL')
+					.username('demo')
+					.password('demo');
+				
+				self.ui.addServerDialog.isDemo = true;
+				
+				self.ui.createDemoServerDialog.close();
+				self.ui.addServerDialog.show();
+			}, 
+			init: function() {
+				if (self.servers.data().length > 0) {
+					// isn't empty
+					return;
+				}
+				
+				// is emtpy, show create demo server dialog.
+				self.ui.createDemoServerDialog.show();
+			}
+		}),
+		chooseServerOrAddNewDialog: new Dialog($('.dialog.choose-server-or-add-new'), self, {
+			selected: ko.observable(),
+			onAddClick: function(e) {
+				console.log('add click:', e);
+				
+				// If [+], add a new server, start that procedure.
 			},
+			onSubmit: function(e) {
+				console.log('sumbit:', e);
+				
+				var selectedServer = self.ui.chooseServerOrAddNewDialog.getExtension().selected();
+				
+				// If [Ok], start that server.
+				self.ui.serverList.startServer(selectedServer);
+			},
+			toString: function(server) {
+				return 'Location: ' + server.location() + ', User: ' + server.username() + ', Organization: ' + server.organization();
+			}
+		}),
+		addServerDialog: new Dialog($('.dialog.add-server'), self, {
+			data: new Server(),
 			onBeforeShow: function(dialog) {
 				// Clean the Dialog
-				dialog.getExtension().data.location('a').organization('a').username('a').password('a');
+				if (true !== dialog.isDemo) {
+					dialog.getExtension().data.location('').organization('').username('').password('');
+				}
+				dialog.isDemo = false;
 			},
 			add: function() {
 				var data = self.ui.addServerDialog.getExtension().data,
-					serverObject = {
+					server = {
 						location: data.location,
 						organization: data.organization,
 						username: data.username,
@@ -219,9 +281,11 @@ function ViewModel() {
 					},
 					emptyFields = [];
 				
-				$.each(serverObject, function(key, value) {
+				// check if the is any empty form field
+				$.each(server, function(key, value) {
 					if (value().trim() === '') {
 						emptyFields.push(key);
+						//return true;
 					}
 				});
 				
@@ -230,164 +294,152 @@ function ViewModel() {
 				if (countFields > 0) {
 					var message;
 					if (countFields === 1) {
-						message = 'The field ' + emptyFields[0] + ' is empty.';
+						// singular
+						message = 'field ' + emptyFields[0] + ' is';
 					} else {
-						message = 'The fields ' + emptyFields.join(', ') + ' are empty.';
+						// plural
+						message = 'fields ' + emptyFields.join(', ') + ' are';
 					}
-					alert(message);
+					alert('The ' + message + ' empty.');
 					return;
 				}
 				
-				serverObject.cookie = data.cookie;
+				var newServer = new Server(data.location(), data.organization(), data.username(), data.password());
 				
-				// url : "https://" + serverObject.location() +
-				// "/cordys/com.eibus.web.soap.Gateway.wcp",
-				//
+				// Add server to list.
+				self.servers.data.push(newServer);
 				
+				if (!/\/cordys$/.test(newServer.location())) {
+					// add /cordys to the url
+					newServer.location(newServer.location() + '/cordys');
+				}
 				
-				var prelogin = Cordys.ajax.createPrelogin();
-				// serverObject.location(),
-				prelogin.url = 'https://ec2-50-17-207-217.compute-1.amazonaws.com/cordys/cordys/com.eibus.web.soap.Gateway.wcp';
-				
-				deleteAllCookies();
-				
-				$.ajax(prelogin).done(function(data) {
-					var $data = $(data),
-						cookie = { 
-							name: $data.find('SamlArtifactCookieName').text()
-						};
+				self.deleteCookies.location.load(function(e) {
+					// Fetch ct code and saml name and persist.
+					self.servers.setupCtCode(newServer);
 					
-					alert('Prelogin succeed.');
+					// Close dialog.
+					self.ui.addServerDialog.close();
+				});
+				self.deleteCookies.doRemove(newServer.location());
+			}
+		}),
+		editServerDialog: new Dialog($('.dialog.edit-server'), self, {}),
+		serverList: {
+			location: $('.content').find('.list'),
+			selected: ko.observable(),
+			longPress: function(server) {
+				// get data
+				self.ui.serverList.selected(server);
+				
+				// show edit a server dialog
+				self.ui.editServerDialog.show();
+			},
+			startServer: function(server, relativeAppUrl) {
+				
+				self.ui.serverListPage.hide();
+				
+				// check if saml/saml token is expired.
+				// if, get a new one.
+				// else, go!
+				
+				// load change to localStorage
+				self.servers.data.notifySubscribers(undefined, undefined);
+				
+				self.deleteCookies.location.load(function(e) {
+					self.deleteCookies.location.off('load');
 					
 					var login = Cordys.ajax.createLogin('demo', 'demo');
-					login.url = 'https://ec2-50-17-207-217.compute-1.amazonaws.com/cordys/cordys/com.eibus.web.soap.Gateway.wcp';
-					//login.dataType = 'plain/text';
-					
-					log('cookie:' + document.cookie);
-					deleteAllCookies();
-					
+					login.url = server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp';
 					
 					$.ajax(login).done(function (data) {
-						var artifact = $(data).find("AssertionArtifact, samlp\\:AssertionArtifact").text();
+						var artifact = $(data).find('AssertionArtifact, samlp\\:AssertionArtifact').text();
 						if (!artifact) {
 							alert('Invalid username and/or password!');
 							return;
 						}
 						
-						alert('Login succeed.');
+						if (true === DEBUG) {
+							alert('Login succeed.');
+						}
 						
-						cookie.value = artifact;
-						cookie.time = new Date();
-						serverObject.cookie = ko.observable(cookie);
+						server.cookies.saml.value(artifact);
 						
-						self.servers.data.push(serverObject);
-						self.ui.addServerDialog.close();
+						// load change to localStorage
+						self.servers.data.notifySubscribers(undefined, undefined);
 						
-						
-						var tasksDialog = self.ui.tasksDialog;
-						tasksDialog
-							.getExtension()
-							.iframeLocation
-							.attr({
-								src: 'https://ec2-50-17-207-217.compute-1.amazonaws.com/cordys/html5/demo/tasklist.htm?' + cookie.name + '=' + cookie.value
-							}).load(function() {
-								$('iframe')[0].contentWindow.run(cookie.name, cookie.value);
-							});
-						tasksDialog.show();
-						
-					}).fail(function (e) {
-						log(e.error().responseText);
-						var err = $(e.error().responseXML).find('faultstring,error elem').text() || e.responseText  || 'General error, see response.';
-						alert('Error on login: "' + err + '"');
-					});
-				}).fail(function(e) {
-					log(e);
-					var err = $(e.error().responseXML).find('faultstring, error elem').text() || e.responseText || 'General error, see response.';
-					alert('Error on login: "' + err + '"');
+						var appDialog = self.ui.appShowPage;
+						appDialog.getExtension().startApp(server, relativeAppUrl);
+						appDialog.getExtension().appIframeLocation.load(function() {
+							appDialog.show();
+						});
+					}).fail(fail);
 				});
-			}
-		}),
-		tasksDialog: new Dialog($('.dialog.tasks'), self, {
-			iframeLocation: $('iframe')
-		}),
-		editServerDialog: new Dialog($('.dialog.edit-server'), self),
-		serverList: {
-			location: $('.content').find('.list'),
-			selected: ko.observable(),
-			longPress: function(e) {				
-				// history: open contextmenu - choose( edit - delete ).
-				// self.ui.serverList.contextMenu.show();
-				// actual: open edit menu, delete would be a swipe on a list
-				// item, from left to the right side of the screen.
-				self.ui.editServerDialog.show();
-				
-				// get data
-				// var server = ko.dataFor(e.target);
-				self.ui.serverList.selected(ko.dataFor(e.target));
-			},
-			startServer: function(e) {
-				// start the server connection
-				alert('I want to start this server..');
-				
-				self.ui.serverList.selected(ko.dataFor(e.target));
-				
-				// check if cookie/saml token is already expired.
-				// if, get a new one.
-				// else, go 
-				
-				
-				/*
-				 * method: 'yourmethodname', 
-				 * namespace: 'yourmethodnamespace',
-				 * loginUrl: '/cordys/com/myorg/mylogin.html';
-				 */
-				
-				/*
-				 * var aj = $.cordys.ajax({ url:
-				 * 'http://tinyurl.com/cordysamazon/cordys/com.eibus.web.soap.Gateway.wcp',
-				 * method: 'GetTasks', namespace:
-				 * 'http://schemas.cordys.com/notification/workflow/1.0',
-				 * dataType: 'json', parameters: [{ name: 'OrderBy', value:
-				 * 'Task.StartDate DESC' }] });
-				 */
+				self.deleteCookies.doRemove(server.location());
 			},
 			init: function() {
-				self.ui.serverList.location.on('taphold', 'li', self.ui.serverList.longPress);
+				
 			}
 		},
 		confirmDelete: new Dialog($('.dialog.confirm-delete'), self, {
-			'delete': function() {
+			remove: function() {
 				// Want to delete
-				self.servers.data.remove(self.ui.serverList.selected);
+				self.servers.data.remove(self.ui.serverList.selected());
 				self.ui.confirmDelete.close();
 				self.ui.editServerDialog.close();
 			}
 		})
-	});
+	};
 }
 
 
-(function($) {
-	var viewModel = new ViewModel();
+function _beforeReady($, window) {
+	var viewModel = new ViewModel(),
+		qs = location.search.slice(1),
+		urlAppUrlIdentifier = 'app-url';
+	
+	
+	page('*', function (ctx, next) {
+		console.log(ctx);
+		if (localStorage.appUrl && '' !== localStorage.appUrl) {
+			var appLocation = localStorage.appUrl;
+			localStorage.appUrl = '';
+			var url = location.href.split('?')[0] + '/' + urlAppUrlIdentifier + '/' + appLocation;
+			console.log('using url:' + url);
+			setTimeout(function() {
+				page(url);
+			});
+		} else {
+			next();
+			console.log('else');
+		}
+	});
+	page(location.href.split('?')[0] + '/' + urlAppUrlIdentifier + '/:appUrl(*)', function(ctx, next) {
+		console.log('Jajajaa, url handler app starter');
+		console.log(ctx);
+		
+		viewModel.servers.start(ctx.params.appUrl);
+	});
+	
+	
+	if (urlAppUrlIdentifier === qs.substring(0, urlAppUrlIdentifier.length)) {
+		localStorage.appUrl = qs.substring(urlAppUrlIdentifier.length + 1); // +1 because of the = sign
+		// trigger change
+		page();
+	}
+	
 	
 	$(document).ready(function() {
-	
 		ko.applyBindings(viewModel);
 		viewModel.init();
 		
-		if (DEBUG === true) {
-			window.viewModel = viewModel;
+		viewModel.ui.serverListPage.show();
+		
+		if (true === Cordys.api.isApp()) {
+			window._viewModel = viewModel;
 		}
 		
-		$.support.cors = true;
-        $.mobile.allowCrossDomainPages = true;
-        
-        
-        $('.mask').on('click focus', function(e) {
-        	alert('mask focus');
-        	e.preventDefault();
-        });
-        
-        
+		$(window).on('message', Cordys.api.postMessageHandler.handle);
 	});
-})(jQuery);
+	
+} _beforeReady(jQuery, window);
