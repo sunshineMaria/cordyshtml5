@@ -2,13 +2,15 @@
 
 html {
 	font-size: 100%;
+	font-family: 'Ubuntu', sans-serif;
+	
 	-webkit-text-size-adjust: 100%;
 	-ms-text-size-adjust: 100%;
 	background: #eaeaea;
 }
 
 html,button,input,select,textarea {
-	font-family: sans-serif;
+	font-family: 'Ubuntu', sans-serif;
 	color: #222;
 }
 
@@ -67,18 +69,18 @@ input[type=text]:focus:after, input[type=password]:focus:after {
 	display: inline-block;
 }
 
-.title h1 {
+h1 {
 	margin: 0;
 	display: inline-block;
 	position: relative;
-	height: 49px;
+	/*height: 49px;*/
 	background-position-x: 30px;
 	font-weight: normal;
 	font-size: 1.0em;
 }
 
 .actionbar .title h1 {
-	padding-left: 70px;
+	padding-left: 90px;
 	vertical-align: middle;
 	font: 0/0 a;
 }
@@ -139,7 +141,7 @@ input[type=text]:focus:after, input[type=password]:focus:after {
 
 .block.list li {
 	border-bottom: 2px solid #dcdcdc;
-	font-size: 18px;
+	/*font-size: 18px;*/
 }
 
 .content .list {
@@ -153,11 +155,11 @@ input[type=text]:focus:after, input[type=password]:focus:after {
 }
 
 .block.list li > * {
-	padding: 10px 5px;
+	padding: .8em .5em;
 	color: #000;
 	text-decoration: none;
 	display: block;
-	font-size: 1.2em;
+	font-size: 1em;
 }
 
 .block.list.title li button {
@@ -189,8 +191,23 @@ input[type=text]:focus:after, input[type=password]:focus:after {
 	height: 49px;
 }
 
-.actionbar .title.icon.back {
+.actionbar .title.icon.up {
 	background-position-x: -2px;
+}
+
+.page.app-show {
+	margin-top: 50px;
+	
+	height: auto;
+	right: 0;
+	left: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.page.app-show iframe {
+	min-height: 100%;
+	border: none;
 }
 
 .dialog {
@@ -228,6 +245,8 @@ input[type=text]:focus:after, input[type=password]:focus:after {
 	margin-left: 5%;
 	overflow: auto;
 	position: relative;
+	width: 90%;
+	display: block;
 }
 
 .dialog label {
@@ -238,7 +257,7 @@ input[type=text]:focus:after, input[type=password]:focus:after {
 	font-size: 0.8em;
 	
 	padding: 5px 10px;
-	margin: 5px 10px;
+	margin: .25em 10px;
 }
 
 input {
@@ -258,7 +277,7 @@ input {
 
 .dialog input {
 	display: block;
-	font-size: 1.2em;
+	font-size: 1em;
 	position: relative;
 }
 
@@ -327,7 +346,7 @@ input:focus {
 	.icon.add {
 		background-image: url(images/hdpi/5-content-new.png);
 	}
-	.icon.back {
+	.icon.up {
 		background-image: url(images/hdpi/1-navigation-previous-item.png);
 	}
 	.icon.delete {
@@ -350,7 +369,7 @@ input:focus {
 	.icon.add {
 		background-image: url(images/xhdpi/5-content-new.png);
 	}
-	.icon.back {
+	.icon.up {
 		background-image: url(images/xhdpi/1-navigation-previous-item.png);
 	}
 	.icon.delete {

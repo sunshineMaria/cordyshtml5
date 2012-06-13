@@ -2,36 +2,55 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Cordys</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Cordys </title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<!--link rel="stylesheet" href="css/jquery.mobile-1.1.0.min.css"-->
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu">
 
 </head>
 <body>
 
 	<header class="block header actionbar">
-		<div class="title icon back">
-			<h1 class="icon cordys ir">Cordys</h1>
-		</div>
+		<a class="title icon up" data-bind="click: ui.actionBar.up">
+			<h1 class="icon cordys ir"> Cordys </h1>
+		</a>
 		<ul class="menu">
 			<li><button title="Add" class="icon add"
 					data-bind="click: ui.addServerDialog.show"></button></li>
 			<li><button title="Settings" class="icon settings"></button></li>
 		</ul>
 	</header>
-
-	<div class="block content">
+	
+	<div class="block page content server-list hidden">
 		<ul class="block list normal" data-bind="foreach: servers.data">
 			<li class="block">
-				<a data-bind="text: location, event: { longpress: $root.ui.serverList.longPress, click: $root.ui.serverList.startServer } "></a>
+				<a data-bind="text: location, event: { ihold: $root.ui.serverList.longPress, click: $root.ui.serverList.startServer } "></a>
 			</li>
 		</ul>
 	</div>
+	
+	<div class="block page content app-show hidden">
+		<iframe seamless class="block"></iframe>
+	</div>
+	
+	<div class="dialog hidden choose-server-or-add-new" data-bind="with: ui.chooseServerOrAddNewDialog">
+		<header>
+			<h1> Choose a server, or add a new one </h1>
+			<button title="Add as new server" class="icon add" data-bind="click: getExtension().onAddClick"></button>
+		</header>
+		<form data-bind="submit: getExtension().onSubmit">
+			<label for="choose-server-or-add-new-servers">Servers:</label>
+			<select id="choose-server-or-add-new-servers" data-bind="options: $root.servers.selected, optionsText: getExtension().toString, value: getExtension().selected"></select>
+			
+			<ul class="block actions list title">
+				<li><input type="button" data-bind="click: close" value="Cancel" class="cancel"></li>
+				<li><input type="submit" value="Ok" class="ok"></li>
+			</ul>
+		</form>
+	</div>
 
-	<div class="dialog hidden add-server"
-		data-bind="with: ui.addServerDialog.getExtension().data">
+	<div class="dialog hidden add-server" data-bind="with: ui.addServerDialog.getExtension().data">
 		
 		<header class="title">
 			<h1>Add a new server</h1>
@@ -39,106 +58,142 @@
 		
 		<form data-bind="submit: $root.ui.addServerDialog.getExtension().add">
 			<label for="addserver-location"> Location:  </label>
-			<input id="addserver-location" data-bind="value: location"> 
-				
-			<label for="addserver-organization"> Organization: </label> 
+			<input type="url" id="addserver-location" data-bind="value: location">
+			
+			<label for="addserver-organization"> Organization: </label>
 			<input id="addserver-organization" data-bind="value: organization">
 			
-			<label for="addserver-username"> Username: </label> 
+			<label for="addserver-username"> User name: </label>
 			<input id="addserver-username" data-bind="value: username"> 
-				
-			<label for="addserver-password"> Password: </label> 
-			<input id="addserver-password" type="password" 
-				data-bind="value: password">
+			
+			<label for="addserver-password"> Password: </label>
+			<input id="addserver-password" type="password" data-bind="value: password">
 
-			<ul class="actions block list title">
-				<li><input type="button" value="Cancel" 
-					data-bind="click: $root.ui.addServerDialog.close"></li>
+			<ul class="block actions list title">
+				<li><input type="button" value="Cancel" data-bind="click: $root.ui.addServerDialog.close"></li>
 				<li><input type="submit" value="Add"></li>
 			</ul>
 		</form>
 	</div>
 
-	<div class="dialog hidden edit-server"
-		data-bind="with: ui.serverList.selected">
+	<div class="dialog hidden edit-server">
 		<form>
 			<header class="title">
-				<h1>Edit a server</h1>
-				<button title="delete" class="icon delete"
-					data-bind="click: $root.ui.confirmDelete.show"></button>
+				<h1> Edit a server </h1>
+				<button title="Delete" class="icon delete" data-bind="click: ui.confirmDelete.show"></button>
 			</header>
-
+			
+			<!-- ko if: ui.serverList.selected -->
+			<!-- ko with: ui.serverList.selected -->
+			
 			<label for="editserver-location"> Location: </label> 
 			<input id="editserver-location" data-bind="value: location"> 
 			
 			<label for="editserver-organization"> Organization: </label>
 			<input id="editserver-organization" data-bind="value: organization"> 
 			
-			<label for="editserver-username"> Username: </label> 
+			<label for="editserver-username"> User name: </label> 
 			<input id="editserver-username" data-bind="value: username"> 
 			
 			<label for="editserver-password"> Password: </label> 
 			<input id="editserver-password" type="password" 
 				data-bind="value: password">
+				
+			<!-- /ko -->
+			<!-- /ko -->
 
 			<ul class="actions block list title">
 				<li><input type="button" value="Ok"
-					data-bind="click: $root.ui.editServerDialog.close"></li>
+					data-bind="click: ui.editServerDialog.close"></li>
 			</ul>
 		</form>
 	</div>
-
-	<div class="dialog hidden tasks">
-		<iframe></iframe>
+	
+	<div class="dialog hidden create-demo" data-bind="with: ui.createDemoServerDialog">
+		<form data-bind="submit: getExtension().createDemoServer">
+			<header>
+				<h1> Do you want to create a link to our demo server? </h1>
+			</header>
+			<ul class="actions block list title">
+				<li><input type="button" value="No" class="no" data-bind="click: close"></li>
+				<li><input type="submit" value="Yes" class="yes"></li>
+			</ul>
+		</form>
 	</div>
-
-	<div class="dialog hidden confirm-delete"
-		data-bind="with: ui.confirmDelete">
-		<form data-bind="submit: getExtension().delete">
+	
+	<div class="dialog hidden confirm-delete" data-bind="with: ui.confirmDelete">
+		<form data-bind="submit: getExtension().remove">
 			<header class="title">
-				<h1>Are you sure you want to delete this server?</h1>
+				<h1> Are you sure you want to delete this server? </h1>
 			</header>
 
 			<dl data-bind="with: $root.ui.serverList.selected">
-				<dt>Location:</dt><dd data-bind="text: location"></dd>
-				<dt>Organization:</dt><dd data-bind="text: organization"></dd>
-				<dt>Username:</dt><dd data-bind="text: username"></dd>
+				<dt> Location: </dt><dd data-bind="text: location"></dd>
+				<dt> Organization: </dt><dd data-bind="text: organization"></dd>
+				<dt> User name: </dt><dd data-bind="text: username"></dd>
 			</dl>
 
 			<ul class="actions block list title">
-				<li><input type="button" value="No" data-bind="click: close" class="no"></li>
+				<li><input type="button" value="No" data-bind="click: close" class="no" autofocus="autofocus"></li>
 				<li><input type="submit" value="Yes" class="yes"></li>
 			</ul>
 		</form>
 	</div>
 
 	<div class="mask hidden"></div>
+	
+	<iframe class="deletecookies hidden"></iframe>
 
+	<!-- jQuery -->
 	<script src="js/jquery-1.7.2.js"></script>
-	<script src="js/jquery.mobile-1.1.0.js"></script>
+	<!--script src="js/jquery.mobile-1.1.0.js"></script-->
+	<script src="js/hammer.js"></script>
+	<script src="js/jquery.hammer.js"></script>
+	
+	<!-- Configuration -->
 	<script>
-		$.mobile.ajaxEnabled = false;
-		$.mobile.autoInitializePage = false;
-		$.mobile.hashListeningEnabled = false;
-		$.mobile.linkBindingEnabledv = false;
-		$.mobile.pushStateEnabled = false;
-
-		var DEBUG = true;
+		var DEBUG = false;
 	</script>
-
-	<script src="js/jquery.cookie.js"></script>
+	
+	<!-- Page.js git://github.com/visionmedia/page.js.git -->
+	<script src="js/page.js"></script>
+	
+	<!-- Cordys requirements -\->
+	<script src="js/jquery.cookie.js"></script-->
 	<script src="js/sha1.js"></script>
-	<script src="js/jquery.xml2json.js"></script>
+	<!--script src="js/jquery.xml2json.js"></script>
 	<script src="js/cordys.html5sdk-0.1.js"></script>
-	<script src="js/cordys.ajax.js"></script>
-
+	<script src="js/cordys.ajax.js"></script-->
+	<script src="js/app.api.js"></script>
+	
+	<!-- PhoneGap / Cordova -->
 	<script src="js/cordova-1.7.0rc1.js"></script>
 	<script src="js/webintent.js"></script>
-
-	<script src="js/knockout-2.0.0.debug.js"></script>
+	
+	<!-- KnockoutJs -->
+	<script src="js/knockout-2.1.0.debug.js"></script>
 	<script src="js/knockout.mapping-latest.debug.js"></script>
-
+	
+	<!-- intent -\->
+	<script src="https://raw.github.com/PaulKinlan/WebIntents/master/src/webintents-prefix.js"></script>
+	<script src="https://raw.github.com/PaulKinlan/WebIntents/master/src/webintents.js"></script>
+	<script src="http://webintents.org/webintents.js"></script>
+	
+	<!-- default -->
 	<script src="js/plugins.js"></script>
+	<script src="js/entities.js"></script>
 	<script src="js/index.js"></script>
-</body>
-</html>
+	
+	
+	<script src="http://debug.phonegap.com/target/target-script-min.js#cordystest"></script>
+	
+	
+	
+	<!--intent 
+		action="intenttest"
+		type="*"
+		href="http://local.localhost/Cordys/assets/www/intent.html">
+		
+		<!-- disposition="window|inline" -->
+	
+	
