@@ -95,7 +95,7 @@
 		//var appWindow = _viewModel.ui.appShowPage.getExtension().appIframeLocation.contents()[0];
 		//var url = 'https://testbop.cordys.com';
 		if (e.originalEvent.origin !== Cordys.currentOrigin) {
-			console.log('not able to handle message from ' + e.originalEvent.origin)
+			console.log('not able to handle message from ' + e.originalEvent.origin);
 			return;
 		}
 		var eventName = e.originalEvent.data;
