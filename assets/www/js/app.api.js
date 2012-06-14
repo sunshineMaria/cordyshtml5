@@ -20,7 +20,8 @@
 	Cordys.api = {
 		isApp: function() {
 			if (!isAppCache) {
-				isAppCache = window.cordova && 'file://' === window.location.origin;
+				var origin = window.location.origin || window.location.protocol + '//';
+				isAppCache = window.cordova && 'file://' === origin;
 			}
 			return isAppCache;
 		},
