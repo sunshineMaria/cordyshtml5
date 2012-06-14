@@ -5,8 +5,7 @@
 	
 	
 	var isAppCache,
-		appWindow,
-		url = 'https://testbop.cordys.com';
+		appWindow;
 	
 	$(window.document).on('ready', function() {
 		appWindow = window._viewModel.ui.appShowPage.getExtension().appIframeLocation[0].contentWindow;
@@ -39,7 +38,7 @@
 					parameters: {
 						cookies: Cordys.api.getCookiesByServerId(e.data.parameters.serverId)
 					}
-				}, url);/*
+				}, Cordys.currentOrigin);/*
 				return {
 					message: 'cookies.setCookies',
 					cookies: Cordys.api.getCookiesByServerId(e.data.parameters.serverId)
@@ -55,14 +54,14 @@
 						parameters: {
 							imageData: imageData
 						}
-					}, url);
+					}, Cordys.currentOrigin);
 				}, function(message) {
 					appWindow.postMessage({
 						message: 'camera.getPicture.onError',
 						parameters: {
 							errorMessage: message
 						}
-					}, url);
+					}, Cordys.currentOrigin);
 				}, e.data.parameters.options);
 			},
 			'notification.alert': function(e) {
@@ -72,16 +71,31 @@
 				navigator.notification.alert(e.data.parameters.message, function() {
 					appWindow.postMessage({
 						message: 'notification.alert.onCallback'
-					}, url);
+					}, Cordys.currentOrigin);
 				}, e.data.parameters.title, e.data.parameters.buttonName);
+			},
+			'notification.beep': function(e) {
+				if (!navigator.notification) {
+					return;
+				}
+				navigator.notification.beep(e.data.parameters.times);
+			},
+			'notification.vibrate': function(e) {
+				if (!navigator.notification) {
+					return;
+				}
+				navigator.notification.vibrate(e.data.parameters.milliseconds);
 			}
 		}
 	};
 	
+	Cordys.currentOrigin = 'https://testbop.cordys.com';
+	
 	Cordys.api.postMessageHandler.handle = function(e) {
 		//var appWindow = _viewModel.ui.appShowPage.getExtension().appIframeLocation.contents()[0];
 		//var url = 'https://testbop.cordys.com';
-		if (e.originalEvent.origin !== url) {
+		if (e.originalEvent.origin !== Cordys.currentOrigin) {
+			console.log('not able to handle message from ' + e.originalEvent.origin)
 			return;
 		}
 		var eventName = e.originalEvent.data;

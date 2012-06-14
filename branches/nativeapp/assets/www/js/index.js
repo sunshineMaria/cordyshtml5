@@ -196,15 +196,17 @@ function ViewModel() {
 				}
 				
 				var indexOfServer = (function() {
-					var id;
+					var id = -1;
 					$.each(self.servers.data(), function(index, s) {
-						var serverObject = s();
+						var serverObject = (typeof(s) == "function" ? s() : s);
 						if (serverObject == server) {
 							id = index;
 						}
 					});
 					return id;
 				})();
+				
+				if (Cordys) Cordys.currentOrigin = server.location().replace(/\/cordys$/, '');
 				
 				var iframe = self.ui.appShowPage.getExtension().appIframeLocation;
 				iframe.prop('src', server.location() + relativeAppUrl + '?startfrom=native&org=' + server.organization() + '&serverId=' + indexOfServer);
@@ -349,7 +351,7 @@ function ViewModel() {
 				self.deleteCookies.location.load(function(e) {
 					self.deleteCookies.location.off('load');
 					
-					var login = Cordys.ajax.createLogin('demo', 'demo');
+					var login = Cordys.ajax.createLogin(server.username(), server.password());
 					login.url = server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp';
 					
 					$.ajax(login).done(function (data) {
