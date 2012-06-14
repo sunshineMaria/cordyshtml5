@@ -10,7 +10,8 @@ fi
 
 export BUILD_HOME=$PWD
 source $BUILD_HOME/setenv.sh
-$BUILD_HOME/setenv.sh
+
+cd components/html5sdk
 
 "$JAVA_HOME/bin/java" $JAVA_ARGS -cp "$ANT_CP" org.apache.tools.ant.Main "-Droot.dir=$BUILD_HOME" "-Dsdk.dir=$BCPSDK_HOME" $*
 
