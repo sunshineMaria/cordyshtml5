@@ -8,7 +8,7 @@ then
         exit 1
 fi
 
-export BUILD_HOME=$PWD/../../
+export BUILD_HOME=$PWD/../..
 source $BUILD_HOME/setenv.sh
 $BUILD_HOME/setenv.sh
 
