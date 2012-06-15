@@ -1,0 +1,26 @@
+
+<TranslatedText
+	xmlns=""
+	xmlns:cws="http://schemas.cordys.com/cws/1.0"
+	type="com.cordys.translation.TranslatedText"
+	RuntimeDocumentID="002170BA-4014-11E1-F6D9-DAA6D8F6FFD7">
+	<DocumentID>002170BA-4014-11E1-F6D9-DAA6D8F6DFD7</DocumentID>
+	<Name>002170BA-4014-11E1-F6D9-DAA6D8F6DFD7</Name>
+	<Description>Approve
+Order</Description>
+	<CreatedBy>csharbel</CreatedBy>
+	<CreationDate>2012-06-15T10:06:01.892</CreationDate>
+	<Notes/>
+	<Text>Approve
+Order</Text>
+	<Language>
+		<uri
+			id="002170BA-4014-11E1-F31C-37EE038A16C7"
+		/>
+	</Language>
+	<TextIdentifier>
+		<uri
+			id="002170BA-4014-11E1-F6D9-DAA6D8F69FD7"
+		/>
+	</TextIdentifier>
+</TranslatedText>
