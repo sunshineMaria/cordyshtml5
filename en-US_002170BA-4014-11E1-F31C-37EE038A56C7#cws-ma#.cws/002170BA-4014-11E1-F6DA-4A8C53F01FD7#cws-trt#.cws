@@ -1,0 +1,24 @@
+
+<TranslatedText
+	xmlns=""
+	xmlns:cws="http://schemas.cordys.com/cws/1.0"
+	type="com.cordys.translation.TranslatedText"
+	RuntimeDocumentID="002170BA-4014-11E1-F6DA-4A8C53F03FD7">
+	<DocumentID>002170BA-4014-11E1-F6DA-4A8C53F01FD7</DocumentID>
+	<Name>002170BA-4014-11E1-F6DA-4A8C53F01FD7</Name>
+	<Description>Update Order Status to Delivered</Description>
+	<CreatedBy>csharbel</CreatedBy>
+	<CreationDate>2012-06-15T10:17:05.135</CreationDate>
+	<Notes/>
+	<Text>Update Order Status to Delivered</Text>
+	<Language>
+		<uri
+			id="002170BA-4014-11E1-F31C-37EE038A16C7"
+		/>
+	</Language>
+	<TextIdentifier>
+		<uri
+			id="002170BA-4014-11E1-F6DA-4A8C53EFDFD7"
+		/>
+	</TextIdentifier>
+</TranslatedText>

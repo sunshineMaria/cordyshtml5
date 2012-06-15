@@ -1,0 +1,21 @@
+
+<QualifiedNameRoot
+	xmlns=""
+	xmlns:cws="http://schemas.cordys.com/cws/1.0"
+	type="com.cordys.cws.namespace.qualifiedname.QualifiedNameRoot"
+	RuntimeDocumentID="002170BA-4014-11E1-F31C-37EE038CD6C7">
+	<DocumentID>002170BA-4014-11E1-F31C-37EE038CB6C7</DocumentID>
+	<Name>runtimeQNR for project</Name>
+	<Description/>
+	<CreatedBy>csharbel</CreatedBy>
+	<CreationDate>2012-05-08T07:45:22.551</CreationDate>
+	<Notes/>
+	<DesigntimeQNRFolder/>
+	<RuntimeQNRFolder>
+		<uri
+			id="002170BA-4014-11E1-F31C-37EE038A96C7"
+			path="HTML5 SDK Demo"
+			type="com.cordys.cws.runtime.types.folder.StudioFolder"
+		/>
+	</RuntimeQNRFolder>
+</QualifiedNameRoot>
