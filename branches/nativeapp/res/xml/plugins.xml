@@ -36,5 +36,4 @@
     <plugin name="Battery" value="org.apache.cordova.BatteryListener"/>
     
     <plugin name="Webintent" value="com.borismus.webintent.WebIntent"></plugin>
-    <plugin name="GetSaml" value="com.cordys.saml.GetSaml"></plugin>
 </plugins>
