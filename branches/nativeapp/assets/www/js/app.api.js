@@ -3,14 +3,12 @@
  */
 (function(window, Cordys) {
 	
-	
 	var isAppCache,
 		appWindow;
 	
 	$(window.document).on('ready', function() {
 		appWindow = window._viewModel.ui.appShowPage.getExtension().appIframeLocation[0].contentWindow;
 	});
-	
 	
 	/**
 	 * @api
@@ -20,8 +18,7 @@
 	Cordys.api = {
 		isApp: function() {
 			if (!isAppCache) {
-				var origin = window.location.origin || window.location.protocol + '//';
-				isAppCache = window.cordova && 'file://' === origin;
+				isAppCache = window.cordova && 'file:' === window.location.protocol;
 			}
 			return isAppCache;
 		},
@@ -39,11 +36,7 @@
 					parameters: {
 						cookies: Cordys.api.getCookiesByServerId(e.data.parameters.serverId)
 					}
-				}, Cordys.currentOrigin);/*
-				return {
-					message: 'cookies.setCookies',
-					cookies: Cordys.api.getCookiesByServerId(e.data.parameters.serverId)
-				};*/
+				}, Cordys.currentOrigin);
 			},
 			'camera.getPicture': function(e) {//?startfrom=native&org=CordysNL&ser?startfrom=native&org=CordysNL&serverId=0"verId=0"
 				if (!navigator.camera) {
@@ -92,7 +85,7 @@
 	
 	Cordys.currentOrigin = 'https://testbop.cordys.com';
 	
-	Cordys.api.postMessageHandler.handle = function(e) {
+	Cordys.api.postMessageHandle = function(e) {
 		//var appWindow = _viewModel.ui.appShowPage.getExtension().appIframeLocation.contents()[0];
 		//var url = 'https://testbop.cordys.com';
 		if (e.originalEvent.origin !== Cordys.currentOrigin) {
@@ -166,5 +159,3 @@
 	
 	
 }) (window, window.Cordys || {});
-
-

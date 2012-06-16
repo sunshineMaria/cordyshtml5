@@ -179,7 +179,6 @@ function ViewModel() {
 			up: function() {
 				var page = self.pageStack.pop();
 				if (page && page !== self.ui.serverListPage) {
-					//console.log('This page is going to be removed:', page);
 					page.close();
 				}
 			}
@@ -198,15 +197,18 @@ function ViewModel() {
 				var indexOfServer = (function() {
 					var id = -1;
 					$.each(self.servers.data(), function(index, s) {
-						var serverObject = (typeof(s) == "function" ? s() : s);
-						if (serverObject == server) {
+						var serverObject = ko.utils.unwrapObservable(s);
+						
+						if (serverObject === server) {
 							id = index;
 						}
 					});
 					return id;
 				})();
 				
-				if (Cordys) Cordys.currentOrigin = server.location().replace(/\/cordys$/, '');
+				if (Cordys) {
+					Cordys.currentOrigin = server.location().replace(/\/cordys$/, '');
+				}
 				
 				var iframe = self.ui.appShowPage.getExtension().appIframeLocation;
 				iframe.prop('src', server.location() + relativeAppUrl + '?startfrom=native&org=' + server.organization() + '&serverId=' + indexOfServer);
@@ -441,7 +443,7 @@ function _beforeReady($, window) {
 			window._viewModel = viewModel;
 		}
 		
-		$(window).on('message', Cordys.api.postMessageHandler.handle);
+		$(window).on('message', Cordys.api.postMessageHandle);
 	});
 	
 } _beforeReady(jQuery, window);
