@@ -53,7 +53,7 @@
 					appWindow.postMessage({
 						message: 'camera.getPicture.onError',
 						parameters: {
-							errorMessage: message
+							error: message
 						}
 					}, Cordys.currentOrigin);
 				}, e.data.parameters.options);
@@ -68,6 +68,19 @@
 					}, Cordys.currentOrigin);
 				}, e.data.parameters.title, e.data.parameters.buttonName);
 			},
+			'notification.confirm': function(e) {
+				if (!navigator.notification) {
+					return;
+				}
+				navigator.notification.confirm(e.data.parameters.message, function(buttonIndex) {
+					appWindow.postMessage({
+						message: 'notification.confirm.onCallback',
+						parameters: {
+							buttonIndex: buttonIndex
+						}
+					}, Cordys.currentOrigin);
+				}, e.data.parameters.title, e.data.parameters.buttonLabels);
+			},
 			'notification.beep': function(e) {
 				if (!navigator.notification) {
 					return;
@@ -79,6 +92,112 @@
 					return;
 				}
 				navigator.notification.vibrate(e.data.parameters.milliseconds);
+			},
+			'fileReader.readAsDataURL': function(e) {
+				if (!FileReader) {
+					return;
+				}
+				window.resolveLocalFileSystemURI(e.data.parameters.filePath, function(fileEntry) {
+					fileEntry.file(function(file) {
+						var reader = new FileReader();
+						reader.onload = function(evt) {
+							appWindow.postMessage({
+								message: 'fileReader.readAsDataURL.onSuccess',
+								parameters: {
+									result: evt.target.result
+								}
+							}, Cordys.currentOrigin);						
+						}
+						reader.onerror = function(evt) {
+							appWindow.postMessage({
+								message: 'fileReader.readAsDataURL.onError',
+								parameters: {
+									error: evt.target.error
+								}
+							}, Cordys.currentOrigin);						
+						}
+						reader.readAsDataURL(file);
+					});
+				}, function(error) {
+					appWindow.postMessage({
+						message: 'fileReader.readAsDataURL.onError',
+						parameters: {
+							error: error
+						}
+					}, Cordys.currentOrigin);						
+				});
+			},
+			'fileReader.readAsText': function(e) {
+				if (!FileReader) {
+					return;
+				}
+				window.resolveLocalFileSystemURI(e.data.parameters.filePath, function(fileEntry) {
+					fileEntry.file(function(file) {
+						var reader = new FileReader();
+						reader.onload = function(evt) {
+							appWindow.postMessage({
+								message: 'fileReader.readAsText.onSuccess',
+								parameters: {
+									result: evt.target.result
+								}
+							}, Cordys.currentOrigin);						
+						}
+						reader.onerror = function(evt) {
+							appWindow.postMessage({
+								message: 'fileReader.readAsText.onError',
+								parameters: {
+									error: evt.target.error
+								}
+							}, Cordys.currentOrigin);						
+						}
+						reader.readAsText(file);
+					});
+				}, function(error) {
+					appWindow.postMessage({
+						message: 'fileReader.readAsText.onError',
+						parameters: {
+							error: error
+						}
+					}, Cordys.currentOrigin);						
+				});
+			},
+			'fileTransfer.upload': function(e) {
+				if (!FileTransfer) {
+					return;
+				}
+				var ft = new FileTransfer();
+				ft.upload(e.data.parameters.filePath, e.data.parameters.server, function(result) {
+					appWindow.postMessage({
+						message: 'fileTransfer.upload.onSuccess',
+						parameters: {
+							result: result
+						}
+					}, Cordys.currentOrigin);
+				}, function(error) {
+					appWindow.postMessage({
+						message: 'fileTransfer.upload.onError',
+						parameters: {
+							error: error
+						}
+					}, Cordys.currentOrigin);
+				}, e.data.parameters.options, true);
+			},
+			'loadScript': function(e) {
+				$.ajax({
+					type: 'GET',
+					url: 'file:///android_asset/www/' + e.data.parameters.filePath,
+					success: function(result) {
+						appWindow.postMessage({
+							message: 'loadScript.onSuccess',
+							parameters: {
+								result: result
+							}
+						}, Cordys.currentOrigin);
+					},
+					dataType: 'text',
+					async: true,
+					cache: true
+				});
 			}
 		}
 	};
