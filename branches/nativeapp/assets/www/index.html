@@ -83,7 +83,6 @@
 				<button title="Delete" class="icon delete" data-bind="click: ui.confirmDelete.show"></button>
 			</header>
 			
-			<!-- ko if: ui.serverList.selected -->
 			<!-- ko with: ui.serverList.selected -->
 			
 			<label for="editserver-location"> Location: </label> 
@@ -100,8 +99,7 @@
 				data-bind="value: password">
 				
 			<!-- /ko -->
-			<!-- /ko -->
-
+			
 			<ul class="actions block list title">
 				<li><input type="button" value="Ok"
 					data-bind="click: ui.editServerDialog.close"></li>
