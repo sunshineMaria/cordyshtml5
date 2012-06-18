@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Photo</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/cordys/html5/jquery/jquery.mobile-1.1.0.min.css" />
-<script src="/cordys/html5/jquery/jquery-1.7.1.min.js"></script>
-<script src="/cordys/html5/jquery/jquery.mobile-1.1.0.min.js"></script>
-<script src="http://debug.phonegap.com/target/target-script-min.js#cordystest"></script>
-<script src="/cordys/html5/cordys.html5sdk-0.1.js"></script>
-<script src="/cordys/html5/src/cordys.mobile.js"></script>
+	<title>Photo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="/cordys/html5/jquery/jquery.mobile-1.1.0.min.css" />
+	<script src="/cordys/html5/jquery/jquery-1.7.1.min.js"></script>
+	<script src="/cordys/html5/jquery/jquery.mobile-1.1.0.min.js"></script>
+
+	<script src="/cordys/html5/cordys.html5sdk-0.1.js"></script>
+	<script src="/cordys/html5/plugins/cordys.mobile.js"></script>
 </head>
 
 <body>
@@ -17,48 +17,27 @@
 			<h1>Take a picture</h1>
 		</div>
 		<div data-role="content" data-theme="d">
-			<!-- Content comes here -->
 			<button id="btnTakePhoto" type="submit" data-theme="b">Click Here</button>
 			<img id="imgPhoto" class="photo" style="width: 300px; height: 300px" />
 		</div>
 		<script>
-			$('#photoPage').on('pageinit', function() {
-				$.support.cors = true;
-				$.mobile.allowCrossDomainPages = true;
-				$('#btnTakePhoto').bind('click', takePhoto);
+			$("#photoPage").on("pageinit", function() {
+				$("#btnTakePhoto").bind("click", takePhoto);
 			})
 
 			function takePhoto() {
 				try {
 					$.cordys.mobile.camera.getPicture(function(parameters) {
-						$('#imgPhoto')[0].src = 'data:image/jpeg;base64,' + parameters.imageData;
+						$("#imgPhoto")[0].src = "data:image/jpeg;base64," + parameters.imageData;
 					}, function(parameters) {
-						alert('failed: ' + parameters.message);
+						alert("failed: " + parameters.message);
 					}, {
 						quality: 50, 
-					    destinationType: 0 // = Camera.DestinationType.FILE_URI 
-				   	});
-
-					/*		if (parent.navigator.camera && parent.navigator.camera.getPicture) {
-								parent.navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-									destinationType: parent.navigator.camera.DestinationType.DATA_URL
-								}); 
-							} else {
-								alert("Camera not available !");
-							}
-					 */
+						destinationType: $.cordys.mobile.camera.DestinationType.DATA_URL
+					});
 				} catch (e) {
-					alert('catching ' + e);
+					alert("error catched: " + e);
 				}
-			}
-
-			function onSuccess(imageData) {
-				alert('success' + imageData.length);
-				$('#imgPhoto')[0].src = 'data:image/jpeg;base64,' + imageData;
-			}
-
-			function onFail(message) {
-				alert('failed: ' + message);
 			}
 		</script>
 	</div>

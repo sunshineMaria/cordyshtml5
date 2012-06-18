@@ -9,6 +9,7 @@
 	
 	<script src="/cordys/html5/knockout/knockout-2.1.0.js" type="text/javascript"></script>	
 	<script src="/cordys/html5/cordys.html5sdk-0.1.js" type="text/javascript"></script>
+	<script src="plugins/cordys.mobile.js" type="text/javascript"></script>
 
 	<script type="text/javascript">
 		var taskModel, targetModel, uiTasksModel;
@@ -58,10 +59,12 @@
 
 	<div data-role="page" id="mainPage">
 		<div data-role="content" data-theme="d">
-			<div data-role="controlgroup" data-type="horizontal" data-theme="c">
-				<a href="#mainPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Tasks</a>
-				<a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c">Worklists</a>
-				<a href="#appsPage" data-role="button" data-transition="fade" data-theme="c">Apps</a>
+			<div data-role="navbar" data-type="horizontal" data-theme="c">
+				<ul>
+					<li><a href="#mainPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Tasks</a></li>
+					<li><a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c">Worklists</a></li>
+					<li><a href="#appsPage" data-role="button" data-transition="fade" data-theme="c">Apps</a></li>
+				</ul>
 			</div>
 
 			<ul id="workList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
@@ -125,10 +128,12 @@
 	</div>
 	<div data-role="page" id="worklistPage">
 		<div data-role="content" data-theme="d">
-			<div data-role="controlgroup" data-type="horizontal">
-				<a href="#mainPage" data-role="button" data-transition="fade" data-theme="c">Tasks</a>
-				<a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Worklists</a>
-				<a href="#appsPage" data-role="button" data-transition="fade" data-theme="c">Apps</a>
+			<div data-role="navbar" data-type="horizontal" data-theme="c">
+				<ul>
+					<li><a href="#mainPage" data-role="button" data-transition="fade" data-theme="c">Tasks</a></li>
+					<li><a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Worklists</a></li>
+					<li><a href="#appsPage" data-role="button" data-transition="fade" data-theme="c">Apps</a></li>
+				</ul>
 			</div>
 
 			<ul id="Ul1" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Target">
@@ -168,10 +173,12 @@
 	</div>
 	<div data-role="page" id="appsPage">
 		<div data-role="content" data-theme="d">
-			<div data-role="controlgroup" data-type="horizontal">
-				<a href="#mainPage" data-role="button" data-transition="fade" data-theme="c">Tasks</a>
-				<a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c">Worklists</a>
-				<a href="#appsPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Apps</a>
+			<div data-role="navbar" data-type="horizontal" data-theme="c">
+				<ul>
+					<li><a href="#mainPage" data-role="button" data-transition="fade" data-theme="c">Tasks</a></li>
+					<li><a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c">Worklists</a></li>
+					<li><a href="#appsPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Apps</a></li>
+				</ul>
 			</div>
 
 			<ul id="Ul3" data-role="listview" data-theme="d" data-inset="true" data-bind="foreach:resource">
@@ -188,17 +195,37 @@
 	</div>
 
 <script type="text/javascript">
-	$("#mainPage").bind("pageshow",function(event, ui) {
-		if (taskModel) {
-			taskModel.read({
-				success: function(){
-					$("#workList").listview("refresh");
-				}
-			});
-		}
-	});
+	$("#mainPage")
+		.bind("pageinit",function(event, ui) {
+			$(this)
+				.swipeleft(function(event){
+					$.mobile.changePage( "#worklistPage" );
+					event.preventDefault();
+					return false;
+				});
+			})
+		.bind("pageshow",function(event, ui) {
+			if (taskModel) {
+				taskModel.read({
+					success: function(){
+						$("#workList").listview("refresh");
+					}
+				});
+			}
+		});
 	$("#worklistPage")
 		.bind("pageinit",function(event, ui) {
+			$(this)
+				.swipeleft(function(event){
+					$.mobile.changePage( "#appsPage" );
+					event.preventDefault();
+					return false;
+				})
+				.swiperight(function(){
+					$.mobile.changePage( "#mainPage" );
+					event.preventDefault();
+					return false;
+				});
 			targetModel = $.cordys.workflow.getWorkLists({
 				context: document.getElementById("worklistPage")
 			});
@@ -222,6 +249,12 @@
 		});
 	$("#appsPage")
 		.bind("pageinit",function(event, ui) {
+			$(this)
+				.swiperight(function(event){
+					$.mobile.changePage( "#worklistPage" );
+					event.preventDefault();
+					return false;
+				});
 			uiTasksModel = new $.cordys.model({
 				objectName: "resource",
 				read: {
