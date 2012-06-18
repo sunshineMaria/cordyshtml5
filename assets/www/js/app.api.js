@@ -107,7 +107,7 @@
 									result: evt.target.result
 								}
 							}, Cordys.currentOrigin);						
-						}
+						};
 						reader.onerror = function(evt) {
 							appWindow.postMessage({
 								message: 'fileReader.readAsDataURL.onError',
@@ -115,7 +115,7 @@
 									error: evt.target.error
 								}
 							}, Cordys.currentOrigin);						
-						}
+						};
 						reader.readAsDataURL(file);
 					});
 				}, function(error) {
@@ -141,7 +141,7 @@
 									result: evt.target.result
 								}
 							}, Cordys.currentOrigin);						
-						}
+						};
 						reader.onerror = function(evt) {
 							appWindow.postMessage({
 								message: 'fileReader.readAsText.onError',
@@ -149,7 +149,7 @@
 									error: evt.target.error
 								}
 							}, Cordys.currentOrigin);						
-						}
+						};
 						reader.readAsText(file);
 					});
 				}, function(error) {
