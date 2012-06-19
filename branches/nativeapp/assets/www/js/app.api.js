@@ -205,8 +205,6 @@
 	Cordys.currentOrigin = 'https://testbop.cordys.com';
 	
 	Cordys.api.postMessageHandle = function(e) {
-		//var appWindow = _viewModel.ui.appShowPage.getExtension().appIframeLocation.contents()[0];
-		//var url = 'https://testbop.cordys.com';
 		if (e.originalEvent.origin !== Cordys.currentOrigin) {
 			console.log('not able to handle message from ' + e.originalEvent.origin);
 			return;
@@ -254,20 +252,22 @@
 	 * @protected
 	 */
 	Cordys.ajax = {
-		createPrelogin: function() {
+		createPrelogin: function(url) {
 			return {
 				data: Cordys.soap.prelogin(),
 				contentType: 'text/xml; charset="utf-8"',
 				type: 'post',
-				dataType: 'xml'
+				dataType: 'xml',
+				url: url
 			};
 		},
-		createLogin: function(username, password) {
+		createLogin: function(url, username, password) {
 			return {
 				data: Cordys.soap.login(username, password),
 				contentType: 'text/xml; charset="utf-8"',
 				type: 'post',
-				dataType: 'xml'
+				dataType: 'xml',
+				url: url
 			};
 		}
 	};

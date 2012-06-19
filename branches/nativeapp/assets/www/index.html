@@ -34,22 +34,31 @@
 		<iframe seamless class="block"></iframe>
 	</div>
 	
-	<div class="dialog hidden choose-server-or-add-new" data-bind="with: ui.chooseServerOrAddNewDialog">
-		<header>
-			<h1> Choose a server, or add a new one </h1>
-			<button title="Add as new server" class="icon add" data-bind="click: getExtension().onAddClick"></button>
+	<div class="dialog hidden start-server" data-bind="with: ui.startServerDialog">
+		<header class="title">
+			<h1>Please fill your password to start</h1>
 		</header>
 		<form data-bind="submit: getExtension().onSubmit">
-			<label for="choose-server-or-add-new-servers">Servers:</label>
-			<select id="choose-server-or-add-new-servers" data-bind="options: $root.servers.selected, optionsText: getExtension().toString, value: getExtension().selected"></select>
+			<label for="start-server-location"> Location:  </label>
+			<input type="url" readonly="readonly" id="start-server-location" data-bind="value: getExtension().server.location">
+			
+			<label for="start-server-organization"> Organization: </label>
+			<input id="start-server-organization" readonly="readonly" data-bind="value: getExtension().server.organization">
+			
+			<label for="start-server-username"> User name: </label>
+			<input id="start-server-username" readonly="readonly" data-bind="value: getExtension().server.username"> 
+			
+			<label for="start-server-password">Password:</label>
+			<input type="password" id="start-server-password" data-bind="value: getExtension().server.password">
 			
 			<ul class="block actions list title">
 				<li><input type="button" data-bind="click: close" value="Cancel" class="cancel"></li>
-				<li><input type="submit" value="Ok" class="ok"></li>
+				<li><input type="submit" value="Start" class="ok"></li>
 			</ul>
 		</form>
 	</div>
-
+	
+	
 	<div class="dialog hidden add-server" data-bind="with: ui.addServerDialog.getExtension().data">
 		
 		<header class="title">
@@ -142,26 +151,21 @@
 	
 	<iframe class="deletecookies hidden"></iframe>
 
-	<!-- jQuery -->
-	<script src="js/jquery-1.7.2.js"></script>
-	<!--script src="js/jquery.mobile-1.1.0.js"></script-->
-	<script src="js/hammer.js"></script>
-	<script src="js/jquery.hammer.js"></script>
-	
 	<!-- Configuration -->
 	<script>
 		var DEBUG = false;
 	</script>
+
+	<!-- jQuery -->
+	<script src="js/jquery-1.7.2.js"></script>
+	<!--script src="js/jquery.mobile-1.1.0.js"></script-->
 	
-	<!-- Page.js git://github.com/visionmedia/page.js.git -->
-	<script src="js/page.js"></script>
+	<!-- Events -->
+	<script src="js/hammer.js"></script>
+	<script src="js/jquery.hammer.js"></script>
 	
-	<!-- Cordys requirements -\->
-	<script src="js/jquery.cookie.js"></script-->
+	<!-- Cordys requirements -->
 	<script src="js/sha1.js"></script>
-	<!--script src="js/jquery.xml2json.js"></script>
-	<script src="js/cordys.html5sdk-0.1.js"></script>
-	<script src="js/cordys.ajax.js"></script-->
 	<script src="js/app.api.js"></script>
 	
 	<!-- PhoneGap / Cordova -->
@@ -178,6 +182,7 @@
 	<script src="http://webintents.org/webintents.js"></script>
 	
 	<!-- default -->
+	<script src="js/URI.js"></script>
 	<script src="js/plugins.js"></script>
 	<script src="js/entities.js"></script>
 	<script src="js/index.js"></script>

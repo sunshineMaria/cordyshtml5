@@ -1,16 +1,24 @@
+/**
+ * --required: 
+ * app.api.js
+ * entities.js
+ * jquery-1.7.2.js
+ * knockout-2.1.0.js
+ * 
+ */
+
 function ViewModel() {
 	
 	var self = this;
 	
-	self.init = function() {
+	this.init = function(search) {
 		self.servers.init();
-		self.ui.serverList.init();
-		self.ui.createDemoServerDialog.getExtension().init();
+		self.ui.createDemoServerDialog.getExtension().init(search);
 		self.deleteCookies.init();
 	};
 	
-	self.pageStack = ko.observableArray([]);
-	self.pageStack.subscribe(function(newPageStack) {
+	this.pageStack = ko.observableArray([]);
+	this.pageStack.subscribe(function(newPageStack) {
 		$.each(newPageStack, function(_index, page) {
 			///page !== self.ui.serverListPage
 			page.hide();
@@ -23,8 +31,8 @@ function ViewModel() {
 	});
 	
 	
-	self.dialogStack = ko.observableArray([]);
-	self.dialogStack.subscribe(function(newDialogStack) {
+	this.dialogStack = ko.observableArray([]);
+	this.dialogStack.subscribe(function(newDialogStack) {
 		
 		var i = 2;
 		
@@ -63,7 +71,7 @@ function ViewModel() {
 		
 	};
 	
-	self.servers = {
+	this.servers = {
 		data: (function() {
 			var servers = JSON.parse(localStorage.servers || '[]');
 			
@@ -73,25 +81,34 @@ function ViewModel() {
 			});
 			
 			return ko.observableArray(mappedServers);
-		}) (),
+		} ()),
+		indexOf: function(server) {
+			var id = -1;
+			$.each(self.servers.data(), function(index, s) {
+				var serverObject = ko.utils.unwrapObservable(s);
+				
+				if (serverObject === server) {
+					id = index;
+				}
+			});
+			return id;
+		},
 		selected: selectedServers,
 		setupCtCode: function(server) {
-			var prelogin = Cordys.ajax.createPrelogin();
-			prelogin.url = server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp';
+			var prelogin = Cordys.ajax.createPrelogin(server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp');
 			
 			$.ajax(prelogin).done(function(data) {
 				if (true === DEBUG) {
 					alert('Prelogin succeed.');
 				}
 				
-				var login,
-					$data = $(data),
+				var $data = $(data),
 					cookies = server.cookies;
 				
-				cookies.saml.name($data.find('SamlArtifactCookieName').text());//SamlArtifactsamlName
+				cookies.saml.name($data.find('SamlArtifactCookieName').text());
 				cookies.ct.name($data.find('CheckName').text());
 				
-				// load change to localStorage
+				// save change to localStorage
 				self.servers.data.notifySubscribers(undefined, undefined);
 			}).fail(function() {
 				// Error
@@ -100,66 +117,64 @@ function ViewModel() {
 		init: function() {
 			// on update do push to localstorage.
 			self.servers.data.subscribe(function(newValue) {
-				
-				//ko.toJSON(self.servers.data())
-				//localStorage.servers = ko.toJSON(ko.utils.unwrapObservable(newValue));
-				
 				localStorage.servers = ko.toJSON(ko.utils.unwrapObservable(self.servers.data()));
 			});
 		},
 		update: function(newValue) {
 			ko.mapping.fromJS(newValue, self.servers.data);
 		},
-		start: function(serverLocation) {
-			// search for server in localStorage - list
-			var serversWithSameLocation = self.servers.getServersByLocation(serverLocation);
+		start: function(server) {
+			// search for server in server list
+			var matchingServers = self.servers.getServersBy({ 
+				location: server.location,
+				organization: server.organization,
+				username: server.username
+			});
 			
-			// if (already exists):
-			if (serversWithSameLocation.length > 0) {
-				
-				self.servers.selected(serversWithSameLocation);
-				
-				// Show the choose-a-server-or-create-new-one dialog, with 
-				// a list of servers that match the serverLocation variable.
-				self.ui.chooseServerOrAddNewDialog.show();
-				
-				return;
+			if (matchingServers.length > 0 && matchingServers[0]) {
+				// start first server of list
+				var serverToStart = matchingServers[0];
+				return self.ui.serverList.startServer(serverToStart);
 			}
 			
-			
-			//  Fill fields of the add-dialog I now, because the exists in 
-			//	the url I got.
-			var data = self.ui.addServerDialog.getExtension().data;
-			data.location(serverLocation);
-			//log();
-			
 			//  Show add-dialog.
-			//self.ui.addServerDialog.show();
+			self.ui.addServerDialog.show();
+			self.ui.addServerDialog.getExtension().data
+				.location(server.location)
+				.organization(server.organization)
+				.username(server.username);
 			
-			//  After [Ok] or [cancel] button I want to retrieve an event,
-			//  And proceed with the code below.
-			
-			
-			// first delete all cookies
-			self.deleteCookies.doRemove(serverLocation);
-			
-			// secondly login - retrieve saml (code doesn't exists yet)
-			
-			
-			// start app in iframe
-			//self.ui.appDialog.getExtension().startApp(serverLocation);
+			self.ui.addServerDialog.getExtension().onAfterAdd(function(e, server) {
+				self.ui.serverList.startServer(server);
+			});
 		},
-		login: function(server) {
+		getServersBy: function(serverObject) {
+			var properties = ['location', 'organization', 'username', 'password'],
+				servers = $.map(self.servers.data(), ko.utils.unwrapObservable);
 			
-		},
-		getServersByLocation: function(serverUrl) {
-			return $.grep(self.servers.data(), function(server) {
-				return server.location() === serverUrl;
+			return $.grep(servers, function(server) {
+				var hasMatch = 0,
+					countObjectHasProperties = 0;
+				
+				$.each(properties, function(index, property) {
+					if (!serverObject[property]) {
+						return;
+					}
+					
+					countObjectHasProperties += 1;
+					
+				
+					if (serverObject[property] === server[property]()) {
+						hasMatch += 1;
+					}
+				});
+				
+				return countObjectHasProperties === hasMatch;
 			});
 		}
 	};
 	
-	self.deleteCookies = {
+	this.deleteCookies = {
 		location: undefined,
 		init: function() {
 			self.deleteCookies.location = $('iframe.deletecookies');
@@ -171,10 +186,16 @@ function ViewModel() {
 			// https://testbop.cordys.com/cordys/html5/touchbop.deletecookies.htm
 			self.deleteCookies.location.prop('src', serverUrl + '/html5/touchbop.deletecookies.htm');
 			return self.deleteCookies.location;
+		},
+		addOnLoadEventListener: function(fn) {
+			return self.deleteCookies.location.load(fn);
+		},
+		removeOnLoadEventListener: function() {
+			return self.deleteCookies.location.off('load');
 		}
 	};
 	
-	self.ui = {
+	this.ui = {
 		actionBar: {
 			up: function() {
 				var page = self.pageStack.pop();
@@ -183,9 +204,7 @@ function ViewModel() {
 				}
 			}
 		},
-		serverListPage: new Page($('.page.server-list'), self, {
-			
-		}),
+		serverListPage: new Page($('.page.server-list'), self, { }),
 		appShowPage: new Page($('.page.app-show'), self, {
 			appIframeLocation: $('.page.app-show').find('iframe'),
 			startApp: function(server, relativeAppUrl) {
@@ -194,17 +213,7 @@ function ViewModel() {
 					relativeAppUrl = '/html5/touchbopindex.htm';
 				}
 				
-				var indexOfServer = (function() {
-					var id = -1;
-					$.each(self.servers.data(), function(index, s) {
-						var serverObject = ko.utils.unwrapObservable(s);
-						
-						if (serverObject === server) {
-							id = index;
-						}
-					});
-					return id;
-				})();
+				var indexOfServer = self.servers.indexOf(server);
 				
 				if (Cordys) {
 					Cordys.currentOrigin = server.location().replace(/\/cordys$/, '');
@@ -217,12 +226,27 @@ function ViewModel() {
 		mask: {
 			location: $('.mask'),
 			show: function() {
-				self.ui.mask.location.removeClass('hidden');
+				return self.ui.mask.location.removeClass('hidden');
 			},
 			hide: function() {
-				self.ui.mask.location.addClass('hidden');
+				return self.ui.mask.location.addClass('hidden');
 			}
 		},
+		startServerDialog: new Dialog($('.dialog.start-server'), self, {
+			server: new Server(),
+			onSubmit: function() {
+				var password = self.ui.startServerDialog.getExtension().server.password().trim();
+				if ('' === password) {
+					alert('Please fill a password, otherwise you can\'t start a server.');
+					return;
+				}
+				return self.ui.startServerDialog.location.trigger('start-server.submit');
+			},
+			addOnSubmit: function(fn) {
+				self.ui.startServerDialog.location.on('start-server.submit', fn);
+				return self.ui.startServerDialog.getExtension().onSubmit();
+			}
+		}),
 		createDemoServerDialog: new Dialog($('.dialog.create-demo'), self, {
 			createDemoServer: function() {
 				// on submit form
@@ -237,9 +261,9 @@ function ViewModel() {
 				self.ui.createDemoServerDialog.close();
 				self.ui.addServerDialog.show();
 			}, 
-			init: function() {
-				if (self.servers.data().length > 0) {
-					// isn't empty
+			init: function(server) {
+				if (server.location || self.servers.data().length > 0) {
+					// isn't empty or has an querystring, don't show the create demo server dialog.
 					return;
 				}
 				
@@ -247,49 +271,31 @@ function ViewModel() {
 				self.ui.createDemoServerDialog.show();
 			}
 		}),
-		chooseServerOrAddNewDialog: new Dialog($('.dialog.choose-server-or-add-new'), self, {
-			selected: ko.observable(),
-			onAddClick: function(e) {
-				console.log('add click:', e);
-				
-				// If [+], add a new server, start that procedure.
-			},
-			onSubmit: function(e) {
-				console.log('sumbit:', e);
-				
-				var selectedServer = self.ui.chooseServerOrAddNewDialog.getExtension().selected();
-				
-				// If [Ok], start that server.
-				self.ui.serverList.startServer(selectedServer);
-			},
-			toString: function(server) {
-				return 'Location: ' + server.location() + ', User: ' + server.username() + ', Organization: ' + server.organization();
-			}
-		}),
 		addServerDialog: new Dialog($('.dialog.add-server'), self, {
 			data: new Server(),
 			onBeforeShow: function(dialog) {
-				// Clean the Dialog
+				// Clean Dialog
 				if (true !== dialog.isDemo) {
 					dialog.getExtension().data.location('').organization('').username('').password('');
 				}
 				dialog.isDemo = false;
 			},
+			onAfterAdd: function(fn) {
+				self.ui.addServerDialog.location.one('add-server.onafteradd', fn);
+			},
 			add: function() {
-				var data = self.ui.addServerDialog.getExtension().data,
+				var emptyFields = [], 
+					data = self.ui.addServerDialog.getExtension().data,
 					server = {
 						location: data.location,
 						organization: data.organization,
-						username: data.username,
-						password: data.password
-					},
-					emptyFields = [];
+						username: data.username
+					};
 				
 				// check if the is any empty form field
 				$.each(server, function(key, value) {
 					if (value().trim() === '') {
 						emptyFields.push(key);
-						//return true;
 					}
 				});
 				
@@ -299,24 +305,24 @@ function ViewModel() {
 					var message;
 					if (countFields === 1) {
 						// singular
-						message = 'field ' + emptyFields[0] + ' is';
+						message = ' ' + emptyFields[0] + ' is';
 					} else {
 						// plural
-						message = 'fields ' + emptyFields.join(', ') + ' are';
+						message = 's ' + emptyFields.join(', ') + ' are';
 					}
-					alert('The ' + message + ' empty.');
+					alert('The field' + message + ' empty. Password isn\'t required.');
 					return;
 				}
 				
-				var newServer = new Server(data.location(), data.organization(), data.username(), data.password());
-				
-				// Add server to list.
-				self.servers.data.push(newServer);
+				var newServer = data.clone();
 				
 				if (!/\/cordys$/.test(newServer.location())) {
 					// add /cordys to the url
 					newServer.location(newServer.location() + '/cordys');
 				}
+				
+				// Add server to list.
+				self.servers.data.push(newServer);
 				
 				self.deleteCookies.location.load(function(e) {
 					// Fetch ct code and saml name and persist.
@@ -324,16 +330,24 @@ function ViewModel() {
 					
 					// Close dialog.
 					self.ui.addServerDialog.close();
+					
+					// trigger event.
+					self.ui.addServerDialog.location.trigger('add-server.onafteradd', [ newServer ]);
 				});
 				self.deleteCookies.doRemove(newServer.location());
 			}
 		}),
-		editServerDialog: new Dialog($('.dialog.edit-server'), self, {}),
+		editServerDialog: new Dialog($('.dialog.edit-server'), self, {
+			onAfterClose: function() {
+				// save change to localStorage
+				self.servers.data.notifySubscribers(undefined, undefined);
+			}
+		}),
 		serverList: {
 			location: $('.content').find('.list'),
 			selected: ko.observable(),
 			longPress: function(server) {
-				// get data
+				// get server
 				self.ui.serverList.selected(server);
 				
 				// show edit a server dialog
@@ -341,48 +355,57 @@ function ViewModel() {
 			},
 			startServer: function(server, relativeAppUrl) {
 				
-				self.ui.serverListPage.hide();
+				var password = server.password();
 				
-				// check if saml/saml token is expired.
-				// if, get a new one.
-				// else, go!
-				
-				// load change to localStorage
-				self.servers.data.notifySubscribers(undefined, undefined);
-				
-				self.deleteCookies.location.load(function(e) {
-					self.deleteCookies.location.off('load');
+				// no password given.
+				self.ui.startServerDialog.show();
+				self.ui.startServerDialog.getExtension().server = server.clone(self.ui.startServerDialog.getExtension().server);
+				self.ui.startServerDialog.getExtension().addOnSubmit(function() {
+					password = self.ui.startServerDialog.getExtension().server.password();
 					
-					var login = Cordys.ajax.createLogin(server.username(), server.password());
-					login.url = server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp';
+					self.ui.startServerDialog.close();
+					self.ui.serverListPage.hide();
 					
-					$.ajax(login).done(function (data) {
-						var artifact = $(data).find('AssertionArtifact, samlp\\:AssertionArtifact').text();
-						if (!artifact) {
-							alert('Invalid username and/or password!');
-							return;
-						}
+					// check if saml/saml token is expired.
+					// if, get a new one.
+					// else, go!
+					
+					self.deleteCookies.addOnLoadEventListener(function(e) {
+						self.deleteCookies.removeOnLoadEventListener();
 						
-						if (true === DEBUG) {
-							alert('Login succeed.');
-						}
+						var login = Cordys.ajax.createLogin(
+							server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp', 
+							server.username(), 
+							password
+						);
 						
-						server.cookies.saml.value(artifact);
-						
-						// load change to localStorage
-						self.servers.data.notifySubscribers(undefined, undefined);
-						
-						var appDialog = self.ui.appShowPage;
-						appDialog.getExtension().startApp(server, relativeAppUrl);
-						appDialog.getExtension().appIframeLocation.load(function() {
-							appDialog.show();
-						});
-					}).fail(fail);
+						$.ajax(login).done(function (data) {
+							var artifact = $(data).find('AssertionArtifact, samlp\\:AssertionArtifact').text();
+							if (!artifact) {
+								if (true === DEBUG) { 
+									alert('Invalid username and/or password!');
+								}
+								return;
+							}
+							
+							if (true === DEBUG) {
+								alert('Login succeed.');
+							}
+							
+							server.cookies.saml.value(artifact);
+							
+							// save change to localStorage
+							self.servers.data.notifySubscribers(undefined, undefined);
+							
+							var appDialog = self.ui.appShowPage;
+							appDialog.getExtension().startApp(server, relativeAppUrl);
+							appDialog.getExtension().appIframeLocation.load(function() {
+								appDialog.show();
+							});
+						}).fail(fail);
+					});
+					self.deleteCookies.doRemove(server.location());
 				});
-				self.deleteCookies.doRemove(server.location());
-			},
-			init: function() {
-				
 			}
 		},
 		confirmDelete: new Dialog($('.dialog.confirm-delete'), self, {
@@ -399,43 +422,12 @@ function ViewModel() {
 
 function _beforeReady($, window) {
 	var viewModel = new ViewModel(),
-		qs = location.search.slice(1),
-		urlAppUrlIdentifier = 'app-url';
-	
-	
-	page('*', function (ctx, next) {
-		console.log(ctx);
-		if (localStorage.appUrl && '' !== localStorage.appUrl) {
-			var appLocation = localStorage.appUrl;
-			localStorage.appUrl = '';
-			var url = location.href.split('?')[0] + '/' + urlAppUrlIdentifier + '/' + appLocation;
-			console.log('using url:' + url);
-			setTimeout(function() {
-				page(url);
-			});
-		} else {
-			next();
-			console.log('else');
-		}
-	});
-	page(location.href.split('?')[0] + '/' + urlAppUrlIdentifier + '/:appUrl(*)', function(ctx, next) {
-		console.log('Jajajaa, url handler app starter');
-		console.log(ctx);
-		
-		viewModel.servers.start(ctx.params.appUrl);
-	});
-	
-	
-	if (urlAppUrlIdentifier === qs.substring(0, urlAppUrlIdentifier.length)) {
-		localStorage.appUrl = qs.substring(urlAppUrlIdentifier.length + 1); // +1 because of the = sign
-		// trigger change
-		page();
-	}
-	
+		search = URI(location.href).search(true),
+		url = search.location;
 	
 	$(document).ready(function() {
 		ko.applyBindings(viewModel);
-		viewModel.init();
+		viewModel.init(search);
 		
 		viewModel.ui.serverListPage.show();
 		
@@ -444,6 +436,10 @@ function _beforeReady($, window) {
 		}
 		
 		$(window).on('message', Cordys.api.postMessageHandle);
+		
+		if (url) {
+			viewModel.servers.start(search);
+		}
 	});
 	
 } _beforeReady(jQuery, window);

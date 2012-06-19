@@ -2,9 +2,11 @@
  * handle fail of ajax requests.
  */
 function fail(e) {
-	log(e);
-	var error = $(e.error().responseXML).find('faultstring, error elem').text() || e.responseText || 'General error, for details see response.';
-	alert('Error on login: "' + error + '"');
+	console.log(e);
+	var message = $(e.error().responseXML)
+		.find('faultstring, error elem')
+		.text() || e.responseText || 'General error, for details see response.';
+	alert('Error on login: "' + message + '"');
 }
 
 
@@ -31,25 +33,27 @@ function Dialog(location, context, extend) {
 	this.context = context;
 	
 	
+	this.show = function() {
+		return Dialog.prototype.show.apply(self, arguments);
+	};
+	
 	this.close = function() {
-		Dialog.prototype.close.apply(self, arguments);
+		return Dialog.prototype.close.apply(self, arguments);
 	};
 	
 	this.runExtension = function(method) {
-		Dialog.prototype.runExtension.apply(self, arguments);
+		return Dialog.prototype.runExtension.apply(self, arguments);
 	};
 	
 	this.clean = function() {
-		Dialog.prototype.clean.apply(self, arguments);
+		return Dialog.prototype.clean.apply(self, arguments);
 	};
 	
 	this.getExtension = function() {
 		return Dialog.prototype.getExtension.apply(self, arguments);
 	};
 	
-	this.show = function() {
-		Dialog.prototype.show.apply(self, arguments);
-	};
+	
 }
 
 Dialog.prototype = {
@@ -167,19 +171,7 @@ Page.prototype = {
 		
 		this.context.pageStack.push(this);
 		
-		var $page = this.location.removeClass('hidden');
-		
-		/*setTimeout(function() {
-			// Sets focus on the first input element
-			var inputs = $page.find('input'), 
-				inputsElementsWithAutofocusSet = inputs.filter('[autofocus]');
-			
-			if (inputsElementsWithAutofocusSet.length > 0) {
-				inputsElementsWithAutofocusSet.first().focus();
-			} else {
-				inputs.first().focus();
-			}
-		}, 0);*/
+		this.location.removeClass('hidden');
 		
 		this.runExtension('onAfterShow');
 	}
@@ -192,7 +184,7 @@ function Server(location, organization, username, password, cookies) {
 	this.location = ko.observable(location);
 	this.organization = ko.observable(organization);
 	this.username = ko.observable(username);
-	this.password = ko.observable(password);
+	this.password = ko.observable(password || '');
 	
 	var self = this;
 	
@@ -225,6 +217,16 @@ function Server(location, organization, username, password, cookies) {
 	this.exportCookies = function() {
 		Server.prototype.exportCookies.apply(self, arguments);
 	};
+	
+	this.clone = function(server) {
+		return Server.prototype.clone.apply(self, arguments);
+	};
+	
+	
+	
+	this.toString = function() {
+		return Server.prototype.toString.apply(self, arguments);
+	};
 }
 
 
@@ -242,7 +244,25 @@ Server.prototype = {
 			saml: {
 				name: _saml.name(),
 				value: _saml.value()
-			} 
+			}
 		};
+	},
+	clone: function(server) {
+		if (server) {
+			return server
+				.location(ko.utils.unwrapObservable(this.location))
+				.organization(ko.utils.unwrapObservable(this.organization))
+				.username(ko.utils.unwrapObservable(this.username))
+				.password(ko.utils.unwrapObservable(this.password));
+		}
+		return new Server(
+			ko.utils.unwrapObservable(this.location), 
+			ko.utils.unwrapObservable(this.organization), 
+			ko.utils.unwrapObservable(this.username), 
+			ko.utils.unwrapObservable(this.password)
+		);
+	},
+	toString: function() {
+		return 'Location: ' + this.location() + ', User: ' + this.username() + ', Organization: ' + this.organization();
 	}
 };
