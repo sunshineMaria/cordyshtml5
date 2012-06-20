@@ -177,18 +177,36 @@ function ViewModel() {
 	this.deleteCookies = {
 		location: undefined,
 		init: function() {
-			self.deleteCookies.location = $('iframe.deletecookies');
+			//self.deleteCookies.location = $('<iframe>');//$('iframe.deletecookies');
 		},
 		refresh: function() {
 			self.deleteCookies.location.contents()[0].location.reload();
-		}, 
+		},
+		prepare: function() {
+			self.deleteCookies.location = $('<iframe>');
+		},
 		doRemove: function(serverUrl) {
 			// https://testbop.cordys.com/cordys/html5/touchbop.deletecookies.htm
 			self.deleteCookies.location.prop('src', serverUrl + '/html5/touchbop.deletecookies.htm');
+			
+			$(document.body).append(self.deleteCookies.location);
+			
+			self.deleteCookies.addOnLoadEventListener(function() {
+				self.deleteCookies.removeOnLoadEventListener();
+				self.deleteCookies.location.trigger('afterremove');
+				//document.body.removeChild(self.deleteCookies.location[0]);
+				
+				self.deleteCookies.location.remove();
+			});
+			
 			return self.deleteCookies.location;
 		},
 		addOnLoadEventListener: function(fn) {
 			return self.deleteCookies.location.load(fn);
+			//return self.deleteCookies.location.on('load', fn);
+		},
+		addAfterRemoveEventListener: function(fn) {
+			return self.deleteCookies.location.on('afterremove', fn);
 		},
 		removeOnLoadEventListener: function() {
 			return self.deleteCookies.location.off('load');
@@ -240,7 +258,9 @@ function ViewModel() {
 					alert('Please fill a password, otherwise you can\'t start a server.');
 					return;
 				}
-				return self.ui.startServerDialog.location.trigger('start-server.submit');
+				self.ui.startServerDialog.location.trigger('start-server.submit');
+				self.ui.startServerDialog.location.off('start-server.submit');
+				return ;
 			},
 			addOnSubmit: function(fn) {
 				self.ui.startServerDialog.location.on('start-server.submit', fn);
@@ -324,7 +344,8 @@ function ViewModel() {
 				// Add server to list.
 				self.servers.data.push(newServer);
 				
-				self.deleteCookies.location.load(function(e) {
+				self.deleteCookies.prepare();
+				self.deleteCookies.addAfterRemoveEventListener(function(e) {
 					// Fetch ct code and saml name and persist.
 					self.servers.setupCtCode(newServer);
 					
@@ -369,9 +390,8 @@ function ViewModel() {
 					// check if saml/saml token is expired.
 					// if, get a new one.
 					// else, go!
-					
-					self.deleteCookies.addOnLoadEventListener(function(e) {
-						self.deleteCookies.removeOnLoadEventListener();
+					self.deleteCookies.prepare();
+					self.deleteCookies.addAfterRemoveEventListener(function(e) {
 						
 						var login = Cordys.ajax.createLogin(
 							server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp', 
@@ -440,6 +460,18 @@ function _beforeReady($, window) {
 		if (url) {
 			viewModel.servers.start(search);
 		}
+		
+		document.addEventListener('deviceready', function() {
+	        document.addEventListener('backbutton', function() {
+				if (false === viewModel.pageStack()[0].location.hasClass('hidden')) {
+					// serverList
+					navigator.app.exitApp();
+				} else {
+					// other page
+					navigator.app.backHistory();
+				}
+			}, false);
+	    }, false);
 	});
 	
 } _beforeReady(jQuery, window);
