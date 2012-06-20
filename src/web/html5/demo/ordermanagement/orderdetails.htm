@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Orders</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js" type="text/javascript"></script>
+
+		<script src="http://borismoore.github.com/jsrender/jsrender.js" type="text/javascript"></script>
+		<script src="/cordys/html5/cordys.html5sdk-0.1.js" type="text/javascript"></script>
+
+	</head>
+	<script id="ordersTemplate" type="text/x-jsrender">
+		<li>
+			<div >
+				<h3 class="ui-li-heading"><a href="#orderDetailsPage">{{:OrderID}}</a></h3>
+				<p class="ui-li-desc"/>{{:Customer}}</p>
+				<p class="ui-li-desc">{{:Product}}</p>
+				<p class="ui-li-desc">{{:Cost}}</p>
+				<p class="ui-li-desc">{{formatDate:OrderDate}}</p>
+			</div>
+		</li>
+	</script>
+
+	<script id="orderDetailsTemplate" type="text/x-jsrender">
+		<li>
+			<div >
+				<h3 class="ui-li-heading"><span class="ui-input-text">Item Code:</span><span>{{:OrderID}}</span></h3>
+				<p class="ui-li-desc"/>{{:Customer}}</p>
+				<p class="ui-li-desc">{{:Employee}}</p>
+				<p class="ui-li-desc">{{formatDate:OrderDate}}</p>
+				<p class="ui-li-desc">{{:Product}}</p>
+				<p class="ui-li-desc">Quantity: <span>{{:Quantity}}</span>
+				<p class="ui-li-desc">Discount: <span>{{:Discont}}</span>
+				<p class="ui-li-desc">Cost : <span>{{:Cost}}</span>
+				<p class="ui-li-desc">{{:Status}}</p>
+				<p class="ui-li-desc">{{:Notes}}</p>
+			</div>
+		</li>
+	</script>
+
+	<script type="text/javascript">
+		$(function () {
+			// get the orders for the customer
+			$.cordys.ajax({
+				method : "GetOrderDemoObjects",
+				namespace : "http://schemas.cordys.com/html5sdk/orderdemo/1.0",
+				parameters : {
+					fromOrderID : "0",
+					toOrderID : "9999"
+				},
+				dataType : 'json', // the xml result will be converted into js objects
+				success : function (data) {
+					// Create an array with only the Employees objects, skip the tuple/old structure
+					var orders = $.map(data.tuple, function (tuple, index) {
+							return tuple.old.OrderDemo;
+						});
+					var html = $("#ordersTemplate").render(orders);
+					$('#orderList')
+					.html(html)
+					.listview("refresh");
+					
+					$("#orderList").find("h3").click(function (event) {
+						$("#orderDetailOrderID").text($(event.target).text())
+						$.cordys.ajax({
+							method : "GetOrderDemoObject",
+							namespace : "http://schemas.cordys.com/html5sdk/orderdemo/1.0",
+							parameters : [{
+									name : "OrderID",
+									value : $(event.target).text()
+								}
+							],
+							dataType : 'json', // the xml result will be converted into js objects
+							success : function (data) {
+								// Create an array with only the Employees objects, skip the tuple/old structure
+								var orderDetails = data.tuple.old.OrderDemo;
+								var html = $("#orderDetailsTemplate").render(orderDetails);
+								$('#orderDetailsList')
+								.html(html)
+								.listview("refresh");
+							}
+						});
+					});
+				}
+			});
+		});
+		$.views.converters({
+			formatDate : function (value) {
+				var formattedDate = new Date(value);
+				return (formattedDate.getFullYear() + "-" + formattedDate.getMonth() + "-" + formattedDate.getDate() + " " + formattedDate.getHours() + ":" + formattedDate.getMinutes());
+			}
+		});
+	</script>
+	<body>
+
+		<div data-role="page" id="ordersPage">
+			<div data-role="header" data-theme="b">
+				<a href="http://www.cordys.com" data-icon="back">Cordys</a>
+				<h1>Orders</h1>
+			</div>
+
+			<div data-role="content" data-theme="b">
+				<ul id="orderList" data-role="listview" data-theme="c" data-inset="true">
+				</ul>			
+			</div>
+		</div>
+		<div data-role="page" id="orderDetailsPage">
+			<div data-role="header" data-theme="b">
+				<a href="#ordersPage" data-icon="back">Back</a>
+				<h1>Order Details:<label id="orderDetailOrderID"></label></h1>
+			</div>
+
+			<div data-role="content" data-theme="b">
+				<ul id="orderDetailsList" data-role="listview" data-theme="c" data-inset="true">
+				</ul>			
+			</div>
+		</div>
+
+	</body>
+</html>
