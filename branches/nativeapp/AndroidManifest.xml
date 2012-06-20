@@ -12,21 +12,24 @@
 		android:smallScreens="true" />
 
 	<uses-permission android:name="android.permission.CAMERA" />
+	<!-- uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /-->
 	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<!--uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /-->
+	<!-- uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /-->
+	<!-- uses-permission android:name="android.permission.READ_PHONE_STATE" /-->
+	<!-- uses-permission android:name="android.permission.RECEIVE_SMS" /-->
+	<!--uses-permission android:name="android.permission.RECORD_AUDIO" /-->
+	<!--uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /-->
+	<!--uses-permission android:name="android.permission.READ_CONTACTS" /-->
+	<!--uses-permission android:name="android.permission.WRITE_CONTACTS" /-->
+	<!--uses-permission android:name="android.permission.GET_ACCOUNTS" /-->
+	<!--uses-permission android:name="android.permission.BROADCAST_STICKY" /-->
+	
+	<!-- Required by Phonegap -->
 	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.RECEIVE_SMS" />
-	<uses-permission android:name="android.permission.RECORD_AUDIO" />
-	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-	<uses-permission android:name="android.permission.READ_CONTACTS" />
-	<uses-permission android:name="android.permission.WRITE_CONTACTS" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-	<uses-permission android:name="android.permission.BROADCAST_STICKY" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	
 
 	<uses-sdk
 		android:minSdkVersion="8"
@@ -55,12 +58,14 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 				<category android:name="android.intent.category.DEFAULT" />
 				
+				
 				<data android:scheme="http" />
 				<data android:scheme="https" />
+				<data android:pathPattern=".*touchbop=true.*" />
+				
 			</intent-filter>
 		</activity>
 		
-		<!--  <action android:name="android.intent.action.VIEW" />-->
 		<activity
 			android:name="org.apache.cordova.DroidGap"
 			android:configChanges="orientation|screenSize|keyboardHidden"
