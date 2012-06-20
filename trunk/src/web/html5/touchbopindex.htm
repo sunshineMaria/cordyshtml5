@@ -12,6 +12,31 @@
 	<script src="plugins/cordys.mobile.js" type="text/javascript"></script>
 
 	<script type="text/javascript">
+	
+		$( document ).bind( 'mobileinit', function(){
+	    	$.mobile.pushStateEnabled = false;
+		});
+
+
+		$(document).bind('pagebeforechange', function(e, data) {
+			var to = data.toPage;
+	        if (typeof to === 'string') {
+
+	            var u = $.mobile.path.parseUrl(to);
+	            to = u.hash || '#' + u.pathname;
+
+	            if (!u.hash) return;
+
+	            e.preventDefault();
+	            
+	          var options = {
+	            dataUrl: '',
+	            changeHash: false
+	          };
+	          $.mobile.changePage($(to), options);
+	        }
+	    });
+	
 		var taskModel, targetModel, uiTasksModel;
 		$(function() {
 			ko.bindingHandlers.date = { 
