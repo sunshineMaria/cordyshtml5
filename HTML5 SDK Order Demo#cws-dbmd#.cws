@@ -35,7 +35,8 @@
 					<Columns>
 						<Column>
 							<columnName>OrderID</columnName>
-							<datatype>guid</datatype>
+							<datatype>i8</datatype>
+							<precision>19</precision>
 						</Column>
 						<Column>
 							<columnName>Customer</columnName>
@@ -46,6 +47,10 @@
 							<columnName>Employee</columnName>
 							<datatype>string</datatype>
 							<size>50</size>
+						</Column>
+						<Column>
+							<columnName>OrderDate</columnName>
+							<datatype>dateTime</datatype>
 						</Column>
 						<Column>
 							<columnName>Product</columnName>
@@ -70,7 +75,7 @@
 						<Column>
 							<columnName>Status</columnName>
 							<datatype>string</datatype>
-							<size>10</size>
+							<size>50</size>
 						</Column>
 						<Column>
 							<columnName>Notes</columnName>
@@ -78,7 +83,25 @@
 							<size>256</size>
 						</Column>
 					</Columns>
-					<Keys/>
+					<Keys>
+						<PrimaryKey>
+							<keyName>PK_OrderDemo</keyName>
+							<SubColumns>
+								<columnName>OrderID</columnName>
+							</SubColumns>
+						</PrimaryKey>
+					</Keys>
+					<Indices>
+						<Index>
+							<indexName>PK_OrderDemo</indexName>
+							<indexNr>1</indexNr>
+							<SubColumns>
+								<columnName>OrderID</columnName>
+							</SubColumns>
+							<description>PK_OrderDemo</description>
+							<isPrimary>true</isPrimary>
+						</Index>
+					</Indices>
 				</TableInfo>
 			</Definition>
 			<DBSchema>
@@ -112,6 +135,7 @@
 			<XmlNode>
 				<xsd:schema
 					xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+					xmlns:cws="http://schemas.cordys.com/cws/1.0"
 					xmlns=""
 					targetNamespace="http://schemas.cordys.com/General/ClientAttributes/"
 					elementFormDefault="qualified"
@@ -149,6 +173,7 @@
 					<DefinitionXML>
 						<xsd:attribute
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="sync_id"
 							type="xsd:string"
@@ -178,6 +203,7 @@
 					<DefinitionXML>
 						<xsd:attribute
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="current_model"
 							type="xsd:string"
@@ -207,6 +233,7 @@
 					<DefinitionXML>
 						<xsd:attribute
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="reorder"
 							type="xsd:boolean"
@@ -236,6 +263,7 @@
 					<DefinitionXML>
 						<xsd:attribute
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="related"
 							type="xsd:string"
@@ -265,6 +293,7 @@
 					<DefinitionXML>
 						<xsd:attribute
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="selected"
 							type="xsd:boolean"
@@ -294,6 +323,7 @@
 					<DefinitionXML>
 						<xsd:attribute
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="activebusinessobject"
 							type="xsd:boolean"
@@ -334,6 +364,7 @@
 			<XmlNode>
 				<xsd:schema
 					xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+					xmlns:cws="http://schemas.cordys.com/cws/1.0"
 					xmlns=""
 					attributeFormDefault="unqualified"
 					elementFormDefault="qualified"
@@ -370,6 +401,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="UpdateMethodAttributes">
 							<xsd:attribute
@@ -474,6 +506,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="tupleAttributes">
 							<xsd:anyAttribute
@@ -506,6 +539,7 @@
 					<DefinitionXML>
 						<xsd:attribute
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="seqId"
 							type="xsd:int"
@@ -535,6 +569,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="oldObjectAttributes">
 							<xsd:attribute
@@ -578,6 +613,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="nestedObjectAttributes">
 							<xsd:anyAttribute
@@ -610,6 +646,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="newObjectAttributes">
 							<xsd:attribute
@@ -689,6 +726,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="GetMethodAttributes">
 							<xsd:attribute
@@ -763,6 +801,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="elementAttributes">
 							<xsd:anyAttribute
@@ -795,6 +834,7 @@
 					<DefinitionXML>
 						<xsd:element
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="values">
 							<xsd:complexType>
@@ -852,6 +892,7 @@
 					<DefinitionXML>
 						<xsd:element
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="cursor">
 							<xsd:complexType>
@@ -937,6 +978,7 @@
 			<XmlNode>
 				<xsd:schema
 					xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+					xmlns:cws="http://schemas.cordys.com/cws/1.0"
 					xmlns=""
 					attributeFormDefault="unqualified"
 					elementFormDefault="qualified"
@@ -973,6 +1015,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="CommonAttributes">
 							<xsd:attribute
@@ -1058,6 +1101,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="CursorAttributes">
 							<xsd:attribute
@@ -1101,6 +1145,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="QueryAttributes">
 							<xsd:attribute
@@ -1163,6 +1208,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="UpdateAttributes">
 							<xsd:attribute
@@ -1207,6 +1253,7 @@
 					<DefinitionXML>
 						<xsd:attributeGroup
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns=""
 							name="elemAttributes">
 							<xsd:anyAttribute
@@ -1250,6 +1297,7 @@
 			<XmlNode>
 				<xsd:schema
 					xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+					xmlns:cws="http://schemas.cordys.com/cws/1.0"
 					xmlns:cordys="http://schemas.cordys.com/General/1.0/"
 					xmlns=""
 					targetNamespace="http://schemas.cordys.com/General/1.0/"
@@ -1287,6 +1335,7 @@
 					<DefinitionXML>
 						<xsd:element
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:cordys="http://schemas.cordys.com/General/1.0/"
 							xmlns=""
 							name="LocalizableMessage">
@@ -1332,6 +1381,7 @@
 					<DefinitionXML>
 						<xsd:complexType
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:cordys="http://schemas.cordys.com/General/1.0/"
 							xmlns=""
 							name="NestedMessage"
@@ -1395,6 +1445,7 @@
 			<XmlNode>
 				<xsd:schema
 					xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+					xmlns:cws="http://schemas.cordys.com/cws/1.0"
 					xmlns:cordys="http://schemas.cordys.com/General/1.0/"
 					xmlns=""
 					targetNamespace="http://schemas.cordys.com/General/1.0/"
@@ -1432,6 +1483,7 @@
 					<DefinitionXML>
 						<xsd:element
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:cordys="http://schemas.cordys.com/General/1.0/"
 							xmlns=""
 							name="FaultDetails">
@@ -1468,6 +1520,7 @@
 					<DefinitionXML>
 						<xsd:element
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:cordys="http://schemas.cordys.com/General/1.0/"
 							xmlns=""
 							name="FaultRelatedException"

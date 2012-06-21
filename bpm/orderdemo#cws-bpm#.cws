@@ -20,12 +20,13 @@
 	<DefaultMonitorSettings>true</DefaultMonitorSettings>
 	<Definition>
 		<Definitions
+			xmlns:cws="http://schemas.cordys.com/cws/1.0"
 			xmlns="">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				xmlns:xlink="http://www.w3.org/1999/xlink"
-				width="725"
-				height="495">
+				width="25"
+				height="25">
 				<defs>
 					<marker
 						id="noarrow"
@@ -139,7 +140,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="120,60 120,102"
+					points="310,100 310,142"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -147,15 +148,15 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="190,280 242,280"
+					points="380,320 432,320"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
 				<rect
-					x="175"
-					y="260"
-					width="90"
-					height="40"
+					x="0"
+					y="0"
+					width="0"
+					height="0"
 					style="opacity:0;stroke:#000000;stroke-width:0"
 				/>
 				<flowText
@@ -164,10 +165,10 @@
 					fill="rgb(0, 99, 155)">
 					<flowRegion>
 						<rect
-							width="90"
-							height="40"
-							x="175"
-							y="262.5"
+							width="35"
+							height="25"
+							x="0"
+							y="0"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -183,20 +184,20 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="120,320 120,362"
+					points="310,360 310,402"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
 				<polyline
 					stroke="#7E857A"
 					stroke-width="1"
-					points="116,338 124,330"
+					points="-4,18 4,10"
 				/>
 				<rect
-					x="75"
-					y="325"
-					width="90"
-					height="40"
+					x="0"
+					y="0"
+					width="0"
+					height="0"
 					style="opacity:0;stroke:#000000;stroke-width:0"
 				/>
 				<flowText
@@ -205,10 +206,10 @@
 					fill="rgb(0, 99, 155)">
 					<flowRegion>
 						<rect
-							width="90"
-							height="40"
-							x="75"
-							y="327.5"
+							width="35"
+							height="25"
+							x="0"
+							y="0"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -224,7 +225,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="190,410 242,410"
+					points="380,450 432,450"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -232,7 +233,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="120,190 120,232"
+					points="310,230 310,272"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -240,7 +241,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="390,305 493,340"
+					points="580,345 683,380"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -248,7 +249,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="390,389 493,358"
+					points="580,429 683,398"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -256,7 +257,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="540,350 552,350"
+					points="730,390 742,390"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -264,7 +265,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="630,390 630,422"
+					points="820,430 820,462"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -284,16 +285,16 @@
 					/>
 				</linearGradient>
 				<circle
-					cx="120"
-					cy="40"
-					r="20"
+					cx="0"
+					cy="0"
+					r="0"
 					style="stroke:#4E8D6D;stroke-width:1;fill:url(#o_8);;stroke-dasharray:none;"
 				/>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/message_catch_sb.gif"
-					x="106.85786437626905"
-					y="26.867864376269054"
+					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/message_catch_sb.gif"
+					x="296.86786437626904"
+					y="66.86786437626905"
 					height="26.284271247461906"
 					width="26.284271247461906"
 					preserveAspectRatio="none"
@@ -314,12 +315,12 @@
 					/>
 				</linearGradient>
 				<rect
-					x="50"
-					y="110"
+					x="0"
+					y="0"
 					rx="5"
 					ry="5"
-					width="140"
-					height="80"
+					width="0"
+					height="18"
 					style="stroke-width:1;fill:url(#o_9);stroke:#698BC4;stroke-dasharray:none;"
 				/>
 				<flowText
@@ -328,10 +329,10 @@
 					fill="rgb(0, 99, 155)">
 					<flowRegion>
 						<rect
-							width="127"
-							height="80"
-							x="63"
-							y="139.5"
+							width="35"
+							height="25"
+							x="13"
+							y="0"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -345,9 +346,9 @@
 				</flowText>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
-					x="53"
-					y="113.01000000000002"
+					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
+					x="240"
+					y="150"
 					height="16"
 					width="16"
 				/>
@@ -367,7 +368,7 @@
 					/>
 				</linearGradient>
 				<polygon
-					points="50,280 120,240 190,280 120,320"
+					points="0,0 0,0 0,0 0,0"
 					style="stroke:#B2763B;stroke-width:1;;stroke-dasharray:none;fill:url(#o_15);"
 				/>
 				<flowText
@@ -376,10 +377,10 @@
 					fill="rgb(0, 99, 155)">
 					<flowRegion>
 						<rect
-							width="140"
-							height="80"
-							x="50"
-							y="262.5"
+							width="0"
+							height="0"
+							x="0"
+							y="0"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -407,12 +408,12 @@
 					/>
 				</linearGradient>
 				<rect
-					x="250"
-					y="240"
+					x="0"
+					y="0"
 					rx="5"
 					ry="5"
-					width="140"
-					height="80"
+					width="0"
+					height="18"
 					style="stroke-width:1;fill:url(#o_18);stroke:#698BC4;stroke-dasharray:none;"
 				/>
 				<flowText
@@ -421,10 +422,10 @@
 					fill="rgb(0, 99, 155)">
 					<flowRegion>
 						<rect
-							width="127"
-							height="80"
-							x="263"
-							y="255.5"
+							width="35"
+							height="25"
+							x="13"
+							y="0"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -438,9 +439,9 @@
 				</flowText>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
-					x="253"
-					y="243"
+					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
+					x="440.01000000000005"
+					y="280.01"
 					height="16"
 					width="16"
 				/>
@@ -460,12 +461,12 @@
 					/>
 				</linearGradient>
 				<rect
-					x="50"
-					y="370"
+					x="0"
+					y="0"
 					rx="5"
 					ry="5"
-					width="140"
-					height="80"
+					width="0"
+					height="18"
 					style="stroke-width:1;fill:url(#o_22);stroke:#698BC4;stroke-dasharray:none;"
 				/>
 				<flowText
@@ -474,10 +475,10 @@
 					fill="rgb(0, 99, 155)">
 					<flowRegion>
 						<rect
-							width="140"
-							height="80"
-							x="50"
-							y="392.5"
+							width="35"
+							height="25"
+							x="0"
+							y="0"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -486,12 +487,7 @@
 							top-margin="5"
 							left-margin="5"
 							right-margin="5"
-							bottom-margin="5">Approve</flowPara>
-						<flowPara
-							justification="middle"
-							left-margin="5"
-							right-margin="5"
-							bottom-margin="5">Order</flowPara>
+							bottom-margin="5">ApproveOrder</flowPara>
 					</flowDiv>
 				</flowText>
 				<linearGradient
@@ -510,12 +506,12 @@
 					/>
 				</linearGradient>
 				<rect
-					x="250"
-					y="370"
+					x="0"
+					y="0"
 					rx="5"
 					ry="5"
-					width="140"
-					height="80"
+					width="0"
+					height="18"
 					style="stroke-width:1;fill:url(#o_26);stroke:#698BC4;stroke-dasharray:none;"
 				/>
 				<flowText
@@ -524,10 +520,10 @@
 					fill="rgb(0, 99, 155)">
 					<flowRegion>
 						<rect
-							width="127"
-							height="80"
-							x="263"
-							y="385.5"
+							width="35"
+							height="25"
+							x="13"
+							y="0"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -541,9 +537,9 @@
 				</flowText>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
-					x="253.01"
-					y="373"
+					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
+					x="440.01000000000005"
+					y="410.00999999999993"
 					height="16"
 					width="16"
 				/>
@@ -563,9 +559,9 @@
 					/>
 				</linearGradient>
 				<circle
-					cx="630"
-					cy="450"
-					r="20"
+					cx="0"
+					cy="0"
+					r="0"
 					style="stroke:#8A0000;stroke-width:2;fill:url(#o_38);;stroke-dasharray:none;"
 				/>
 				<linearGradient
@@ -584,22 +580,22 @@
 					/>
 				</linearGradient>
 				<circle
-					cx="520"
-					cy="350"
-					r="20"
+					cx="0"
+					cy="0"
+					r="0"
 					style="stroke:#8C84A2;stroke-width:1;fill:url(#o_43);;stroke-dasharray:none;"
 				/>
 				<circle
-					cx="520"
-					cy="350"
-					r="17"
+					cx="0"
+					cy="0"
+					r="-3"
 					style="stroke:#8C84A2;stroke-width:1;fill:url(#o_43);;stroke-dasharray:none;"
 				/>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/timer_catch_sb.gif"
-					x="506.86786437626904"
-					y="336.86786437626904"
+					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/timer_catch_sb.gif"
+					x="696.867864376269"
+					y="376.86786437626904"
 					height="26.284271247461906"
 					width="26.284271247461906"
 					preserveAspectRatio="none"
@@ -620,12 +616,12 @@
 					/>
 				</linearGradient>
 				<rect
-					x="560"
-					y="310"
+					x="0"
+					y="0"
 					rx="5"
 					ry="5"
-					width="140"
-					height="80"
+					width="0"
+					height="18"
 					style="stroke-width:1;fill:url(#o_52);stroke:#698BC4;stroke-dasharray:none;"
 				/>
 				<flowText
@@ -634,10 +630,10 @@
 					fill="rgb(0, 99, 155)">
 					<flowRegion>
 						<rect
-							width="127"
-							height="80"
-							x="573"
-							y="325.5"
+							width="35"
+							height="25"
+							x="13"
+							y="0"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -651,9 +647,9 @@
 				</flowText>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
-					x="563"
-					y="313"
+					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
+					x="750.01"
+					y="350.01"
 					height="16"
 					width="16"
 				/>
@@ -758,6 +754,20 @@
 				namespacevalue="http://schemas.cordys.com/html5sdk/demo/1.0"
 				namespaceEditable="true"
 			/>
+			<namespace
+				xmlns=""
+				prefix="ns8"
+				namespacevalue="http://schemas.cordys.com/cws/1.0"
+				namespaceEditable="true">
+				<activityid
+					xmlns="">o_9</activityid>
+				<activityid
+					xmlns="">o_18</activityid>
+				<activityid
+					xmlns="">o_26</activityid>
+				<activityid
+					xmlns="">o_52</activityid>
+			</namespace>
 		</namespaces>
 	</Namespaces>
 	<Operation></Operation>
@@ -768,6 +778,7 @@
 	<ProcessMessages>
 		<definitions
 			xmlns="http://schemas.xmlsoap.org/wsdl/"
+			xmlns:cws="http://schemas.cordys.com/cws/1.0"
 			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 			xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 			xmlns:bpm="http://schemas.cordys.com/default"
@@ -793,7 +804,7 @@
 	<UseBusinessCalendar>false</UseBusinessCalendar>
 	<WsdlTargetNamespace></WsdlTargetNamespace>
 	<WsdlUrl></WsdlUrl>
-	<freeObjectId>59</freeObjectId>
+	<freeObjectId>61</freeObjectId>
 	<isChanged></isChanged>
 	<links/>
 	<modelFormatVersion>BOP4_FP1</modelFormatVersion>
@@ -872,11 +883,7 @@
 					<CreatedBy>csharbel</CreatedBy>
 					<CreationDate>2012-06-15T10:06:01.891</CreationDate>
 					<Notes/>
-					<Identifier>
-						<uri
-							id="002170BA-4014-11E1-F499-A89B464A5237"
-						/>
-					</Identifier>
+					<Identifier/>
 				</TranslatableText>
 			</TranslatableName>
 		</Start>
@@ -922,11 +929,7 @@
 					<CreatedBy>csharbel</CreatedBy>
 					<CreationDate>2012-06-15T10:06:01.923</CreationDate>
 					<Notes/>
-					<Identifier>
-						<uri
-							id="002170BA-4014-11E1-F6D9-D1FC1CAD5FD7"
-						/>
-					</Identifier>
+					<Identifier/>
 				</TranslatableText>
 			</TranslatableName>
 		</SequenceFlow>
@@ -936,8 +939,7 @@
 			RuntimeDocumentID="002170BA-4014-11E1-F6D9-CA1ADEBE9FD7">
 			<DocumentID>002170BA-4014-11E1-F6D9-CA1ADEBE7FD7</DocumentID>
 			<Name>Activity (4)</Name>
-			<Description>Approve
-Order</Description>
+			<Description>ApproveOrder</Description>
 			<CreatedBy>csharbel</CreatedBy>
 			<CreationDate>2012-06-15T10:06:01.848</CreationDate>
 			<Notes/>
@@ -995,16 +997,16 @@ Order</Description>
 			<TranslatableName>
 				<TranslatableText
 					type="com.cordys.translation.TranslatableText"
-					RuntimeDocumentID="002170BA-4014-11E1-F6D9-DAA6D8F67FD7">
-					<DocumentID>002170BA-4014-11E1-F6D9-DAA6D8F65FD7</DocumentID>
-					<Name>002170BA-4014-11E1-F6D9-DAA6D8F65FD7</Name>
-					<Description>002170BA-4014-11E1-F6D9-DAA6D8F65FD7</Description>
-					<CreatedBy>csharbel</CreatedBy>
-					<CreationDate>2012-06-15T10:06:01.85</CreationDate>
+					RuntimeDocumentID="00215A60-3EB8-11E1-F71F-ED6C59BA7201">
+					<DocumentID>00215A60-3EB8-11E1-F71F-ED6C59BA5201</DocumentID>
+					<Name>00215A60-3EB8-11E1-F71F-ED6C59BA5201</Name>
+					<Description>00215A60-3EB8-11E1-F71F-ED6C59BA5201</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T05:02:02.716</CreationDate>
 					<Notes/>
 					<Identifier>
 						<uri
-							id="002170BA-4014-11E1-F6D9-DAA6D8F69FD7"
+							id="00215A60-3EB8-11E1-F71F-ED6C59BA9201"
 						/>
 					</Identifier>
 				</TranslatableText>
@@ -1052,11 +1054,7 @@ Order</Description>
 					<CreatedBy>csharbel</CreatedBy>
 					<CreationDate>2012-06-15T10:06:01.89</CreationDate>
 					<Notes/>
-					<Identifier>
-						<uri
-							id="002170BA-4014-11E1-F6D9-D1FC1CAE9FD7"
-						/>
-					</Identifier>
+					<Identifier/>
 				</TranslatableText>
 			</TranslatableName>
 		</SequenceFlow>
@@ -1115,12 +1113,12 @@ Order</Description>
 			<TranslatableName>
 				<TranslatableText
 					type="com.cordys.translation.TranslatableText"
-					RuntimeDocumentID="002170BA-4014-11E1-F6D9-D1FC1CAFBFD7">
-					<DocumentID>002170BA-4014-11E1-F6D9-D1FC1CAF9FD7</DocumentID>
-					<Name>002170BA-4014-11E1-F6D9-D1FC1CAF9FD7</Name>
-					<Description>002170BA-4014-11E1-F6D9-D1FC1CAF9FD7</Description>
-					<CreatedBy>csharbel</CreatedBy>
-					<CreationDate>2012-06-15T10:06:01.846</CreationDate>
+					RuntimeDocumentID="00215A60-3EB8-11E1-F71F-C62A1E82D201">
+					<DocumentID>00215A60-3EB8-11E1-F71F-C62A1E82B201</DocumentID>
+					<Name>00215A60-3EB8-11E1-F71F-C62A1E82B201</Name>
+					<Description>00215A60-3EB8-11E1-F71F-C62A1E82B201</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T04:39:00.355</CreationDate>
 					<Notes/>
 					<Identifier>
 						<uri
@@ -1240,11 +1238,7 @@ Order</Description>
 					<CreatedBy>csharbel</CreatedBy>
 					<CreationDate>2012-06-15T10:06:01.888</CreationDate>
 					<Notes/>
-					<Identifier>
-						<uri
-							id="002170BA-4014-11E1-F499-A89B46461237"
-						/>
-					</Identifier>
+					<Identifier/>
 				</TranslatableText>
 			</TranslatableName>
 		</End>
@@ -1493,7 +1487,28 @@ Order</Description>
 				/>
 			</ContainerProcess>
 			<InputMessageObject/>
-			<MessageMap/>
+			<MessageMap>
+				<MessageMap
+					type="com.cordys.bpm.messagemap.MessageMap"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F722-5E190C733201">
+					<DocumentID>00215A60-3EB8-11E1-F722-5E190C731201</DocumentID>
+					<Name>Delay</Name>
+					<Description>Delay</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T06:58:00.991</CreationDate>
+					<Notes/>
+					<afterAssignment>
+						<activity
+							xmlns=""
+						/>
+					</afterAssignment>
+					<beforeAssignment>
+						<activity
+							xmlns=""
+						/>
+					</beforeAssignment>
+				</MessageMap>
+			</MessageMap>
 			<MonitorableEvents/>
 			<MonitorableKpis/>
 			<OutputMessageObject/>
@@ -1507,11 +1522,7 @@ Order</Description>
 					<CreatedBy>csharbel</CreatedBy>
 					<CreationDate>2012-06-15T10:17:05.134</CreationDate>
 					<Notes/>
-					<Identifier>
-						<uri
-							id="002170BA-4014-11E1-F6DA-4A8C53F91FD7"
-						/>
-					</Identifier>
+					<Identifier/>
 				</TranslatableText>
 			</TranslatableName>
 		</Delay>
@@ -1542,7 +1553,7 @@ Order</Description>
 			<ExecutionOrganization></ExecutionOrganization>
 			<ExecutionUserType>currentOwner</ExecutionUserType>
 			<FontSize>12</FontSize>
-			<InProcessExecution></InProcessExecution>
+			<InProcessExecution>false</InProcessExecution>
 			<LogData/>
 			<MapSOAPFaultCode>true</MapSOAPFaultCode>
 			<Method></Method>
@@ -1647,8 +1658,18 @@ Order</Description>
 					<Notes/>
 					<afterAssignment>
 						<activity
-							xmlns=""
-						/>
+							xmlns="">
+							<mapping
+								sourceId=""
+								targetId="_Message_tuple"
+								isProcessVariable="false"
+								targetAssign="bpm:Message/bpm:tuple"
+								operation="Replace With"
+								operation2="SelectTNS"
+								isNillable="false">
+								<sourceAssign>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple</sourceAssign>
+							</mapping>
+						</activity>
 					</afterAssignment>
 					<beforeAssignment>
 						<activity
@@ -1713,6 +1734,16 @@ Order</Description>
 								isNillable="true">
 								<sourceAssign>bpm:OrderDemo/bpm:Cost/text()</sourceAssign>
 							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_9_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo_Status"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo/ns7:Status"
+								operation="Replace Content With"
+								operation2="Fixed Value"
+								isNillable="true">
+								<sourceAssign>CREATED</sourceAssign>
+							</mapping>
 						</activity>
 					</beforeAssignment>
 				</MessageMap>
@@ -1723,12 +1754,12 @@ Order</Description>
 			<TranslatableName>
 				<TranslatableText
 					type="com.cordys.translation.TranslatableText"
-					RuntimeDocumentID="002170BA-4014-11E1-F6DA-509D501ABFD7">
-					<DocumentID>002170BA-4014-11E1-F6DA-509D501A9FD7</DocumentID>
-					<Name>002170BA-4014-11E1-F6DA-509D501A9FD7</Name>
-					<Description>002170BA-4014-11E1-F6DA-509D501A9FD7</Description>
-					<CreatedBy>csharbel</CreatedBy>
-					<CreationDate>2012-06-15T10:39:02.871</CreationDate>
+					RuntimeDocumentID="00215A60-3EB8-11E1-F71F-ED6C59C03201">
+					<DocumentID>00215A60-3EB8-11E1-F71F-ED6C59C01201</DocumentID>
+					<Name>00215A60-3EB8-11E1-F71F-ED6C59C01201</Name>
+					<Description>00215A60-3EB8-11E1-F71F-ED6C59C01201</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T04:39:00.355</CreationDate>
 					<Notes/>
 					<Identifier>
 						<uri
@@ -1739,7 +1770,7 @@ Order</Description>
 			</TranslatableName>
 			<WebserviceBindingOperation>
 				<uri
-					id="002170BA-4014-11E1-F6DA-319DBD661FD7"
+					id="00215A60-3EB8-11E1-F753-81C90C53F201"
 				/>
 			</WebserviceBindingOperation>
 		</ServiceTask>
@@ -1770,7 +1801,7 @@ Order</Description>
 			<ExecutionOrganization></ExecutionOrganization>
 			<ExecutionUserType>currentOwner</ExecutionUserType>
 			<FontSize>12</FontSize>
-			<InProcessExecution></InProcessExecution>
+			<InProcessExecution>false</InProcessExecution>
 			<LogData/>
 			<MapSOAPFaultCode>true</MapSOAPFaultCode>
 			<Method></Method>
@@ -1863,19 +1894,70 @@ Order</Description>
 				/>
 			</ContainerProcess>
 			<InputMessageObject/>
-			<MessageMap/>
+			<MessageMap>
+				<MessageMap
+					type="com.cordys.bpm.messagemap.MessageMap"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F722-5E190C72F201">
+					<DocumentID>00215A60-3EB8-11E1-F722-5E190C72D201</DocumentID>
+					<Name>UpdateOrderDemo (4)</Name>
+					<Description>UpdateOrderDemo (4)</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T06:58:00.991</CreationDate>
+					<Notes/>
+					<afterAssignment>
+						<activity
+							xmlns=""
+						/>
+					</afterAssignment>
+					<beforeAssignment>
+						<activity
+							xmlns="">
+							<mapping
+								sourceId=""
+								targetId="o_52_UpdateOrderDemoInput_UpdateOrderDemo_tuple_old_OrderDemo"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:old/ns7:OrderDemo"
+								operation="Replace With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple/ns7:new/ns7:OrderDemo</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId="o_9_UpdateOrderDemoOutput_UpdateOrderDemoResponse_tuple_new_OrderDemo"
+								targetId=""
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo"
+								operation="Replace With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple/ns7:new/ns7:OrderDemo</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_52_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo_Status"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo/ns7:Status"
+								operation="Replace Content With"
+								operation2="Fixed Value"
+								isNillable="true">
+								<sourceAssign>DELIVERED</sourceAssign>
+							</mapping>
+						</activity>
+					</beforeAssignment>
+				</MessageMap>
+			</MessageMap>
 			<MonitorableEvents/>
 			<MonitorableKpis/>
 			<OutputMessageObject/>
 			<TranslatableName>
 				<TranslatableText
 					type="com.cordys.translation.TranslatableText"
-					RuntimeDocumentID="002170BA-4014-11E1-F6DA-8918D0A8BFD7">
-					<DocumentID>002170BA-4014-11E1-F6DA-8918D0A89FD7</DocumentID>
-					<Name>002170BA-4014-11E1-F6DA-8918D0A89FD7</Name>
-					<Description>002170BA-4014-11E1-F6DA-8918D0A89FD7</Description>
-					<CreatedBy>csharbel</CreatedBy>
-					<CreationDate>2012-06-15T10:59:55.454</CreationDate>
+					RuntimeDocumentID="00215A60-3EB8-11E1-F721-664078621201">
+					<DocumentID>00215A60-3EB8-11E1-F721-66407861F201</DocumentID>
+					<Name>00215A60-3EB8-11E1-F721-66407861F201</Name>
+					<Description>00215A60-3EB8-11E1-F721-66407861F201</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T06:05:32.819</CreationDate>
 					<Notes/>
 					<Identifier>
 						<uri
@@ -1886,7 +1968,7 @@ Order</Description>
 			</TranslatableName>
 			<WebserviceBindingOperation>
 				<uri
-					id="002170BA-4014-11E1-F6DA-319DBD661FD7"
+					id="00215A60-3EB8-11E1-F753-81C90C53F201"
 				/>
 			</WebserviceBindingOperation>
 		</ServiceTask>
@@ -1917,7 +1999,7 @@ Order</Description>
 			<ExecutionOrganization></ExecutionOrganization>
 			<ExecutionUserType>currentOwner</ExecutionUserType>
 			<FontSize>12</FontSize>
-			<InProcessExecution></InProcessExecution>
+			<InProcessExecution>false</InProcessExecution>
 			<LogData/>
 			<MapSOAPFaultCode>true</MapSOAPFaultCode>
 			<Method></Method>
@@ -2010,19 +2092,40 @@ Order</Description>
 				/>
 			</ContainerProcess>
 			<InputMessageObject/>
-			<MessageMap/>
+			<MessageMap>
+				<MessageMap
+					type="com.cordys.bpm.messagemap.MessageMap"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F721-6640785C1201">
+					<DocumentID>00215A60-3EB8-11E1-F722-5E190C735201</DocumentID>
+					<Name>UpdateOrderDemo (3)</Name>
+					<Description>UpdateOrderDemo (3)</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T06:58:00.991</CreationDate>
+					<Notes/>
+					<afterAssignment>
+						<activity
+							xmlns=""
+						/>
+					</afterAssignment>
+					<beforeAssignment>
+						<activity
+							xmlns=""
+						/>
+					</beforeAssignment>
+				</MessageMap>
+			</MessageMap>
 			<MonitorableEvents/>
 			<MonitorableKpis/>
 			<OutputMessageObject/>
 			<TranslatableName>
 				<TranslatableText
 					type="com.cordys.translation.TranslatableText"
-					RuntimeDocumentID="002170BA-4014-11E1-F6DA-8918D0AA1FD7">
-					<DocumentID>002170BA-4014-11E1-F6DA-8918D0A9FFD7</DocumentID>
-					<Name>002170BA-4014-11E1-F6DA-8918D0A9FFD7</Name>
-					<Description>002170BA-4014-11E1-F6DA-8918D0A9FFD7</Description>
-					<CreatedBy>csharbel</CreatedBy>
-					<CreationDate>2012-06-15T10:59:55.455</CreationDate>
+					RuntimeDocumentID="00215A60-3EB8-11E1-F71F-ED6C59BE7201">
+					<DocumentID>00215A60-3EB8-11E1-F71F-ED6C59BE5201</DocumentID>
+					<Name>00215A60-3EB8-11E1-F71F-ED6C59BE5201</Name>
+					<Description>00215A60-3EB8-11E1-F71F-ED6C59BE5201</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T04:39:00.355</CreationDate>
 					<Notes/>
 					<Identifier>
 						<uri
@@ -2033,7 +2136,7 @@ Order</Description>
 			</TranslatableName>
 			<WebserviceBindingOperation>
 				<uri
-					id="002170BA-4014-11E1-F6DA-319DBD661FD7"
+					id="00215A60-3EB8-11E1-F753-81C90C53F201"
 				/>
 			</WebserviceBindingOperation>
 		</ServiceTask>
@@ -2064,7 +2167,7 @@ Order</Description>
 			<ExecutionOrganization></ExecutionOrganization>
 			<ExecutionUserType>currentOwner</ExecutionUserType>
 			<FontSize>12</FontSize>
-			<InProcessExecution></InProcessExecution>
+			<InProcessExecution>false</InProcessExecution>
 			<LogData/>
 			<MapSOAPFaultCode>true</MapSOAPFaultCode>
 			<Method></Method>
@@ -2157,19 +2260,70 @@ Order</Description>
 				/>
 			</ContainerProcess>
 			<InputMessageObject/>
-			<MessageMap/>
+			<MessageMap>
+				<MessageMap
+					type="com.cordys.bpm.messagemap.MessageMap"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F721-6640785C5201">
+					<DocumentID>00215A60-3EB8-11E1-F721-6640785C3201</DocumentID>
+					<Name>UpdateOrderDemo (2)</Name>
+					<Description>UpdateOrderDemo (2)</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T06:58:00.991</CreationDate>
+					<Notes/>
+					<afterAssignment>
+						<activity
+							xmlns=""
+						/>
+					</afterAssignment>
+					<beforeAssignment>
+						<activity
+							xmlns="">
+							<mapping
+								sourceId=""
+								targetId="o_18_UpdateOrderDemoInput_UpdateOrderDemo_tuple_old_OrderDemo"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:old/ns7:OrderDemo"
+								operation="Replace With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple/ns7:new/ns7:OrderDemo</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_18_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo"
+								operation="Replace With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple/ns7:new/ns7:OrderDemo</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_18_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo_Status"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo/ns7:Status"
+								operation="Replace Content With"
+								operation2="Fixed Value"
+								isNillable="true">
+								<sourceAssign>APPROVED</sourceAssign>
+							</mapping>
+						</activity>
+					</beforeAssignment>
+				</MessageMap>
+			</MessageMap>
 			<MonitorableEvents/>
 			<MonitorableKpis/>
 			<OutputMessageObject/>
 			<TranslatableName>
 				<TranslatableText
 					type="com.cordys.translation.TranslatableText"
-					RuntimeDocumentID="002170BA-4014-11E1-F6DA-8918D0AB7FD7">
-					<DocumentID>002170BA-4014-11E1-F6DA-8918D0AB5FD7</DocumentID>
-					<Name>002170BA-4014-11E1-F6DA-8918D0AB5FD7</Name>
-					<Description>002170BA-4014-11E1-F6DA-8918D0AB5FD7</Description>
-					<CreatedBy>csharbel</CreatedBy>
-					<CreationDate>2012-06-15T10:59:55.455</CreationDate>
+					RuntimeDocumentID="00215A60-3EB8-11E1-F721-664078651201">
+					<DocumentID>00215A60-3EB8-11E1-F721-66407864F201</DocumentID>
+					<Name>00215A60-3EB8-11E1-F721-66407864F201</Name>
+					<Description>00215A60-3EB8-11E1-F721-66407864F201</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-18T06:05:32.819</CreationDate>
 					<Notes/>
 					<Identifier>
 						<uri
@@ -2180,7 +2334,7 @@ Order</Description>
 			</TranslatableName>
 			<WebserviceBindingOperation>
 				<uri
-					id="002170BA-4014-11E1-F6DA-319DBD661FD7"
+					id="00215A60-3EB8-11E1-F753-81C90C53F201"
 				/>
 			</WebserviceBindingOperation>
 		</ServiceTask>
@@ -2194,7 +2348,7 @@ Order</Description>
 			RuntimeDocumentID="002170BA-4014-11E1-F6BA-3A1BC842FFAB">
 			<DocumentID>002170BA-4014-11E1-F6BA-3A1BC842DFAB</DocumentID>
 			<Name>info_orderdemo</Name>
-			<Description>info_BPM for managing the Order Management for the HTML5 SDK Order Demo</Description>
+			<Description>info_</Description>
 			<CreatedBy>csharbel</CreatedBy>
 			<CreationDate>2012-06-14T10:11:20.515</CreationDate>
 			<Notes/>
@@ -2282,7 +2436,11 @@ Order</Description>
 			<Namespace>http://schemas.cordys.com/html5sdk/demo/1.0</Namespace>
 			<OwnerMessageType></OwnerMessageType>
 			<UseDefaultValues>false</UseDefaultValues>
-			<CustomMessageParts/>
+			<CustomMessageParts>
+				<uri
+					id="00215A60-3EB8-11E1-F75C-09C5ABB43202"
+				/>
+			</CustomMessageParts>
 			<MessageParts/>
 			<RootOwner>
 				<uri
@@ -2329,6 +2487,7 @@ Order</Description>
 			<XmlNode>
 				<xsd:schema
 					xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+					xmlns:cws="http://schemas.cordys.com/cws/1.0"
 					xmlns=""
 					xmlns:tns="http://schemas.cordys.com/html5sdk/demo/1.0"
 					elementFormDefault="qualified"
@@ -2337,6 +2496,122 @@ Order</Description>
 			</XmlNode>
 			<DefinitionSet/>
 			<SchemaFragments>
+				<SchemaFragment
+					type="com.cordys.xmlschema.SchemaFragment"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F75C-09C5ABB45202">
+					<DocumentID>00215A60-3EB8-11E1-F75C-09C5ABB43202</DocumentID>
+					<Name>tuple</Name>
+					<Description>tuple</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-20T14:20:48.077</CreationDate>
+					<Notes/>
+					<AnnotationSpecificationXML/>
+					<DefinitionXML>
+						<element
+							xmlns="http://www.w3.org/2001/XMLSchema"
+							name="tuple">
+							<complexType>
+								<sequence>
+									<element
+										name="old">
+										<complexType>
+											<sequence>
+												<element
+													name="OrderDemo">
+													<complexType>
+														<sequence>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="OrderID"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Customer"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Employee"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="OrderDate"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Product"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Quantity"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Discount"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Cost"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Status"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Notes"	/>
+														</sequence>
+													</complexType>
+												</element>
+											</sequence>
+										</complexType>
+									</element>
+									<element
+										name="new">
+										<complexType>
+											<sequence>
+												<element
+													name="OrderDemo">
+													<complexType>
+														<sequence>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="OrderID"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Customer"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Employee"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="OrderDate"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Product"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Quantity"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Discount"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Cost"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Status"	/>	<element
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="xs:string"
+		name="Notes"	/>
+														</sequence>
+													</complexType>
+												</element>
+											</sequence>
+										</complexType>
+									</element>
+								</sequence>
+							</complexType>
+						</element>
+					</DefinitionXML>
+					<FragmentName>tuple</FragmentName>
+					<Type></Type>
+					<SchemaDefinition>
+						<uri
+							id="002170BA-4014-11E1-F6DA-509D501FDFD7"
+						/>
+					</SchemaDefinition>
+				</SchemaFragment>
 				<SchemaFragment
 					type="com.cordys.xmlschema.SchemaFragment"
 					RuntimeDocumentID="002170BA-4014-11E1-F6DA-509D501D9FD7">
@@ -2350,6 +2625,7 @@ Order</Description>
 					<DefinitionXML>
 						<element
 							xmlns="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:xs="http://www.w3.org/2001/XMLSchema"
 							type="xs:int"
 							name="Cost"
@@ -2376,6 +2652,7 @@ Order</Description>
 					<DefinitionXML>
 						<element
 							xmlns="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:xs="http://www.w3.org/2001/XMLSchema"
 							type="xs:byte"
 							name="Discount"
@@ -2402,6 +2679,7 @@ Order</Description>
 					<DefinitionXML>
 						<element
 							xmlns="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:xs="http://www.w3.org/2001/XMLSchema"
 							type="xs:byte"
 							name="Quantity"
@@ -2428,6 +2706,7 @@ Order</Description>
 					<DefinitionXML>
 						<element
 							xmlns="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:xs="http://www.w3.org/2001/XMLSchema"
 							type="xs:string"
 							name="Product"
@@ -2454,6 +2733,7 @@ Order</Description>
 					<DefinitionXML>
 						<element
 							xmlns="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:xs="http://www.w3.org/2001/XMLSchema"
 							type="xs:string"
 							name="Employee"
@@ -2480,6 +2760,7 @@ Order</Description>
 					<DefinitionXML>
 						<element
 							xmlns="http://www.w3.org/2001/XMLSchema"
+							xmlns:cws="http://schemas.cordys.com/cws/1.0"
 							xmlns:xs="http://www.w3.org/2001/XMLSchema"
 							type="xs:string"
 							name="Customer"
@@ -2534,10 +2815,10 @@ Order</Description>
 							connectorId="o_10"
 							source="o_8"
 							destination="o_9"
-							fromX="120"
-							fromY="60"
-							toX="120"
-							toY="110"
+							fromX="310"
+							fromY="100"
+							toX="310"
+							toY="150"
 							display=""
 							user="csharbel"
 						/>
@@ -2598,14 +2879,14 @@ Order</Description>
 					id="o_9"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-C411C3605FD7"
 					objectType="activity"
-					left="50%"
-					top="110.01000000000002%"
+					left="240%"
+					top="150%"
 					width="140%"
 					height="80%"
 					horizontalTextAlignment="center"
 					verticalTextAlignment="middle"
 					display=""
-					user="csharbel">
+					user="sswathi">
 					<dataObject
 						name="activity">
 						<uri
@@ -2644,10 +2925,10 @@ Order</Description>
 					id="o_8"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-C411C3619FD7"
 					objectType="start"
-					left="100%"
-					top="20.01%"
+					left="290.01%"
+					top="60.01%"
 					display=""
-					user="csharbel">
+					user="sswathi">
 					<dataObject
 						name="start">
 						<uri
@@ -2686,14 +2967,14 @@ Order</Description>
 					id="o_26"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-CA1ADEBBFFD7"
 					objectType="activity"
-					left="250.01%"
-					top="370%"
+					left="440.01000000000005%"
+					top="410.00999999999993%"
 					width="140%"
 					height="80%"
 					horizontalTextAlignment="center"
 					verticalTextAlignment="middle"
 					display=""
-					user="csharbel">
+					user="sswathi">
 					<dataObject
 						name="activity">
 						<uri
@@ -2732,10 +3013,10 @@ Order</Description>
 							connectorId="o_23"
 							source="o_15"
 							destination="o_22"
-							fromX="120"
-							fromY="320"
-							toX="120"
-							toY="370"
+							fromX="310"
+							fromY="360"
+							toX="310"
+							toY="410"
 							display=""
 							user="csharbel"
 						/>
@@ -2747,8 +3028,8 @@ Order</Description>
 							connectorId="o_23"
 							lineId="o_24"
 							anchorPercentage="0.5"
-							anchorLeft="120"
-							anchorTop="345"
+							anchorLeft="310"
+							anchorTop="385"
 							position="general"
 							name="annotation"
 							relativeLeft="-45"
@@ -2816,14 +3097,14 @@ Order</Description>
 					id="o_22"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-CA1ADEBEBFD7"
 					objectType="activity"
-					left="50.01%"
-					top="370%"
+					left="240.01%"
+					top="410.00999999999993%"
 					width="140%"
 					height="80%"
 					horizontalTextAlignment="center"
 					verticalTextAlignment="middle"
 					display=""
-					user="csharbel">
+					user="sswathi">
 					<dataObject
 						name="activity">
 						<uri
@@ -2862,10 +3143,10 @@ Order</Description>
 							connectorId="o_19"
 							source="o_15"
 							destination="o_18"
-							fromX="190"
-							fromY="280"
-							toX="250"
-							toY="280"
+							fromX="380"
+							fromY="320"
+							toX="440"
+							toY="320"
 							display=""
 							user="csharbel"
 						/>
@@ -2877,8 +3158,8 @@ Order</Description>
 							connectorId="o_19"
 							lineId="o_20"
 							anchorPercentage="0.5"
-							anchorLeft="220"
-							anchorTop="280"
+							anchorLeft="410"
+							anchorTop="320"
 							position="general"
 							name="annotation"
 							relativeLeft="-45"
@@ -2946,14 +3227,14 @@ Order</Description>
 					id="o_18"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-CA1ADEC27FD7"
 					objectType="activity"
-					left="250%"
-					top="240%"
+					left="440.01000000000005%"
+					top="280.01%"
 					width="140%"
 					height="80%"
 					horizontalTextAlignment="center"
 					verticalTextAlignment="middle"
 					display=""
-					user="csharbel">
+					user="sswathi">
 					<dataObject
 						name="activity">
 						<uri
@@ -2992,12 +3273,12 @@ Order</Description>
 					id="o_15"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-CA1ADEC4FFD7"
 					objectType="decision"
-					left="50%"
-					top="240%"
+					left="240.01%"
+					top="280.01%"
 					width="140%"
 					height="80%"
 					display=""
-					user="csharbel">
+					user="sswathi">
 					<dataObject
 						name="decision">
 						<uri
@@ -3036,10 +3317,10 @@ Order</Description>
 					id="o_38"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-D1FC1CB49FD7"
 					objectType="end"
-					left="610.01%"
-					top="430.01%"
+					left="800.01%"
+					top="470.01%"
 					display=""
-					user="csharbel">
+					user="sswathi">
 					<dataObject
 						name="end">
 						<uri
@@ -3078,10 +3359,10 @@ Order</Description>
 							connectorId="o_27"
 							source="o_22"
 							destination="o_26"
-							fromX="190"
-							fromY="410"
-							toX="250"
-							toY="410"
+							fromX="380"
+							fromY="450"
+							toX="440"
+							toY="450"
 							display=""
 							user="csharbel"
 						/>
@@ -3142,10 +3423,10 @@ Order</Description>
 							connectorId="o_41"
 							source="o_9"
 							destination="o_15"
-							fromX="120"
-							fromY="190"
-							toX="120"
-							toY="240"
+							fromX="310"
+							fromY="230"
+							toX="310"
+							toY="280"
 							display=""
 							user="csharbel"
 						/>
@@ -3206,10 +3487,10 @@ Order</Description>
 							connectorId="o_55"
 							source="o_52"
 							destination="o_38"
-							fromX="630"
-							fromY="390"
-							toX="630"
-							toY="430"
+							fromX="820"
+							fromY="430"
+							toX="820"
+							toY="470"
 							display=""
 							user="csharbel"
 						/>
@@ -3270,10 +3551,10 @@ Order</Description>
 							connectorId="o_53"
 							source="o_43"
 							destination="o_52"
-							fromX="540"
-							fromY="350"
-							toX="560"
-							toY="350"
+							fromX="730"
+							fromY="390"
+							toX="750"
+							toY="390"
 							display=""
 							user="csharbel"
 						/>
@@ -3334,14 +3615,14 @@ Order</Description>
 					id="o_52"
 					__shapeReferenceID="002170BA-4014-11E1-F6DA-4A8C53F69FD7"
 					objectType="activity"
-					left="560%"
-					top="310%"
+					left="750.01%"
+					top="350.01%"
 					width="140%"
 					height="80%"
 					horizontalTextAlignment="center"
 					verticalTextAlignment="middle"
 					display=""
-					user="csharbel">
+					user="sswathi">
 					<dataObject
 						name="activity">
 						<uri
@@ -3380,10 +3661,10 @@ Order</Description>
 							connectorId="o_48"
 							source="o_26"
 							destination="o_43"
-							fromX="390"
-							fromY="389"
-							toX="501"
-							toY="356"
+							fromX="580"
+							fromY="429"
+							toX="691"
+							toY="396"
 							display=""
 							user="csharbel"
 						/>
@@ -3444,10 +3725,10 @@ Order</Description>
 							connectorId="o_44"
 							source="o_18"
 							destination="o_43"
-							fromX="390"
-							fromY="305"
-							toX="501"
-							toY="343"
+							fromX="580"
+							fromY="345"
+							toX="691"
+							toY="383"
 							display=""
 							user="csharbel"
 						/>
@@ -3508,10 +3789,10 @@ Order</Description>
 					id="o_43"
 					__shapeReferenceID="002170BA-4014-11E1-F6DA-4A8C53F9DFD7"
 					objectType="delay"
-					left="500.01%"
-					top="330.01%"
+					left="690.01%"
+					top="370.01%"
 					display=""
-					user="csharbel">
+					user="sswathi">
 					<dataObject
 						name="delay">
 						<uri
@@ -3541,11 +3822,7 @@ Order</Description>
 			<CreatedBy>csharbel</CreatedBy>
 			<CreationDate>2012-06-15T10:43:41.317</CreationDate>
 			<Notes/>
-			<Identifier>
-				<uri
-					id="002170BA-4014-11E1-F6DA-8918D0B19FD7"
-				/>
-			</Identifier>
+			<Identifier/>
 		</TranslatableText>
 	</TranslatableName>
 </BusinessProcess>
