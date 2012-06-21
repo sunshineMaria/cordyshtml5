@@ -153,7 +153,7 @@
 								// the objects here are Observavables, let us unmap to get the new bo
 								var newObject = ko.mapping.toJS(object);
 								// get the corresponding XML for the object and add it to the updateContent
-								updateContent.push($.cordys.json.js2xmlstring({tuple:{old:{Employees:oldObject}, 'new':{Employees:newObject}}}));
+								updateContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,newObject)));
 							}
 						}
 					}
@@ -183,7 +183,7 @@
 									// let us get the old bo from the initial saved state
 									var oldObject = object.lock.getInitialState();
 									// get the corresponding XML for the deleted object and add it to the deleteContent
-									synchronizeContent.push($.cordys.json.js2xmlstring({tuple:{old:{Employees:oldObject}}}));
+									synchronizeContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,null)));
 								}
 								else if (object.lock.isDirty()){
 									self.objectsToBeUpdated.push(object);
@@ -192,7 +192,7 @@
 									// the objects here are Observavables, let us unmap to get the new bo
 									var newObject = ko.mapping.toJS(object);
 									// get the corresponding XML for the object and add it to the updateContent
-									synchronizeContent.push($.cordys.json.js2xmlstring({tuple:{old:{Employees:oldObject}, 'new':{Employees:newObject}}}));
+									synchronizeContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,newObject)));
 								}	
 							}
 							// not persisted - new
@@ -202,7 +202,7 @@
 								// let us get the new bo by unwrapping the Observable
 								var newObject = ko.mapping.toJS(object);
 								// get the corresponding XML for the inserted object and add it to the insertContent
-								synchronizeContent.push($.cordys.json.js2xmlstring({tuple:{'new':{Employees:newObject}}}));
+								synchronizeContent.push($.cordys.json.js2xmlstring(createTuple(null,newObject)));
 
 							}
 						}
@@ -215,7 +215,7 @@
 
 		// Handlers and settings for the delete part
 		this.deleteSettings = {
-            parameters : function (settings){
+			parameters : function (settings){
 				var deleteContent = [];
 				self.objectsToBeUpdated = [];
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
@@ -229,7 +229,7 @@
 								// let us get the old bo from the initial saved state
 								var oldObject = object.lock.getInitialState();
 								// get the corresponding XML for the deleted object and add it to the deleteContent
-								deleteContent.push($.cordys.json.js2xmlstring({tuple:{old:{Employees:oldObject}}}));
+								deleteContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,null)));
 							}
 						}
 					}
@@ -255,7 +255,7 @@
 								// let us get the new bo by unwrapping the Observable
 								var newObject = ko.mapping.toJS(object);
 								// get the corresponding XML for the inserted object and add it to the insertContent
-								insertContent.push($.cordys.json.js2xmlstring({tuple:{'new':{Employees:newObject}}}));
+								insertContent.push($.cordys.json.js2xmlstring(createTuple(null,newObject)));
 							}
 						}
 					}
@@ -491,6 +491,21 @@
 					}
 				}
 			}
+		}
+		
+		// create a json structure to represent the tuple with the specified old and new Business Object (can alson pass null  values 
+		// in case where the old or new is not required
+		createTuple = function(oldBusObject, newBusObject) {
+			var tuple = {};
+			if (oldBusObject) {	
+				tuple.old = {};
+				tuple.old[self.objectName] = oldBusObject;
+			}
+			if (newBusObject) {	
+				tuple['new'] = {};
+				tuple['new'][self.objectName] = newBusObject;
+			}
+			return {tuple:tuple};
 		}
 	};
 
