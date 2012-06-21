@@ -150,7 +150,7 @@
 								}
 							}, Cordys.currentOrigin);						
 						};
-						reader.readAsText(file);
+						reader.readAsText(file, e.data.parameters.encoding);
 					});
 				}, function(error) {
 					appWindow.postMessage({
