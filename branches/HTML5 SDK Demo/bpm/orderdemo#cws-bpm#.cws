@@ -140,7 +140,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="310,100 310,142"
+					points="130,70 130,112"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -148,7 +148,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="380,320 432,320"
+					points="200,290 252,290"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -168,7 +168,7 @@
 							width="35"
 							height="25"
 							x="0"
-							y="0"
+							y="-3.5"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -184,7 +184,31 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="310,360 310,402"
+					points="130,200 130,242"
+					style="marker-end:url(#blockarrow#7E857A)"
+					stroke-dasharray="none"
+				/>
+				<polyline
+					fill="none"
+					stroke="#7E857A"
+					stroke-width="1px"
+					points="540,290 632,290"
+					style="marker-end:url(#blockarrow#7E857A)"
+					stroke-dasharray="none"
+				/>
+				<polyline
+					fill="none"
+					stroke="#7E857A"
+					stroke-width="1px"
+					points="710,330 710,522"
+					style="marker-end:url(#blockarrow#7E857A)"
+					stroke-dasharray="none"
+				/>
+				<polyline
+					fill="none"
+					stroke="#7E857A"
+					stroke-width="1px"
+					points="130,330 130,372"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -209,7 +233,7 @@
 							width="35"
 							height="25"
 							x="0"
-							y="0"
+							y="-3.5"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -225,7 +249,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="380,450 432,450"
+					points="400,290 492,290"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -233,7 +257,43 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="310,230 310,272"
+					points="520,380 520,318"
+					style="marker-end:url(#blockarrow#7E857A)"
+					stroke-dasharray="none"
+				/>
+				<rect
+					x="0"
+					y="0"
+					width="0"
+					height="0"
+					style="opacity:0;stroke:#000000;stroke-width:0"
+				/>
+				<flowText
+					xmlns="http://xml.apache.org/batik/ext"
+					font-size="12"
+					fill="rgb(0, 99, 155)">
+					<flowRegion>
+						<rect
+							width="35"
+							height="25"
+							x="0"
+							y="-3.5"
+						/>
+					</flowRegion>
+					<flowDiv>
+						<flowPara
+							justification="middle"
+							top-margin="5"
+							left-margin="0"
+							right-margin="5"
+							bottom-margin="5">yes</flowPara>
+					</flowDiv>
+				</flowText>
+				<polyline
+					fill="none"
+					stroke="#7E857A"
+					stroke-width="1px"
+					points="200,420 252,420"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -241,7 +301,7 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="580,345 683,380"
+					points="400,420 442,420"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -249,23 +309,48 @@
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="580,429 683,398"
+					points="520,460 520,502"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
 				<polyline
-					fill="none"
 					stroke="#7E857A"
-					stroke-width="1px"
-					points="730,390 742,390"
-					style="marker-end:url(#blockarrow#7E857A)"
-					stroke-dasharray="none"
+					stroke-width="1"
+					points="-4,18 4,10"
 				/>
+				<rect
+					x="0"
+					y="0"
+					width="0"
+					height="0"
+					style="opacity:0;stroke:#000000;stroke-width:0"
+				/>
+				<flowText
+					xmlns="http://xml.apache.org/batik/ext"
+					font-size="12"
+					fill="rgb(0, 99, 155)">
+					<flowRegion>
+						<rect
+							width="35"
+							height="25"
+							x="0"
+							y="-3.5"
+						/>
+					</flowRegion>
+					<flowDiv>
+						<flowPara
+							justification="middle"
+							top-margin="5"
+							left-margin="0"
+							right-margin="5"
+							bottom-margin="5">no</flowPara>
+					</flowDiv>
+				</flowText>
 				<polyline
 					fill="none"
 					stroke="#7E857A"
 					stroke-width="1px"
-					points="820,430 820,462"
+					points="590,550 682,550"
 					style="marker-end:url(#blockarrow#7E857A)"
 					stroke-dasharray="none"
 				/>
@@ -292,9 +377,9 @@
 				/>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/message_catch_sb.gif"
-					x="296.86786437626904"
-					y="66.86786437626905"
+					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/message_catch_sb.gif"
+					x="116.86786437626907"
+					y="36.867864376269054"
 					height="26.284271247461906"
 					width="26.284271247461906"
 					preserveAspectRatio="none"
@@ -332,7 +417,7 @@
 							width="35"
 							height="25"
 							x="13"
-							y="0"
+							y="-3.5"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -346,9 +431,9 @@
 				</flowText>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
-					x="240"
-					y="150"
+					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
+					x="60.01"
+					y="120.01"
 					height="16"
 					width="16"
 				/>
@@ -380,7 +465,7 @@
 							width="0"
 							height="0"
 							x="0"
-							y="0"
+							y="-3.5"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -425,7 +510,7 @@
 							width="35"
 							height="25"
 							x="13"
-							y="0"
+							y="-3.5"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -439,57 +524,12 @@
 				</flowText>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
-					x="440.01000000000005"
-					y="280.01"
+					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
+					x="260.01"
+					y="250.01"
 					height="16"
 					width="16"
 				/>
-				<linearGradient
-					id="o_22"
-					x1="0%"
-					y1="0%"
-					x2="100%"
-					y2="100%">
-					<stop
-						offset="0%"
-						style="stop-color:RGB(227,258,290)"
-					/>
-					<stop
-						offset="80%"
-						style="stop-color:RGB(189,215,242)"
-					/>
-				</linearGradient>
-				<rect
-					x="0"
-					y="0"
-					rx="5"
-					ry="5"
-					width="0"
-					height="18"
-					style="stroke-width:1;fill:url(#o_22);stroke:#698BC4;stroke-dasharray:none;"
-				/>
-				<flowText
-					xmlns="http://xml.apache.org/batik/ext"
-					font-size="12"
-					fill="rgb(0, 99, 155)">
-					<flowRegion>
-						<rect
-							width="35"
-							height="25"
-							x="0"
-							y="0"
-						/>
-					</flowRegion>
-					<flowDiv>
-						<flowPara
-							justification="middle"
-							top-margin="5"
-							left-margin="5"
-							right-margin="5"
-							bottom-margin="5">ApproveOrder</flowPara>
-					</flowDiv>
-				</flowText>
 				<linearGradient
 					id="o_26"
 					x1="0%"
@@ -523,7 +563,7 @@
 							width="35"
 							height="25"
 							x="13"
-							y="0"
+							y="-3.5"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -537,9 +577,9 @@
 				</flowText>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
-					x="440.01000000000005"
-					y="410.00999999999993"
+					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
+					x="260.01"
+					y="380.01"
 					height="16"
 					width="16"
 				/>
@@ -593,9 +633,9 @@
 				/>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/timer_catch_sb.gif"
-					x="696.867864376269"
-					y="376.86786437626904"
+					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/timer_catch_sb.gif"
+					x="506.86786437626904"
+					y="276.86786437626904"
 					height="26.284271247461906"
 					width="26.284271247461906"
 					preserveAspectRatio="none"
@@ -633,7 +673,7 @@
 							width="35"
 							height="25"
 							x="13"
-							y="0"
+							y="-3.5"
 						/>
 					</flowRegion>
 					<flowDiv>
@@ -647,9 +687,155 @@
 				</flowText>
 				<image
 					xmlns:xlink="http://www.w3.org/1999/xlink"
-					xlink:href="http://cin400508/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
-					x="750.01"
-					y="350.01"
+					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
+					x="640.01"
+					y="250.01"
+					height="16"
+					width="16"
+				/>
+				<linearGradient
+					id="o_61"
+					x1="0%"
+					y1="0%"
+					x2="100%"
+					y2="100%">
+					<stop
+						offset="0%"
+						style="stop-color:RGB(227,258,290)"
+					/>
+					<stop
+						offset="80%"
+						style="stop-color:RGB(189,215,242)"
+					/>
+				</linearGradient>
+				<rect
+					x="0"
+					y="0"
+					rx="5"
+					ry="5"
+					width="0"
+					height="18"
+					style="stroke-width:1;fill:url(#o_61);stroke:#698BC4;stroke-dasharray:none;"
+				/>
+				<flowText
+					xmlns="http://xml.apache.org/batik/ext"
+					font-size="12"
+					fill="rgb(0, 99, 155)">
+					<flowRegion>
+						<rect
+							width="35"
+							height="25"
+							x="13"
+							y="-3.5"
+						/>
+					</flowRegion>
+					<flowDiv>
+						<flowPara
+							justification="middle"
+							top-margin="5"
+							left-margin="5"
+							right-margin="5"
+							bottom-margin="5">ApproveOrder</flowPara>
+					</flowDiv>
+				</flowText>
+				<image
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/humanactivity_sb.gif"
+					x="60.01"
+					y="380.01"
+					height="16"
+					width="16"
+				/>
+				<linearGradient
+					id="o_78"
+					x1="0%"
+					y1="0%"
+					x2="100%"
+					y2="100%">
+					<stop
+						offset="0%"
+						style="stop-color:RGB(306,246,185)"
+					/>
+					<stop
+						offset="80%"
+						style="stop-color:RGB(255,205,154)"
+					/>
+				</linearGradient>
+				<polygon
+					points="0,0 0,0 0,0 0,0"
+					style="stroke:#B2763B;stroke-width:1;;stroke-dasharray:none;fill:url(#o_78);"
+				/>
+				<flowText
+					xmlns="http://xml.apache.org/batik/ext"
+					font-size="12"
+					fill="rgb(0, 99, 155)">
+					<flowRegion>
+						<rect
+							width="0"
+							height="0"
+							x="0"
+							y="-3.5"
+						/>
+					</flowRegion>
+					<flowDiv>
+						<flowPara
+							justification="middle"
+							top-margin="5"
+							left-margin="5"
+							right-margin="5"
+							bottom-margin="5">Is Approved</flowPara>
+					</flowDiv>
+				</flowText>
+				<linearGradient
+					id="o_81"
+					x1="0%"
+					y1="0%"
+					x2="100%"
+					y2="100%">
+					<stop
+						offset="0%"
+						style="stop-color:RGB(227,258,290)"
+					/>
+					<stop
+						offset="80%"
+						style="stop-color:RGB(189,215,242)"
+					/>
+				</linearGradient>
+				<rect
+					x="0"
+					y="0"
+					rx="5"
+					ry="5"
+					width="0"
+					height="18"
+					style="stroke-width:1;fill:url(#o_81);stroke:#698BC4;stroke-dasharray:none;"
+				/>
+				<flowText
+					xmlns="http://xml.apache.org/batik/ext"
+					font-size="12"
+					fill="rgb(0, 99, 155)">
+					<flowRegion>
+						<rect
+							width="35"
+							height="25"
+							x="13"
+							y="-3.5"
+						/>
+					</flowRegion>
+					<flowDiv>
+						<flowPara
+							justification="middle"
+							top-margin="5"
+							left-margin="5"
+							right-margin="5"
+							bottom-margin="5">Update Order Status to Rejected</flowPara>
+					</flowDiv>
+				</flowText>
+				<image
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:href="http://localhost/cordys/wcp/theme/default/icon/processobject/automaticactivity_sb.gif"
+					x="450.01"
+					y="510.00999999999993"
 					height="16"
 					width="16"
 				/>
@@ -695,6 +881,8 @@
 					xmlns="">o_26</activityid>
 				<activityid
 					xmlns="">o_52</activityid>
+				<activityid
+					xmlns="">o_81</activityid>
 			</namespace>
 			<namespace
 				xmlns=""
@@ -711,6 +899,14 @@
 					xmlns="">o_26</activityid>
 				<activityid
 					xmlns="">o_52</activityid>
+				<activityid
+					xmlns="">o_22</activityid>
+				<activityid
+					xmlns="">o_61</activityid>
+				<activityid
+					xmlns="">o_71</activityid>
+				<activityid
+					xmlns="">o_81</activityid>
 			</namespace>
 			<namespace
 				xmlns=""
@@ -727,6 +923,8 @@
 					xmlns="">o_26</activityid>
 				<activityid
 					xmlns="">o_52</activityid>
+				<activityid
+					xmlns="">o_81</activityid>
 			</namespace>
 			<namespace
 				xmlns=""
@@ -747,6 +945,8 @@
 					xmlns="">o_26</activityid>
 				<activityid
 					xmlns="">o_52</activityid>
+				<activityid
+					xmlns="">o_81</activityid>
 			</namespace>
 			<namespace
 				xmlns=""
@@ -767,6 +967,16 @@
 					xmlns="">o_26</activityid>
 				<activityid
 					xmlns="">o_52</activityid>
+			</namespace>
+			<namespace
+				xmlns=""
+				prefix="ns9"
+				namespacevalue="http://schemas.cordys.com/approve"
+				namespaceEditable="false">
+				<activityid
+					xmlns="">o_71</activityid>
+				<activityid
+					xmlns="">o_61</activityid>
 			</namespace>
 		</namespaces>
 	</Namespaces>
@@ -804,7 +1014,7 @@
 	<UseBusinessCalendar>false</UseBusinessCalendar>
 	<WsdlTargetNamespace></WsdlTargetNamespace>
 	<WsdlUrl></WsdlUrl>
-	<freeObjectId>61</freeObjectId>
+	<freeObjectId>126</freeObjectId>
 	<isChanged></isChanged>
 	<links/>
 	<modelFormatVersion>BOP4_FP1</modelFormatVersion>
@@ -812,6 +1022,846 @@
 	<zoomFactor>100</zoomFactor>
 	<AttachmentDefinitions/>
 	<BPMNElement>
+		<HumanTask
+			type="com.cordys.bpm.activity.HumanTask"
+			typeVersion="83d79cba-b5fe-4f22-8aq2-9ge9395d5689 ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F774-1D757F3DD202">
+			<DocumentID>00215A60-3EB8-11E1-F774-1D757F3DB202</DocumentID>
+			<Name>Approve Task</Name>
+			<Description>ApproveOrder</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-21T13:20:25.935</CreationDate>
+			<Notes/>
+			<ActivityColor>#bcd6f1</ActivityColor>
+			<ApplicationIcon></ApplicationIcon>
+			<AssigneeAddlproperties></AssigneeAddlproperties>
+			<AssigneeTargetType>user</AssigneeTargetType>
+			<AssigneeTargetValue></AssigneeTargetValue>
+			<AssigneeTargetValueDynamic>false</AssigneeTargetValueDynamic>
+			<BizCalculationEndsOn>endOfBusinessDay</BizCalculationEndsOn>
+			<BizCalendarName></BizCalendarName>
+			<BizCalendarSource>process</BizCalendarSource>
+			<CalculatedLeadTimeInDays>0</CalculatedLeadTimeInDays>
+			<CalculatedLeadTimeInHrs>0</CalculatedLeadTimeInHrs>
+			<CalculatedLeadTimeInMin>0</CalculatedLeadTimeInMin>
+			<CalculatedSpendTimeInDays>0</CalculatedSpendTimeInDays>
+			<CalculatedSpendTimeInHrs>0</CalculatedSpendTimeInHrs>
+			<CalculatedSpendTimeInMin>0</CalculatedSpendTimeInMin>
+			<ChangeDueTime>false</ChangeDueTime>
+			<ClassicDebugCondition>false</ClassicDebugCondition>
+			<ClassicExecuteCondition>false</ClassicExecuteCondition>
+			<CrashRecoveryCustomized>false</CrashRecoveryCustomized>
+			<CrashRecoveryEnabled>true</CrashRecoveryEnabled>
+			<Customized>false</Customized>
+			<DebugBefore>beforeActivity</DebugBefore>
+			<DebugCondition></DebugCondition>
+			<DebugStep>no</DebugStep>
+			<DeliveryModel></DeliveryModel>
+			<Dependent>false</Dependent>
+			<DispatchAlgorithmName></DispatchAlgorithmName>
+			<DocumentationText></DocumentationText>
+			<DueTimeDaysDuration>0</DueTimeDaysDuration>
+			<DueTimeDynamic>staticRealDuration</DueTimeDynamic>
+			<DueTimeFromMessage></DueTimeFromMessage>
+			<DueTimeHoursDuration>0</DueTimeHoursDuration>
+			<DueTimeMinutesDuration>0</DueTimeMinutesDuration>
+			<DynamicDispatchAlgorithm>_none</DynamicDispatchAlgorithm>
+			<DynamicExecuteCondition>_none</DynamicExecuteCondition>
+			<DynamicInitialAction>false</DynamicInitialAction>
+			<DynamicNotifyEscalate>false</DynamicNotifyEscalate>
+			<DynamicPriority>false</DynamicPriority>
+			<DynamicReassign>false</DynamicReassign>
+			<DynamicSenderDisplayName>_none</DynamicSenderDisplayName>
+			<DynamicSenderMailId>_none</DynamicSenderMailId>
+			<DynamicSubject>false</DynamicSubject>
+			<EmailBcc></EmailBcc>
+			<EmailCc></EmailCc>
+			<EmailTemplate>_none</EmailTemplate>
+			<EmailTo></EmailTo>
+			<EnableEscalation>false</EnableEscalation>
+			<EnableReminder></EnableReminder>
+			<EscalateNotifyEnabled>false</EscalateNotifyEnabled>
+			<EscalateReassignEnabled>false</EscalateReassignEnabled>
+			<EscalateReassignTarget></EscalateReassignTarget>
+			<EstimatedLeadTimeExpectedInDays>0</EstimatedLeadTimeExpectedInDays>
+			<EstimatedLeadTimeExpectedInHrs>0</EstimatedLeadTimeExpectedInHrs>
+			<EstimatedLeadTimeExpectedInMin>0</EstimatedLeadTimeExpectedInMin>
+			<EstimatedLeadTimeIdealInDays>0</EstimatedLeadTimeIdealInDays>
+			<EstimatedLeadTimeIdealInHrs>0</EstimatedLeadTimeIdealInHrs>
+			<EstimatedLeadTimeIdealInMin>0</EstimatedLeadTimeIdealInMin>
+			<EstimatedLeadTimeMaximumInDays>0</EstimatedLeadTimeMaximumInDays>
+			<EstimatedLeadTimeMaximumInHrs>0</EstimatedLeadTimeMaximumInHrs>
+			<EstimatedLeadTimeMaximumInMin>0</EstimatedLeadTimeMaximumInMin>
+			<EstimatedLeadTimeMinimumInDays>0</EstimatedLeadTimeMinimumInDays>
+			<EstimatedLeadTimeMinimumInHrs>0</EstimatedLeadTimeMinimumInHrs>
+			<EstimatedLeadTimeMinimumInMin>0</EstimatedLeadTimeMinimumInMin>
+			<EstimatedSpendTimeExpectedInDays>0</EstimatedSpendTimeExpectedInDays>
+			<EstimatedSpendTimeExpectedInHrs>0</EstimatedSpendTimeExpectedInHrs>
+			<EstimatedSpendTimeExpectedInMin>0</EstimatedSpendTimeExpectedInMin>
+			<EstimatedSpendTimeIdealInDays>0</EstimatedSpendTimeIdealInDays>
+			<EstimatedSpendTimeIdealInHrs>0</EstimatedSpendTimeIdealInHrs>
+			<EstimatedSpendTimeIdealInMin>0</EstimatedSpendTimeIdealInMin>
+			<EstimatedSpendTimeMaximumInDays>0</EstimatedSpendTimeMaximumInDays>
+			<EstimatedSpendTimeMaximumInHrs>0</EstimatedSpendTimeMaximumInHrs>
+			<EstimatedSpendTimeMaximumInMin>0</EstimatedSpendTimeMaximumInMin>
+			<EstimatedSpendTimeMinimumInDays>0</EstimatedSpendTimeMinimumInDays>
+			<EstimatedSpendTimeMinimumInHrs>0</EstimatedSpendTimeMinimumInHrs>
+			<EstimatedSpendTimeMinimumInMin>0</EstimatedSpendTimeMinimumInMin>
+			<ExecuteCondition></ExecuteCondition>
+			<ExecutionUserType>currentOwner</ExecutionUserType>
+			<FontSize>12</FontSize>
+			<InboxTemplate>_none</InboxTemplate>
+			<IncludeStartDay>true</IncludeStartDay>
+			<InitialAction>CREATE</InitialAction>
+			<IsAssigneeInheritedFromLane>false</IsAssigneeInheritedFromLane>
+			<IsEMailMandatory>false</IsEMailMandatory>
+			<LogData/>
+			<MonitorLevel>12</MonitorLevel>
+			<MonitoringEnabled>true</MonitoringEnabled>
+			<NotificationSubject>ApproveOrder</NotificationSubject>
+			<NotifyEscalateTarget></NotifyEscalateTarget>
+			<NotifyEscalationType>worklist</NotifyEscalationType>
+			<Priority>process</Priority>
+			<PriorityValue>3</PriorityValue>
+			<PrivilegesRelatedTaskId></PrivilegesRelatedTaskId>
+			<PrivilegesType>_none</PrivilegesType>
+			<ReassignEscalationType>worklist</ReassignEscalationType>
+			<ReminderDaysDuration>0</ReminderDaysDuration>
+			<ReminderFromMessage></ReminderFromMessage>
+			<ReminderHoursDuration>0</ReminderHoursDuration>
+			<ReminderMinutesDuration>0</ReminderMinutesDuration>
+			<ReminderSubject></ReminderSubject>
+			<RetrieveData></RetrieveData>
+			<SendReminderDynamic>staticRealDuration</SendReminderDynamic>
+			<SenderDisplayName></SenderDisplayName>
+			<SenderMailId></SenderMailId>
+			<StartTimeDaysDuration>0</StartTimeDaysDuration>
+			<StartTimeDynamic>staticRealDuration</StartTimeDynamic>
+			<StartTimeFromMessage></StartTimeFromMessage>
+			<StartTimeHoursDuration>0</StartTimeHoursDuration>
+			<StartTimeMinutesDuration>0</StartTimeMinutesDuration>
+			<SyncDBBeforeActivity>false</SyncDBBeforeActivity>
+			<TypeTask>true</TypeTask>
+			<UseBusinessCalendar>false</UseBusinessCalendar>
+			<UseEmailModel>false</UseEmailModel>
+			<UseInboxModel>false</UseInboxModel>
+			<links/>
+			<oldWSDL/>
+			<ActivityMessages>
+				<Message
+					type="com.cordys.bpm.Message"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F774-76F668411202">
+					<DocumentID>00215A60-3EB8-11E1-F774-76F66840F202</DocumentID>
+					<Name>ApproveTask_ApproveTaskDefaultDeliveryModel_OP</Name>
+					<Description>ApproveOrder/ApproveTask_ApproveTaskDefaultDeliveryModel_OP</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-21T13:20:25.935</CreationDate>
+					<Notes/>
+					<Namespace>http://schemas.cordys.com/</Namespace>
+					<OwnerMessageType>output</OwnerMessageType>
+					<UseDefaultValues>false</UseDefaultValues>
+					<CustomMessageParts/>
+					<MessageParts/>
+					<RootOwner>
+						<uri
+							id="00215A60-3EB8-11E1-F774-1D757F3DB202"
+						/>
+					</RootOwner>
+				</Message>
+				<Message
+					type="com.cordys.bpm.Message"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F774-1D757F3CF202">
+					<DocumentID>00215A60-3EB8-11E1-F774-76F668413202</DocumentID>
+					<Name>ApproveTask_ApproveTaskDefaultDeliveryModel_IP</Name>
+					<Description>ApproveOrder/ApproveTask_ApproveTaskDefaultDeliveryModel_IP</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-21T13:20:25.935</CreationDate>
+					<Notes/>
+					<Namespace>http://schemas.cordys.com/</Namespace>
+					<OwnerMessageType>input</OwnerMessageType>
+					<UseDefaultValues>true</UseDefaultValues>
+					<CustomMessageParts/>
+					<MessageParts/>
+					<RootOwner>
+						<uri
+							id="00215A60-3EB8-11E1-F774-1D757F3DB202"
+						/>
+					</RootOwner>
+				</Message>
+			</ActivityMessages>
+			<AssignToRole/>
+			<AssignToTeam/>
+			<AssignToWorklist/>
+			<Attachments/>
+			<BPMAttachments/>
+			<BusinessCalendar/>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<DispatchAlgorithm/>
+			<EscalateToRole/>
+			<EscalateToTeam/>
+			<EscalateToWorklist/>
+			<InputMessageObject/>
+			<MessageMap>
+				<MessageMap
+					type="com.cordys.bpm.messagemap.MessageMap"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F774-76F66840B202">
+					<DocumentID>00215A60-3EB8-11E1-F774-76F668409202</DocumentID>
+					<Name>Approve Task</Name>
+					<Description>Approve Task</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-21T13:20:25.935</CreationDate>
+					<Notes/>
+					<afterAssignment>
+						<activity
+							xmlns=""
+						/>
+					</afterAssignment>
+					<beforeAssignment>
+						<activity
+							xmlns="">
+							<mapping
+								sourceId=""
+								targetId="o_61_ApproveTask_ApproveTaskDefaultDeliveryModel_IP_ApproveTask_header"
+								isProcessVariable="false"
+								targetAssign="ns4:ApproveTask_ApproveTaskDefaultDeliveryModel_IP/ns4:ApproveTask/ns4:header"
+								operation="Replace Content With"
+								operation2="Fixed Value"
+								isNillable="false">
+								<sourceAssign>Approve Order</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_61_ApproveTask_ApproveTaskDefaultDeliveryModel_IP_ApproveTask_options"
+								isProcessVariable="false"
+								targetAssign="ns4:ApproveTask_ApproveTaskDefaultDeliveryModel_IP/ns4:ApproveTask/ns4:options"
+								operation="Replace With"
+								operation2="XML Structure"
+								isNillable="false">
+								<sourceAssign>&lt;options&gt;&lt;option label=&quot;Approve&quot; value=&quot;approve&quot;/&gt;&lt;option label=&quot;Reject&quot; value=&quot;reject&quot;/&gt;&lt;/options&gt;</sourceAssign>
+							</mapping>
+						</activity>
+					</beforeAssignment>
+				</MessageMap>
+			</MessageMap>
+			<MonitorableEvents/>
+			<MonitorableKpis/>
+			<NotifyToRole/>
+			<NotifyToTeam/>
+			<NotifyToWorklist/>
+			<OutputMessageObject/>
+			<Task>
+				<uri
+					id="00215A60-3EB8-11E1-F773-5FABFC14B202"
+				/>
+			</Task>
+			<TranslatableName>
+				<TranslatableText
+					type="com.cordys.translation.TranslatableText"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F774-1D757F3D9202">
+					<DocumentID>00215A60-3EB8-11E1-F774-1D757F3D7202</DocumentID>
+					<Name>00215A60-3EB8-11E1-F774-1D757F3D7202</Name>
+					<Description>00215A60-3EB8-11E1-F774-1D757F3D7202</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-21T13:20:25.935</CreationDate>
+					<Notes/>
+					<Identifier>
+						<uri
+							id="00215A60-3EB8-11E1-F71F-ED6C59BA9201"
+						/>
+					</Identifier>
+				</TranslatableText>
+			</TranslatableName>
+			<TranslatableSubject>
+				<TranslatableText
+					type="com.cordys.translation.TranslatableText"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F774-1D757F3D5202">
+					<DocumentID>00215A60-3EB8-11E1-F774-1D757F3D3202</DocumentID>
+					<Name>00215A60-3EB8-11E1-F774-1D757F3D3202</Name>
+					<Description>00215A60-3EB8-11E1-F774-1D757F3D3202</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-21T13:20:25.935</CreationDate>
+					<Notes/>
+					<Identifier>
+						<uri
+							id="00215A60-3EB8-11E1-F71F-ED6C59BA9201"
+						/>
+					</Identifier>
+				</TranslatableText>
+			</TranslatableSubject>
+			<WorkFlowDeliveryModel>
+				<uri
+					id="00215A60-3EB8-11E1-F773-5FABFC129202"
+				/>
+			</WorkFlowDeliveryModel>
+		</HumanTask>
+		<SequenceFlow
+			type="com.cordys.bpm.connectors.SequenceFlow"
+			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F774-12359FF89202">
+			<DocumentID>00215A60-3EB8-11E1-F774-1D757F495202</DocumentID>
+			<Name>Connector (12)</Name>
+			<Description>Yes</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-21T13:00:25.341</CreationDate>
+			<Notes/>
+			<ClassicCondition>false</ClassicCondition>
+			<ConditionExpression></ConditionExpression>
+			<ConditionType>Default</ConditionType>
+			<DocumentationText></DocumentationText>
+			<FontSize>12</FontSize>
+			<Sequence>2</Sequence>
+			<links/>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<SourceReference>
+				<uri
+					id="002170BA-4014-11E1-F6D9-CA1ADEC4BFD7"
+				/>
+			</SourceReference>
+			<TargetReference>
+				<uri
+					id="00215A60-3EB8-11E1-F774-1D757F3DB202"
+				/>
+			</TargetReference>
+			<TranslatableName>
+				<TranslatableText
+					type="com.cordys.translation.TranslatableText"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F774-1D757F43F202">
+					<DocumentID>00215A60-3EB8-11E1-F774-1D757F43D202</DocumentID>
+					<Name>00215A60-3EB8-11E1-F774-1D757F43D202</Name>
+					<Description>00215A60-3EB8-11E1-F774-1D757F43D202</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-21T13:00:25.341</CreationDate>
+					<Notes/>
+					<Identifier>
+						<uri
+							id="002170BA-4014-11E1-F6D9-D1FC1CAD5FD7"
+						/>
+					</Identifier>
+				</TranslatableText>
+			</TranslatableName>
+		</SequenceFlow>
+		<Gateway
+			type="com.cordys.bpm.gateway.Gateway"
+			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F786-51D511297202">
+			<DocumentID>00215A60-3EB8-11E1-F786-51D511295202</DocumentID>
+			<Name>Decision (2)</Name>
+			<Description>Is Approved</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T06:44:46.718</CreationDate>
+			<Notes/>
+			<ClassicExecuteCondition>false</ClassicExecuteCondition>
+			<CrashRecoveryCustomized>false</CrashRecoveryCustomized>
+			<CrashRecoveryEnabled>false</CrashRecoveryEnabled>
+			<Customized>false</Customized>
+			<DocumentationText></DocumentationText>
+			<DynamicExecuteCondition>_none</DynamicExecuteCondition>
+			<ExecuteCondition></ExecuteCondition>
+			<FontSize>12</FontSize>
+			<IsXor>false</IsXor>
+			<MonitorLevel>11</MonitorLevel>
+			<MonitoringEnabled>true</MonitoringEnabled>
+			<SyncDBBeforeActivity>false</SyncDBBeforeActivity>
+			<links/>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<InputMessageObject/>
+			<MessageMap>
+				<MessageMap
+					type="com.cordys.bpm.messagemap.MessageMap"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F786-BF3843E9D202">
+					<DocumentID>00215A60-3EB8-11E1-F786-BF3843E9B202</DocumentID>
+					<Name>Decision (2)</Name>
+					<Description>Decision (2)</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-22T06:49:04.676</CreationDate>
+					<Notes/>
+					<afterAssignment>
+						<activity
+							xmlns=""
+						/>
+					</afterAssignment>
+					<beforeAssignment>
+						<activity
+							xmlns=""
+						/>
+					</beforeAssignment>
+				</MessageMap>
+			</MessageMap>
+			<OutputMessageObject/>
+			<TranslatableName>
+				<TranslatableText
+					type="com.cordys.translation.TranslatableText"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F786-A6782B74B202">
+					<DocumentID>00215A60-3EB8-11E1-F786-A6782B749202</DocumentID>
+					<Name>00215A60-3EB8-11E1-F786-A6782B749202</Name>
+					<Description>00215A60-3EB8-11E1-F786-A6782B749202</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-22T06:47:22.409</CreationDate>
+					<Notes/>
+					<Identifier>
+						<uri
+							id="00215A60-3EB8-11E1-F786-A6782B74D202"
+						/>
+					</Identifier>
+				</TranslatableText>
+			</TranslatableName>
+		</Gateway>
+		<SequenceFlow
+			type="com.cordys.bpm.connectors.SequenceFlow"
+			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F786-A6782B7DD202">
+			<DocumentID>00215A60-3EB8-11E1-F786-A6782B7DB202</DocumentID>
+			<Name>Connector (15)</Name>
+			<Description/>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T06:44:46.718</CreationDate>
+			<Notes/>
+			<ClassicCondition>false</ClassicCondition>
+			<ConditionExpression></ConditionExpression>
+			<ConditionType></ConditionType>
+			<DocumentationText></DocumentationText>
+			<FontSize>12</FontSize>
+			<Sequence></Sequence>
+			<links/>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<SourceReference>
+				<uri
+					id="002170BA-4014-11E1-F6DA-8918D0AB9FD7"
+				/>
+			</SourceReference>
+			<TargetReference>
+				<uri
+					id="002170BA-4014-11E1-F6DA-4A8C53F99FD7"
+				/>
+			</TargetReference>
+			<TranslatableName/>
+		</SequenceFlow>
+		<ServiceTask
+			type="com.cordys.bpm.activity.ServiceTask"
+			typeVersion="001CC435-D795-11E0-FF11-B1382512DF93 ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F786-BF3843EB3202">
+			<DocumentID>00215A60-3EB8-11E1-F786-BF3843EB1202</DocumentID>
+			<Name>UpdateOrderDemo (5)</Name>
+			<Description>Update Order Status to Rejected</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T06:49:04.676</CreationDate>
+			<Notes/>
+			<ActivityColor>#bcd6f1</ActivityColor>
+			<ClassicDebugCondition>false</ClassicDebugCondition>
+			<ClassicExecuteCondition>false</ClassicExecuteCondition>
+			<CrashRecoveryCustomized>false</CrashRecoveryCustomized>
+			<CrashRecoveryEnabled>true</CrashRecoveryEnabled>
+			<Customized>false</Customized>
+			<DebugBefore>beforeActivity</DebugBefore>
+			<DebugCondition></DebugCondition>
+			<DebugStep>no</DebugStep>
+			<DocumentationText></DocumentationText>
+			<DynamicExecuteCondition>_none</DynamicExecuteCondition>
+			<DynamicRetryCount>none</DynamicRetryCount>
+			<DynamicRetryInterval>staticValue</DynamicRetryInterval>
+			<ExecuteCondition></ExecuteCondition>
+			<ExecutionOrganization></ExecutionOrganization>
+			<ExecutionUserType>currentOwner</ExecutionUserType>
+			<FontSize>12</FontSize>
+			<InProcessExecution></InProcessExecution>
+			<LogData/>
+			<MapSOAPFaultCode>true</MapSOAPFaultCode>
+			<Method></Method>
+			<MethodDN></MethodDN>
+			<Methodset></Methodset>
+			<Methodtype>XAS</Methodtype>
+			<MonitorLevel>12</MonitorLevel>
+			<MonitoringEnabled>true</MonitoringEnabled>
+			<Namespace></Namespace>
+			<OtherThread>false</OtherThread>
+			<ReliableMessaging>false</ReliableMessaging>
+			<RetryCondition></RetryCondition>
+			<RetryCount></RetryCount>
+			<RetryHours></RetryHours>
+			<RetryIntervalFromMessage></RetryIntervalFromMessage>
+			<RetryMinutes></RetryMinutes>
+			<RetrySeconds></RetrySeconds>
+			<SoapProcessor></SoapProcessor>
+			<SoapRequestTimeOut></SoapRequestTimeOut>
+			<SoapRequestTimeOutDynamic>staticValue</SoapRequestTimeOutDynamic>
+			<SyncDBBeforeActivity>false</SyncDBBeforeActivity>
+			<UseRetryCondition>none</UseRetryCondition>
+			<WaitForReply>true</WaitForReply>
+			<links/>
+			<ActivityMessages>
+				<Message
+					type="com.cordys.bpm.Message"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F786-BF3843EA1202">
+					<DocumentID>00215A60-3EB8-11E1-F786-BF3843E9F202</DocumentID>
+					<Name>UpdateOrderDemoFaultDetail</Name>
+					<Description>Update Order Status to Rejected/UpdateOrderDemoFaultDetail</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-22T06:49:04.676</CreationDate>
+					<Notes/>
+					<Namespace>http://schemas.cordys.com/html5sdk/orderdemo/1.0</Namespace>
+					<OwnerMessageType></OwnerMessageType>
+					<UseDefaultValues>false</UseDefaultValues>
+					<CustomMessageParts/>
+					<MessageParts/>
+					<RootOwner>
+						<uri
+							id="00215A60-3EB8-11E1-F786-BF3843EB1202"
+						/>
+					</RootOwner>
+				</Message>
+				<Message
+					type="com.cordys.bpm.Message"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F786-BF3843EA5202">
+					<DocumentID>00215A60-3EB8-11E1-F786-BF3843EA3202</DocumentID>
+					<Name>UpdateOrderDemoOutput</Name>
+					<Description>Update Order Status to Rejected/UpdateOrderDemoOutput</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-22T06:49:04.676</CreationDate>
+					<Notes/>
+					<Namespace>http://schemas.cordys.com/html5sdk/orderdemo/1.0</Namespace>
+					<OwnerMessageType></OwnerMessageType>
+					<UseDefaultValues>false</UseDefaultValues>
+					<CustomMessageParts/>
+					<MessageParts/>
+					<RootOwner>
+						<uri
+							id="00215A60-3EB8-11E1-F786-BF3843EB1202"
+						/>
+					</RootOwner>
+				</Message>
+				<Message
+					type="com.cordys.bpm.Message"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F786-BF3843EA9202">
+					<DocumentID>00215A60-3EB8-11E1-F786-BF3843EA7202</DocumentID>
+					<Name>UpdateOrderDemoInput</Name>
+					<Description>Update Order Status to Rejected/UpdateOrderDemoInput</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-22T06:49:04.676</CreationDate>
+					<Notes/>
+					<Namespace>http://schemas.cordys.com/html5sdk/orderdemo/1.0</Namespace>
+					<OwnerMessageType></OwnerMessageType>
+					<UseDefaultValues>false</UseDefaultValues>
+					<CustomMessageParts/>
+					<MessageParts/>
+					<RootOwner>
+						<uri
+							id="00215A60-3EB8-11E1-F786-BF3843EB1202"
+						/>
+					</RootOwner>
+				</Message>
+			</ActivityMessages>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<InputMessageObject/>
+			<MessageMap>
+				<MessageMap
+					type="com.cordys.bpm.messagemap.MessageMap"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F786-BF3843E99202">
+					<DocumentID>00215A60-3EB8-11E1-F786-BF3843E97202</DocumentID>
+					<Name>UpdateOrderDemo (5)</Name>
+					<Description>UpdateOrderDemo (5)</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-22T06:49:04.676</CreationDate>
+					<Notes/>
+					<afterAssignment>
+						<activity
+							xmlns=""
+						/>
+					</afterAssignment>
+					<beforeAssignment>
+						<activity
+							xmlns="">
+							<mapping
+								sourceId=""
+								targetId="o_81_UpdateOrderDemoInput_UpdateOrderDemo_tuple_old_OrderDemo"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:old/ns7:OrderDemo"
+								operation="Replace With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple/ns7:new/ns7:OrderDemo</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_81_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo"
+								operation="Replace With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple/ns7:new/ns7:OrderDemo</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_81_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo_Status"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo/ns7:Status"
+								operation="Replace Content With"
+								operation2="Fixed Value"
+								isNillable="true">
+								<sourceAssign>REJECTED</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_81_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo_Notes"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo/ns7:Notes"
+								operation="Replace Content With"
+								operation2="Select"
+								isNillable="true">
+								<sourceAssign>ns4:ApproveTask_ApproveTaskDefaultDeliveryModel_OP/ns9:ApproveTask_ApproveTaskDefaultDeliveryModel_OP/ns9:comment/text()</sourceAssign>
+							</mapping>
+						</activity>
+					</beforeAssignment>
+				</MessageMap>
+			</MessageMap>
+			<MonitorableEvents/>
+			<MonitorableKpis/>
+			<OutputMessageObject/>
+			<TranslatableName>
+				<TranslatableText
+					type="com.cordys.translation.TranslatableText"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F786-BF3843EAF202">
+					<DocumentID>00215A60-3EB8-11E1-F786-BF3843EAD202</DocumentID>
+					<Name>00215A60-3EB8-11E1-F786-BF3843EAD202</Name>
+					<Description>00215A60-3EB8-11E1-F786-BF3843EAD202</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-22T06:49:04.676</CreationDate>
+					<Notes/>
+					<Identifier>
+						<uri
+							id="00215A60-3EB8-11E1-F786-A6782B7CF202"
+						/>
+					</Identifier>
+				</TranslatableText>
+			</TranslatableName>
+			<WebserviceBindingOperation>
+				<uri
+					id="00215A60-3EB8-11E1-F753-81C90C53F201"
+				/>
+			</WebserviceBindingOperation>
+		</ServiceTask>
+		<SequenceFlow
+			type="com.cordys.bpm.connectors.SequenceFlow"
+			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-140BAB3FF202">
+			<DocumentID>00215A60-3EB8-11E1-F788-140BAB3FD202</DocumentID>
+			<Name>Connector (13)</Name>
+			<Description>no</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<ClassicCondition>false</ClassicCondition>
+			<ConditionExpression></ConditionExpression>
+			<ConditionType>Default</ConditionType>
+			<DocumentationText></DocumentationText>
+			<FontSize>12</FontSize>
+			<Sequence>2</Sequence>
+			<links/>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<SourceReference>
+				<uri
+					id="00215A60-3EB8-11E1-F786-51D511295202"
+				/>
+			</SourceReference>
+			<TargetReference>
+				<uri
+					id="00215A60-3EB8-11E1-F786-BF3843EB1202"
+				/>
+			</TargetReference>
+			<TranslatableName>
+				<TranslatableText
+					type="com.cordys.translation.TranslatableText"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F788-7405C57C5202">
+					<DocumentID>00215A60-3EB8-11E1-F788-7405C57C3202</DocumentID>
+					<Name>00215A60-3EB8-11E1-F788-7405C57C3202</Name>
+					<Description>00215A60-3EB8-11E1-F788-7405C57C3202</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-22T08:30:31.52</CreationDate>
+					<Notes/>
+					<Identifier>
+						<uri
+							id="00215A60-3EB8-11E1-F788-7405C57C7202"
+						/>
+					</Identifier>
+				</TranslatableText>
+			</TranslatableName>
+		</SequenceFlow>
+		<SequenceFlow
+			type="com.cordys.bpm.connectors.SequenceFlow"
+			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-140BAB41B202">
+			<DocumentID>00215A60-3EB8-11E1-F788-140BAB419202</DocumentID>
+			<Name>Connector (16)</Name>
+			<Description/>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<ClassicCondition>false</ClassicCondition>
+			<ConditionExpression></ConditionExpression>
+			<ConditionType></ConditionType>
+			<DocumentationText></DocumentationText>
+			<FontSize>12</FontSize>
+			<Sequence></Sequence>
+			<links/>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<SourceReference>
+				<uri
+					id="002170BA-4014-11E1-F6DA-8918D0AA3FD7"
+				/>
+			</SourceReference>
+			<TargetReference>
+				<uri
+					id="00215A60-3EB8-11E1-F786-51D511295202"
+				/>
+			</TargetReference>
+			<TranslatableName/>
+		</SequenceFlow>
+		<SequenceFlow
+			type="com.cordys.bpm.connectors.SequenceFlow"
+			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-140BAB427202">
+			<DocumentID>00215A60-3EB8-11E1-F788-140BAB425202</DocumentID>
+			<Name>Connector (14)</Name>
+			<Description/>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<ClassicCondition>false</ClassicCondition>
+			<ConditionExpression></ConditionExpression>
+			<ConditionType></ConditionType>
+			<DocumentationText></DocumentationText>
+			<FontSize>12</FontSize>
+			<Sequence></Sequence>
+			<links/>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<SourceReference>
+				<uri
+					id="00215A60-3EB8-11E1-F774-1D757F3DB202"
+				/>
+			</SourceReference>
+			<TargetReference>
+				<uri
+					id="002170BA-4014-11E1-F6DA-8918D0AA3FD7"
+				/>
+			</TargetReference>
+			<TranslatableName/>
+		</SequenceFlow>
+		<SequenceFlow
+			type="com.cordys.bpm.connectors.SequenceFlow"
+			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-140BAB463202">
+			<DocumentID>00215A60-3EB8-11E1-F788-140BAB461202</DocumentID>
+			<Name>Connector (8)</Name>
+			<Description>yes</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<ClassicCondition>false</ClassicCondition>
+			<ConditionExpression>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple/ns7:new/ns7:OrderDemo/ns7:Status/text() = &quot;approve&quot;</ConditionExpression>
+			<ConditionType>Static</ConditionType>
+			<DocumentationText></DocumentationText>
+			<FontSize>12</FontSize>
+			<Sequence>1</Sequence>
+			<links/>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<SourceReference>
+				<uri
+					id="00215A60-3EB8-11E1-F786-51D511295202"
+				/>
+			</SourceReference>
+			<TargetReference>
+				<uri
+					id="002170BA-4014-11E1-F6DA-4A8C53F99FD7"
+				/>
+			</TargetReference>
+			<TranslatableName>
+				<TranslatableText
+					type="com.cordys.translation.TranslatableText"
+					RuntimeDocumentID="00215A60-3EB8-11E1-F788-7405C57B1202">
+					<DocumentID>00215A60-3EB8-11E1-F788-7405C57AF202</DocumentID>
+					<Name>00215A60-3EB8-11E1-F788-7405C57AF202</Name>
+					<Description>00215A60-3EB8-11E1-F788-7405C57AF202</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-06-22T08:30:31.52</CreationDate>
+					<Notes/>
+					<Identifier>
+						<uri
+							id="00215A60-3EB8-11E1-F788-7405C57B3202"
+						/>
+					</Identifier>
+				</TranslatableText>
+			</TranslatableName>
+		</SequenceFlow>
+		<SequenceFlow
+			type="com.cordys.bpm.connectors.SequenceFlow"
+			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-7405C57E9202">
+			<DocumentID>00215A60-3EB8-11E1-F788-7405C57E7202</DocumentID>
+			<Name>Connector (17)</Name>
+			<Description/>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<ClassicCondition>false</ClassicCondition>
+			<ConditionExpression></ConditionExpression>
+			<ConditionType></ConditionType>
+			<DocumentationText></DocumentationText>
+			<FontSize>12</FontSize>
+			<Sequence></Sequence>
+			<links/>
+			<ContainerProcess>
+				<uri
+					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
+				/>
+			</ContainerProcess>
+			<SourceReference>
+				<uri
+					id="00215A60-3EB8-11E1-F786-BF3843EB1202"
+				/>
+			</SourceReference>
+			<TargetReference>
+				<uri
+					id="002170BA-4014-11E1-F6D9-D1FC1CB45FD7"
+				/>
+			</TargetReference>
+			<TranslatableName/>
+		</SequenceFlow>
 		<Start
 			type="com.cordys.bpm.event.Start"
 			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
@@ -860,8 +1910,48 @@
 					<Notes/>
 					<afterAssignment>
 						<activity
-							xmlns=""
-						/>
+							xmlns="">
+							<mapping
+								sourceId=""
+								targetId="Customer"
+								isProcessVariable="true"
+								targetAssign="bpm/Customer"
+								operation="Replace Content With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>bpm:OrderDemo/bpm:Customer/text()</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="Product"
+								isProcessVariable="true"
+								targetAssign="bpm/Product"
+								operation="Replace Content With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>bpm:OrderDemo/bpm:Product/text()</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="Quantity"
+								isProcessVariable="true"
+								targetAssign="bpm/Quantity"
+								operation="Replace Content With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>bpm:OrderDemo/bpm:Quantity/text()</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="Cost"
+								isProcessVariable="true"
+								targetAssign="bpm/Cost"
+								operation="Replace Content With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>bpm:OrderDemo/bpm:Cost/text()</sourceAssign>
+							</mapping>
+						</activity>
 					</afterAssignment>
 					<beforeAssignment>
 						<activity
@@ -887,131 +1977,6 @@
 				</TranslatableText>
 			</TranslatableName>
 		</Start>
-		<SequenceFlow
-			type="com.cordys.bpm.connectors.SequenceFlow"
-			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
-			RuntimeDocumentID="002170BA-4014-11E1-F6D9-CA1ADEBD5FD7">
-			<DocumentID>002170BA-4014-11E1-F6D9-CA1ADEBD3FD7</DocumentID>
-			<Name>Connector (5)</Name>
-			<Description>Yes</Description>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:06:01.924</CreationDate>
-			<Notes/>
-			<ClassicCondition>false</ClassicCondition>
-			<ConditionExpression></ConditionExpression>
-			<ConditionType>Default</ConditionType>
-			<DocumentationText></DocumentationText>
-			<FontSize>12</FontSize>
-			<Sequence>2</Sequence>
-			<links/>
-			<ContainerProcess>
-				<uri
-					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
-				/>
-			</ContainerProcess>
-			<SourceReference>
-				<uri
-					id="002170BA-4014-11E1-F6D9-CA1ADEC4BFD7"
-				/>
-			</SourceReference>
-			<TargetReference>
-				<uri
-					id="002170BA-4014-11E1-F6D9-CA1ADEBE7FD7"
-				/>
-			</TargetReference>
-			<TranslatableName>
-				<TranslatableText
-					type="com.cordys.translation.TranslatableText"
-					RuntimeDocumentID="002170BA-4014-11E1-F6D9-D1FC1CAD3FD7">
-					<DocumentID>002170BA-4014-11E1-F6D9-D1FC1CAD1FD7</DocumentID>
-					<Name>002170BA-4014-11E1-F6D9-D1FC1CAD1FD7</Name>
-					<Description>002170BA-4014-11E1-F6D9-D1FC1CAD1FD7</Description>
-					<CreatedBy>csharbel</CreatedBy>
-					<CreationDate>2012-06-15T10:06:01.923</CreationDate>
-					<Notes/>
-					<Identifier/>
-				</TranslatableText>
-			</TranslatableName>
-		</SequenceFlow>
-		<EmptyActivity
-			type="com.cordys.bpm.activity.EmptyActivity"
-			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
-			RuntimeDocumentID="002170BA-4014-11E1-F6D9-CA1ADEBE9FD7">
-			<DocumentID>002170BA-4014-11E1-F6D9-CA1ADEBE7FD7</DocumentID>
-			<Name>Activity (4)</Name>
-			<Description>ApproveOrder</Description>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:06:01.848</CreationDate>
-			<Notes/>
-			<ActivityColor>#bcd6f1</ActivityColor>
-			<ClassicDebugCondition>false</ClassicDebugCondition>
-			<ClassicExecuteCondition>false</ClassicExecuteCondition>
-			<CrashRecoveryCustomized>false</CrashRecoveryCustomized>
-			<CrashRecoveryEnabled>false</CrashRecoveryEnabled>
-			<Customized>false</Customized>
-			<DebugBefore>beforeActivity</DebugBefore>
-			<DebugCondition></DebugCondition>
-			<DebugStep>no</DebugStep>
-			<DocumentationText></DocumentationText>
-			<DynamicExecuteCondition>_none</DynamicExecuteCondition>
-			<ExecuteCondition></ExecuteCondition>
-			<ExecutionUserType>currentOwner</ExecutionUserType>
-			<FontSize>12</FontSize>
-			<LogData/>
-			<MonitorLevel>11</MonitorLevel>
-			<MonitoringEnabled>true</MonitoringEnabled>
-			<SyncDBBeforeActivity>false</SyncDBBeforeActivity>
-			<links/>
-			<ActivityMessages/>
-			<ContainerProcess>
-				<uri
-					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
-				/>
-			</ContainerProcess>
-			<InputMessageObject/>
-			<MessageMap>
-				<MessageMap
-					type="com.cordys.bpm.messagemap.MessageMap"
-					RuntimeDocumentID="002170BA-4014-11E1-F6DA-509D501BFFD7">
-					<DocumentID>002170BA-4014-11E1-F6DA-509D501BDFD7</DocumentID>
-					<Name>Activity (4)</Name>
-					<Description>Activity (4)</Description>
-					<CreatedBy>csharbel</CreatedBy>
-					<CreationDate>2012-06-15T10:24:11.253</CreationDate>
-					<Notes/>
-					<afterAssignment>
-						<activity
-							xmlns=""
-						/>
-					</afterAssignment>
-					<beforeAssignment>
-						<activity
-							xmlns=""
-						/>
-					</beforeAssignment>
-				</MessageMap>
-			</MessageMap>
-			<MonitorableEvents/>
-			<MonitorableKpis/>
-			<OutputMessageObject/>
-			<TranslatableName>
-				<TranslatableText
-					type="com.cordys.translation.TranslatableText"
-					RuntimeDocumentID="00215A60-3EB8-11E1-F71F-ED6C59BA7201">
-					<DocumentID>00215A60-3EB8-11E1-F71F-ED6C59BA5201</DocumentID>
-					<Name>00215A60-3EB8-11E1-F71F-ED6C59BA5201</Name>
-					<Description>00215A60-3EB8-11E1-F71F-ED6C59BA5201</Description>
-					<CreatedBy>sswathi</CreatedBy>
-					<CreationDate>2012-06-18T05:02:02.716</CreationDate>
-					<Notes/>
-					<Identifier>
-						<uri
-							id="00215A60-3EB8-11E1-F71F-ED6C59BA9201"
-						/>
-					</Identifier>
-				</TranslatableText>
-			</TranslatableName>
-		</EmptyActivity>
 		<SequenceFlow
 			type="com.cordys.bpm.connectors.SequenceFlow"
 			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
@@ -1245,40 +2210,6 @@
 		<SequenceFlow
 			type="com.cordys.bpm.connectors.SequenceFlow"
 			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
-			RuntimeDocumentID="002170BA-4014-11E1-F6D9-D1FC1CB7FFD7">
-			<DocumentID>002170BA-4014-11E1-F6D9-D1FC1CB7DFD7</DocumentID>
-			<Name>Connector (6)</Name>
-			<Description/>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:06:01.891</CreationDate>
-			<Notes/>
-			<ClassicCondition>false</ClassicCondition>
-			<ConditionExpression></ConditionExpression>
-			<ConditionType></ConditionType>
-			<DocumentationText></DocumentationText>
-			<FontSize>12</FontSize>
-			<Sequence></Sequence>
-			<links/>
-			<ContainerProcess>
-				<uri
-					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
-				/>
-			</ContainerProcess>
-			<SourceReference>
-				<uri
-					id="002170BA-4014-11E1-F6D9-CA1ADEBE7FD7"
-				/>
-			</SourceReference>
-			<TargetReference>
-				<uri
-					id="002170BA-4014-11E1-F6DA-8918D0AA3FD7"
-				/>
-			</TargetReference>
-			<TranslatableName/>
-		</SequenceFlow>
-		<SequenceFlow
-			type="com.cordys.bpm.connectors.SequenceFlow"
-			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
 			RuntimeDocumentID="002170BA-4014-11E1-F6DA-3CD3DC7FBFD7">
 			<DocumentID>002170BA-4014-11E1-F6DA-3CD3DC7F9FD7</DocumentID>
 			<Name>Connector (10)</Name>
@@ -1374,74 +2305,6 @@
 			<TargetReference>
 				<uri
 					id="002170BA-4014-11E1-F6DA-8918D0A8DFD7"
-				/>
-			</TargetReference>
-			<TranslatableName/>
-		</SequenceFlow>
-		<SequenceFlow
-			type="com.cordys.bpm.connectors.SequenceFlow"
-			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
-			RuntimeDocumentID="002170BA-4014-11E1-F6DA-4A8C53F73FD7">
-			<DocumentID>002170BA-4014-11E1-F6DA-4A8C53F71FD7</DocumentID>
-			<Name>Connector (8)</Name>
-			<Description/>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:17:05.139</CreationDate>
-			<Notes/>
-			<ClassicCondition>false</ClassicCondition>
-			<ConditionExpression></ConditionExpression>
-			<ConditionType></ConditionType>
-			<DocumentationText></DocumentationText>
-			<FontSize>12</FontSize>
-			<Sequence></Sequence>
-			<links/>
-			<ContainerProcess>
-				<uri
-					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
-				/>
-			</ContainerProcess>
-			<SourceReference>
-				<uri
-					id="002170BA-4014-11E1-F6DA-8918D0AA3FD7"
-				/>
-			</SourceReference>
-			<TargetReference>
-				<uri
-					id="002170BA-4014-11E1-F6DA-4A8C53F99FD7"
-				/>
-			</TargetReference>
-			<TranslatableName/>
-		</SequenceFlow>
-		<SequenceFlow
-			type="com.cordys.bpm.connectors.SequenceFlow"
-			typeVersion="ru3229e8-6598-4208-9804-a6e623c0qyte"
-			RuntimeDocumentID="002170BA-4014-11E1-F6DA-4A8C53F7FFD7">
-			<DocumentID>002170BA-4014-11E1-F6DA-4A8C53F7DFD7</DocumentID>
-			<Name>Connector (7)</Name>
-			<Description/>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:17:05.133</CreationDate>
-			<Notes/>
-			<ClassicCondition>false</ClassicCondition>
-			<ConditionExpression></ConditionExpression>
-			<ConditionType></ConditionType>
-			<DocumentationText></DocumentationText>
-			<FontSize>12</FontSize>
-			<Sequence></Sequence>
-			<links/>
-			<ContainerProcess>
-				<uri
-					id="002170BA-4014-11E1-F6BA-3A1BC8431FAB"
-				/>
-			</ContainerProcess>
-			<SourceReference>
-				<uri
-					id="002170BA-4014-11E1-F6DA-8918D0AB9FD7"
-				/>
-			</SourceReference>
-			<TargetReference>
-				<uri
-					id="002170BA-4014-11E1-F6DA-4A8C53F99FD7"
 				/>
 			</TargetReference>
 			<TranslatableName/>
@@ -1942,6 +2805,16 @@
 								isNillable="true">
 								<sourceAssign>DELIVERED</sourceAssign>
 							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_52_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo_Notes"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo/ns7:Notes"
+								operation="Replace Content With"
+								operation2="Select"
+								isNillable="true">
+								<sourceAssign>ns4:ApproveTask_ApproveTaskDefaultDeliveryModel_OP/ns9:ApproveTask_ApproveTaskDefaultDeliveryModel_OP/ns9:comment/text()</sourceAssign>
+							</mapping>
 						</activity>
 					</beforeAssignment>
 				</MessageMap>
@@ -2109,8 +2982,38 @@
 					</afterAssignment>
 					<beforeAssignment>
 						<activity
-							xmlns=""
-						/>
+							xmlns="">
+							<mapping
+								sourceId=""
+								targetId="o_26_UpdateOrderDemoInput_UpdateOrderDemo_tuple_old_OrderDemo"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:old/ns7:OrderDemo"
+								operation="Replace With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple/ns7:new/ns7:OrderDemo</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_26_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo"
+								operation="Replace With"
+								operation2="Select"
+								isNillable="false">
+								<sourceAssign>ns7:UpdateOrderDemoOutput/ns7:UpdateOrderDemoResponse/ns7:tuple/ns7:new/ns7:OrderDemo</sourceAssign>
+							</mapping>
+							<mapping
+								sourceId=""
+								targetId="o_26_UpdateOrderDemoInput_UpdateOrderDemo_tuple_new_OrderDemo_Status"
+								isProcessVariable="false"
+								targetAssign="ns7:UpdateOrderDemoInput/ns7:UpdateOrderDemo/ns7:tuple/ns7:new/ns7:OrderDemo/ns7:Status"
+								operation="Replace Content With"
+								operation2="Select"
+								isNillable="true">
+								<sourceAssign>ns4:ApproveTask_ApproveTaskDefaultDeliveryModel_OP/ns9:ApproveTask_ApproveTaskDefaultDeliveryModel_OP/ns9:response/text()</sourceAssign>
+							</mapping>
+						</activity>
 					</beforeAssignment>
 				</MessageMap>
 			</MessageMap>
@@ -2348,7 +3251,7 @@
 			RuntimeDocumentID="002170BA-4014-11E1-F6BA-3A1BC842FFAB">
 			<DocumentID>002170BA-4014-11E1-F6BA-3A1BC842DFAB</DocumentID>
 			<Name>info_orderdemo</Name>
-			<Description>info_</Description>
+			<Description>info_BPM for managing the Order Management for the HTML5 SDK Order Demo</Description>
 			<CreatedBy>csharbel</CreatedBy>
 			<CreationDate>2012-06-14T10:11:20.515</CreationDate>
 			<Notes/>
@@ -2467,7 +3370,76 @@
 	<ProcessBindingOperation/>
 	<ProcessBusinessCalendar/>
 	<ProcessElements/>
-	<ProcessIdentifiers/>
+	<ProcessIdentifiers>
+		<BPMBusinessIdentifier
+			type="com.cordys.bpm.BPMBusinessIdentifier"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F772-877BC7053202">
+			<DocumentID>00215A60-3EB8-11E1-F772-877BC7051202</DocumentID>
+			<Name>Product</Name>
+			<Description>Product</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-21T11:32:05.767</CreationDate>
+			<Notes/>
+			<Sequence>2</Sequence>
+			<ShowInPIM>true</ShowInPIM>
+			<BusinessIdentifier>
+				<uri
+					id="00215A60-3EB8-11E1-F772-877BC70D1202"
+				/>
+			</BusinessIdentifier>
+		</BPMBusinessIdentifier>
+		<BPMBusinessIdentifier
+			type="com.cordys.bpm.BPMBusinessIdentifier"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F772-877BC7059202">
+			<DocumentID>00215A60-3EB8-11E1-F772-877BC7057202</DocumentID>
+			<Name>Customer</Name>
+			<Description>Customer</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-21T11:32:05.767</CreationDate>
+			<Notes/>
+			<Sequence>1</Sequence>
+			<ShowInPIM>true</ShowInPIM>
+			<BusinessIdentifier>
+				<uri
+					id="00215A60-3EB8-11E1-F771-68C69F0C5202"
+				/>
+			</BusinessIdentifier>
+		</BPMBusinessIdentifier>
+		<BPMBusinessIdentifier
+			type="com.cordys.bpm.BPMBusinessIdentifier"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F772-877BC705F202">
+			<DocumentID>00215A60-3EB8-11E1-F772-877BC705D202</DocumentID>
+			<Name>Cost</Name>
+			<Description>Cost</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-21T11:32:05.767</CreationDate>
+			<Notes/>
+			<Sequence>4</Sequence>
+			<ShowInPIM>true</ShowInPIM>
+			<BusinessIdentifier>
+				<uri
+					id="00215A60-3EB8-11E1-F772-877BC70B1202"
+				/>
+			</BusinessIdentifier>
+		</BPMBusinessIdentifier>
+		<BPMBusinessIdentifier
+			type="com.cordys.bpm.BPMBusinessIdentifier"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F772-877BC7067202">
+			<DocumentID>00215A60-3EB8-11E1-F772-877BC7065202</DocumentID>
+			<Name>Quantity</Name>
+			<Description>Quantity</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-21T11:32:05.767</CreationDate>
+			<Notes/>
+			<Sequence>3</Sequence>
+			<ShowInPIM>true</ShowInPIM>
+			<BusinessIdentifier>
+				<uri
+					id="00215A60-3EB8-11E1-F772-877BC7079202"
+				/>
+			</BusinessIdentifier>
+		</BPMBusinessIdentifier>
+	</ProcessIdentifiers>
 	<ProcessSchemas>
 		<XMLSchemaDefinitionDesigntime
 			type="com.cordys.xmlschema.XMLSchemaDefinitionDesigntime"
@@ -2798,6 +3770,650 @@
 		<GMFShapeReference
 			type="com.cordys.gmf.diagram.GMFShapeReference"
 			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F774-12359FF8D202">
+			<DocumentID>00215A60-3EB8-11E1-F774-12359FF8B202</DocumentID>
+			<Name>o_64</Name>
+			<Description>o_64</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-21T13:00:25.341</CreationDate>
+			<Notes/>
+			<dataObject>
+				<linkedObjects
+					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
+					<line>
+						<object
+							id="o_65"
+							objectType="line"
+							connectorId="o_64"
+							source="o_15"
+							destination="o_61"
+							fromX="130"
+							fromY="330"
+							toX="130"
+							toY="380"
+							display=""
+							user="sswathi"
+						/>
+					</line>
+					<placeholder>
+						<object
+							id="o_66"
+							objectType="placeholder"
+							connectorId="o_64"
+							lineId="o_65"
+							anchorPercentage="0.5"
+							anchorLeft="310"
+							anchorTop="385"
+							position="general"
+							name="annotation"
+							relativeLeft="-209"
+							relativeTop="-44"
+							width="90%"
+							height="40%"
+							data="&lt;div id=&quot;textarea1&quot; textvalue=&quot;Yes&quot; inlinestyle=&quot;text-align: center; cursor: text; &quot;&gt;&lt;/div&gt;"
+							display=""
+							user="sswathi"
+						/>
+					</placeholder>
+				</linkedObjects>
+			</dataObject>
+			<height></height>
+			<htmlChildPosition>32</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_64"
+					__shapeReferenceID="00215A60-3EB8-11E1-F774-12359FF8B202"
+					objectType="connector"
+					connectorType="connector"
+					source="o_15"
+					destination="o_61"
+					direction="one way"
+					isDefault="true"
+					sourceIntersection="center"
+					destinationIntersection="center">
+					<dataObject
+						name="connector">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F774-1D757F495202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>connector</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F774-1D757F495202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F774-12359FFA1202">
+			<DocumentID>00215A60-3EB8-11E1-F774-12359FF9F202</DocumentID>
+			<Name>o_61</Name>
+			<Description>o_61</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-21T13:00:25.341</CreationDate>
+			<Notes/>
+			<dataObject/>
+			<height></height>
+			<htmlChildPosition>18</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_61"
+					__shapeReferenceID="00215A60-3EB8-11E1-F774-12359FF9F202"
+					objectType="activity"
+					left="60.01%"
+					top="380.01%"
+					width="140%"
+					height="80%"
+					horizontalTextAlignment="center"
+					verticalTextAlignment="middle"
+					display=""
+					user="sswathi">
+					<dataObject
+						name="activity">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F774-1D757F3DB202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>activity</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F774-1D757F3DB202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F786-51D511273202">
+			<DocumentID>00215A60-3EB8-11E1-F786-51D511271202</DocumentID>
+			<Name>o_81</Name>
+			<Description>o_81</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T06:44:46.718</CreationDate>
+			<Notes/>
+			<dataObject/>
+			<height></height>
+			<htmlChildPosition>22</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_81"
+					__shapeReferenceID="00215A60-3EB8-11E1-F786-51D511271202"
+					objectType="activity"
+					left="450.01%"
+					top="510.00999999999993%"
+					width="140%"
+					height="80%"
+					horizontalTextAlignment="center"
+					verticalTextAlignment="middle"
+					display=""
+					user="sswathi">
+					<dataObject
+						name="activity">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F786-BF3843EB1202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>activity</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F786-BF3843EB1202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F786-51D51129B202">
+			<DocumentID>00215A60-3EB8-11E1-F786-51D511299202</DocumentID>
+			<Name>o_78</Name>
+			<Description>o_78</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T06:44:46.718</CreationDate>
+			<Notes/>
+			<dataObject/>
+			<height></height>
+			<htmlChildPosition>20</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_78"
+					__shapeReferenceID="00215A60-3EB8-11E1-F786-51D511299202"
+					objectType="decision"
+					left="450.01%"
+					top="380.01%"
+					width="140%"
+					height="80%"
+					display=""
+					user="sswathi">
+					<dataObject
+						name="decision">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F786-51D511295202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>decision</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F786-51D511295202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F786-A6782B7E1202">
+			<DocumentID>00215A60-3EB8-11E1-F786-A6782B7DF202</DocumentID>
+			<Name>o_91</Name>
+			<Description>o_91</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T06:44:46.718</CreationDate>
+			<Notes/>
+			<dataObject>
+				<linkedObjects
+					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
+					<line>
+						<object
+							id="o_92"
+							objectType="line"
+							connectorId="o_91"
+							source="o_18"
+							destination="o_43"
+							fromX="400"
+							fromY="290"
+							toX="500"
+							toY="290"
+							display=""
+							user="sswathi"
+						/>
+					</line>
+				</linkedObjects>
+			</dataObject>
+			<height></height>
+			<htmlChildPosition>33</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_91"
+					__shapeReferenceID="00215A60-3EB8-11E1-F786-A6782B7DF202"
+					objectType="connector"
+					connectorType="connector"
+					source="o_18"
+					destination="o_43"
+					direction="one way"
+					isDefault="false"
+					sourceIntersection="center"
+					destinationIntersection="center">
+					<dataObject
+						name="connector">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F786-A6782B7DB202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>connector</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F786-A6782B7DB202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-140BAB403202">
+			<DocumentID>00215A60-3EB8-11E1-F788-140BAB401202</DocumentID>
+			<Name>o_119</Name>
+			<Description>o_119</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<dataObject>
+				<linkedObjects
+					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
+					<line>
+						<object
+							id="o_120"
+							objectType="line"
+							connectorId="o_119"
+							source="o_78"
+							destination="o_81"
+							fromX="520"
+							fromY="460"
+							toX="520"
+							toY="510"
+							display=""
+							user="sswathi"
+						/>
+					</line>
+					<placeholder>
+						<object
+							id="o_121"
+							objectType="placeholder"
+							connectorId="o_119"
+							lineId="o_120"
+							anchorPercentage="0.5"
+							anchorLeft="520"
+							anchorTop="485"
+							position="general"
+							name="annotation"
+							relativeLeft="-45"
+							relativeTop="-20"
+							width="90%"
+							height="40%"
+							data="&lt;div id=&quot;textarea1&quot; textvalue=&quot;no&quot; inlinestyle=&quot;text-align: center; cursor: text; &quot;&gt;&lt;/div&gt;"
+							display=""
+							user="sswathi"
+						/>
+					</placeholder>
+				</linkedObjects>
+			</dataObject>
+			<height></height>
+			<htmlChildPosition>37</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_119"
+					__shapeReferenceID="00215A60-3EB8-11E1-F788-140BAB401202"
+					objectType="connector"
+					connectorType="connector"
+					source="o_78"
+					destination="o_81"
+					direction="one way"
+					isDefault="true"
+					sourceIntersection="center"
+					destinationIntersection="center">
+					<dataObject
+						name="connector">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F788-140BAB3FD202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>connector</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F788-140BAB3FD202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-140BAB41F202">
+			<DocumentID>00215A60-3EB8-11E1-F788-140BAB41D202</DocumentID>
+			<Name>o_115</Name>
+			<Description>o_115</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<dataObject>
+				<linkedObjects
+					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
+					<line>
+						<object
+							id="o_116"
+							objectType="line"
+							connectorId="o_115"
+							source="o_26"
+							destination="o_78"
+							fromX="400"
+							fromY="420"
+							toX="450"
+							toY="420"
+							display=""
+							user="sswathi"
+						/>
+					</line>
+				</linkedObjects>
+			</dataObject>
+			<height></height>
+			<htmlChildPosition>36</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_115"
+					__shapeReferenceID="00215A60-3EB8-11E1-F788-140BAB41D202"
+					objectType="connector"
+					connectorType="connector"
+					source="o_26"
+					destination="o_78"
+					direction="one way"
+					isDefault="false"
+					sourceIntersection="center"
+					destinationIntersection="center">
+					<dataObject
+						name="connector">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F788-140BAB419202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>connector</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F788-140BAB419202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-140BAB42B202">
+			<DocumentID>00215A60-3EB8-11E1-F788-140BAB429202</DocumentID>
+			<Name>o_111</Name>
+			<Description>o_111</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<dataObject>
+				<linkedObjects
+					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
+					<line>
+						<object
+							id="o_112"
+							objectType="line"
+							connectorId="o_111"
+							source="o_61"
+							destination="o_26"
+							fromX="200"
+							fromY="420"
+							toX="260"
+							toY="420"
+							display=""
+							user="sswathi"
+						/>
+					</line>
+				</linkedObjects>
+			</dataObject>
+			<height></height>
+			<htmlChildPosition>35</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_111"
+					__shapeReferenceID="00215A60-3EB8-11E1-F788-140BAB429202"
+					objectType="connector"
+					connectorType="connector"
+					source="o_61"
+					destination="o_26"
+					direction="one way"
+					isDefault="false"
+					sourceIntersection="center"
+					destinationIntersection="center">
+					<dataObject
+						name="connector">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F788-140BAB425202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>connector</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F788-140BAB425202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-140BAB467202">
+			<DocumentID>00215A60-3EB8-11E1-F788-140BAB465202</DocumentID>
+			<Name>o_101</Name>
+			<Description>o_101</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<dataObject>
+				<linkedObjects
+					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
+					<line>
+						<object
+							id="o_102"
+							objectType="line"
+							connectorId="o_101"
+							source="o_78"
+							destination="o_43"
+							fromX="520"
+							fromY="380"
+							toX="520"
+							toY="310"
+							display=""
+							user="sswathi"
+						/>
+					</line>
+					<placeholder>
+						<object
+							id="o_103"
+							objectType="placeholder"
+							connectorId="o_101"
+							lineId="o_102"
+							anchorPercentage="0.5"
+							anchorLeft="520"
+							anchorTop="345"
+							position="general"
+							name="annotation"
+							relativeLeft="-45"
+							relativeTop="-20"
+							width="90%"
+							height="40%"
+							data="&lt;div id=&quot;textarea1&quot; textvalue=&quot;yes&quot; inlinestyle=&quot;text-align: center; cursor: text; &quot;&gt;&lt;/div&gt;"
+							display=""
+							user="sswathi"
+						/>
+					</placeholder>
+				</linkedObjects>
+			</dataObject>
+			<height></height>
+			<htmlChildPosition>34</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_101"
+					__shapeReferenceID="00215A60-3EB8-11E1-F788-140BAB465202"
+					objectType="connector"
+					connectorType="connector"
+					source="o_78"
+					destination="o_43"
+					direction="one way"
+					isDefault="false"
+					sourceIntersection="center"
+					destinationIntersection="center">
+					<dataObject
+						name="connector">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F788-140BAB461202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>connector</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F788-140BAB461202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F788-7405C57ED202">
+			<DocumentID>00215A60-3EB8-11E1-F788-7405C57EB202</DocumentID>
+			<Name>o_124</Name>
+			<Description>o_124</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-22T08:28:00.08</CreationDate>
+			<Notes/>
+			<dataObject>
+				<linkedObjects
+					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
+					<line>
+						<object
+							id="o_125"
+							objectType="line"
+							connectorId="o_124"
+							source="o_81"
+							destination="o_38"
+							fromX="590"
+							fromY="550"
+							toX="690"
+							toY="550"
+							display=""
+							user="sswathi"
+						/>
+					</line>
+				</linkedObjects>
+			</dataObject>
+			<height></height>
+			<htmlChildPosition>38</htmlChildPosition>
+			<left></left>
+			<objectXML>
+				<object
+					xmlns=""
+					id="o_124"
+					__shapeReferenceID="00215A60-3EB8-11E1-F788-7405C57EB202"
+					objectType="connector"
+					connectorType="connector"
+					source="o_81"
+					destination="o_38"
+					direction="one way"
+					isDefault="false"
+					sourceIntersection="center"
+					destinationIntersection="center">
+					<dataObject
+						name="connector">
+						<uri
+							xmlns="http://schemas.cordys.com/cws/1.0"
+							id="00215A60-3EB8-11E1-F788-7405C57E7202"
+						/>
+					</dataObject>
+				</object>
+			</objectXML>
+			<shapeType>connector</shapeType>
+			<top></top>
+			<width></width>
+			<ReferenceObject>
+				<uri
+					id="00215A60-3EB8-11E1-F788-7405C57E7202"
+				/>
+			</ReferenceObject>
+		</GMFShapeReference>
+		<GMFShapeReference
+			type="com.cordys.gmf.diagram.GMFShapeReference"
+			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
 			RuntimeDocumentID="002170BA-4014-11E1-F6D9-C411C35E7FD7">
 			<DocumentID>002170BA-4014-11E1-F6D9-C411C35E5FD7</DocumentID>
 			<Name>o_10</Name>
@@ -2815,10 +4431,10 @@
 							connectorId="o_10"
 							source="o_8"
 							destination="o_9"
-							fromX="310"
-							fromY="100"
-							toX="310"
-							toY="150"
+							fromX="130"
+							fromY="70"
+							toX="130"
+							toY="120"
 							display=""
 							user="csharbel"
 						/>
@@ -2826,7 +4442,7 @@
 				</linkedObjects>
 			</dataObject>
 			<height></height>
-			<htmlChildPosition>20</htmlChildPosition>
+			<htmlChildPosition>27</htmlChildPosition>
 			<left></left>
 			<objectXML>
 				<object
@@ -2879,8 +4495,8 @@
 					id="o_9"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-C411C3605FD7"
 					objectType="activity"
-					left="240%"
-					top="150%"
+					left="60.01%"
+					top="120.01%"
 					width="140%"
 					height="80%"
 					horizontalTextAlignment="center"
@@ -2925,8 +4541,8 @@
 					id="o_8"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-C411C3619FD7"
 					objectType="start"
-					left="290.01%"
-					top="60.01%"
+					left="110.01000000000002%"
+					top="30.01%"
 					display=""
 					user="sswathi">
 					<dataObject
@@ -2959,7 +4575,7 @@
 			<Notes/>
 			<dataObject/>
 			<height></height>
-			<htmlChildPosition>10</htmlChildPosition>
+			<htmlChildPosition>8</htmlChildPosition>
 			<left></left>
 			<objectXML>
 				<object
@@ -2967,8 +4583,8 @@
 					id="o_26"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-CA1ADEBBFFD7"
 					objectType="activity"
-					left="440.01000000000005%"
-					top="410.00999999999993%"
+					left="260.01%"
+					top="380.01%"
 					width="140%"
 					height="80%"
 					horizontalTextAlignment="center"
@@ -2996,136 +4612,6 @@
 		<GMFShapeReference
 			type="com.cordys.gmf.diagram.GMFShapeReference"
 			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
-			RuntimeDocumentID="002170BA-4014-11E1-F6D9-CA1ADEBD9FD7">
-			<DocumentID>002170BA-4014-11E1-F6D9-CA1ADEBD7FD7</DocumentID>
-			<Name>o_23</Name>
-			<Description>o_23</Description>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:06:01.918</CreationDate>
-			<Notes/>
-			<dataObject>
-				<linkedObjects
-					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
-					<line>
-						<object
-							id="o_24"
-							objectType="line"
-							connectorId="o_23"
-							source="o_15"
-							destination="o_22"
-							fromX="310"
-							fromY="360"
-							toX="310"
-							toY="410"
-							display=""
-							user="csharbel"
-						/>
-					</line>
-					<placeholder>
-						<object
-							id="o_25"
-							objectType="placeholder"
-							connectorId="o_23"
-							lineId="o_24"
-							anchorPercentage="0.5"
-							anchorLeft="310"
-							anchorTop="385"
-							position="general"
-							name="annotation"
-							relativeLeft="-45"
-							relativeTop="-20"
-							width="90%"
-							height="40%"
-							data="&lt;div id=&quot;textarea1&quot; textvalue=&quot;Yes&quot; inlinestyle=&quot;text-align: center; cursor: text; &quot;&gt;&lt;/div&gt;"
-							display=""
-							user="csharbel"
-						/>
-					</placeholder>
-				</linkedObjects>
-			</dataObject>
-			<height></height>
-			<htmlChildPosition>22</htmlChildPosition>
-			<left></left>
-			<objectXML>
-				<object
-					xmlns=""
-					id="o_23"
-					__shapeReferenceID="002170BA-4014-11E1-F6D9-CA1ADEBD7FD7"
-					objectType="connector"
-					connectorType="connector"
-					source="o_15"
-					destination="o_22"
-					direction="one way"
-					isDefault="true"
-					sourceIntersection="center"
-					destinationIntersection="center">
-					<dataObject
-						name="connector">
-						<uri
-							xmlns="http://schemas.cordys.com/cws/1.0"
-							id="002170BA-4014-11E1-F6D9-CA1ADEBD3FD7"
-						/>
-					</dataObject>
-				</object>
-			</objectXML>
-			<shapeType>connector</shapeType>
-			<top></top>
-			<width></width>
-			<ReferenceObject>
-				<uri
-					id="002170BA-4014-11E1-F6D9-CA1ADEBD3FD7"
-				/>
-			</ReferenceObject>
-		</GMFShapeReference>
-		<GMFShapeReference
-			type="com.cordys.gmf.diagram.GMFShapeReference"
-			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
-			RuntimeDocumentID="002170BA-4014-11E1-F6D9-CA1ADEBEDFD7">
-			<DocumentID>002170BA-4014-11E1-F6D9-CA1ADEBEBFD7</DocumentID>
-			<Name>o_22</Name>
-			<Description>o_22</Description>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:06:01.888</CreationDate>
-			<Notes/>
-			<dataObject/>
-			<height></height>
-			<htmlChildPosition>8</htmlChildPosition>
-			<left></left>
-			<objectXML>
-				<object
-					xmlns=""
-					id="o_22"
-					__shapeReferenceID="002170BA-4014-11E1-F6D9-CA1ADEBEBFD7"
-					objectType="activity"
-					left="240.01%"
-					top="410.00999999999993%"
-					width="140%"
-					height="80%"
-					horizontalTextAlignment="center"
-					verticalTextAlignment="middle"
-					display=""
-					user="sswathi">
-					<dataObject
-						name="activity">
-						<uri
-							xmlns="http://schemas.cordys.com/cws/1.0"
-							id="002170BA-4014-11E1-F6D9-CA1ADEBE7FD7"
-						/>
-					</dataObject>
-				</object>
-			</objectXML>
-			<shapeType>activity</shapeType>
-			<top></top>
-			<width></width>
-			<ReferenceObject>
-				<uri
-					id="002170BA-4014-11E1-F6D9-CA1ADEBE7FD7"
-				/>
-			</ReferenceObject>
-		</GMFShapeReference>
-		<GMFShapeReference
-			type="com.cordys.gmf.diagram.GMFShapeReference"
-			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
 			RuntimeDocumentID="002170BA-4014-11E1-F6D9-CA1ADEC15FD7">
 			<DocumentID>002170BA-4014-11E1-F6D9-CA1ADEC13FD7</DocumentID>
 			<Name>o_19</Name>
@@ -3143,10 +4629,10 @@
 							connectorId="o_19"
 							source="o_15"
 							destination="o_18"
-							fromX="380"
-							fromY="320"
-							toX="440"
-							toY="320"
+							fromX="200"
+							fromY="290"
+							toX="260"
+							toY="290"
 							display=""
 							user="csharbel"
 						/>
@@ -3158,23 +4644,23 @@
 							connectorId="o_19"
 							lineId="o_20"
 							anchorPercentage="0.5"
-							anchorLeft="410"
-							anchorTop="320"
+							anchorLeft="230"
+							anchorTop="290"
 							position="general"
 							name="annotation"
-							relativeLeft="-45"
-							relativeTop="-20"
+							relativeLeft="-69.99000000000001"
+							relativeTop="-29.99000000000001"
 							width="90%"
 							height="40%"
 							data="&lt;div id=&quot;textarea1&quot; textvalue=&quot;No&quot; inlinestyle=&quot;text-align: center; cursor: text; &quot;&gt;&lt;/div&gt;"
 							display=""
-							user="csharbel"
+							user="sswathi"
 						/>
 					</placeholder>
 				</linkedObjects>
 			</dataObject>
 			<height></height>
-			<htmlChildPosition>21</htmlChildPosition>
+			<htmlChildPosition>28</htmlChildPosition>
 			<left></left>
 			<objectXML>
 				<object
@@ -3227,8 +4713,8 @@
 					id="o_18"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-CA1ADEC27FD7"
 					objectType="activity"
-					left="440.01000000000005%"
-					top="280.01%"
+					left="260.01%"
+					top="250.01%"
 					width="140%"
 					height="80%"
 					horizontalTextAlignment="center"
@@ -3273,8 +4759,8 @@
 					id="o_15"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-CA1ADEC4FFD7"
 					objectType="decision"
-					left="240.01%"
-					top="280.01%"
+					left="60.01%"
+					top="250.01%"
 					width="140%"
 					height="80%"
 					display=""
@@ -3309,7 +4795,7 @@
 			<Notes/>
 			<dataObject/>
 			<height></height>
-			<htmlChildPosition>12</htmlChildPosition>
+			<htmlChildPosition>11</htmlChildPosition>
 			<left></left>
 			<objectXML>
 				<object
@@ -3317,8 +4803,8 @@
 					id="o_38"
 					__shapeReferenceID="002170BA-4014-11E1-F6D9-D1FC1CB49FD7"
 					objectType="end"
-					left="800.01%"
-					top="470.01%"
+					left="690.01%"
+					top="530.01%"
 					display=""
 					user="sswathi">
 					<dataObject
@@ -3342,70 +4828,6 @@
 		<GMFShapeReference
 			type="com.cordys.gmf.diagram.GMFShapeReference"
 			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
-			RuntimeDocumentID="002170BA-4014-11E1-F6D9-D1FC1CB83FD7">
-			<DocumentID>002170BA-4014-11E1-F6D9-D1FC1CB81FD7</DocumentID>
-			<Name>o_27</Name>
-			<Description>o_27</Description>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:06:01.85</CreationDate>
-			<Notes/>
-			<dataObject>
-				<linkedObjects
-					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
-					<line>
-						<object
-							id="o_28"
-							objectType="line"
-							connectorId="o_27"
-							source="o_22"
-							destination="o_26"
-							fromX="380"
-							fromY="450"
-							toX="440"
-							toY="450"
-							display=""
-							user="csharbel"
-						/>
-					</line>
-				</linkedObjects>
-			</dataObject>
-			<height></height>
-			<htmlChildPosition>23</htmlChildPosition>
-			<left></left>
-			<objectXML>
-				<object
-					xmlns=""
-					id="o_27"
-					__shapeReferenceID="002170BA-4014-11E1-F6D9-D1FC1CB81FD7"
-					objectType="connector"
-					connectorType="connector"
-					source="o_22"
-					destination="o_26"
-					direction="one way"
-					isDefault="false"
-					sourceIntersection="center"
-					destinationIntersection="center">
-					<dataObject
-						name="connector">
-						<uri
-							xmlns="http://schemas.cordys.com/cws/1.0"
-							id="002170BA-4014-11E1-F6D9-D1FC1CB7DFD7"
-						/>
-					</dataObject>
-				</object>
-			</objectXML>
-			<shapeType>connector</shapeType>
-			<top></top>
-			<width></width>
-			<ReferenceObject>
-				<uri
-					id="002170BA-4014-11E1-F6D9-D1FC1CB7DFD7"
-				/>
-			</ReferenceObject>
-		</GMFShapeReference>
-		<GMFShapeReference
-			type="com.cordys.gmf.diagram.GMFShapeReference"
-			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
 			RuntimeDocumentID="002170BA-4014-11E1-F6DA-3CD3DC7FFFD7">
 			<DocumentID>002170BA-4014-11E1-F6DA-3CD3DC7FDFD7</DocumentID>
 			<Name>o_41</Name>
@@ -3423,10 +4845,10 @@
 							connectorId="o_41"
 							source="o_9"
 							destination="o_15"
-							fromX="310"
-							fromY="230"
-							toX="310"
-							toY="280"
+							fromX="130"
+							fromY="200"
+							toX="130"
+							toY="250"
 							display=""
 							user="csharbel"
 						/>
@@ -3434,7 +4856,7 @@
 				</linkedObjects>
 			</dataObject>
 			<height></height>
-			<htmlChildPosition>24</htmlChildPosition>
+			<htmlChildPosition>29</htmlChildPosition>
 			<left></left>
 			<objectXML>
 				<object
@@ -3487,10 +4909,10 @@
 							connectorId="o_55"
 							source="o_52"
 							destination="o_38"
-							fromX="820"
-							fromY="430"
-							toX="820"
-							toY="470"
+							fromX="710"
+							fromY="330"
+							toX="710"
+							toY="530"
 							display=""
 							user="csharbel"
 						/>
@@ -3498,7 +4920,7 @@
 				</linkedObjects>
 			</dataObject>
 			<height></height>
-			<htmlChildPosition>28</htmlChildPosition>
+			<htmlChildPosition>31</htmlChildPosition>
 			<left></left>
 			<objectXML>
 				<object
@@ -3551,10 +4973,10 @@
 							connectorId="o_53"
 							source="o_43"
 							destination="o_52"
-							fromX="730"
-							fromY="390"
-							toX="750"
-							toY="390"
+							fromX="540"
+							fromY="290"
+							toX="640"
+							toY="290"
 							display=""
 							user="csharbel"
 						/>
@@ -3562,7 +4984,7 @@
 				</linkedObjects>
 			</dataObject>
 			<height></height>
-			<htmlChildPosition>27</htmlChildPosition>
+			<htmlChildPosition>30</htmlChildPosition>
 			<left></left>
 			<objectXML>
 				<object
@@ -3607,7 +5029,7 @@
 			<Notes/>
 			<dataObject/>
 			<height></height>
-			<htmlChildPosition>17</htmlChildPosition>
+			<htmlChildPosition>16</htmlChildPosition>
 			<left></left>
 			<objectXML>
 				<object
@@ -3615,8 +5037,8 @@
 					id="o_52"
 					__shapeReferenceID="002170BA-4014-11E1-F6DA-4A8C53F69FD7"
 					objectType="activity"
-					left="750.01%"
-					top="350.01%"
+					left="640.01%"
+					top="250.01%"
 					width="140%"
 					height="80%"
 					horizontalTextAlignment="center"
@@ -3644,134 +5066,6 @@
 		<GMFShapeReference
 			type="com.cordys.gmf.diagram.GMFShapeReference"
 			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
-			RuntimeDocumentID="002170BA-4014-11E1-F6DA-4A8C53F77FD7">
-			<DocumentID>002170BA-4014-11E1-F6DA-4A8C53F75FD7</DocumentID>
-			<Name>o_48</Name>
-			<Description>o_48</Description>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:17:05.137</CreationDate>
-			<Notes/>
-			<dataObject>
-				<linkedObjects
-					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
-					<line>
-						<object
-							id="o_49"
-							objectType="line"
-							connectorId="o_48"
-							source="o_26"
-							destination="o_43"
-							fromX="580"
-							fromY="429"
-							toX="691"
-							toY="396"
-							display=""
-							user="csharbel"
-						/>
-					</line>
-				</linkedObjects>
-			</dataObject>
-			<height></height>
-			<htmlChildPosition>26</htmlChildPosition>
-			<left></left>
-			<objectXML>
-				<object
-					xmlns=""
-					id="o_48"
-					__shapeReferenceID="002170BA-4014-11E1-F6DA-4A8C53F75FD7"
-					objectType="connector"
-					connectorType="connector"
-					source="o_26"
-					destination="o_43"
-					direction="one way"
-					isDefault="false"
-					sourceIntersection="center"
-					destinationIntersection="center">
-					<dataObject
-						name="connector">
-						<uri
-							xmlns="http://schemas.cordys.com/cws/1.0"
-							id="002170BA-4014-11E1-F6DA-4A8C53F71FD7"
-						/>
-					</dataObject>
-				</object>
-			</objectXML>
-			<shapeType>connector</shapeType>
-			<top></top>
-			<width></width>
-			<ReferenceObject>
-				<uri
-					id="002170BA-4014-11E1-F6DA-4A8C53F71FD7"
-				/>
-			</ReferenceObject>
-		</GMFShapeReference>
-		<GMFShapeReference
-			type="com.cordys.gmf.diagram.GMFShapeReference"
-			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
-			RuntimeDocumentID="002170BA-4014-11E1-F6DA-4A8C53F83FD7">
-			<DocumentID>002170BA-4014-11E1-F6DA-4A8C53F81FD7</DocumentID>
-			<Name>o_44</Name>
-			<Description>o_44</Description>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-06-15T10:17:05.134</CreationDate>
-			<Notes/>
-			<dataObject>
-				<linkedObjects
-					xmlns="http://schemas.cordys.com/gmf/diagram/GMFShapeReference/1.0">
-					<line>
-						<object
-							id="o_45"
-							objectType="line"
-							connectorId="o_44"
-							source="o_18"
-							destination="o_43"
-							fromX="580"
-							fromY="345"
-							toX="691"
-							toY="383"
-							display=""
-							user="csharbel"
-						/>
-					</line>
-				</linkedObjects>
-			</dataObject>
-			<height></height>
-			<htmlChildPosition>25</htmlChildPosition>
-			<left></left>
-			<objectXML>
-				<object
-					xmlns=""
-					id="o_44"
-					__shapeReferenceID="002170BA-4014-11E1-F6DA-4A8C53F81FD7"
-					objectType="connector"
-					connectorType="connector"
-					source="o_18"
-					destination="o_43"
-					direction="one way"
-					isDefault="false"
-					sourceIntersection="center"
-					destinationIntersection="center">
-					<dataObject
-						name="connector">
-						<uri
-							xmlns="http://schemas.cordys.com/cws/1.0"
-							id="002170BA-4014-11E1-F6DA-4A8C53F7DFD7"
-						/>
-					</dataObject>
-				</object>
-			</objectXML>
-			<shapeType>connector</shapeType>
-			<top></top>
-			<width></width>
-			<ReferenceObject>
-				<uri
-					id="002170BA-4014-11E1-F6DA-4A8C53F7DFD7"
-				/>
-			</ReferenceObject>
-		</GMFShapeReference>
-		<GMFShapeReference
-			type="com.cordys.gmf.diagram.GMFShapeReference"
-			typeVersion="00217070-125C-71DF-A53F-4E0D3746F9D5"
 			RuntimeDocumentID="002170BA-4014-11E1-F6DA-4A8C53F9FFD7">
 			<DocumentID>002170BA-4014-11E1-F6DA-4A8C53F9DFD7</DocumentID>
 			<Name>o_43</Name>
@@ -3781,7 +5075,7 @@
 			<Notes/>
 			<dataObject/>
 			<height></height>
-			<htmlChildPosition>15</htmlChildPosition>
+			<htmlChildPosition>14</htmlChildPosition>
 			<left></left>
 			<objectXML>
 				<object
@@ -3789,8 +5083,8 @@
 					id="o_43"
 					__shapeReferenceID="002170BA-4014-11E1-F6DA-4A8C53F9DFD7"
 					objectType="delay"
-					left="690.01%"
-					top="370.01%"
+					left="500.01%"
+					top="270.01%"
 					display=""
 					user="sswathi">
 					<dataObject
