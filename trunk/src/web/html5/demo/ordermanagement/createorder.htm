@@ -11,10 +11,37 @@
 	<script src="/cordys/html5/cordys.html5sdk-0.1.js" type="text/javascript"></script>
 
 	<script type="text/javascript">
-
+		$(document).ready(function() {
+			$(".numberField").focusout(function() {
+				var $inputField = $(this).find(":input");
+					if(!$.isNumeric($inputField.val())) {
+					if($inputField.val() !== "") {
+						$(this).find(".errorMessage").html("Digits Only").css("color","red").show().delay(500).fadeOut("slow");
+						$inputField.focus();
+						$inputField.val("");
+					}
+				}
+			});
+			$(".costField").focusout(function() {
+				var quantity = parseInt($("#fldQuantity").val(),10);
+				var price = parseInt($("#fldPrice").val(),10);
+				var discount;
+					if($("#fldDiscount").val() !== "") {
+					discount = parseInt($("#fldPrice").val(),10) * parseInt($("#fldDiscount").val(),10) / 100;
+				}else {
+					discount = 0;
+				}
+				if(price !== undefined && quantity !== undefined) {
+					var html = (price-discount)*quantity;
+					html = Math.round(html).toFixed(2)
+					if($.isNumeric(html)) {
+						$("#fldCost").html(html); 
+					}
+				}
+			});
+		});
 	</script>
 </head> 
-
 <body> 
 	<div data-role="page" id="createFormPage">
 		<div data-role="header" data-theme="b">
@@ -26,34 +53,37 @@
 				<li data-role="fieldcontain">
 					<div id="orderDiv">
 						<div class="field">
-							<label for="fldCustomer" class="select left-align">Customer</label>
+							<label for="fldCustomer" class="select">Customer</label>
 							<select id="fldCustomer" class="right-align" data-native-menu="true" data-mini="true" data-theme="c" data-inline="true">
 								<option value="0">--- Select ---</option>
 							</select>
 						</div>
-						<div class="field">
-							<label for="fldEmployee" class="ui-input-text left-align">Employee</label>
+						<div>
+							<label for="fldEmployee" class="ui-input-text">Employee</label>
 							<input type="text" id="fldEmployee" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
 						</div>
-						<div class="field">
-							<label for="fldProduct" class="ui-input-text left-align">Product</label>
+						<div>
+							<label for="fldProduct" class="ui-input-text">Product</label>
 							<input type="text" id="fldProduct" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
 						</div>
-						<div class="field">
-							<label for="fldQuantity" class="ui-input-text left-align">Quantity</label>
+						<div class="numberField costField">
+							<label for="fldQuantity" class="ui-input-text">Quantity</label>
 							<input type="text" id="fldQuantity" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+							<span class="errorMessage"></span>
 						</div>
-						<div class="field">
+						<div class="numberField costField">
 							<label for="fldPrice" class="ui-input-text">Price</label>
 							<input type="text" id="fldPrice" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+							<span class="errorMessage"></span>
 						</div>
-						<div class="field"> 
-							<label for="fldDiscount" class="ui-input-text left-align">Discount</label>
+						<div class="numberField"> 
+							<label for="fldDiscount" class="ui-input-text">Discount</label>
 							<input type="text" id="fldDiscount" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+							<span class="errorMessage"></span>
 						</div>
-						<div class="field">
+						<div>
 							<label for="fldCost" class="ui-input-text">Cost</label>
-							<div id="fldCost" ></div>
+							<span id="fldCost"></span>
 						</div>
 						<div class="field">
 						    <input type="button" id="fldCreateOrder" value="Create Order" class="ui-btn ui-body-b ui-corner-all ui-shadow-inset"/>
