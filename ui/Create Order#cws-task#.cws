@@ -1,0 +1,84 @@
+
+<URLBasedForm
+	xmlns=""
+	xmlns:cws="http://schemas.cordys.com/cws/1.0"
+	type="com.cordys.uiapplication.URLBasedForm"
+	RuntimeDocumentID="00215A60-3EB8-11E1-F7D2-86F3D36ED202">
+	<DocumentID>00215A60-3EB8-11E1-F7D2-86F3D36EB202</DocumentID>
+	<Name>Create Order</Name>
+	<Description>Create Order</Description>
+	<CreatedBy>sswathi</CreatedBy>
+	<CreationDate>2012-06-26T03:11:27.86</CreationDate>
+	<Notes/>
+	<URL>/cordys/html5/demo/ordermanagement/createorder.htm</URL>
+	<WSDL/>
+	<automatic>false</automatic>
+	<caption></caption>
+	<data/>
+	<height></height>
+	<isInternal>false</isInternal>
+	<isLegacy>false</isLegacy>
+	<left></left>
+	<mode>full</mode>
+	<parameters>
+		<Properties
+			xmlns:c="http://schemas.cordys.com/cws/1.0"
+			xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/"
+			xmlns=""
+		/>
+	</parameters>
+	<showOnStartPage>true</showOnStartPage>
+	<taskDescription>Create Order</taskDescription>
+	<taskName>Create Order</taskName>
+	<title>true</title>
+	<top></top>
+	<type>URLBasedForm</type>
+	<width></width>
+	<TranslatableName>
+		<TranslatableText
+			type="com.cordys.translation.TranslatableText"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F7E8-1EC13A9D7202">
+			<DocumentID>00215A60-3EB8-11E1-F7E8-1EC13A9D5202</DocumentID>
+			<Name>00215A60-3EB8-11E1-F7E8-1EC13A9D5202</Name>
+			<Description>00215A60-3EB8-11E1-F7E8-1EC13A9D5202</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-26T07:29:47.517</CreationDate>
+			<Notes/>
+			<Identifier>
+				<uri
+					id="002170BA-4014-11E1-F6D9-D1FC1CB25FD7"
+				/>
+			</Identifier>
+		</TranslatableText>
+	</TranslatableName>
+	<aclFragments/>
+	<deliveryModels/>
+	<image/>
+	<input/>
+	<messageParts/>
+	<output/>
+	<tagsContainer>
+		<TagDefinitionSet
+			type="com.cordys.tag.TagDefinitionSet"
+			typeVersion="00215A60-3DBC-11E1-EEFD-B3BAB0E6FF10"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F7EC-351DB013F202">
+			<DocumentID>00215A60-3EB8-11E1-F7EC-351DB013D202</DocumentID>
+			<Name>00215A60-3EB8-11E1-F7D2-86F3D36EB202</Name>
+			<Description>00215A60-3EB8-11E1-F7D2-86F3D36EB202</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-26T07:38:13.201</CreationDate>
+			<Notes/>
+			<taggableDocuments>
+				<uri
+					id="00215A60-3EB8-11E1-F7D2-86F3D36EB202"
+				/>
+			</taggableDocuments>
+			<tags>
+				<uri
+					id="00215A60-3EB8-11E1-F7EC-351DB014B202"
+				/>
+			</tags>
+		</TagDefinitionSet>
+	</tagsContainer>
+	<taskParts/>
+</URLBasedForm>

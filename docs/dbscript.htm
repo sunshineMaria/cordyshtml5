@@ -1,27 +1,37 @@
 USE [Northwind]
 GO
-/****** Object:  Table [dbo].[OrderDemo]    Script Date: 06/15/2012 16:37:10 ******/
+
+/****** Object:  Table [dbo].[Test]    Script Date: 06/26/2012 09:47:21 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 SET ANSI_PADDING ON
 GO
-CREATE TABLE [dbo].[OrderDemo](
+
+CREATE TABLE [dbo].[Test](
 	[OrderID] [bigint] IDENTITY(1,1) NOT NULL,
-	[Customer] [varchar](100) NULL,
-	[Employee] [varchar](50) NULL,
-	[Product] [varchar](50) NULL,
-	[Quantity] [smallint] NULL,
+	[Customer] [varchar](100) NOT NULL,
+	[Employee] [varchar](50) NOT NULL,
+	[OrderDate] [datetime] NOT NULL,
+	[Product] [nvarchar](50) NOT NULL,
+	[Quantity] [smallint] NOT NULL,
 	[Discount] [tinyint] NULL,
-	[Cost] [money] NULL,
-	[Status] [nchar](10) NULL,
-	[Notes] [varchar](256) NULL,
- CONSTRAINT [PK_OrderDemo] PRIMARY KEY CLUSTERED 
+	[Cost] [money] NOT NULL,
+	[Status] [nvarchar](50) NOT NULL,
+	[Notes] [nvarchar](256) NULL,
+ CONSTRAINT [PK_Test] PRIMARY KEY CLUSTERED 
 (
 	[OrderID] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 GO
+
 SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Test] ADD  CONSTRAINT [DF_Test_OrderDate]  DEFAULT (getdate()) FOR [OrderDate]
+GO

@@ -1,0 +1,51 @@
+
+<RoleDesignTime
+	xmlns=""
+	xmlns:cws="http://schemas.cordys.com/cws/1.0"
+	type="com.cordys.organization.role.RoleDesignTime"
+	RuntimeDocumentID="00215A60-3EB8-11E1-F7EC-DE888F20D202">
+	<DocumentID>00215A60-3EB8-11E1-F7EC-DE888F20B202</DocumentID>
+	<Name>Manager</Name>
+	<Description>Manager</Description>
+	<CreatedBy>sswathi</CreatedBy>
+	<CreationDate>2012-06-26T08:38:06.829</CreationDate>
+	<Notes/>
+	<DistinguishedName>cn=#roleName#, cn=#ISVPName#, #LDAPRoot#</DistinguishedName>
+	<isFunctionalRole>true</isFunctionalRole>
+	<type>Functional</type>
+	<Subroles/>
+	<configuredTasks>
+		<ConfiguredTask
+			type="com.cordys.task.ConfiguredTask"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F7EC-DE888F1F9202">
+			<DocumentID>00215A60-3EB8-11E1-F7EC-DE888F1F7202</DocumentID>
+			<Name>Order Details_00215A60-3EB8-11E1-F7EC-DE888F1F7202</Name>
+			<Description>Order Details_00215A60-3EB8-11E1-F7EC-DE888F1F7202</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-26T08:38:06.829</CreationDate>
+			<Notes/>
+			<configuredTaskParts/>
+			<uiTask>
+				<uri
+					id="00215A60-3EB8-11E1-F7E8-1EC13AA0D202"
+				/>
+			</uiTask>
+		</ConfiguredTask>
+		<ConfiguredTask
+			type="com.cordys.task.ConfiguredTask"
+			RuntimeDocumentID="00215A60-3EB8-11E1-F7EC-DE888F1FD202">
+			<DocumentID>00215A60-3EB8-11E1-F7EC-DE888F1FB202</DocumentID>
+			<Name>Approve Task_00215A60-3EB8-11E1-F7EC-DE888F1FB202</Name>
+			<Description>Approve Task_00215A60-3EB8-11E1-F7EC-DE888F1FB202</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-06-26T08:38:06.829</CreationDate>
+			<Notes/>
+			<configuredTaskParts/>
+			<uiTask>
+				<uri
+					id="00215A60-3EB8-11E1-F773-5FABFC14B202"
+				/>
+			</uiTask>
+		</ConfiguredTask>
+	</configuredTasks>
+</RoleDesignTime>
