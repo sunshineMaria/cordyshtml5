@@ -16,7 +16,7 @@
 ;(function (window, $, undefined) {
 
 	if (!$.cordys) {
-		throw 'The Cordys HTML5 SDK is required, please ensure it is loaded properly'; 
+		throw new Error("The Cordys HTML5 SDK is required, please ensure it is loaded properly");
 	}
 
 	$.cordys.case = new function() {
@@ -24,6 +24,7 @@
 			activityDefinitionModel,
 			activityInstanceModel,
 			businessEventsModel,
+			caseAttachmentsModel,
 			caseInstanceModel,
 			caseIdentifiersModel,
 			caseDataModel,
@@ -264,15 +265,115 @@
 			return $.cordys.ajax(options);
 		};
 
+
+		// Attachments
+		this.getAttachments = function(caseInstance, options) {
+			options = getOptionsForCaseMethod("GetAttachments", options, {
+				instanceid: {
+					"@type": "CASE",
+					text: getCaseInstanceId(caseInstance)
+				}
+			}, "http://schemas.cordys.com/bpm/attachments/1.0");
+			if (!self.caseAttachmentsModel) {
+				self.caseAttachmentsModel = new $.cordys.model({
+					objectName: "instance",
+					read: options
+				});
+				if (options.context) {
+					ko.applyBindings(self.caseAttachmentsModel, options.context);
+				}
+			}
+			self.caseAttachmentsModel.read(options);
+			return self.caseAttachmentsModel;
+		}
+
+		this.addAttachment = function(caseInstance, attachmentName, fileName, description, content, options) {
+			var isURL = /^[a-zA-Z].*\:/.test(content);
+			if (isURL) {
+				// upload the file
+				if ($.cordys.mobile) {
+					$.cordys.mobile.fileReader.readAsDataURL(content, function(result) {
+						// content retrieved as base64 encoded
+						content = result.replace(/^.*base64,/, "");
+						options = getOptionsForCaseMethod("UploadAttachment", options, {
+							instanceid: {
+								"@type": "CASE",
+								text: getCaseInstanceId(caseInstance)
+							},
+							attachmentname: attachmentName,
+							filename: fileName,
+							description: description,
+							content: {
+								"@isURL": false,
+								text: content
+							}
+						}, "http://schemas.cordys.com/bpm/attachments/1.0");
+						$.cordys.ajax(options);
+					}, function (error) {
+						throw new Error("Unable to read file, error: " + JSON.stringify(error));
+					});
+				}
+			} else {
+				// content should be base64 encoded
+				if(!(/^[a-z0-9\+\/\s]+\={0,2}$/i.test(content)) || content.length % 4 > 0){
+					if (window.btoa) content = window.btoa(content);
+					else throw new Error("Unable to convert data to base64");
+				}
+				options = getOptionsForCaseMethod("UploadAttachment", options, {
+					instanceid: {
+						"@type": "CASE",
+						text: getCaseInstanceId(caseInstance)
+					},
+					attachmentname: attachmentName,
+					filename: fileName,
+					description: description,
+					content: {
+						"@isURL": false,
+						text: content
+					}
+				}, "http://schemas.cordys.com/bpm/attachments/1.0");
+				return $.cordys.ajax(options);
+			}
+		}
+
+		this.uploadAttachment = function(caseInstance, attachmentName, fileName, description, url, options) {
+			options = getOptionsForCaseMethod("UploadAttachment", options, {
+				instanceid: {
+					"@type": "CASE",
+					text: getCaseInstanceId(caseInstance)
+				},
+				attachmentname: attachmentName,
+				filename: fileName,
+				description: description,
+				content: {
+					"@isURL": true,
+					text: url
+				}
+			}, "http://schemas.cordys.com/bpm/attachments/1.0");
+			return $.cordys.ajax(options);
+		}
+
+		this.removeAttachment = function(caseInstance, attachmentName, fileName, options) {
+			options = getOptionsForCaseMethod("DeleteAttachment", options, {
+				instanceid: {
+					"@type": "CASE",
+					text: getCaseInstanceId(caseInstance)
+				},
+				attachmentname: attachmentName,
+				filename: fileName
+			}, "http://schemas.cordys.com/bpm/attachments/1.0");
+			return $.cordys.ajax(options);
+		}
+
 		return this;
 	};
 
-	function getOptionsForCaseMethod(methodName, options, defaultParameters) {
+	function getOptionsForCaseMethod(methodName, options, defaultParameters, namespace) {
 		options = options || {};
 		options.parameters = $.extend(defaultParameters, options.parameters);
 		options = $.extend({
 			method: methodName,
-			namespace: "http://schemas.cordys.com/casemanagement/execution/1.0",
+			namespace: namespace || "http://schemas.cordys.com/casemanagement/execution/1.0",
 			dataType: 'json'
 		}, options);
 		return options;

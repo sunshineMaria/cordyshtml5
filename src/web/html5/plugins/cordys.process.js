@@ -16,11 +16,12 @@
 ;(function (window, $, undefined) {
 
 	if (!$.cordys) {
-		throw 'The Cordys HTML5 SDK is required, please ensure it is loaded properly'; 
+		throw new Error("The Cordys HTML5 SDK is required, please ensure it is loaded properly");
 	}
 
 	$.cordys.process = new function() {
 		var self = this,
+			processAttachmentsModel,
 			businessIdentifiersModel;
 
 		this.getBusinessIdentifiers = function(processInstance, options) {
@@ -84,6 +85,108 @@
 			return $.cordys.ajax(options);
 		};
 
+		// Attachments
+		this.getAttachments = function(processInstance, options) {
+			options = getOptionsForProcessMethod("GetAttachments", options, {
+				instanceid: {
+					"@type": "BPM",
+					text: getProcessInstanceId(processInstance)
+				},
+				activityid: processInstance.ActivityId
+			}, "http://schemas.cordys.com/bpm/attachments/1.0");
+			if (!self.processAttachmentsModel) {
+				self.processAttachmentsModel = new $.cordys.model({
+					objectName: "instance",
+					read: options
+				});
+				if (options.context) {
+					ko.applyBindings(self.processAttachmentsModel, options.context);
+				}
+			}
+			self.processAttachmentsModel.read(options);
+			return self.processAttachmentsModel;
+		}
+
+		this.addAttachment = function(processInstance, attachmentName, fileName, description, content, options) {
+			var isURL = /^[a-zA-Z].*\:/.test(content);
+			if (isURL) {
+				// upload the file
+				if ($.cordys.mobile) {
+					$.cordys.mobile.fileReader.readAsDataURL(content, function(result) {
+						// content retrieved as base64 encoded
+						content = result.replace(/^.*base64,/, "");
+						options = getOptionsForProcessMethod("UploadAttachment", options, {
+							instanceid: {
+								"@type": "BPM",
+								text: getProcessInstanceId(processInstance)
+							},
+							activityid: processInstance.ActivityId,
+							attachmentname: attachmentName,
+							filename: fileName,
+							description: description,
+							content: {
+								"@isURL": false,
+								text: content
+							}
+						}, "http://schemas.cordys.com/bpm/attachments/1.0");
+						$.cordys.ajax(options);
+					}, function (error) {
+						throw new Error("Unable to read file, error: " + JSON.stringify(error));
+					});
+				}
+			} else {
+				// content should be base64 encoded
+				if(!(/^[a-z0-9\+\/\s]+\={0,2}$/i.test(content)) || content.length % 4 > 0){
+					if (window.btoa) content = window.btoa(content);
+					else throw new Error("Unable to convert data to base64");
+				}
+				options = getOptionsForProcessMethod("UploadAttachment", options, {
+					instanceid: {
+						"@type": "BPM",
+						text: getProcessInstanceId(processInstance)
+					},
+					activityid: processInstance.ActivityId,
+					attachmentname: attachmentName,
+					filename: fileName,
+					description: description,
+					content: {
+						"@isURL": false,
+						text: content
+					}
+				}, "http://schemas.cordys.com/bpm/attachments/1.0");
+				return $.cordys.ajax(options);
+			}
+		}
+
+		this.uploadAttachment = function(processInstance, attachmentName, fileName, description, url, options) {
+			options = getOptionsForProcessMethod("UploadAttachment", options, {
+				instanceid: {
+					"@type": "BPM",
+					text: getProcessInstanceId(processInstance)
+				},
+				attachmentname: attachmentName,
+				filename: fileName,
+				description: description,
+				content: {
+					"@isURL": true,
+					text: url
+				}
+			}, "http://schemas.cordys.com/bpm/attachments/1.0");
+			return $.cordys.ajax(options);
+		}
+
+		this.removeAttachment = function(processInstance, attachmentName, fileName, options) {
+			options = getOptionsForProcessMethod("DeleteAttachment", options, {
+				instanceid: {
+					"@type": "BPM",
+					text: getProcessInstanceId(processInstance)
+				},
+				attachmentname: attachmentName,
+				filename: fileName
+			}, "http://schemas.cordys.com/bpm/attachments/1.0");
+			return $.cordys.ajax(options);
+		}
+
 		return this;
 	};
 
@@ -98,6 +201,17 @@
 			if (!found) result.push(this);
 		});
 		return result;
+	}
+
+	function getOptionsForProcessMethod(methodName, options, defaultParameters, namespace) {
+		options = options || {};
+		options.parameters = $.extend(defaultParameters, options.parameters);
+		options = $.extend({
+			method: methodName,
+			namespace: namespace || "http://schemas.cordys.com/bpm/execution/1.0",
+			dataType: 'json'
+		}, options);
+		return options;
 	}
 
 	function getProcessInstanceId(processInstance) {

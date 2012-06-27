@@ -16,7 +16,7 @@
 ;(function (window, $, undefined) {
 
 	if (!$.cordys) {
-		throw 'The Cordys HTML5 SDK is required, please ensure it is loaded properly'; 
+		throw new Error("The Cordys HTML5 SDK is required, please ensure it is loaded properly");
 	}
 
 	$.cordys.workflow = new function() {
@@ -48,7 +48,8 @@
 				var url = tasks[0].url;
 				if (url.search(/\.html?$/) > 0) {
 					url = addURLParameter(url, "taskId", tasks[0].TaskId);
-					$.mobile.changePage( url, { transition: "pop", changeHash: false } );
+					//$.mobile.changePage( url, { transition: "pop", changeHash: false } );
+					document.location = url;
 				}
 				else {
 					$.mobile.changePage( "#" + (detailsPageId && typeof(detailsPageId)==="string" ? detailsPageId : "detailsPage"), { transition: "pop", changeHash: false } );
@@ -100,7 +101,7 @@
 			options = getOptionsForWorkflowMethod("PerformTaskAction", options, {
 					TaskId: getTaskId(task),
 					Action: action,
-					Data: taskData
+					Data: taskData || {}
 			});
 			return $.cordys.ajax(options);
 		};
