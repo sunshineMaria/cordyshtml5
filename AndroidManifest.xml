@@ -13,12 +13,13 @@
 		android:smallScreens="true" />
 
 	<uses-permission android:name="android.permission.CAMERA" />
-	<!-- uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /-->
 	<uses-permission android:name="android.permission.VIBRATE" />
+	
+	<!--uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /-->
 	<!--uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /-->
-	<!-- uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /-->
-	<!-- uses-permission android:name="android.permission.READ_PHONE_STATE" /-->
-	<!-- uses-permission android:name="android.permission.RECEIVE_SMS" /-->
+	<!--uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /-->
+	<!--uses-permission android:name="android.permission.READ_PHONE_STATE" /-->
+	<!--uses-permission android:name="android.permission.RECEIVE_SMS" /-->
 	<!--uses-permission android:name="android.permission.RECORD_AUDIO" /-->
 	<!--uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /-->
 	<!--uses-permission android:name="android.permission.READ_CONTACTS" /-->
@@ -62,6 +63,7 @@
 				
 				<data android:scheme="http" />
 				<data android:scheme="https" />
+				<data android:host="*" />
 				<data android:pathPattern=".*touchbop=true.*" />
 				
 			</intent-filter>
