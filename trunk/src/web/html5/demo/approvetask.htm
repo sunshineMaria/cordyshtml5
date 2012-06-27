@@ -16,7 +16,6 @@
 
 	<div data-role="page" id="approvePage">
 		<div data-role="header" data-theme="b">
-			<a id="btnBack" href="#mainPage" data-role="button" data-icon="back">Back</a>
 			<h1>Approve</h1>
 		</div>
 
@@ -33,7 +32,7 @@
 					<div data-bind="foreach: $root.fields">
 						<div >
 							<label for="fldName" class="ui-input-text" data-bind="text:Description">Name</label>
-							<input type="text" readonly='true' id="fldName" data-bind="value:Value" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+							<input type="text" readonly='true' id="fldName" data-bind="value:Value" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" style="background-color:#ccc"/>
 						</div>
 					</div>
 				</li>
@@ -52,9 +51,10 @@
 		</div>
 
 		<script type="text/javascript">
-			var taskDetailModel, bindingsApplied = false;
+			var taskDetailModel, bindingsApplied = false,
+				taskId = getURLParameter(window.location, "taskId");
 			$("#approvePage").bind( 'pageshow',function(event, ui) {
-				taskDetailModel = $.cordys.workflow.getTaskDetails($.cordys.workflow.taskModel.selectedItem(), {
+				taskDetailModel = $.cordys.workflow.getTaskDetails(taskId, {
 					success:function(tasks) {
 					//	var pid = tasks[0].ProcessInstanceId;
 						$.cordys.process.getBusinessIdentifiers(tasks[0], {
@@ -79,7 +79,7 @@
 						comment: document.getElementById("fldComment").value
 					}
 				});
-				$("#btnBack").click();
+				window.history.back();
 			}
 
 		</script>
