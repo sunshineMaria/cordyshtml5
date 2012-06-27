@@ -132,13 +132,14 @@
 			}
 		}, $.cordys.mobile.origin);
 	}
-	$.cordys.mobile.fileReader.readAsText = function(filePath, successCallback, errorCallback) {
+	$.cordys.mobile.fileReader.readAsText = function(filePath, encoding, successCallback, errorCallback) {
 		this.__readTextSuccess = successCallback;
 		this.__readTextError = errorCallback;
 		parent.postMessage({
 			message: "fileReader.readAsText",
 			parameters: {
-				filePath: filePath
+				filePath: filePath,
+				encoding: encoding
 			}
 		}, $.cordys.mobile.origin);
 	}
