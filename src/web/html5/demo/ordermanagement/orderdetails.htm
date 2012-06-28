@@ -4,43 +4,79 @@
 		<title>Orders</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
-		<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
-		<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/jquery-1.7.1.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.js" type="text/javascript"></script>
 
 		<script src="http://borismoore.github.com/jsrender/jsrender.js" type="text/javascript"></script>
 		<script src="/cordys/html5/cordys.html5sdk-0.1.js" type="text/javascript"></script>
-
+		<style type="text/css">
+			.left-align{ float: left;width: 40%; }
+			.field{ clear:both; height:30px; }
+		</style>
 	</head>
 	<script id="ordersTemplate" type="text/x-jsrender">
 		<li>
+			<a href="#orderDetailsPage" data-transition="pop" class="ui-link-inherit showDetails" data-orderid="{{:OrderID}}">
 			<div >
-				<h3 class="ui-li-heading"><a href="#orderDetailsPage">{{:OrderID}}</a></h3>
-				<p class="ui-li-desc"/>{{:Customer}}</p>
-				<p class="ui-li-desc">{{:Product}}</p>
-				<p class="ui-li-desc">{{:Cost}}</p>
-				<p class="ui-li-desc">{{formatDate:OrderDate}}</p>
+				<h3 class="ui-li-heading">Order {{:OrderID}}</h3>
+				<p class="ui-li-desc">Customer :{{:Customer}}</p>
+				<p class="ui-li-desc">Product :{{:Product}}</p>
+				<p class="ui-li-desc">Cost :{{:Cost}}</p>
+				<p class="ui-li-desc">OrderDate :{{formatDate:OrderDate}}</p>
 			</div>
+			</a>
 		</li>
 	</script>
 
 	<script id="orderDetailsTemplate" type="text/x-jsrender">
-		<li>
-			<div >
-				<h3 class="ui-li-heading"><span class="ui-input-text">Item Code:</span><span>{{:OrderID}}</span></h3>
-				<p class="ui-li-desc"/>{{:Customer}}</p>
-				<p class="ui-li-desc">{{:Employee}}</p>
-				<p class="ui-li-desc">{{formatDate:OrderDate}}</p>
-				<p class="ui-li-desc">{{:Product}}</p>
-				<p class="ui-li-desc">Quantity: <span>{{:Quantity}}</span>
-				<p class="ui-li-desc">Discount: <span>{{:Discont}}</span>
-				<p class="ui-li-desc">Cost : <span>{{:Cost}}</span>
-				<p class="ui-li-desc">{{:Status}}</p>
-				<p class="ui-li-desc">{{:Notes}}</p>
+		<li data-role="fieldcontain" class="ui-field-contain">
+			<div>
+				<div class="field">
+					<label class="ui-input-text left-align">Customer</label>
+					<span>{{:Customer}}</span>
+				</div>
+				<div class="field">
+					<label class="ui-input-text left-align">Employee</label>
+					<span>{{:Employee}}</span>
+				</div>
+				<div class="field">
+					<label class="ui-input-text left-align">OrderDate</label>
+					<span>{{formatDate:OrderDate}}</span>
+				</div>
+				<div class="field numberField costField">
+					<label class="ui-input-text left-align">Product</label>
+					<span>{{:Product}}</span>
+				</div>
+				<div class="field numberField costField">
+					<label class="ui-input-text left-align">Quantity</label>
+					<span>{{:Quantity}}</span>
+				</div>
+				<div class="field numberField"> 
+					<label class="ui-input-text left-align">Price</label>
+					<span>{{:Cost}}</span>
+				</div>
+				<div class="field numberField"> 
+					<label class="ui-input-text left-align">Discount</label>
+					<span>{{:Discount}}</span>
+				</div>
+				<div class="field">
+					<label class="ui-input-text left-align">Cost</label>
+					<span>{{:~calculateCost(#data)}}</span>
+				</div>
+					<div class="field">
+					<label class="ui-input-text left-align">Status</label>
+					<span>{{:Status}}</span>
+				</div>
+				<div class="field">
+					<label for="fldNotes" class="ui-input-text">Notes</label>
+					<span id="fldNotes">{{:Notes}}</span>
+				</div>
 			</div>
 		</li>
 	</script>
 
 	<script type="text/javascript">
+
 		$(function () {
 			// get the orders for the customer
 			$.cordys.ajax({
@@ -61,14 +97,14 @@
 					.html(html)
 					.listview("refresh");
 					
-					$("#orderList").find("h3").click(function (event) {
-						$("#orderDetailOrderID").text($(event.target).text())
+					$("#orderList").find(".showDetails").click(function (event) {
+						$("#orderDetailOrderID").text($(event.currentTarget).attr("data-orderid"));
 						$.cordys.ajax({
 							method : "GetOrderDemoObject",
 							namespace : "http://schemas.cordys.com/html5sdk/orderdemo/1.0",
 							parameters : [{
 									name : "OrderID",
-									value : $(event.target).text()
+									value : $(event.currentTarget).attr("data-orderid")
 								}
 							],
 							dataType : 'json', // the xml result will be converted into js objects
@@ -85,35 +121,48 @@
 				}
 			});
 		});
+
 		$.views.converters({
 			formatDate : function (value) {
-				var formattedDate = new Date(value);
-				return (formattedDate.getFullYear() + "-" + formattedDate.getMonth() + "-" + formattedDate.getDate() + " " + formattedDate.getHours() + ":" + formattedDate.getMinutes());
+
+				var date = value.split("T")[0].split("-");
+				var time = value.split("T")[1].split(":");
+
+				var dateObj = new Date(date[0],date[1],date[2],time[0],time[1],time[2]);
+				var formattedDate = dateObj.getFullYear() + "-" + dateObj.getMonth() + "-" + dateObj.getDate() + " " + dateObj.getHours() + ":" + dateObj .getMinutes();
+
+				return (formattedDate);
 			}
 		});
+
+		$.views.helpers({
+			calculateCost : function (data) {
+				return ((parseFloat(data.Cost) - (parseFloat(data.Discount) * parseFloat(data.Cost) / 100)) * parseFloat(data.Quantity));
+			}
+		});
+
 	</script>
 	<body>
 
 		<div data-role="page" id="ordersPage">
 			<div data-role="header" data-theme="b">
-				<a href="http://www.cordys.com" data-icon="back">Cordys</a>
+				<a data-rel="back" data-icon="back">Back</a>
 				<h1>Orders</h1>
 			</div>
-
 			<div data-role="content" data-theme="b">
 				<ul id="orderList" data-role="listview" data-theme="c" data-inset="true">
-				</ul>			
+				</ul>
 			</div>
 		</div>
+
 		<div data-role="page" id="orderDetailsPage">
 			<div data-role="header" data-theme="b">
-				<a href="#ordersPage" data-icon="back">Back</a>
+				<a data-rel="back" data-icon="back">Back</a>
 				<h1>Order Details:<label id="orderDetailOrderID"></label></h1>
 			</div>
-
 			<div data-role="content" data-theme="b">
-				<ul id="orderDetailsList" data-role="listview" data-theme="c" data-inset="true">
-				</ul>			
+				<ul id="orderDetailsList" data-role="listview" data-theme="b">
+				</ul>
 			</div>
 		</div>
 

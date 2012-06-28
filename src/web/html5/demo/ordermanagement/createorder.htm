@@ -22,7 +22,7 @@
 					}
 				}
 			});
-			$(".costField").focusout(function() {
+			$(".costField").change(function() {
 				var quantity = parseInt($("#fldQuantity").val(),10);
 				var price = parseInt($("#fldPrice").val(),10);
 				var discount;
@@ -45,7 +45,7 @@
 <body> 
 	<div data-role="page" id="createFormPage">
 		<div data-role="header" data-theme="b">
-			<a id="btnBack" href="#mainPage" data-role="button" data-icon="back" data-rel="back" data-bind="click:revertChanges">Back</a>
+			<a id="btnBack" data-role="button" data-icon="back" data-rel="back">Back</a>
 			<h1>Create Order</h1>
 		</div>
 		<div data-role="content" data-theme="b">
@@ -56,6 +56,14 @@
 							<label for="fldCustomer" class="select">Customer</label>
 							<select id="fldCustomer" class="right-align" data-native-menu="true" data-mini="true" data-theme="c" data-inline="true">
 								<option value="0">--- Select ---</option>
+								<option value="Fujitsu">Fujitsu</option>
+								<option value="Schneider Electric">Schneider Electric</option>
+								<option value="Getronics">Getronics</option>
+								<option value="Samsung SDS">Samsung SDS</option>
+								<option value="Siemens PLM Software">Siemens PLM Software</option>
+								<option value="ICICI Bank">ICICI Bank</option>
+								<option value="Axis Bank">Axis Bank</option>
+								<option value="CrimsonLogic">CrimsonLogic</option>
 							</select>
 						</div>
 						<div>
@@ -76,7 +84,7 @@
 							<input type="text" id="fldPrice" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
 							<span class="errorMessage"></span>
 						</div>
-						<div class="numberField"> 
+						<div class="numberField costField"> 
 							<label for="fldDiscount" class="ui-input-text">Discount</label>
 							<input type="text" id="fldDiscount" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
 							<span class="errorMessage"></span>
@@ -99,7 +107,7 @@
 		</div>
 		<div data-role="content" data-theme="b">
 			<h4><span>The order is successfully registered.</span></h4>
-			<a id="confirmOrderBtn" data-role="button" data-rel="back" data-inline="true" data-theme="b" href="#mainPage">Ok</a>
+			<a id="confirmOrderBtn" data-role="button" data-inline="true" data-theme="b">Ok</a>
 		</div>
 	</div>
 <script type="text/javascript">
@@ -120,6 +128,15 @@
 					$.mobile.changePage( "#orderConfirmation", { transition: "slideup"} );
 				}
 			});
+		});
+		$("#confirmOrderBtn").bind("click", function() {
+            $("#orderConfirmation").dialog("close");
+			$('#orderConfirmation').on('pagehide',function(event) {
+    		    $("#btnBack").click();
+            });
+			 /*window.setTimeout(function () {
+			    $("#btnBack").click();
+			 }, 100);*/
 		});
 	});
 </script>
