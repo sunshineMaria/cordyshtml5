@@ -13,29 +13,21 @@
 
 	<script type="text/javascript">
 	
-		$( document ).bind( 'mobileinit', function(){
-	    	$.mobile.pushStateEnabled = false;
+		$(document).bind('mobileinit', function(){
+			$.mobile.pushStateEnabled = false;
 		});
-
 
 		$(document).bind('pagebeforechange', function(e, data) {
 			var to = data.toPage;
-	        if (typeof to === 'string') {
+			if (typeof(to) === 'string') {
+				var u = $.mobile.path.parseUrl(to);
+				if (!u.hash) return;
+				to = u.hash;
 
-	            var u = $.mobile.path.parseUrl(to);
-	            to = u.hash || '#' + u.pathname;
-
-	            if (!u.hash) return;
-
-	            e.preventDefault();
-	            
-	          var options = {
-	            dataUrl: '',
-	            changeHash: false
-	          };
-	          $.mobile.changePage($(to), options);
-	        }
-	    });
+				$.mobile.changePage($(to), {dataUrl: '', changeHash: false});
+				e.preventDefault();
+			}
+		});
 	
 		var taskModel, targetModel, uiTasksModel;
 		$(function() {
@@ -92,6 +84,7 @@
 				</ul>
 			</div>
 
+			<a href="javascript:refeshTaskList()" data-role="button" data-icon="refresh" data-rel="refresh" data-inline="true" data-mini="true">Refresh</a>
 			<ul id="workList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
 				<li>
 					<div >
@@ -220,6 +213,7 @@
 	</div>
 
 <script type="text/javascript">
+	var userRolesModel, taskRolesModel;
 	$("#mainPage")
 		.bind("pageinit",function(event, ui) {
 			$(this)
@@ -230,14 +224,17 @@
 				});
 			})
 		.bind("pageshow",function(event, ui) {
-			if (taskModel) {
-				taskModel.read({
-					success: function(){
-						$("#workList").listview("refresh");
-					}
-				});
-			}
+			refeshTaskList();
 		});
+	function refeshTaskList() {
+		if (taskModel) {
+			taskModel.read({
+				success: function(){
+					$("#workList").listview("refresh");
+				}
+			});
+		}
+	}
 	$("#worklistPage")
 		.bind("pageinit",function(event, ui) {
 			$(this)
@@ -301,11 +298,63 @@
 				},
 				xcontext: document.getElementById("appsPage")
 			});
+			userRolesModel = new $.cordys.model({
+				objectName: "role",
+				read: {
+					method: "GetRoles",
+					namespace: "http://schemas.cordys.com/1.0/ldap",
+					dataType: "json",
+					parameters: {
+						dn: "",
+						depth: "0"
+					}
+				}
+			});
+			userRolesModel.read({success: function(roles) {
+					taskRolesModel = new $.cordys.model({
+						objectName: "Task",
+						read: {
+							method: "GetTasksForRoles",
+							namespace: "http://schemas.cordys.com/task/1.0/runtime/",
+							dataType: "json",
+							parameters: getRoleParameters
+						}
+					});
+					if (roles.length > 0) {
+						taskRolesModel.read({ success: function(tasks) {
+							uiTasksModel.read({success: function(resources) {
+								if (taskRolesModel.Task().length > 0) {
+									// check for each Mobile app if it is in tasks, if not: remove from mobile apps
+									for (var r=0; r<resources.length; r++) {
+										var rId = resources[r]["@uri"];
+										if (!findTaskRoleByID(rId)) uiTasksModel.resource.remove(resources[r]);
+									}
+								}
+							}});
+						}});
+					}
+				}
+			});
 			ko.applyBindings(uiTasksModel, document.getElementById("appsPage"));
 		})
 		.bind( 'pageshow',function(event, ui) {
-			if (uiTasksModel) uiTasksModel.read();
+			//if (uiTasksModel) uiTasksModel.read();
 		});
+
+	function getRoleParameters() {
+		var roles = [];
+		for (var i=0; i<userRolesModel.role().length; i++) {
+			var role = {Role: { "@dn": userRolesModel.role()[i]["@id"], "@detail": "true" } };
+			roles.push($.cordys.json.js2xmlstring(role));
+		}
+		return roles.join("");
+	}
+	function findTaskRoleByID(id) {
+		for (var i=0; i<taskRolesModel.Task().length; i++) {
+			if (taskRolesModel.Task()[i]["@id"] == id) return true;
+		}
+		return false;
+	}
 	function renderApp(elmt, data) {
 	//	debugger;
 	}
