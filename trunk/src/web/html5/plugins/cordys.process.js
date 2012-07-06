@@ -215,7 +215,7 @@
 	}
 
 	function getProcessInstanceId(processInstance) {
-		var id = (typeof(processInstance) === "object") ? processInstance.ProcessInstanceId : processInstance;
+		var id = (typeof(processInstance) === "object") ? processInstance.ProcessInstanceId || processInstance.SourceInstanceId : processInstance;
 		// If it is an observable, call the method to get the value, otherwise just return the value
 		return (typeof(id) === "function") ? id() : id;
 	}

@@ -21,10 +21,10 @@
 
 	$.cordys.workflow = new function() {
 		var self = this,
-			taskModel, worklistModel, taskDetailModel;
+			taskModel, personalTaskModel, worklistModel, taskDetailModel;
 
 		this.getTasks = function(options) {
-			options = getOptionsForWorkflowMethod("GetTasks", options, {
+			options = getOptionsForWorkflowMethod("GetAllTasksForUser", options, {
 					OrderBy: "Task.StartDate DESC"
 			});
 			if (!self.taskModel) {
@@ -39,8 +39,21 @@
 			self.taskModel.read(options);
 			return self.taskModel;
 		};
-		this.selectTask = function(data) {
-			if (self.taskModel && self.taskModel.selectedItem) self.taskModel.selectedItem(data);
+		this.getPersonalTasks = function(options) {
+			options = getOptionsForWorkflowMethod("GetTasks", options, {
+					OrderBy: "Task.StartDate DESC"
+			});
+			if (!self.personalTaskModel) {
+				self.personalTaskModel = new $.cordys.model({
+					objectName: "Task",
+					read: options
+				});
+			}
+			if (options.context) {
+				ko.applyBindings(self.personalTaskModel, options.context);
+			}
+			self.personalTaskModel.read(options);
+			return self.personalTaskModel;
 		};
 		this.openTask = function(task, detailsPageId) {
 			if (typeof(task) === "object" && self.taskModel && self.taskModel.selectedItem) self.taskModel.selectedItem(task);
