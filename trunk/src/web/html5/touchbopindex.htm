@@ -39,7 +39,8 @@
 				}
 			};
 			taskModel = $.cordys.workflow.getTasks({
-				context: document.getElementById("mainPage")
+				context: document.getElementById("mainPage"),
+				success: function() { showBusinessIdentifiers(); }
 			});
 		});
 		function selectTask() {
@@ -84,17 +85,17 @@
 				</ul>
 			</div>
 
-			<a href="javascript:refeshTaskList()" data-role="button" data-icon="refresh" data-rel="refresh" data-inline="true" data-mini="true">Refresh</a>
-			<ul id="workList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
+			<ul id="taskList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
 				<li>
-					<div >
-						<a href="#" data-transition="pop" class="ui-link-inherit" data-bind="click:selectTask($data)">
-							<h3 class="ui-li-heading" data-bind="text:Activity.text">Activity</h3>
-							<p class="ui-li-desc"><span data-bind="date:StartDate"></span>&nbsp;<span data-bind="text:State"></span></p>
-						</a>
-					</div>
+					<a href="#" data-transition="pop" class="ui-link-inherit" data-bind="click:selectTask($data)">
+						<h3 class="ui-li-heading" data-bind="text:Activity.text">Activity</h3>
+						<p class="ui-li-desc"><span data-bind="date:StartDate"></span>&nbsp;<span data-bind="text:State"></span></p>
+					</a>
 				</li>
 			</ul>
+		</div>
+		<div data-role="footer" data-theme="c" data-position="fixed">
+			<a href="javascript:refeshTaskList()" data-role="button" data-icon="refresh" data-rel="refresh" data-inline="true" data-mini="true">Refresh</a>
 		</div>
 	</div>
 
@@ -172,8 +173,8 @@
 	</div>
 	<div data-role="page" id="workListTasksPage">
 		<div data-role="header" data-theme="b">
-			<a href="#worklistPage" data-role="button" data-icon="back" data-rel="back">Worklist</a>
-			<h1>Tasklist</h1>
+			<a href="#worklistPage" data-role="button" data-icon="back">Worklist</a>
+			<h1>Tasks by worklist</h1>
 		</div>
 
 		<div data-role="content" data-theme="d">
@@ -230,9 +231,34 @@
 		if (taskModel) {
 			taskModel.read({
 				success: function(){
-					$("#workList").listview("refresh");
+					$("#taskList").listview("refresh");
+					showBusinessIdentifiers();
 				}
 			});
+		}
+	}
+	function showBusinessIdentifiers(rowNr) {
+		if (typeof(rowNr) === "undefined") rowNr = 0;
+		var taskRow = $("#taskList li")[rowNr];
+		if (!taskRow) return;
+		taskRow = $(taskRow).find("a")[0];
+		var task = ko.dataFor(taskRow);
+		if (task && !$.cordys.workflow.isCaseActivity(task)) {
+			$.cordys.process.getBusinessIdentifiers(task, { success: addIdents(rowNr) });
+		} else {
+			showBusinessIdentifiers(rowNr+1);
+		}
+	}
+	function addIdents(rowNr) {
+		return function(identifiers) {
+			if (identifiers.length > 0) {
+				var sIdent = "";
+				for (var i=0; i<identifiers.length; i++) {
+					sIdent += "<b>"+identifiers[i].Description + "</b>: " + identifiers[i].Value + " / ";
+				}
+				$("<p class='ui-li-desc' style='white-space:normal'><span>" + sIdent + "</span></p>").appendTo($("#taskList li a")[rowNr]);
+			}
+			showBusinessIdentifiers(rowNr+1);
 		}
 	}
 	$("#worklistPage")
@@ -298,6 +324,7 @@
 				},
 				xcontext: document.getElementById("appsPage")
 			});
+			// Get all roles of current user
 			userRolesModel = new $.cordys.model({
 				objectName: "role",
 				read: {
@@ -311,6 +338,7 @@
 				}
 			});
 			userRolesModel.read({success: function(roles) {
+					// Get all tasks for all roles
 					taskRolesModel = new $.cordys.model({
 						objectName: "Task",
 						read: {
@@ -325,7 +353,7 @@
 							uiTasksModel.read({success: function(resources) {
 								if (taskRolesModel.Task().length > 0) {
 									// check for each Mobile app if it is in tasks, if not: remove from mobile apps
-									for (var r=0; r<resources.length; r++) {
+									for (var r=resources.length-1; r>=0; r--) {
 										var rId = resources[r]["@uri"];
 										if (!findTaskRoleByID(rId)) uiTasksModel.resource.remove(resources[r]);
 									}
