@@ -30,9 +30,16 @@
 				</li>
 				<li data-role="fieldcontain" data-mini="true" id="identifierView">
 					<div data-bind="foreach: $root.fields">
+						<div class="ui-grid-a">
+							<div class="ui-block-a"><label for="fldName" class="ui-bar ui-bar-d" data-bind="text:Description">Name</label></div>
+							<div class="ui-block-b"><label id="fldName" class="ui-bar ui-bar-d" data-bind="text:Value" style="font-weight:normal"></label></div>
+						</div>
+					</div>
+				</li>
+				<li data-role="fieldcontain" data-mini="true" id="attachmentsView">
+					<div data-bind="foreach: $root.attachments">
 						<div >
-							<label for="fldName" class="ui-input-text" data-bind="text:Description">Name</label>
-							<input type="text" readonly='true' id="fldName" data-bind="value:Value" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" style="background-color:#ccc"/>
+							<a href="#showAttachmentPage" data-bind="text:$data['@description'],click:$root.selectedAttachment">Attachment</a>
 						</div>
 					</div>
 				</li>
@@ -62,26 +69,70 @@
 								taskDetailModel.fields(identifiers);
 							}
 						})
+						$.cordys.process.getAttachments(tasks[0], {
+							success:function(attachments) {
+								taskDetailModel.attachments(attachments);
+							}
+						})
 					}
 				});
 				taskDetailModel.fields = ko.observableArray();
+				taskDetailModel.attachments = ko.observableArray();
+				taskDetailModel.selectedAttachment = ko.observable();
 				if (!bindingsApplied) {
 					ko.applyBindings(taskDetailModel, document.getElementById("approvePage"));
 					bindingsApplied = true;
 				}
 			});
 
+			var claimDone = false;
 			function completeTask(btnData) {
+				var taskStatus = taskDetailModel.Task()[0].State;
+				if (!claimDone && taskStatus != "ASSIGNED") {
+					claimDone = true;
+					$.cordys.workflow.claimTask(taskDetailModel.Task()[0], { success: function() {
+						completeTask(btnData);
+					}
+					});
+					return;
+				}
 				$.cordys.workflow.completeTask(taskDetailModel.Task()[0], {
 					ApproveTask_ApproveTaskDefaultDeliveryModel_OP: {
 						'@xmlns': 'http://schemas.cordys.com/approve',
 						response: btnData['@value'],
 						comment: document.getElementById("fldComment").value
 					}
+				}, {dataType:'xml'}).done( function() {
+					window.history.back();
 				});
-				window.history.back();
 			}
 
+		</script>
+	</div>
+	<div data-role="page" id="showAttachmentPage">
+		<img id="imgAttachment" style="width: 100%;" />
+		<script type="text/javascript">
+			$("#showAttachmentPage").bind( 'pageshow',function(event, ui) {
+				var $img = $("#imgAttachment");
+				$img.hide();
+				$.cordys.ajax({
+					method: "GetDocument",
+					namespace: "http://schemas.cordys.com/documentstore/default/1.0",
+					parameters: {
+						DocumentURL: taskDetailModel.selectedAttachment().text
+					},
+					dataType: "json",
+					success: function(doc) {
+						if (doc.DocumentContent && doc.DocumentContent["@isLocation"]=="false") {
+							$img[0].src = "data:image/bmp;base64,"+doc.DocumentContent.text;
+							$img.show();
+						} else {
+							alert("unable to show attachment");
+							$.mobile.changePage("#approvePage");
+						}
+					}
+				});
+			});
 		</script>
 	</div>
 
