@@ -26,7 +26,7 @@
 				<button id="btnSend" type="submit" data-theme="b">Report Now</button>
 			</div>
 			<script type="text/javascript">
-
+				var currentPosition;
 				$("#reportPage")
 					.on('pageinit', function() {
 						$("#btnSend").bind("click", sendRequest);
@@ -34,6 +34,9 @@
 							$("#btnSend").button('enable');
 						});
 						$("#fldDescription").focus();
+						navigator.geolocation.getCurrentPosition(function(position) {
+							currentPosition = position;
+						})
 					})
 					.keydown(function (event) {
 						if (event.keyCode == 13) { // Enter
@@ -55,7 +58,8 @@
 					return {
 						ReportDamage: {
 							'@xmlns': 'http://schemas.cordys.com/default',
-							Description: $("#fldDescription").val()
+							Description: $("#fldDescription").val(),
+							GeoLocation: currentPosition ? {latitude:currentPosition.coords.latitude, longitude:currentPosition.coords.longitude} : ""
 						}
 					};
 				}
