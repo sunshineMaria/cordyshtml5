@@ -145,7 +145,9 @@
 		};
 
 		this.isCaseActivity = function(task) {
-			return (task && task.SourceType === "CASE");
+			if (typeof(task) !== "object") return -1;
+			var taskType = task.SourceType || task.Component;
+			return (taskType === "CASE");
 		};
 
 		return this;
