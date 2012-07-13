@@ -237,7 +237,7 @@
 
 		this.sendEvent = function(caseInstance, eventName, options) {
 			var sourceId = (typeof(caseInstance) === "object") ? caseInstance.ActivityId : "";
-			options = getOptionsForCaseMethod("sendEvent", options, {
+			options = getOptionsForCaseMethod("SendEvent", options, {
 				caseinstanceid: getCaseInstanceId(caseInstance),
 				event: {
 					text: eventName,
@@ -312,6 +312,8 @@
 					}, function (error) {
 						throw new Error("Unable to read file, error: " + JSON.stringify(error));
 					});
+				} else {
+					throw new Error("Unable to add attachment by url");
 				}
 			} else {
 				// content should be base64 encoded
