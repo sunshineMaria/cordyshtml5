@@ -131,7 +131,9 @@
 		this.revokeTask = function(task, taskData, options) {
 			return this.performTaskAction(task, taskData, "REVOKECLAIM", options);
 		};
-		this.skipTask = function(task, taskData, options) {
+		this.skipTask = function(task, taskData, reason, options) {
+			options = options || {};
+			options.parameters = $.extend({Memo:reason}, options.parameters);
 			return this.performTaskAction(task, taskData, "SKIP", options);
 		};
 		this.startTask = function(task, taskData, options) {

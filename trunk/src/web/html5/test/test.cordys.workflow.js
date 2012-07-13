@@ -349,32 +349,32 @@
 		stop();
 		$.cordys.workflow.getTasks({success:function(tasks) {
 			equal(tasks.length, 2, "2 tasks found");
-			$.cordys.workflow.claimTask(tasks[0], { success: function() {
-				ok(true, "Task Claimed");
+			$.cordys.workflow.claimTask(tasks[0], { success: function(data) {
+				equal(data.error, null, "Task Claimed");
 			}});
-			$.cordys.workflow.pauseTask(tasks[1], {somedata:"paused"}, { success: function() {
-				ok(true, "Task Paused");
+			$.cordys.workflow.pauseTask(tasks[1], {somedata:"paused"}, { success: function(data) {
+				equal(data.error, null, "Task Paused");
 			}});
-			$.cordys.workflow.resumeTask(tasks[1], {somedata:"resumed"}, { success: function() {
-				ok(true, "Task Resumed");
+			$.cordys.workflow.resumeTask(tasks[1], {somedata:"resumed"}, { success: function(data) {
+				equal(data.error, null, "Task Resumed");
 			}});
-			$.cordys.workflow.revokeTask(tasks[1], {somedata:"revoked"}, { success: function() {
-				ok(true, "Task Revoked");
+			$.cordys.workflow.revokeTask(tasks[1], {somedata:"revoked"}, { success: function(data) {
+				equal(data.error, null, "Task Revoked");
 			}});
-			$.cordys.workflow.skipTask(tasks[1], {somedata:"skipped"}, { success: function() {
-				ok(true, "Task Skipped");
+			$.cordys.workflow.skipTask(tasks[1], {somedata:"skipped"}, "skip this", { success: function(data) {
+				equal(data.error, null, "Task Skipped");
 			}});
-			$.cordys.workflow.startTask(tasks[1], {somedata:"started"}, { success: function() {
-				ok(true, "Task Started");
+			$.cordys.workflow.startTask(tasks[1], {somedata:"started"}, { success: function(data) {
+				equal(data.error, null, "Task Started");
 			}});
-			$.cordys.workflow.stopTask(tasks[1], {somedata:"stopped"}, { success: function() {
-				ok(true, "Task Stopped");
+			$.cordys.workflow.stopTask(tasks[1], {somedata:"stopped"}, { success: function(data) {
+				equal(data.error, null, "Task Stopped");
 			}});
-			$.cordys.workflow.suspendTask(tasks[1], {somedata:"suspended"}, { success: function() {
-				ok(true, "Task Suspended");
+			$.cordys.workflow.suspendTask(tasks[1], {somedata:"suspended"}, { success: function(data) {
+				equal(data.error, null, "Task Suspended");
 			}});
-			$.cordys.workflow.completeTask(tasks[1], {somedata:"completed"}, { success: function() {
-				ok(true, "Task Completed");
+			$.cordys.workflow.completeTask(tasks[1], {somedata:"completed"}, { success: function(data) {
+				equal(data.error, null, "Task Completed");
 			}});
 		}});
 		setTimeout(function() {
