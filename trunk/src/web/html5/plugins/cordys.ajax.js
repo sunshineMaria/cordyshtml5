@@ -76,12 +76,14 @@
 	$.cordys.ajax.defaults = {
 		url: "",
 		async: true,
+        isMock:false,
 		type:"POST",
 		contentType:"text/xml; charset=\"utf-8\"",
 		dataType:"xml"
 	}
 
 	function configureGatewayUrl(url, options) {
+
 		url = url 
 				? url.replace(/^http:\//, window.location.protocol+"/").replace(/\/localhost\//, "/"+window.location.host+"/") 
 				: window.location.protocol + "//" + window.location.host + "/cordys/com.eibus.web.soap.Gateway.wcp";
@@ -100,16 +102,22 @@
 			}
 		}
 /*/
-		var ctCookie = getCookie("\\w*_ct"); // cookie name can be different, when property gateway.csrf.cookiename is set
-		if (ctCookie) {
-			url = addURLParameter(url, RegExp.$1, ctCookie);
-		} else {
-			var saCookie = getCookie("\\w*_SAMLart");
-			if (!saCookie) {
-				loginIntoCordys(options.loginUrl);
-				return "";
-			}
-		}
+        if (options.isMock === true){
+            // This is a mock request used for testing. We do not need to login or set the SAML token.
+        }
+        else
+        {
+		    var ctCookie = getCookie("\\w*_ct"); // cookie name can be different, when property gateway.csrf.cookiename is set
+		    if (ctCookie) {
+			    url = addURLParameter(url, RegExp.$1, ctCookie);
+		    } else {
+			    var saCookie = getCookie("\\w*_SAMLart");
+			    if (!saCookie) {
+				    loginIntoCordys(options.loginUrl);
+				    return "";
+			    }
+		    }
+        }
 //*/
 		return url;
 	}
