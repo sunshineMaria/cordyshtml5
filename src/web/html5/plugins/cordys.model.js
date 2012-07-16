@@ -118,13 +118,13 @@
 				self.objectsToBeUpdated = null;
 			},
 
-			error : function (jqXHR, textStatus, errorThrown){
+			error : function (jqXHR, textStatus, errorThrown, messCode, errorMessage, opts){
 				handleError(jqXHR.error(), self.objectsToBeUpdated);
 				self.objectsToBeUpdated = null;
 
 				var showError = true;
-				if (opts._error && typeof(opts._error) === "function"){
-					showError = opts._error(jqXHR, textStatus, errorThrown, messCode, errorMessage) !== false;
+				if (self._error && typeof(self._error) === "function"){
+					showError = self._error(jqXHR, textStatus, errorThrown, messCode, errorMessage, opts) !== false;
 				}
 				if (showError){
 					showErrorDialog(jqXHR.error(), "Error on Update");
@@ -266,8 +266,9 @@
 
 		// Sends all inserted objects to the backend
 		this.create = function(createSettings) {
-			self._beforeSend = (createSettings && createSettings.beforeSend) ? createSettings.beforeSend : settings.create.beforeSend;
+			self._beforeSend = (createSettings && createSettings.beforeSend) ? createSettings.beforeSend : (settings.create ? settings.create.beforeSend : null);
 			self._success = (createSettings && createSettings.success) ? createSettings.success : (settings.create ? settings.create.success : null);
+			self._error = (createSettings && createSettings.error) ? createSettings.error : (settings.create ? settings.create.error : null);
 			return $.cordys.ajax($.extend({}, settings.defaults, settings.create, createSettings, self.defaultUpdateSettings, self.createSettings));
 		};
 
@@ -280,22 +281,25 @@
 
 		// Sends all updated objects to the backend
 		this.update = function(updateSettings) {
-			self._beforeSend = (updateSettings && updateSettings.beforeSend) ? updateSettings.beforeSend : settings.update.beforeSend;
-			self._success = (updateSettings && updateSettings.success) ? updateSettings.success : (settings.update ? settings.update.success : null); 
+			self._beforeSend = (updateSettings && updateSettings.beforeSend) ? updateSettings.beforeSend : (settings.update ? settings.update.beforeSend :null);
+			self._success = (updateSettings && updateSettings.success) ? updateSettings.success : (settings.update ? settings.update.success : null);
+			self._error = (updateSettings && updateSettings.error) ? updateSettings.error : (settings.update ? settings.update.error : null);  
 			return $.cordys.ajax($.extend({}, settings.defaults, settings.update, updateSettings, self.defaultUpdateSettings, self.updateSettings));
 		};
 
 		// Sends all deleted objects to the backend.
 		this['delete'] = function(deleteSettings) {
-			self._beforeSend = (deleteSettings && deleteSettings.beforeSend) ? deleteSettings.beforeSend : settings['delete'].beforeSend;
+			self._beforeSend = (deleteSettings && deleteSettings.beforeSend) ? deleteSettings.beforeSend : (settings['delete'] ? settings['delete'].beforeSend :null);
 			self._success = (deleteSettings && deleteSettings.success) ? deleteSettings.success : (settings['delete'] ? settings['delete'].success : null); 
+			self._error = (deleteSettings && deleteSettings.error) ? deleteSettings.error : (settings['delete'] ? settings['delete'].error : null); 
 			return $.cordys.ajax($.extend({}, settings.defaults, settings['delete'], deleteSettings, self.defaultUpdateSettings, self.deleteSettings));
 		};
 
 		// Sends all local changes (inserted, updated, deleted objects) to the backend.
 		this.synchronize = function(synchronizeSettings) {
-			self._beforeSend = (synchronizeSettings && synchronizeSettings.beforeSend) ? synchronizeSettings.beforeSend : settings.update.beforeSend;
+			self._beforeSend = (synchronizeSettings && synchronizeSettings.beforeSend) ? synchronizeSettings.beforeSend : (settings.update ? settings.update.beforeSend : null);
 			self._success = (synchronizeSettings && synchronizeSettings.success) ? synchronizeSettings.success : (settings.update ? settings.update.success : null);
+			self._error = (synchronizeSettings && synchronizeSettings.error) ? synchronizeSettings.error : (settings.update ? settings.update.error : null);
 			return $.cordys.ajax($.extend({}, settings.defaults, settings.update, synchronizeSettings, self.defaultUpdateSettings, self.synchronizeSettings));
 		};
 

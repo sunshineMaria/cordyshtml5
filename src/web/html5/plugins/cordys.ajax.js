@@ -63,7 +63,7 @@
 						|| jqXHR.responseText 
 						|| "General error, see response.";
 				if (opts.__error && typeof(opts.__error) === "function") {
-					showError = opts.__error(jqXHR, textStatus, errorThrown, messCode, errorMessage) !== false;
+					showError = opts.__error(jqXHR, textStatus, errorThrown, messCode, errorMessage, opts) !== false;
 				}
 				if (showError) {
 					alert("Error on read: '" + errorMessage + "'");
@@ -76,7 +76,7 @@
 	$.cordys.ajax.defaults = {
 		url: "",
 		async: true,
-        isMock:false,
+		isMock:false,
 		type:"POST",
 		contentType:"text/xml; charset=\"utf-8\"",
 		dataType:"xml"
@@ -102,22 +102,22 @@
 			}
 		}
 /*/
-        if (options.isMock === true){
-            // This is a mock request used for testing. We do not need to login or set the SAML token.
-        }
-        else
-        {
-		    var ctCookie = getCookie("\\w*_ct"); // cookie name can be different, when property gateway.csrf.cookiename is set
-		    if (ctCookie) {
-			    url = addURLParameter(url, RegExp.$1, ctCookie);
-		    } else {
-			    var saCookie = getCookie("\\w*_SAMLart");
-			    if (!saCookie) {
-				    loginIntoCordys(options.loginUrl);
-				    return "";
-			    }
-		    }
-        }
+		if (options.isMock === true){
+			// This is a mock request used for testing. We do not need to login or set the SAML token.
+		}
+		else
+		{
+			var ctCookie = getCookie("\\w*_ct"); // cookie name can be different, when property gateway.csrf.cookiename is set
+			if (ctCookie) {
+				url = addURLParameter(url, RegExp.$1, ctCookie);
+			} else {
+				var saCookie = getCookie("\\w*_SAMLart");
+				if (!saCookie) {
+					loginIntoCordys(options.loginUrl);
+					return "";
+				}
+			}
+		}
 //*/
 		return url;
 	}
