@@ -51,7 +51,7 @@
 			opts.__error = opts.error;
 		}
 		opts.error = function(jqXHR, textStatus, errorThrown) {
-			console.log(jqXHR, jqXHR.error());
+			console.log("Error Response received ", jqXHR, jqXHR.error());
 			if (!jqXHR.error().responseText && !jqXHR.error().responseXML) return;// skip this error, there is no description
 			var $response = $(jqXHR.error().responseXML);
 			var messCode = $response.find("MessageCode").text();
