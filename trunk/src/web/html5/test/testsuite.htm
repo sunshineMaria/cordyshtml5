@@ -13,6 +13,7 @@
 		$.mockjaxSettings.log = function(msg,settings) {
 			if (console && console.log) console.log("MOCK: " + settings.data);
 		};
+		$.cordys.ajax.defaults.isMock = true;
 	</script>
 
 <!-- The test scripts --> 

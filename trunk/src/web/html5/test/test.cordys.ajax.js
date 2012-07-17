@@ -1,8 +1,6 @@
 ﻿(function(window, $) {
 
-    module("Employees Test");
-
-    $.cordys.ajax.defaults.isMock = false;
+	module("Employees Test");
 
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
@@ -92,11 +90,10 @@
 	});
 
 	test("Get Employees json", 2, function(){
-	    stop();
+		stop();
 
-	    $.cordys.ajax({
-	        isMock: true,
-		    method: "GetEmployeesObjects",
+		$.cordys.ajax({
+			method: "GetEmployeesObjects",
 			namespace: "http://schemas.cordys.com/NW",
 			parameters: {
 				fromEmployeeID : "0",
@@ -120,7 +117,6 @@
 	test("Get Employees xml", 2, function(){
 		stop();
 		$.cordys.ajax({
-		    isMock: true,
 			method: "GetEmployeesObjects",
 			namespace: "http://schemas.cordys.com/NW",
 			parameters: {

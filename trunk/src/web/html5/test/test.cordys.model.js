@@ -40,7 +40,6 @@
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: { 
-			isMock: true,
 			namespace: "http://schemas.cordys.com/html5sdk/orderdemo/1.0",
 			async:false,
 			dataType: "json",
