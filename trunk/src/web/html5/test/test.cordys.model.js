@@ -6,7 +6,7 @@
 	
 	The following tests are covered under model plugin test
 		 1. Read Business Objects
-		2. Insert a new Businss Object using create
+		 2. Insert a new Businss Object using create
 		 3. Insert a new Businss Object using sync
 		 4. Update an existing Business Object using sync
 		 5. Update an existing Business Object using update
@@ -99,7 +99,7 @@
 
 	//1. Read Business Objects 	
 
-	test("Read OrderDemo Objects", 4, function(){
+	test("Read OrderDemo Objects", 3, function(){
 		stop();
 		
 		response = orderDemoModel.read({
@@ -109,8 +109,8 @@
 					toOrderID: "161"
 			},
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("fromOrderID").text(), 160);
-				equal($($.parseXML(settings.data)).find("toOrderID").text(), 161);
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($.parseJSON(response.responseText).tuple.length, 2, "2 records found");
@@ -136,7 +136,7 @@
 							"Discount":"21",
 							"Cost":"123456",
 							"Status":"CREATED",
-							"Notes":"created"
+							"Notes":"Create Order Demo"
 						}
 					}
 				}
@@ -145,33 +145,33 @@
 
 	//2. Insert a new Businss Object using create
 	
-	test("Create OrderDemo Object using create", 3, function(){
+	test("Create OrderDemo Object using create", 2, function(){
 		stop();
-		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"test"});
+		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"Create Order Demo"});
 		response = orderDemoModel.create({
 			method: "CreateOrderDemo",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("Employee").text(), "ss");
-				equal($($.parseXML(settings.data)).find("Product").text(), "aa");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><CreateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Create Order Demo</Notes></OrderDemo></new></tuple></CreateOrderDemo></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Notes,"created");
+		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Notes,"Create Order Demo");
 		start();
 	});
 
 	//3. Insert a new Businss Object using sync 
 
-	test("Create OrderDemo Object using synchronize", 3, function(){
+	test("Create OrderDemo Object using synchronize", 2, function(){
 		stop();
-		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"test"});
+		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"Create Order Demo"});
 		response = orderDemoModel.synchronize({
 			method: "CreateOrderDemo",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("Employee").text(), "ss");
-				equal($($.parseXML(settings.data)).find("Product").text(), "aa");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><CreateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Create Order Demo</Notes></OrderDemo></new></tuple></CreateOrderDemo></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Notes,"created");
+		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Notes,"Create Order Demo");
 		start();
 	});
 	
@@ -216,13 +216,17 @@
 
 	//4. Update an existing Business Object using update  
 
-	test("Update OrderDemo Object using update", 3, function(){
+	test("Update OrderDemo Object using update", 4, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -230,23 +234,28 @@
 		response = orderDemoModel.update({
 			method: "UpdateOrderDemo",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("old OrderDemo Status").text(), "CREATED");
-				equal($($.parseXML(settings.data)).find("new OrderDemo Status").text(), "UPDATED");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>UPDATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateOrderDemo></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "The Order Status is updated");
+		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
 		start();
 	});
 
 	//5. Update an existing Business Object using sync 
 
-	test("Update OrderDemo Object using synchronize", 3, function(){
+	test("Update OrderDemo Object using synchronize", 4, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -254,11 +263,12 @@
 		response = orderDemoModel.synchronize({
 			method: "UpdateOrderDemo",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("old OrderDemo Status").text(), "CREATED");
-				equal($($.parseXML(settings.data)).find("new OrderDemo Status").text(), "UPDATED");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>UPDATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateOrderDemo></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "The Order Status is updated");
+		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
 		start();
 	});
 
@@ -288,13 +298,17 @@
 
 	//6. Delete an existing Business Object using delete 
 	
-	test("Delete OrderDemo Object using delete", 3, function(){
+	test("Delete OrderDemo Object using delete", 4, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -302,7 +316,8 @@
 		response = orderDemoModel['delete']({
 			method: "DeleteOrderDemo",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("old OrderDemo Status").text(), "CREATED");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old></tuple></DeleteOrderDemo></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.OrderID, "140");
@@ -312,13 +327,17 @@
 
 	//7. Delete an existing Business Object using sync  
 	
-	test("Delete OrderDemo Object using synchronize", 3, function(){
+	test("Delete OrderDemo Object using synchronize", 4, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -326,7 +345,8 @@
 		response = orderDemoModel.synchronize({
 			method: "DeleteOrderDemo",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("old OrderDemo Status").text(), "CREATED");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old></tuple></DeleteOrderDemo></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.OrderID, "140");
@@ -369,12 +389,16 @@
 
 	//8. Read Business Object with Invalid Input Parameter
 
-	test("Read OrderDemo Object Invalid Input Parameter", 2, function(){
+	test("Read OrderDemo Object Invalid Input Parameter", 3, function(){
 		stop();
 		response = orderDemoModel.read({
 			method: "ReadOrderDemoObjectInvalidInputParameter",
 			parameters: {
 					OrderID: "a"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><ReadOrderDemoObjectInvalidInputParameter xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderID>a</OrderID></ReadOrderDemoObjectInvalidInputParameter></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($($.parseXML(response.responseText)).find("faultstring").text(), "Database update failed.");
@@ -384,13 +408,17 @@
 
 	//9. Synchronize without any change   
 
-	test("Synchronize without any change", 1, function(){
+	test("Synchronize without any change", 2, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -403,13 +431,17 @@
 
 	//10. Update with no change in data  
 
-	test("Update OrderDemo - Update fail as no change in data", 1, function(){
+	test("Update OrderDemo - Update fail as no change in data", 2, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -462,7 +494,8 @@
 		response = orderDemoModel.create({
 			method: "CreateBODuplicateOrderID",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("new OrderDemo OrderID").text(), "160");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><CreateBODuplicateOrderID xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></new></tuple></CreateBODuplicateOrderID></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			},
 			error : function(){
 				return false;
@@ -475,13 +508,17 @@
 
 	//12. Delete a non existing record   
 
-	test("Delete a non existing record", 1, function(){
+	test("Delete a non existing record", 2, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoModel.removeBusinessObject({OrderID:"25",Customer:"fj",Employee:"ss",Product:"aa",OrderDate:"2012-07-10T10:29:16.140000000",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"test"});
@@ -494,14 +531,14 @@
 
 	//13. Add a BO and revert inserion  
 
-	test("Create OrderDemo Object Revert Insertion", 3, function(){
+	test("Create OrderDemo Object Revert Insertion", 2, function(){
 		stop();
 		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"test"});
 		response = orderDemoModel.create({
 			method: "CreateOrderDemo",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("Employee").text(), "ss");
-				equal($($.parseXML(settings.data)).find("Product").text(), "aa");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><CreateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></new></tuple></CreateOrderDemo></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoModel.revert();
@@ -552,13 +589,17 @@
 
 	//14. Update a BO and revert updation  
 
-	test("Update OrderDemo Object Revert Updation", 4, function(){
+	test("Update OrderDemo Object Revert Updation", 5, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -567,7 +608,8 @@
 		response = orderDemoModel.synchronize({
 			method: "UpdateBORevertUpdation",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("old OrderDemo Notes").text(), "test");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateBORevertUpdation xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateBORevertUpdation></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			},
 			error : function(){
 				return false;
@@ -614,13 +656,17 @@
 
 	//15. Delete a BO and delete updation
 
-	test("Delete OrderDemo Object Revert Deletion", 3, function(){
+	test("Delete OrderDemo Object Revert Deletion", 5, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoModel.read({
@@ -628,6 +674,10 @@
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -635,7 +685,8 @@
 		response = orderDemoModel.synchronize({
 			method: "DeleteBORevertDeletion",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("old OrderDemo Notes").text(), "test");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteBORevertDeletion xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old></tuple></DeleteBORevertDeletion></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			},
 			error : function(){
 				return false;
@@ -672,7 +723,7 @@
 
 	//16. Add a BO, revert inserion and insert BO 
 
-	test("Insert BO Revert Insertion and Insert a new BO", 3, function(){
+	test("Insert BO Revert Insertion and Insert a new BO", 2, function(){
 		stop();
 		orderDemoModel.clear();
 		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"BO for revertion"});
@@ -681,8 +732,8 @@
 		response = orderDemoModel.synchronize({
 			method: "InsertBORevertInsertNew",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("tuple").length, 1);
-				equal($($.parseXML(settings.data)).find("new OrderDemo Notes").text(), "Insert BO Revert Insertion and Inser a new BO");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><InsertBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Insert BO Revert Insertion and Inser a new BO</Notes></OrderDemo></new></tuple></InsertBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Notes, "Insert BO Revert Insertion and Inser a new BO");
@@ -732,7 +783,7 @@
 
 	//17. Update a BO and insert BO 
 
-	test("Update BO and Insert a new BO", 6, function(){
+	test("Update BO and Insert a new BO", 4, function(){
 		stop();
 		orderDemoModel.clear();
 		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"BO for updation"});
@@ -742,9 +793,8 @@
 		response = orderDemoModel.synchronize({
 			method: "UpdateBOInsertNew",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("tuple").length, 2);
-				equal($($.parseXML(settings.data)).find("tuple").first().find("new OrderDemo Notes").text(), "Updated");
-				equal($($.parseXML(settings.data)).find("tuple").last().find("new OrderDemo Notes").text(), "Update BO and Insert a new BO");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateBOInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Updated</Notes></OrderDemo></new></tuple><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO and Insert a new BO</Notes></OrderDemo></new></tuple></UpdateBOInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($.parseJSON(response.responseText).tuple.length, 2);
@@ -779,7 +829,7 @@
 
 	//18. Update a BO, revert updation and insert BO  
 
-	test("Update BO Revert Update and Insert a new BO", 3, function(){
+	test("Update BO Revert Update and Insert a new BO", 2, function(){
 		stop();
 		orderDemoModel.clear();
 		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"BO for revertion"});
@@ -790,8 +840,8 @@
 		response = orderDemoModel.synchronize({
 			method: "UpdateBORevertInsertNew",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("tuple").length, 1);
-				equal($($.parseXML(settings.data)).find("new OrderDemo Notes").text(), "Update BO Revert Insertion and Inser a new BO");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO Revert Insertion and Inser a new BO</Notes></OrderDemo></new></tuple></UpdateBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Notes, "Update BO Revert Insertion and Inser a new BO");
@@ -824,7 +874,7 @@
 
 	//19. Delete a BO and insert BO  
 
-	test("Delete BO and Insert a new BO", 3, function(){
+	test("Delete BO and Insert a new BO", 2, function(){
 		stop();
 		orderDemoModel.clear();
 		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"BO for revertion"});
@@ -834,8 +884,8 @@
 		response = orderDemoModel.synchronize({
 			method: "DeleteBOInsertNew",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("tuple").length, 1);
-				equal($($.parseXML(settings.data)).find("tuple").find("new OrderDemo Notes").text(), "Delete BO and Insert a new BO");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteBOInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Delete BO and Insert a new BO</Notes></OrderDemo></new></tuple></DeleteBOInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Notes, "Delete BO and Insert a new BO");
@@ -868,7 +918,7 @@
 
 	//20. Delete a BO, revert deletion and insert BO
 
-	test("Delete BO Revert Deletion and Insert a new BO", 3, function(){
+	test("Delete BO Revert Deletion and Insert a new BO", 2, function(){
 		stop();
 		orderDemoModel.clear();
 		orderDemoModel.addBusinessObject({Customer:"fj",Employee:"ss",Product:"aa",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"BO for revertion"});
@@ -879,8 +929,8 @@
 		response = orderDemoModel.synchronize({
 			method: "DeleteBORevertInsertNew",
 			beforeSend : function(jqXHR,settings) {
-				equal($($.parseXML(settings.data)).find("tuple").length, 1);
-				equal($($.parseXML(settings.data)).find("new OrderDemo Notes").text(), "Insert BO Revert Insertion and Inser a new BO");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Insert BO Revert Insertion and Inser a new BO</Notes></OrderDemo></new></tuple></DeleteBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Notes, "Insert BO Revert Insertion and Inser a new BO");
@@ -922,13 +972,17 @@
 
 	//22. Update BO on BO that is deleted
 
-	test("Update BO on BO that is deleted", 3, function(){
+	test("Update BO on BO that is deleted", 5, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "160"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>160</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -938,6 +992,10 @@
 			method: "UpdateBOOnDeletedBO",
 			error : function(){
 				return false;
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateBOOnDeletedBO xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old></tuple></UpdateBOOnDeletedBO></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($($.parseXML(response.responseText)).find("faultstring").text(), "Database update failed.");
@@ -1005,7 +1063,7 @@
 
 	//21. Read BO on BO that is deleted
 
-	test("Read BO on BO that is deleted", 3, function(){
+	test("Read BO on BO that is deleted", 6, function(){
 		stop();
 		orderDemoModel.clear();
 		orderDemoModel.read({
@@ -1013,17 +1071,29 @@
 			parameters: {
 					fromOrderID: "140",
 					toOrderID: "141"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>140</fromOrderID><toOrderID>141</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
 		orderDemoModel.synchronize({
-			method: "DeleteOrderDemo"
+			method: "DeleteOrderDemo",
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old></tuple></DeleteOrderDemo></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
+			}
 		});
 		response = orderDemoModel.read({
 			method: "ReadBOOnDeletedBO",
 			parameters: {
 					OrderID: "140"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><ReadBOOnDeletedBO xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderID>140</OrderID></ReadBOOnDeletedBO></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		equal($($.parseXML(response.responseText)).find("faultstring").text(), "Database update failed.");
@@ -1034,13 +1104,17 @@
 
 	//23. Use selectedItem with and without a selcted BO
 
-	test("Use selectedItem with and without a selcted BO", 2, function(){
+	test("Use selectedItem with and without a selcted BO", 3, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -1053,13 +1127,18 @@
 
 	//24. Clear the model of all data 
 
-	test("Clear the model of all data", 2, function(){
+	test("Clear the model of all data", 3, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+			debugger;
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -1072,13 +1151,17 @@
 
 	//25. Get the number of Business Objects 
 
-	test("Get the number of Business Objects ", 1, function(){
+	test("Get the number of Business Objects ", 2, function(){
 		stop();
 		orderDemoModel.read({
 			method: "GetOrderDemoObjects",
 			parameters: {
 					fromOrderID: "160",
 					toOrderID: "161"
+			},
+			beforeSend : function(jqXHR,settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
