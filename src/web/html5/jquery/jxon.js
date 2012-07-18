@@ -9,6 +9,11 @@
 		var _nVerb = arguments.length > 1 && typeof nVerbosity === "number" ? nVerbosity & 3 : /* put here the default verbosity level: */ 1;
 		return createObjTree(oXMLParent, _nVerb, bFreeze || false, arguments.length > 3 ? bNesteAttributes : _nVerb === 3);
 	};
+	
+	$.cordys.json.xml2jsstring = function (oXMLParent, nVerbosity /* optional */, bFreeze /* optional */, bNesteAttributes /* optional */) {
+        if (! oXMLParent) return null;
+        return JSON.stringify($.cordys.json.xml2js(oXMLParent, nVerbosity, bNesteAttributes));
+	};
 
 	$.cordys.json.js2xml = function (oObjTree) {
 		var oNewDoc = document.implementation.createDocument("", "", null);
