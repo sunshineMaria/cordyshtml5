@@ -177,26 +177,26 @@
 
 	test("Create and Test Case", 8, function(){
 		stop();
-		$.cordys.case.createCase("Test Case", getCaseVariables(), getCaseData(), {
+		$.cordys['case'].createCase("Test Case", getCaseVariables(), getCaseData(), {
 			success: function(data) {
 				equal(data.caseinstanceid, "someCaseInstanceID", "Case created");
-				$.cordys.case.updateCaseData(data.caseinstanceid, getCaseData(), {success: function(data) {
+				$.cordys['case'].updateCaseData(data.caseinstanceid, getCaseData(), {success: function(data) {
 					equal(data.error, null, "Case Data updated");
 				}});
-				$.cordys.case.updateCaseVariables(data.caseinstanceid, getCaseVariables(), {success: function(data) {
+				$.cordys['case'].updateCaseVariables(data.caseinstanceid, getCaseVariables(), {success: function(data) {
 					equal(data.error, null, "Case Variables updated");
 				}});
-				$.cordys.case.getCaseData(data.caseinstanceid, {success: function(data) {
+				$.cordys['case'].getCaseData(data.caseinstanceid, {success: function(data) {
 					equal(data[0]["ns:TestCase"]["ns:Number"], "1234567890", "Getting Case Data");
 				}});
-				$.cordys.case.getCaseInstance(data.caseinstanceid, {success: function(data) {
+				$.cordys['case'].getCaseInstance(data.caseinstanceid, {success: function(data) {
 					equal(data[0].CASE_INSTANCE_IDENTIFIERS.INSTANCE_ID, "someCaseInstanceID", "Getting Case Instance");
 				}});
-				$.cordys.case.getCaseVariables(data.caseinstanceid, {success: function(vars) {
+				$.cordys['case'].getCaseVariables(data.caseinstanceid, {success: function(vars) {
 					equal(vars.length, 3, "3 case variables found");
 					equal(vars[0].User.text, "user1", "First variable contains User");
 				}});
-				$.cordys.case.sendEvent(data.caseinstanceid, "test", {success: function(data) {
+				$.cordys['case'].sendEvent(data.caseinstanceid, "test", {success: function(data) {
 					equal(data.result["@success"], "false", "Event Send");
 				}});
 			}
@@ -236,14 +236,14 @@
 
 	test("Case Attachments", 4, function(){
 		stop();
-		$.cordys.case.getAttachments("someCaseInstanceID", {success: function(attachments) {
+		$.cordys['case'].getAttachments("someCaseInstanceID", {success: function(attachments) {
 			equal(attachments.length, 2, "2 attachments found");
 			equal(attachments[0]["@name"], "image1.jpg", "First attachment image1");
 		}});
-		$.cordys.case.addAttachment("someCaseInstanceID", "Photo", "image3.jpg", "some image", window.btoa("some content"), {success: function(data) {
+		$.cordys['case'].addAttachment("someCaseInstanceID", "Photo", "image3.jpg", "some image", window.btoa("some content"), {success: function(data) {
 			equal(data.attachment["@name"], "image3.jpg", "Attachment added");
 		}});
-		$.cordys.case.removeAttachment("someCaseInstanceID", "Photo", "image3.jpg", {success: function(data) {
+		$.cordys['case'].removeAttachment("someCaseInstanceID", "Photo", "image3.jpg", {success: function(data) {
 			equal(data.error, null, "Attachment removed");
 		}});
 		setTimeout(function() {

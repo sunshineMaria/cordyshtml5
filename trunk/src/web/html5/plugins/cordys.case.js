@@ -19,7 +19,7 @@
 		throw new Error("The Cordys HTML5 SDK is required, please ensure it is loaded properly");
 	}
 
-	$.cordys.case = new function() {
+	$.cordys['case'] = new function() {
 		var self = this,
 			activityDefinitionModel,
 			activityInstanceModel,
