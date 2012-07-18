@@ -64,8 +64,8 @@ writeTestResultXML = function()
 };
 
 writeTestResultHTML = function () {
-	var outputTestResultHTML = page.evaluate(function () { return document.documentElement.outerHTML });
-	fs.write(system.args[2], outputTestResultHTML, "w");
+    var outputTestResultHTML = page.evaluate(function () { return getTestResultHTML() });
+    fs.write(system.args[2], outputTestResultHTML, "w");
 };
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
