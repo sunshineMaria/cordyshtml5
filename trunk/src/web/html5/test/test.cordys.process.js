@@ -20,6 +20,18 @@
             }
         }
     });
+	
+	$.mockjax({
+        url: '*/com.eibus.web.soap.Gateway.wcp',
+        data: /ExecuteProcess/,
+        responseText: {
+            data: {
+                "instance_id": "001CC42E-BB14-11E1-F993-C9E84F75F4A8"
+            }
+        },
+		responseXML:
+		'<response><data><instance_id>001CC42E-BB14-11E1-F993-C9E84F75F4A8</instance_id></data></response>'
+    });
 
     test("Get Business Identifier JSON", 2, function () {
         stop();
@@ -38,19 +50,7 @@
                 return false;
             }
         })
-    });
-	
-    $.mockjax({
-        url: '*/com.eibus.web.soap.Gateway.wcp',
-        data: /ExecuteProcess/,
-        responseText: {
-            data: {
-                "instance_id": "001CC42E-BB14-11E1-F993-C9E84F75F4A8"
-            }
-        },
-		responseXML:
-		'<response><data><instance_id>001CC42E-BB14-11E1-F993-C9E84F75F4A8</instance_id></data></response>'
-    });
+    });    
 
 	var startProcessRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><ExecuteProcess xmlns='http://schemas.cordys.com/bpm/execution/1.0'><receiver>BPM/getEmployees</receiver><type>definition</type><message></message></ExecuteProcess></SOAP:Body></SOAP:Envelope>";
 	
@@ -61,7 +61,7 @@
 				equal(compareXML(startProcessRequest,settings.data), true, "Compare Request XML");
             },
 			success: function (response) {
-                equal(response.data.instance_id, "001CC42E-BB14-11E1-F993-C9E84F75F4A8", "Process Instance_Id is 001CC42E-BB14-11E1-F993-C9E84F75F4A8");
+                equal(response.data.instance_id, "001CC42E-BB14-11E1-F993-C9E84F75F4A8", "Process (001CC42E-BB14-11E1-F993-C9E84F75F4A8) started");
                 start();
             },
             error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
@@ -80,7 +80,7 @@
 				equal(compareXML(startProcessRequest,settings.data), true, "Compare Request XML");
             },
 			success: function (response) {
-                equal($(response).find("instance_id").text(), "001CC42E-BB14-11E1-F993-C9E84F75F4A8", "Process Instance_Id is 001CC42E-BB14-11E1-F993-C9E84F75F4A8");
+                equal($(response).find("instance_id").text(), "001CC42E-BB14-11E1-F993-C9E84F75F4A8", "Process (001CC42E-BB14-11E1-F993-C9E84F75F4A8) started");
                 start();
             },
             error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
@@ -100,7 +100,7 @@
 				equal(compareXML(executeProcessRequest,settings.data), true, "Compare Request XML");
             },
 			success: function (response) {
-                equal(response.data.instance_id, "001CC42E-BB14-11E1-F993-C9E84F75F4A8", "Process Instance_Id is 001CC42E-BB14-11E1-F993-C9E84F75F4A8");
+                equal(response.data.instance_id, "001CC42E-BB14-11E1-F993-C9E84F75F4A8", "Process (001CC42E-BB14-11E1-F993-C9E84F75F4A8) executed");
                 start();
             },
             error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
@@ -119,7 +119,7 @@
 				equal(compareXML(executeProcessRequest,settings.data), true, "Compare Request XML");
             },
             success: function (response) {
-                equal($(response).find("instance_id").text(), "001CC42E-BB14-11E1-F993-C9E84F75F4A8", "Process Instance_Id is 001CC42E-BB14-11E1-F993-C9E84F75F4A8");
+                equal($(response).find("instance_id").text(), "001CC42E-BB14-11E1-F993-C9E84F75F4A8", "Process (001CC42E-BB14-11E1-F993-C9E84F75F4A8) executed");
                 start();
             },
             error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
@@ -135,7 +135,7 @@
 		
         $.cordys.process.getAttachments("001CC42E-BB14-11E1-F980-20A353CF14A7", {
             beforeSend: function (xhr, settings) {
-				var getAttachRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAttachments xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type='BPM'>001CC42E-BB14-11E1-F980-20A353CF14A7</instanceid></GetAttachments></SOAP:Body></SOAP:Envelope>";
+				var getAttachRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAttachments xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"BPM\">001CC42E-BB14-11E1-F980-20A353CF14A7</instanceid></GetAttachments></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(getAttachRequest,settings.data), true, "Compare Request XML");
                 equal($(settings.data).find("instanceID").text(), "001CC42E-BB14-11E1-F980-20A353CF14A7", "Attachment InstanceID is 001CC42E-BB14-11E1-F980-20A353CF14A7");
                 equal($(settings.data).find("instanceID").attr("type"), "BPM", "Process type is BPM");
@@ -148,14 +148,31 @@
             }
         })
     });
-
+	
+	test("Upload Attachment", 2, function () {
+        stop();
+        $.cordys.process.uploadAttachment("001CC42E-BB14-11E1-F993-CEB9864AF4A8", "attachmentName", "image", "fileDescription", "http://fileurl.jpg", {
+            beforeSend: function (xhr, settings) {
+				var uploadAttachRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UploadAttachment xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"BPM\">001CC42E-BB14-11E1-F993-CEB9864AF4A8</instanceid><attachmentname>attachmentName</attachmentname><filename>image</filename><description>fileDescription</description><content isURL=\"true\">http://fileurl.jpg</content></UploadAttachment></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(uploadAttachRequest,settings.data), true, "Compare Request XML");
+                equal($(settings.data).find("filename").text(), "image", "Filename is image");
+                start();
+            },
+            error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
+                ok(false, "error found: " + errorMessage);
+                start();
+                return false;
+            }
+        })
+    });
+	
     test("Remove Attachment", 2, function () {
         stop();
-        $.cordys.process.removeAttachment("001CC42E-BB14-11E1-F993-CEB9864AF4A8", "attachmentName", "sample", {
+        $.cordys.process.removeAttachment("001CC42E-BB14-11E1-F993-CEB9864AF4A8", "attachmentName", "image", {
             beforeSend: function (xhr, settings) {
-				var removeAttachRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteAttachment xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type='BPM'>001CC42E-BB14-11E1-F993-CEB9864AF4A8</instanceid><attachmentname>attachmentName</attachmentname><filename>sample</filename></DeleteAttachment></SOAP:Body></SOAP:Envelope>";
+				var removeAttachRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteAttachment xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"BPM\">001CC42E-BB14-11E1-F993-CEB9864AF4A8</instanceid><attachmentname>attachmentName</attachmentname><filename>image</filename></DeleteAttachment></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(removeAttachRequest,settings.data), true, "Compare Request XML");
-                equal($(settings.data).find("filename").text(), "sample", "Filename is sample");
+                equal($(settings.data).find("filename").text(), "image", "Filename is image");
                 start();
             },
             error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {

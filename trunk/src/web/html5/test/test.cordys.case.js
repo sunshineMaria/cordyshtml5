@@ -163,10 +163,20 @@
 
 	test("Read Tasks with details", function(){
 		stop();
-		$.cordys.workflow.getTasks({success:function(tasks) {
-			equal(tasks.length, 2, "2 task found");
+		$.cordys.workflow.getTasks({
+			beforeSend:function(xhr, settings){
+				var getTasksRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAllTasksForUser xmlns='http://schemas.cordys.com/notification/workflow/1.0'><OrderBy>Task.StartDate DESC</OrderBy></GetAllTasksForUser></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(getTasksRequest,settings.data), true, "Compare Request XML");
+			},
+			success:function(tasks) {
+				equal(tasks.length, 2, "2 task found");
 			ok($.cordys.workflow.isCaseActivity(tasks[1]), "Task is Case");
-			$.cordys.workflow.getTaskDetails(tasks[1], {success: function(tasks) {
+			$.cordys.workflow.getTaskDetails(tasks[1], {
+			beforeSend:function(xhr, settings){
+				var getTaskDetailsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><ReturnTaskData>true</ReturnTaskData><RetrievePossibleActions>true</RetrievePossibleActions></GetTask></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(getTaskDetailsRequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(tasks) {
 				equal(tasks.length, 1, "1 task details found");
 			}});
 		}});
@@ -175,28 +185,62 @@
 		}, 2000);
 	});
 
-	test("Create and Test Case", 8, function(){
+	test("Create and Test Case", 15, function(){
 		stop();
 		$.cordys['case'].createCase("Test Case", getCaseVariables(), getCaseData(), {
+			beforeSend:function(xhr, settings){
+				var createCaseRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><CreateCase xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><model>Test Case</model><casedata><data xmlns:ns=\"http://schemas.cordys.com/default\" name=\"ns:TestCase\"><ns:TestCase><ns:Number>1234567890</ns:Number></ns:TestCase></data><data xmlns:case=\"http://schemas.cordys.com/casemanagement/1.0\" name=\"case:casevariables\"><case:casevariables><case:User type=\"user\">user1</case:User><case:ExpectedDuration type=\"duration\">P0Y0M10DT0H0M0S</case:ExpectedDuration><case:Worklist type=\"worklist\">Organization/My Work List</case:Worklist></case:casevariables></data></casedata></CreateCase></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(createCaseRequest,settings.data), true, "Compare Request XML");
+			},
 			success: function(data) {
 				equal(data.caseinstanceid, "someCaseInstanceID", "Case created");
-				$.cordys['case'].updateCaseData(data.caseinstanceid, getCaseData(), {success: function(data) {
-					equal(data.error, null, "Case Data updated");
+				$.cordys['case'].updateCaseData(data.caseinstanceid, getCaseData(), {
+				beforeSend:function(xhr, settings){
+					var updateCaseDataRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateCaseData xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>someCaseInstanceID</caseinstanceid><casedata><data xmlns:ns=\"http://schemas.cordys.com/default\" name=\"ns:TestCase\"><ns:TestCase><ns:Number>1234567890</ns:Number></ns:TestCase></data></casedata></UpdateCaseData></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(updateCaseDataRequest,settings.data), true, "Compare Request XML");
+				},
+				success: function(data) {
+					equal(data.error, undefined, "Case Data updated");
 				}});
-				$.cordys['case'].updateCaseVariables(data.caseinstanceid, getCaseVariables(), {success: function(data) {
-					equal(data.error, null, "Case Variables updated");
+				$.cordys['case'].updateCaseVariables(data.caseinstanceid, getCaseVariables(), {
+				beforeSend:function(xhr, settings){
+					var updateCaseVariablesRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateCaseVariables xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>someCaseInstanceID</caseinstanceid><casedata><data xmlns:case=\"http://schemas.cordys.com/casemanagement/1.0\" name=\"case:casevariables\"><case:casevariables><case:User type=\"user\">user1</case:User><case:ExpectedDuration type=\"duration\">P0Y0M10DT0H0M0S</case:ExpectedDuration><case:Worklist type=\"worklist\">Organization/My Work List</case:Worklist></case:casevariables></data></casedata></UpdateCaseVariables></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(updateCaseVariablesRequest,settings.data), true, "Compare Request XML");
+				},
+				success: function(data) {
+					equal(data.error, undefined, "Case Variables updated");
 				}});
-				$.cordys['case'].getCaseData(data.caseinstanceid, {success: function(data) {
+				$.cordys['case'].getCaseData(data.caseinstanceid, {
+				beforeSend:function(xhr, settings){
+					var getCaseDataRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetCaseData xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>someCaseInstanceID</caseinstanceid></GetCaseData></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(getCaseDataRequest,settings.data), true, "Compare Request XML");
+				},
+				success: function(data) {
 					equal(data[0]["ns:TestCase"]["ns:Number"], "1234567890", "Getting Case Data");
 				}});
-				$.cordys['case'].getCaseInstance(data.caseinstanceid, {success: function(data) {
+				$.cordys['case'].getCaseInstance(data.caseinstanceid, {
+				beforeSend:function(xhr, settings){
+					var getCaseInstanceRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetCaseInstance xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>someCaseInstanceID</caseinstanceid></GetCaseInstance></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(getCaseInstanceRequest,settings.data), true, "Compare Request XML");
+				},
+				success: function(data) {
 					equal(data[0].CASE_INSTANCE_IDENTIFIERS.INSTANCE_ID, "someCaseInstanceID", "Getting Case Instance");
 				}});
-				$.cordys['case'].getCaseVariables(data.caseinstanceid, {success: function(vars) {
+				$.cordys['case'].getCaseVariables(data.caseinstanceid, {
+				beforeSend:function(xhr, settings){
+					var getCaseVariablesRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetCaseVariables xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>someCaseInstanceID</caseinstanceid></GetCaseVariables></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(getCaseVariablesRequest,settings.data), true, "Compare Request XML");
+				},
+				success: function(vars) {
 					equal(vars.length, 3, "3 case variables found");
 					equal(vars[0].User.text, "user1", "First variable contains User");
 				}});
-				$.cordys['case'].sendEvent(data.caseinstanceid, "test", {success: function(data) {
+				$.cordys['case'].sendEvent(data.caseinstanceid, "test", {
+				beforeSend:function(xhr, settings){
+					var sendEventRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><SendEvent xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>someCaseInstanceID</caseinstanceid><event source=\"\">test</event></SendEvent></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(sendEventRequest,settings.data), true, "Compare Request XML");
+				},
+				success: function(data) {
 					equal(data.result["@success"], "false", "Event Send");
 				}});
 			}
@@ -234,17 +278,32 @@
 		};
 	}
 
-	test("Case Attachments", 4, function(){
+	test("Case Attachments", 7, function(){
 		stop();
-		$.cordys['case'].getAttachments("someCaseInstanceID", {success: function(attachments) {
-			equal(attachments.length, 2, "2 attachments found");
-			equal(attachments[0]["@name"], "image1.jpg", "First attachment image1");
+		$.cordys['case'].getAttachments("someCaseInstanceID", {
+			beforeSend:function(xhr, settings){
+				var getAttachmentsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAttachments xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"CASE\">someCaseInstanceID</instanceid></GetAttachments></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(getAttachmentsRequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(attachments) {
+				equal(attachments.length, 2, "2 attachments found");
+				equal(attachments[0]["@name"], "image1.jpg", "First attachment image1");
 		}});
-		$.cordys['case'].addAttachment("someCaseInstanceID", "Photo", "image3.jpg", "some image", window.btoa("some content"), {success: function(data) {
-			equal(data.attachment["@name"], "image3.jpg", "Attachment added");
+		$.cordys['case'].addAttachment("someCaseInstanceID", "Photo", "image3.jpg", "some image", window.btoa("some content"), {
+			beforeSend:function(xhr, settings){
+				var addAttachmentRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UploadAttachment xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"CASE\">someCaseInstanceID</instanceid><attachmentname>Photo</attachmentname><filename>image3.jpg</filename><description>some image</description><content isURL=\"false\">c29tZSBjb250ZW50</content></UploadAttachment></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(addAttachmentRequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.attachment["@name"], "image3.jpg", "Attachment added");
 		}});
-		$.cordys['case'].removeAttachment("someCaseInstanceID", "Photo", "image3.jpg", {success: function(data) {
-			equal(data.error, null, "Attachment removed");
+		$.cordys['case'].removeAttachment("someCaseInstanceID", "Photo", "image3.jpg", {
+			beforeSend:function(xhr, settings){
+				var removeAttachmentRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteAttachment xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"CASE\">someCaseInstanceID</instanceid><attachmentname>Photo</attachmentname><filename>image3.jpg</filename></DeleteAttachment></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(removeAttachmentRequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Attachment removed");
 		}});
 		setTimeout(function() {
 			start();
