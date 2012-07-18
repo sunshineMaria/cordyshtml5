@@ -1,6 +1,6 @@
 ﻿(function(window, $) {
 
-	module("Employees Test");
+	module("Ajax Plugin Test");
 
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
