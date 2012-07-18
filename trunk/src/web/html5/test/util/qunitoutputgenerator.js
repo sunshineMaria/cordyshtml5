@@ -4,21 +4,21 @@
  Output Format
 
  <testsuites>
-    <testsuite name="testsuite">
-        <testcase classname="Employees Test" name="Get Employees json">
-            <success message="3 employees found" type="success"/>
-            <success message="Davolio is first Employee" type="success"/>
-        </testcase>
-        <testcase classname="Employees Test" name="Get Employees xml">
-            <success message="3 employees found" type="success"/>
-            <failure message="Davolio is first Employee" type="failed"/>
-            <system-out>Expected: &quot;Davolios&quot;Result: &quot;Davolio&quot;Diff: &quot;Davolios&quot; &quot;Davolio&quot; Source:     at http://localhost/cordys/html5/test/test.cordys.ajax.js:129</system-out>
-        </testcase>
-        <testcase classname="Process Plugin test" name="Remove Attachment">
-            <success message="Compare Request XML" type="success"/>
-            <success message="Filename is sample" type="success"/>
-        </testcase>
-    </testsuite>
+	<testsuite name="testsuite">
+		<testcase classname="Employees Test" name="Get Employees json">
+			<success message="3 employees found" type="success"/>
+			<success message="Davolio is first Employee" type="success"/>
+		</testcase>
+		<testcase classname="Employees Test" name="Get Employees xml">
+			<success message="3 employees found" type="success"/>
+			<failure message="Davolio is first Employee" type="failed"/>
+			<system-out>Expected: &quot;Davolios&quot;Result: &quot;Davolio&quot;Diff: &quot;Davolios&quot; &quot;Davolio&quot; Source:	 at http://localhost/cordys/html5/test/test.cordys.ajax.js:129</system-out>
+		</testcase>
+		<testcase classname="Process Plugin test" name="Remove Attachment">
+			<success message="Compare Request XML" type="success"/>
+			<success message="Filename is sample" type="success"/>
+		</testcase>
+	</testsuite>
 </testsuites>
 
 */
@@ -82,9 +82,9 @@ Takes the body of the test result and adds the qunit css.
 
 */
 function getTestResultHTML() {
-    var outputTestResultHTML = "<html><head><link href=\"" + PATH_TO_QUNIT_CSS + "\" rel=\"stylesheet\" type=\"text/css\"></link></head>"
-    outputTestResultHTML += document.body.outerHTML;
-    outputTestResultHTML += "</html>";
+	var outputTestResultHTML = "<html><head><link href=\"" + PATH_TO_QUNIT_CSS + "\" rel=\"stylesheet\" type=\"text/css\"></link></head>"
+	outputTestResultHTML += document.body.outerHTML;
+	outputTestResultHTML += "</html>";
 
-    return outputTestResultHTML;
+	return outputTestResultHTML;
 }
