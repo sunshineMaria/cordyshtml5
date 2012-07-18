@@ -1,3 +1,12 @@
+/*
+Courtesy https://gist.github.com/1305062
+
+Added saving the HTML Result along with saving of JUnit type XML.
+
+qunitoutputgenerator has to be added to the test suite.
+
+*/
+
 var system = require('system');
 
 // Now let's get a file system handle.
@@ -57,12 +66,14 @@ if (system.args.length !== 4) {
 
 var page = require('webpage').create();
 
+// evaluates getTestResultXML in the qunitputgenerator to get the XML in Junit Style
 writeTestResultXML = function()
 {
 	var outputTestResultXML = page.evaluate(function () { return getTestResultXML() });
 	fs.write(system.args[3], outputTestResultXML, "w");
 };
 
+// evaluates getTestResultHTML in the qunitputgenerator to get the HTML output
 writeTestResultHTML = function () {
     var outputTestResultHTML = page.evaluate(function () { return getTestResultHTML() });
     fs.write(system.args[2], outputTestResultHTML, "w");
