@@ -48,3 +48,12 @@ function getTestResultXML() {
 
 	return outputXML;
 }
+
+var PATH_TO_JQUERY_CSS = "http://srv-nl-crd134/cordys/html5/jquery/qunit.css";
+function getTestResultHTML() {
+    var outputTestResultHTML = "<html><head><link href=\"" + PATH_TO_JQUERY_CSS + "\" rel=\"stylesheet\" type=\"text/css\"></link></head>"
+    outputTestResultHTML += document.body.outerHTML;
+    outputTestResultHTML += "</html>";
+
+    return outputTestResultHTML;
+}
