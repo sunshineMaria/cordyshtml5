@@ -311,29 +311,48 @@
 			}
 		}
 	});
-
-
+	
+	var getTasksrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAllTasksForUser xmlns='http://schemas.cordys.com/notification/workflow/1.0'><OrderBy>Task.StartDate DESC</OrderBy></GetAllTasksForUser></SOAP:Body></SOAP:Envelope>";
+	
 	test("Read Tasks for User", null, function(){
 		stop();
-		$.cordys.workflow.getTasks({success:function(tasks) {
+		$.cordys.workflow.getTasks({
+		beforeSend: function (xhr, settings) {
+			equal(compareXML(getTasksrequest,settings.data), true, "Compare Request XML");
+        },
+		success:function(tasks) {
 			equal(tasks.length, 2, "2 tasks found");
 			ok(!$.cordys.workflow.isCaseActivity(tasks[0]), "First task is BPM");
 			ok($.cordys.workflow.isCaseActivity(tasks[1]), "Second task is Case");
 			start();
 		}});
-	});
+	});	
 	
-	test("Read Tasks Details", 7, function(){
+	test("Read Tasks Details", 10, function(){
 		stop();
-		$.cordys.workflow.getTasks({success:function(tasks) {
+		$.cordys.workflow.getTasks({
+		beforeSend: function (xhr, settings) {
+			equal(compareXML(getTasksrequest,settings.data), true, "Compare Request XML");
+        },
+		success:function(tasks) {
 			equal(tasks.length, 2, "2 tasks found");
 			var firstTaskId = tasks[0].TaskId,
 				secondTaskId = tasks[1].TaskId;
-			$.cordys.workflow.getTaskDetails(tasks[0], {success: function(tasks) {	// Read by task object
+			$.cordys.workflow.getTaskDetails(tasks[0], {
+			beforeSend: function (xhr, settings) {
+				var getTaskDetailsrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>FF27CA09-C054-11E1-F8F4-026B300AB28E</TaskId><ReturnTaskData>true</ReturnTaskData><RetrievePossibleActions>true</RetrievePossibleActions></GetTask></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(getTaskDetailsrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(tasks) {	// Read by task object
 				equal(tasks.length, 1, "1 task details found");
 				equal(tasks[0].TaskId, firstTaskId, "same TaskId");
 				ok(!$.cordys.workflow.isCaseActivity(tasks[0]), "Task is BPM");
-				$.cordys.workflow.getTaskDetails(secondTaskId, {success: function(tasks) {	// Read by taskId
+				$.cordys.workflow.getTaskDetails(secondTaskId, {
+				beforeSend: function (xhr, settings) {
+					var getTaskDetailsrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><ReturnTaskData>true</ReturnTaskData><RetrievePossibleActions>true</RetrievePossibleActions></GetTask></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(getTaskDetailsrequest,settings.data), true, "Compare Request XML");
+				},
+				success: function(tasks) {	// Read by taskId
 					equal(tasks.length, 1, "1 task details found");
 					equal(tasks[0].TaskId, secondTaskId, "same TaskId");
 					ok($.cordys.workflow.isCaseActivity(tasks[0]), "Task is Case");
@@ -345,36 +364,85 @@
 		}, 2000);
 	});
 
-	test("Tasks Actions", 10, function(){
+	test("Tasks Actions", 20, function(){
 		stop();
-		$.cordys.workflow.getTasks({success:function(tasks) {
+		$.cordys.workflow.getTasks({
+		beforeSend: function (xhr, settings) {
+			equal(compareXML(getTasksrequest,settings.data), true, "Compare Request XML");
+        },
+		success:function(tasks) {
 			equal(tasks.length, 2, "2 tasks found");
-			$.cordys.workflow.claimTask(tasks[0], { success: function(data) {
-				equal(data.error, null, "Task Claimed");
+			$.cordys.workflow.claimTask(tasks[0], {
+			beforeSend: function (xhr, settings) {
+				var claimTaskrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><ClaimTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>FF27CA09-C054-11E1-F8F4-026B300AB28E</TaskId></ClaimTask></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(claimTaskrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Task Claimed");
 			}});
-			$.cordys.workflow.pauseTask(tasks[1], {somedata:"paused"}, { success: function(data) {
-				equal(data.error, null, "Task Paused");
+			$.cordys.workflow.pauseTask(tasks[1], {somedata:"paused"}, {
+			beforeSend: function (xhr, settings) {
+				var pauseTaskrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><PerformTaskAction xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><Action>PAUSE</Action><Data><somedata>paused</somedata></Data></PerformTaskAction></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(pauseTaskrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Task Paused");
 			}});
-			$.cordys.workflow.resumeTask(tasks[1], {somedata:"resumed"}, { success: function(data) {
-				equal(data.error, null, "Task Resumed");
+			$.cordys.workflow.resumeTask(tasks[1], {somedata:"resumed"}, {
+			beforeSend: function (xhr, settings) {
+				var resumeTaskrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><PerformTaskAction xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><Action>RESUME</Action><Data><somedata>resumed</somedata></Data></PerformTaskAction></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(resumeTaskrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Task Resumed");
 			}});
-			$.cordys.workflow.revokeTask(tasks[1], {somedata:"revoked"}, { success: function(data) {
-				equal(data.error, null, "Task Revoked");
+			$.cordys.workflow.revokeTask(tasks[1], {somedata:"revoked"}, {
+			beforeSend: function (xhr, settings) {
+				var revokeTaskrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><PerformTaskAction xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><Action>REVOKECLAIM</Action><Data><somedata>revoked</somedata></Data></PerformTaskAction></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(revokeTaskrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Task Revoked");
 			}});
-			$.cordys.workflow.skipTask(tasks[1], {somedata:"skipped"}, "skip this", { success: function(data) {
-				equal(data.error, null, "Task Skipped");
+			$.cordys.workflow.skipTask(tasks[1], {somedata:"skipped"}, "skip this", {
+			beforeSend: function (xhr, settings) {
+				var skipTaskrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><PerformTaskAction xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><Action>SKIP</Action><Data><somedata>skipped</somedata></Data><Memo>skip this</Memo></PerformTaskAction></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(skipTaskrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Task Skipped");
 			}});
-			$.cordys.workflow.startTask(tasks[1], {somedata:"started"}, { success: function(data) {
-				equal(data.error, null, "Task Started");
+			$.cordys.workflow.startTask(tasks[1], {somedata:"started"}, {
+			beforeSend: function (xhr, settings) {
+				var startTaskrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><PerformTaskAction xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><Action>START</Action><Data><somedata>started</somedata></Data></PerformTaskAction></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(startTaskrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Task Started");
 			}});
-			$.cordys.workflow.stopTask(tasks[1], {somedata:"stopped"}, { success: function(data) {
-				equal(data.error, null, "Task Stopped");
+			$.cordys.workflow.stopTask(tasks[1], {somedata:"stopped"}, {
+			beforeSend: function (xhr, settings) {
+				var stopTaskrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><PerformTaskAction xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><Action>STOP</Action><Data><somedata>stopped</somedata></Data></PerformTaskAction></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(stopTaskrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Task Stopped");
 			}});
-			$.cordys.workflow.suspendTask(tasks[1], {somedata:"suspended"}, { success: function(data) {
-				equal(data.error, null, "Task Suspended");
+			$.cordys.workflow.suspendTask(tasks[1], {somedata:"suspended"}, {
+			beforeSend: function (xhr, settings) {
+				var suspendTaskrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><PerformTaskAction xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><Action>SUSPEND</Action><Data><somedata>suspended</somedata></Data></PerformTaskAction></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(suspendTaskrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Task Suspended");
 			}});
-			$.cordys.workflow.completeTask(tasks[1], {somedata:"completed"}, { success: function(data) {
-				equal(data.error, null, "Task Completed");
+			$.cordys.workflow.completeTask(tasks[1], {somedata:"completed"}, {
+			beforeSend: function (xhr, settings) {
+				var completeTaskrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><PerformTaskAction xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><Action>COMPLETE</Action><Data><somedata>completed</somedata></Data></PerformTaskAction></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(completeTaskrequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(data) {
+				equal(data.error, undefined, "Task Completed");
 			}});
 		}});
 		setTimeout(function() {
