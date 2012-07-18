@@ -75,8 +75,8 @@ writeTestResultXML = function()
 
 // evaluates getTestResultHTML in the qunitputgenerator to get the HTML output
 writeTestResultHTML = function () {
-    var outputTestResultHTML = page.evaluate(function () { return getTestResultHTML() });
-    fs.write(system.args[2], outputTestResultHTML, "w");
+	var outputTestResultHTML = page.evaluate(function () { return getTestResultHTML() });
+	fs.write(system.args[2], outputTestResultHTML, "w");
 };
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
@@ -85,7 +85,7 @@ page.onConsoleMessage = function(msg, lineNumber, source) {
  };
  
 
-
+// Called on page open
 page.open(system.args[1], function(status){
 	if (status !== "success") {
 		console.log("Unable to access network");
