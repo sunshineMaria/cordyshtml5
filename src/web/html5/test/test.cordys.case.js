@@ -3,7 +3,30 @@
 	module("Case Plugin test");
 
 	// Use mockjax from test.cordys.workflow.js for reading tasks
-
+	test("Read Tasks with details", function(){
+		stop();
+		$.cordys.workflow.getTasks({
+			beforeSend:function(xhr, settings){
+				var getTasksRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAllTasksForUser xmlns='http://schemas.cordys.com/notification/workflow/1.0'><OrderBy>Task.StartDate DESC</OrderBy></GetAllTasksForUser></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(getTasksRequest,settings.data), true, "Compare Request XML");
+			},
+			success:function(tasks) {
+				equal(tasks.length, 2, "2 task found");
+			ok($.cordys.workflow.isCaseActivity(tasks[1]), "Task is Case");
+			$.cordys.workflow.getTaskDetails(tasks[1], {
+			beforeSend:function(xhr, settings){
+				var getTaskDetailsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><ReturnTaskData>true</ReturnTaskData><RetrievePossibleActions>true</RetrievePossibleActions></GetTask></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(getTaskDetailsRequest,settings.data), true, "Compare Request XML");
+			},
+			success: function(tasks) {
+				equal(tasks.length, 1, "1 task details found");
+			}});
+		}});
+		setTimeout(function() {
+			start();
+		}, 2000);
+	});
+	
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
 		data: /(\bCreateCase\b|\bUpdateCaseData\b|\bUpdateCaseVariables\b)/,
@@ -28,6 +51,7 @@
 			}
 		}
 	});
+
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
 		data: /\bSendEvent\b/,
@@ -49,6 +73,7 @@
 			}
 		}
 	});
+
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
 		data: /\bGetCaseInstance\b/,
@@ -79,6 +104,7 @@
 			}
 		}
 	});
+
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
 		data: /\bGetCaseVariables\b/,
@@ -108,81 +134,6 @@
 				}
 			}
 		}
-	});
-
-	$.mockjax({
-		url: '*/com.eibus.web.soap.Gateway.wcp',
-		data: /\bGetAttachments\b/,
-		responseText: {
-			attachment: {
-				"@name": "Photo",
-				"@mime": "bpm,jpg,jpeg",
-				"@multiplicity":"*",
-				"@acl":"delete",
-				instance:[
-					{
-						"@name": "image1.jpg",
-						"@modifiedby":"cn=user1,cn=organizational users,o=system,cn=cordys,cn=build,o=vanenburg.com",
-						"@modifiedon":"1340204669026",
-						"@description":"some Image",
-						text:"/documentstore/casemanagement/Empty Model/someCaseInstanceID/Photo/image1.jpg"
-					},
-					{
-						"@name": "image2.jpg",
-						"@modifiedby":"cn=user1,cn=organizational users,o=system,cn=cordys,cn=build,o=vanenburg.com",
-						"@modifiedon":"1340204669026",
-						"@description":"other Image",
-						text:"/documentstore/casemanagement/Empty Model/someCaseInstanceID/Photo/image2.jpg"
-					}
-				]
-			}
-		}
-	});
-
-	$.mockjax({
-		url: '*/com.eibus.web.soap.Gateway.wcp',
-		data: /\bUploadAttachment\b/,
-		responseText: {
-			attachment: {
-				"@name": "image3.jpg",
-				"@modifiedby": "user1",
-				"@modifiedat": "12-07-2012 10:20",
-				"@size": "300",
-				text: "/documentstore/casemanagement/Empty Model/someCaseInstanceID/Photo/image3.jpg"
-			}
-		}
-	});
-
-	$.mockjax({
-		url: '*/com.eibus.web.soap.Gateway.wcp',
-		data: /\bDeleteAttachment\b/,
-		responseText: {
-			caseinstanceid: "someCaseInstanceID"
-		}
-	});
-
-	test("Read Tasks with details", function(){
-		stop();
-		$.cordys.workflow.getTasks({
-			beforeSend:function(xhr, settings){
-				var getTasksRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAllTasksForUser xmlns='http://schemas.cordys.com/notification/workflow/1.0'><OrderBy>Task.StartDate DESC</OrderBy></GetAllTasksForUser></SOAP:Body></SOAP:Envelope>";
-				equal(compareXML(getTasksRequest,settings.data), true, "Compare Request XML");
-			},
-			success:function(tasks) {
-				equal(tasks.length, 2, "2 task found");
-			ok($.cordys.workflow.isCaseActivity(tasks[1]), "Task is Case");
-			$.cordys.workflow.getTaskDetails(tasks[1], {
-			beforeSend:function(xhr, settings){
-				var getTaskDetailsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><ReturnTaskData>true</ReturnTaskData><RetrievePossibleActions>true</RetrievePossibleActions></GetTask></SOAP:Body></SOAP:Envelope>";
-				equal(compareXML(getTaskDetailsRequest,settings.data), true, "Compare Request XML");
-			},
-			success: function(tasks) {
-				equal(tasks.length, 1, "1 task details found");
-			}});
-		}});
-		setTimeout(function() {
-			start();
-		}, 2000);
 	});
 
 	test("Create and Test Case", 15, function(){
@@ -247,8 +198,9 @@
 		});
 		setTimeout(function() {
 			start();
-		}, 2000);
+		}, 4000);
 	});
+	
 	function getCaseVariables() {
 		return {
 			User: {
@@ -278,6 +230,57 @@
 		};
 	}
 
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /\bGetAttachments\b/,
+		responseText: {
+			attachment: {
+				"@name": "Photo",
+				"@mime": "bpm,jpg,jpeg",
+				"@multiplicity":"*",
+				"@acl":"delete",
+				instance:[
+					{
+						"@name": "image1.jpg",
+						"@modifiedby":"cn=user1,cn=organizational users,o=system,cn=cordys,cn=build,o=vanenburg.com",
+						"@modifiedon":"1340204669026",
+						"@description":"some Image",
+						text:"/documentstore/casemanagement/Empty Model/someCaseInstanceID/Photo/image1.jpg"
+					},
+					{
+						"@name": "image2.jpg",
+						"@modifiedby":"cn=user1,cn=organizational users,o=system,cn=cordys,cn=build,o=vanenburg.com",
+						"@modifiedon":"1340204669026",
+						"@description":"other Image",
+						text:"/documentstore/casemanagement/Empty Model/someCaseInstanceID/Photo/image2.jpg"
+					}
+				]
+			}
+		}
+	});
+
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /\bUploadAttachment\b/,
+		responseText: {
+			attachment: {
+				"@name": "image3.jpg",
+				"@modifiedby": "user1",
+				"@modifiedat": "12-07-2012 10:20",
+				"@size": "300",
+				text: "/documentstore/casemanagement/Empty Model/someCaseInstanceID/Photo/image3.jpg"
+			}
+		}
+	});
+
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /\bDeleteAttachment\b/,
+		responseText: {
+			caseinstanceid: "someCaseInstanceID"
+		}
+	});
+	
 	test("Case Attachments", 7, function(){
 		stop();
 		$.cordys['case'].getAttachments("someCaseInstanceID", {
@@ -307,7 +310,7 @@
 		}});
 		setTimeout(function() {
 			start();
-		}, 2000);
+		}, 3000);
 	});
 
 })(window, jQuery)
