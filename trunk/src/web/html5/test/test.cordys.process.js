@@ -21,18 +21,6 @@
         }
     });
 	
-	$.mockjax({
-        url: '*/com.eibus.web.soap.Gateway.wcp',
-        data: /ExecuteProcess/,
-        responseText: {
-            data: {
-                "instance_id": "001CC42E-BB14-11E1-F993-C9E84F75F4A8"
-            }
-        },
-		responseXML:
-		'<response><data><instance_id>001CC42E-BB14-11E1-F993-C9E84F75F4A8</instance_id></data></response>'
-    });
-
     test("Get Business Identifier JSON", 2, function () {
         stop();
         $.cordys.process.getBusinessIdentifiers("001CC42E-BB14-11E1-F984-5F61BA2114A7", {
@@ -50,7 +38,19 @@
                 return false;
             }
         })
-    });    
+    });
+
+    $.mockjax({
+        url: '*/com.eibus.web.soap.Gateway.wcp',
+        data: /ExecuteProcess/,
+        responseText: {
+            data: {
+                "instance_id": "001CC42E-BB14-11E1-F993-C9E84F75F4A8"
+            }
+        },
+		responseXML:
+		'<response><data><instance_id>001CC42E-BB14-11E1-F993-C9E84F75F4A8</instance_id></data></response>'
+    });
 
 	var startProcessRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><ExecuteProcess xmlns='http://schemas.cordys.com/bpm/execution/1.0'><receiver>BPM/getEmployees</receiver><type>definition</type><message></message></ExecuteProcess></SOAP:Body></SOAP:Envelope>";
 	
