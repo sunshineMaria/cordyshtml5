@@ -91,7 +91,26 @@
 		<echo message="updating the webfilesystem.xml ${src.capcontent.web.filesystem.xml}'" />
 		<echo message="updating from ${build.web}" />
 	   	
-	   	<updatefilesystemxml inputxmlpath="${src.capcontent.web.filesystem.xml}" buildlocation="${build.web}"/>
+	   	<trycatch property="updatefilesystemerrormessage" reference="updatewebfilesystem">
+		  <try>
+		    <updatefilesystemxml inputxmlpath="${src.capcontent.web.filesystem.xml}" buildlocation="${build.web}" />
+		  </try>
+		
+		  <catch>
+		    	<if>
+			    <contains string="${updatefilesystemerrormessage}" substring="Source file system is updated." />
+			    <then>
+			        <echo>Source File System was updated after the last generation of the file system artifact definition (webfilesystem.xml)</echo>
+			    </then>
+			    <else>
+			        <fail>
+			        	${updatefilesystemerrormessage}
+			        </fail>
+			        <echo>Error in Updating the Web File System with the Web File System + ${updatefilesystemerrormessage}.</echo>
+			    </else>
+			</if>
+		  </catch>
+		</trycatch>
 	</target>
 	
 	<!--
