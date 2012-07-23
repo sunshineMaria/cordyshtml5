@@ -534,5 +534,45 @@
             }
         })
     });
+	
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /GetBusinessEvents/,
+		responseText:{
+			events:{
+				"@xmlns": "http://schemas.cordys.com/casemanagement/1.0",
+				event:[
+				{
+				   "@name": "Solution.Approved",
+				   "@type": "CALL"
+				},
+				{
+				   "@name": "Solution.Rejected",
+				   "@type": "CALL"
+				}
+			  ]
+		    }
+		}
+	});
+	
+	test("Get Business Events", 3, function () {
+        stop();
+        $.cordys['case'].getBusinessEvents("001CC42E-BB14-11E1-FA4E-3E43A945D4AF", {
+				beforeSend:function(xhr, settings){
+					var getBusinessEventsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetBusinessEvents xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>001CC42E-BB14-11E1-FA4E-3E43A945D4AF</caseinstanceid></GetBusinessEvents></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(getBusinessEventsRequest,settings.data), true, "Compare Request XML");
+				},
+				success: function(data) {
+					equal(data[0].event[0]["@name"], "Solution.Approved", "First event is Solution.Approved");
+					equal(data[0].event[1]["@name"], "Solution.Rejected", "Second event is Solution.Rejected");
+					start();
+				},
+            error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
+                ok(false, "error found: " + errorMessage);
+                start();
+                return false;
+            }
+        })
+    });
 
 })(window, jQuery)
