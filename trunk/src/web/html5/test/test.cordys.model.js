@@ -1136,7 +1136,6 @@
 					toOrderID: "161"
 			},
 			beforeSend : function(jqXHR,settings) {
-			debugger;
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
