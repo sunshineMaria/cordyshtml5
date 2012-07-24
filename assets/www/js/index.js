@@ -95,7 +95,7 @@ function ViewModel() {
 		},
 		selected: selectedServers,
 		setupCtCode: function(server) {
-			var prelogin = Cordys.ajax.createPrelogin(server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp');
+			var prelogin = Cordys.ajax.createPrelogin(server.location() + '/com.eibus.web.soap.Gateway.wcp');
 			
 			$.ajax(prelogin).done(function(data) {
 				if (true === DEBUG) {
@@ -394,7 +394,7 @@ function ViewModel() {
 					self.deleteCookies.addAfterRemoveEventListener(function(e) {
 						
 						var login = Cordys.ajax.createLogin(
-							server.location() + '/cordys/com.eibus.web.soap.Gateway.wcp', 
+							server.location() + '/com.eibus.web.soap.Gateway.wcp', 
 							server.username(), 
 							password
 						);
