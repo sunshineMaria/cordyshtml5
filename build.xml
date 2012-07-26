@@ -29,7 +29,7 @@
 	-->
 	<target name="dist" 
 		description="Builds the component completely"
-		depends="clean, init, copy_web, concat_plugins, minify_sdk, updatewebfilesystem, createcap">
+		depends="clean, init, copy_web, concat_plugins, minify_sdk, update_sdkversion_references, updatewebfilesystem, createcap">
 	</target>
 
 
@@ -78,6 +78,7 @@
   		</concat>
 	</target>
 	
+	
 	<target name="minify_sdk" description="Minify the sdk file"
 					depends="concat_plugins">
 		<echo message="Minifying SDK ${build.sdk.debug.filename}" />
@@ -85,7 +86,21 @@
 		<echo message="Renaming ${build.sdk.min.filename} to ${build.sdk.release.filename}" />
 		<rename src="${build.sdk.min.filename}" dest="${build.sdk.release.filename}"/>
 	</target>
-	 
+	
+	
+	<target name="update_sdkversion_references" description="Update all the References to the SDK to ${component.sdk.release.name}"
+						depends="copy_web">
+		<echo message="Update all the References to the SDK to ${component.sdk.release.name}" />
+		<replaceregexp byline="true">
+		  <regexp pattern="cordys.${component.name}-([^\u0022\u0027]+)"/>
+		  <substitution expression="${component.sdk.release.name}"/>
+		  <fileset dir="${build.web}">
+		    <include name="**/*.htm"/>
+		    <include name="**/*.html"/>
+		  </fileset>
+		</replaceregexp>
+	</target>
+	
 		
 	<target name="updatewebfilesystem" description="Updating the webfilesystem.xml based on the addition or deletion of files">
 		<echo message="updating the webfilesystem.xml ${src.capcontent.web.filesystem.xml}'" />
