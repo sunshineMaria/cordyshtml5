@@ -60,4 +60,15 @@
     <artifact guid="002170BA-4014-11E1-F934-54950F075F4C" itempath="web/html5/demo/ordermanagement/createorder.js" name="web/html5/demo/ordermanagement/createorder.js" source="${build.web}/html5/demo/ordermanagement/createorder.js"/>
     <artifact guid="002170BA-4014-11E1-F934-54950F077F4C" itempath="web/html5/demo/attachphoto.htm" name="web/html5/demo/attachphoto.htm" source="${build.web}/html5/demo/attachphoto.htm"/>
     <artifact guid="002170BA-4014-11E1-F934-54950F079F4C" itempath="web/html5/demo/takephotourl.htm" name="web/html5/demo/takephotourl.htm" source="${build.web}/html5/demo/takephotourl.htm"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c602015446" itempath="web/html5/cordys.html5sdk-${new.component.version}.js" name="web/html5/cordys.html5sdk-${new.component.version}.js" source="${build.web}/html5/cordys.html5sdk-${new.component.version}.js"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c604031447" itempath="web/html5/test/util/qunitoutputgenerator.js" name="web/html5/test/util/qunitoutputgenerator.js" source="${build.web}/html5/test/util/qunitoutputgenerator.js"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c60497d448" itempath="web/html5/test/test.cordys.model.js" name="web/html5/test/test.cordys.model.js" source="${build.web}/html5/test/test.cordys.model.js"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c60d3ed449" itempath="web/html5/test/test.cordys.case.js" name="web/html5/test/test.cordys.case.js" source="${build.web}/html5/test/test.cordys.case.js"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c60deb544a" itempath="web/html5/test/test.cordys.process.js" name="web/html5/test/test.cordys.process.js" source="${build.web}/html5/test/test.cordys.process.js"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c60e76144b" itempath="web/html5/test/util/run-qunit.js" name="web/html5/test/util/run-qunit.js" source="${build.web}/html5/test/util/run-qunit.js"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c60efbd44c" itempath="web/html5/touchbop.deletecookies.htm" name="web/html5/touchbop.deletecookies.htm" source="${build.web}/html5/touchbop.deletecookies.htm"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c60f94544d" itempath="web/html5/cordys.html5sdk-0.2.js" name="web/html5/cordys.html5sdk-0.2.js" source="${build.web}/html5/cordys.html5sdk-0.2.js"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c6102b944e" itempath="web/html5/test/test.cordys.workflow.js" name="web/html5/test/test.cordys.workflow.js" source="${build.web}/html5/test/test.cordys.workflow.js"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c610b2944f" itempath="web/html5/test/util/inject.js" name="web/html5/test/util/inject.js" source="${build.web}/html5/test/util/inject.js"/>
+    <artifact guid="0050568b-0064-11e1-faf5-98c611501450" itempath="web/html5/test/util/test.util.js" name="web/html5/test/util/test.util.js" source="${build.web}/html5/test/util/test.util.js"/>
 </artifacts>
