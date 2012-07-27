@@ -29,7 +29,7 @@
 	-->
 	<target name="dist" 
 		description="Builds the component completely"
-		depends="clean, init, copy_web, concat_plugins, minify_sdk, update_sdkversion_references, updatewebfilesystem, createcap">
+		depends="clean, init, copy_web, concat_plugins, minify_sdk, updatewebfilesystem, createcap">
 	</target>
 
 
@@ -87,20 +87,6 @@
 		<rename src="${build.sdk.min.filename}" dest="${build.sdk.release.filename}"/>
 	</target>
 	
-	
-	<target name="update_sdkversion_references" description="Update all the References to the SDK to ${component.sdk.release.name}"
-						depends="copy_web">
-		<echo message="Update all the References to the SDK to ${component.sdk.release.name}" />
-		<replaceregexp byline="true">
-		  <regexp pattern="cordys.${component.name}-([^\u0022\u0027]+)"/>
-		  <substitution expression="${component.sdk.release.name}"/>
-		  <fileset dir="${build.web}">
-		    <include name="**/*.htm"/>
-		    <include name="**/*.html"/>
-		  </fileset>
-		</replaceregexp>
-	</target>
-	
 		
 	<target name="updatewebfilesystem" description="Updating the webfilesystem.xml based on the addition or deletion of files">
 		<echo message="updating the webfilesystem.xml ${src.capcontent.web.filesystem.xml}'" />
@@ -147,4 +133,44 @@
 			<capcontent source="${src.capcontent}/webfilesystem.xml" />
 		</createcap>				
    	</target>
+	
+	<!--
+	=============================
+	Tasks related to SDK Version Updation
+	=============================
+	-->
+	
+	<target name="update_sdk_version" 
+		description="Update the property file and references to the SDK to new version"
+		depends="set_new_sdk_name, update_component_version, update_sdkversion, update_new_sdkversion_references">
+	</target>
+	
+	<target name="set_new_sdk_name">
+		<property name="new.component.sdk.release.name" value="cordys.${component.name}-${new.component.version}.js"/>
+	</target>
+	
+	<target name="update_component_version" description="Update the property file with new version ${new.component.version}">
+		<echo message="Update the property file with new version ${new.component.version}" />
+		<propertyfile file="build.properties">
+		  <entry  key="component.version" value="${new.component.version}"/>		  
+		</propertyfile>
+	</target>
+	
+	<target name="update_sdkversion" description="Update SDK file name ${component.sdk.release.name} to ${new.component.sdk.release.name}">
+		<echo message="Update SDK file name ${component.sdk.release.name} to ${new.component.sdk.release.name}" />
+		<move file="${src.web}\html5\${component.sdk.release.name}" tofile="${src.web}\html5\${new.component.sdk.release.name}"/>
+	</target>
+	
+	<target name="update_new_sdkversion_references" description="Update all the References to the SDK from ${component.sdk.release.name} to ${new.component.sdk.release.name}">
+		<echo message="Update all the References to the SDK from ${component.sdk.release.name} to ${new.component.sdk.release.name}" />
+		<replaceregexp byline="true">
+		  <regexp pattern="${component.sdk.release.name}"/>
+		  <substitution expression="${new.component.sdk.release.name}"/>
+		  <fileset dir="${src.web}">
+		    <include name="**/*.htm"/>
+		    <include name="**/*.html"/>
+		  </fileset>
+		</replaceregexp>
+	</target>
+	
 </project>
