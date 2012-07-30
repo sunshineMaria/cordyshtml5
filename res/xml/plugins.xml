@@ -34,6 +34,4 @@
     <plugin name="FileTransfer" value="org.apache.cordova.FileTransfer"/>
     <plugin name="Capture" value="org.apache.cordova.Capture"/>
     <plugin name="Battery" value="org.apache.cordova.BatteryListener"/>
-    
-    <plugin name="Webintent" value="com.borismus.webintent.WebIntent"></plugin>
 </plugins>
