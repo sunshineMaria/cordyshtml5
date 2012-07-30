@@ -1,392 +1,80 @@
 @CHARSET "UTF-8";
 
-html {
-	font-size: 100%;
-	font-family: 'Ubuntu', sans-serif;
-	
-	-webkit-text-size-adjust: 100%;
-	-ms-text-size-adjust: 100%;
-	background: #eaeaea;
-}
 
-html,button,input,select,textarea {
-	font-family: 'Ubuntu', sans-serif;
-	color: #222;
-}
-
-body {
-	margin: 0;
-	font-size: 1em;
-	line-height: 1.4;
-}
-
-/*input[type=text]:focus:before, input[type=password]:focus:before, 
-input[type=text]:focus:after, input[type=password]:focus:after {
-	height: 5px;
-	width: 1px;
-	background: #33b5e5;
-}
-
-input[type=text]:focus:before, input[type=password]:focus:before {
-	
-}
-
-input[type=text]:focus:after, input[type=password]:focus:after {
-	
-}
-
-/* apply a natural box layout model to all elements */
 * {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
+	font-family: 'Ubuntu';
 }
 
-.block {
-	display: block;
-	width: 100%;
-	margin: 0;
-	overflow: auto;
+
+iframe[seamless]{
+    background-color: transparent;
+    border: 0 none transparent;
+    padding: 0;
+    overflow: hidden;
 }
 
-.block.content {
-	/* http://www.colorzilla.com/gradient-editor/#e8e8e8+0,f7f7f7+100;Custom */
-	position: absolute;
+
+
+.ui-dialog  .ui-header .ui-btn-icon-notext:first-child {
+	/* removes only the dialog close button */
+	display: none;
 }
 
-.block.header {
-	-webkit-box-shadow: 0px 0px 7px -1px rgba(0, 0, 0, 1);
-	box-shadow: 0px 0px 7px -1px rgba(0, 0, 0, 1);
-}
 
-.block.header.actionbar {
-	background: #ddd;
-	border-bottom: #acacac solid 0.063em;
-}
-
-.block.header .title {
-	margin: 0;
-	display: inline-block;
-}
-
-h1 {
-	margin: 0;
-	display: inline-block;
-	position: relative;
-	/*height: 49px;*/
-	background-position-x: 30px;
+.ui-listview .ui-btn-text {
 	font-weight: normal;
-	font-size: 1.0em;
 }
 
-.actionbar .title h1 {
-	padding-left: 90px;
-	vertical-align: middle;
-	font: 0/0 a;
-}
 
-/* Blocks - views */
-
-.block.header .title img {
-	vertical-align: middle;
-}
-
-.block.actionbar .menu {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	float: right;
-	display: inline-block;
-}
-
-.block.actionbar .menu li {
-	list-style: none;
-	float: left;
-	display: inline-block;
-}
-
-/* Lists */
-
-.block.list {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	background: #fff;
-}
-
-.block.list.normal {
-	width: 100%;
-}
-
-.block.list.title {
-	border-bottom: 0;
-    display: table;
-    table-layout: fixed; /* the magic dust that ensure equal width */
-}
-
-.block.list.title > * {
-	display: block;
-	margin: 0;
-	border-right: 1px solid #dcdcdc;
-	border-bottom: 0;
-	background: transparent;
+.ui-dialog .ui-header .ui-title {
+	margin-left: 20px;
+	margin-right: 20px;
 	
-	display: table-cell;
-	text-align: center
+	white-space: normal;
 }
 
-.block.list.title > *:last-child {
-	border-right: none;
+
+.ui-btn .ui-btn-inner {
+	white-space: normal;
 }
 
-.block.list li {
-	border-bottom: 2px solid #dcdcdc;
-	/*font-size: 18px;*/
-}
 
-.content .list {
-	/* Don't select text */
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
 
-.block.list li > * {
-	padding: .8em .5em;
-	color: #000;
-	text-decoration: none;
-	display: block;
-	font-size: 1em;
-}
-
-.block.list.title li button {
-	border-right: 1px solid #dcdcdc;
-	width: 50%;
-}
-
-.block.list li button {
+#app > iframe {
 	width: 100%;
-	float: left;
-	margin: 0;
-	border: 0;
-	background: transparent;
+	min-height: 300px;
 }
 
-/* Icons */
-
-.icon {
-	border: 0;
-	background-repeat: no-repeat;
-	background-size: 36px 36px;
+/*
+`html body` for overriding the default icon
+*/
+body .ui-icon-cordys {
+	background-image: url(images/cordys_36x36.png);
+	background-size: 18px 18px;
 	background-color: transparent;
-	background-position-y: 5px;
-	background-position-x: center;
-	vertical-align: middle;
+	-webkit-box-shadow: none;
 	
-	/* new */
-	width: 46px;
-	height: 49px;
-}
-
-.actionbar .title.icon.up {
-	background-position-x: -2px;
-}
-
-.page.app-show {
-	margin-top: 50px;
-	
-	height: auto;
-	right: 0;
-	left: 0;
-	top: 0;
-	bottom: 0;
-}
-
-.page.app-show iframe {
-	min-height: 100%;
-	border: none;
-}
-
-.dialog {
-	background: #fff;
-	float: left;
-	font-size: 1.2em;
-	position: absolute;
-	left: 50%;
-	top: 5%;
-	z-index: 10;
-	
-	width: 92.5%;
-	margin-left: -46.25%;
-	
-	-webkit-border-radius: 2px;
-	border-radius: 2px;
-}
-
-.dialog header {
-	border-bottom: #0099cc solid 2px;
-}
-
-.dialog header .icon {
-	float: right;
-}
-
-.dialog header h1 {
-	padding: 10px 20px;
-	color: #33b5e5;
-}
-
-.dialog form > input,
-.dialog form > label {
-	margin-right: 5%;
-	margin-left: 5%;
-	overflow: auto;
-	position: relative;
-	width: 90%;
-	display: block;
-}
-
-.dialog label {
-	display: block;
-	text-transform: uppercase;
-	color: #33b5e5;
-	border-bottom: #33b5e5 solid 1px;
-	font-size: 0.8em;
-	
-	padding: 5px 10px;
-	margin: .25em 10px;
-}
-
-input {
-	border: 0;
-	border-bottom: #dddddd solid 1px;
-}
-
-/*[type=text]:before {
-	background-color: #dddddd;
-	color: red;
+	-moz-box-shadow: none;
+	box-shadow: none;
 	
 	
-	padding: 1.5px;
+}
+
+.ui-icon-cordys .ui-btn-text {
 	
-	content: ".";
-}*/
-
-.dialog input {
-	display: block;
-	font-size: 1em;
-	position: relative;
 }
 
-input:focus {
-	border-bottom: #33b5e5 solid 1.5px;
-	outline: 0;
-}
-
-.dialog .actions {
-	border-top: #dcdcdc solid 1px;
-}
-
-.dialog .actions *:last-child > * {
-	border: 0;
-}
-
-.dialog .actions > * > * {
-	width: 100%;
-	margin: 0;
-	padding: 8px 0;
-	background: transparent;
-}
-
-.dialog .actions * {
-	-webkit-border-radius: 2px;
-	border-radius: 2px;
-}
-
-.dialog.contextmenu .block.list > *:last-child {
-	border: 0;
+body .ui-icon-up {
+	content: '<';
+	background-size: 18px 18px;
 }
 
 
-
-.dialog.tasks {
-	height: 500px;
-}
-
-.dialog.tasks iframe {
-	height: 500px;
-	width: 100%;
-}
-
-.dialog .block.list {
-	background: transparent;
-}
-
-/* target small screens (mobile devices or small desktop windows)*/
-@media only screen and (max-width: 480px) { /* CSS goes here */
-}
-
-/* low resolution screens */
-@media ( -webkit-max-device-pixel-ratio : 1.5) , ( max--moz-device-pixel-ratio :
-		1.5) , ( max-resolution : 299dpi) {
-		
-	.icon.cordys {
-		background-image: url(images/cordys_48x48.png);
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	.ui-icon-cordys {
+		background-image: url(images/cordys_96x96.png);
+		background-size: 18px 18px;
 	}
-	
-	.icon.settings {
-		background-image: url(images/hdpi/2-action-settings.png);
-	}
-	.icon.edit {
-		background-image: url(images/hdpi/5-content-edit.png);
-	}
-	.icon.add {
-		background-image: url(images/hdpi/5-content-new.png);
-	}
-	.icon.up {
-		background-image: url(images/hdpi/1-navigation-previous-item.png);
-	}
-	.icon.delete {
-		background-image: url(images/hdpi/5-content-remove.png);
-	}
-}
-
-/* high resolution screens */
-@media ( -webkit-min-device-pixel-ratio : 2) , ( min--moz-device-pixel-ratio : 2)
-		, ( min-resolution : 300dpi) {
-	.icon.cordys {
-		background-image: url(images/cordys_48x48.png);
-	}
-	.icon.settings {
-		background-image: url(images/xhdpi/2-action-settings.png);
-	}
-	.icon.edit {
-		background-image: url(images/xhdpi/5-content-edit.png);
-	}
-	.icon.add {
-		background-image: url(images/xhdpi/5-content-new.png);
-	}
-	.icon.up {
-		background-image: url(images/xhdpi/1-navigation-previous-item.png);
-	}
-	.icon.delete {
-		background-image: url(images/xhdpi/5-content-remove.png);
-	}
-}
-
-.mask {
-	background: #000;
-	position: fixed;
-	left: 0;
-	top: 0;
-	z-index: 10;
-	width: 100%;
-	height: 100%;
-	opacity: 0.7;
-	z-index: 5;
 }
 
 

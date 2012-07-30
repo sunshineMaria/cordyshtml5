@@ -3,11 +3,11 @@
  */
 (function(window, Cordys) {
 	
-	var isAppCache,
-		appWindow;
+	var isAppCache = null,
+		appWindow = null;
 	
 	$(window.document).on('ready', function() {
-		appWindow = window._viewModel.ui.appShowPage.getExtension().appIframeLocation[0].contentWindow;
+		appWindow = $('#app').children('iframe')[0].contentWindow;
 	});
 	
 	/**
@@ -23,7 +23,7 @@
 			return isAppCache;
 		},
 		getCookiesByServerId: function(serverId) {
-			var server = window._viewModel.servers.data()[serverId];
+			var server = window.__sharedViewModel__.instances()[serverId];
 			server = ko.utils.unwrapObservable(server);
 			if (server && server.cookies) {
 				return ko.mapping.toJS(server.cookies);
@@ -38,7 +38,7 @@
 					}
 				}, Cordys.currentOrigin);
 			},
-			'camera.getPicture': function(e) {//?startfrom=native&org=CordysNL&ser?startfrom=native&org=CordysNL&serverId=0"verId=0"
+			'camera.getPicture': function(e) {
 				if (!navigator.camera) {
 					return;
 				}
@@ -206,7 +206,7 @@
 	
 	Cordys.api.postMessageHandle = function(e) {
 		if (e.originalEvent.origin !== Cordys.currentOrigin) {
-			console.log('not able to handle message from ' + e.originalEvent.origin);
+			//console.log('not able to handle message from ' + e.originalEvent.origin);
 			return;
 		}
 		var eventName = e.originalEvent.data;

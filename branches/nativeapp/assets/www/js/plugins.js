@@ -1,21 +1,57 @@
-(function($) {
+/**
+ * 
+ * @param object
+ * @returns
+ */
+Array.prototype.remove = function(object) {
+	var index = this.indexOf(object);
 	
-	$.event.special.ihold = {
-		setup: function(data, namespaces, eventHandle) {
-			
-		},
-		teardown: function(namespaces) {
-			
-		},
-		add: function(handleObj) {
-			$(this).hammer().on('hold', handleObj.handler);
-		},
-		remove: function(handleObj) {
-			$(this).hammer().off('hold', handleObj.handler);
-		},
-		_default: function(event) {
-			
-		}
-	};
-	
-}) (jQuery);
+	return this.splice(index, 1);
+};
+
+/**
+ * 
+ * @returns {Boolean}
+ */
+Array.prototype.any = function() {
+	return this.length > 0;
+};
+
+/**
+ * 
+ * @returns {Boolean}
+ */
+Array.prototype.none = function() {
+	return this.length < 1;
+};
+
+/**
+ * 
+ * @param object
+ * @returns
+ */
+Array.prototype.contains = function(object) {
+	return !!~this.indexOf(object);
+};
+
+
+
+/**
+ * observableArray additions
+ */
+
+/**
+ * ko.observableArray.any()
+ * @return Boolean, true if there are one or more elements in the array, false if the array is empty.
+ */
+ko.observableArray.fn.any = function() {
+	return this().any();
+};
+
+/**
+ * ko.observableArray.none()
+ * @return Boolean true, if the array is empty. Otherwise false.
+ */
+ko.observableArray.fn.none = function() {
+	return this().none();
+};
