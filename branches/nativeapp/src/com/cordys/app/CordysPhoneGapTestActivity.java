@@ -18,9 +18,11 @@ public class CordysPhoneGapTestActivity extends DroidGap {
 		
 		String url = "file:///android_asset/www/index.html";
 		
-		url += null == data
-			? ""
-			: "?" + data.getQuery();
+		if (null != data) {
+			url += "?" + data.getQuery();
+		}
+		
+		System.out.print("url: " + url);
 		
 		super.loadUrl(url);
 	}
