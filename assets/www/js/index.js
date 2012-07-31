@@ -1,6 +1,6 @@
 (function(document, parentModel) {
 	
-	/**
+	/*
 	 * All viewmodel and jQuery Mobile page bindings
 	 */
 	var ViewModelRegistry = [{
@@ -22,7 +22,7 @@
 	
 	$(document).on('pageinit', function() {
 		
-		/**
+		/*
 		 * Apply bindings for all pages on `pagebeforeshow` jQuery Mobile event
 		 */
 		$.each(ViewModelRegistry, function(index, domViewModelCoupling) {
@@ -31,6 +31,11 @@
 				? domViewModelCoupling.applyEvent
 				: 'pagebeforeshow';
 			
+			/*
+			 * Use event bubbling. Because jQuery Mobile changes the dom when 
+			 * you navigate through the pages. So you can't bind the 
+			 * events hard.
+			 */
 			$(document).on(eventName, domViewModelCoupling.selector, function(e) {
 				ko.applyBindings(domViewModelCoupling.viewModel(parentModel), e.target);
 			});
