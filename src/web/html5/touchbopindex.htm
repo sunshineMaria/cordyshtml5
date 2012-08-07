@@ -405,11 +405,8 @@
 					success:function(data) {
 						var app = $.cordys.json.find(data, "Application");
 						if (app) {
-							var url = app.url;
-							if (url.search(/\.html?$/) > 0) {
-								//$.mobile.changePage( url, { transition: "fade", changeHash: true } );
-								document.location = url;
-							}
+							document.location = app.url;
+							//$.mobile.changePage( url, { transition: "fade", changeHash: true } );
 						}
 					}
 				});
