@@ -10,7 +10,7 @@ function AppViewModel(parentModel) {
 		var server = this.instance(),
 			id = parentModel.instances.indexOf(server);
 		
-		return server.getTouchBopIndexUrl(id);
+		return server ? server.getTouchBopIndexUrl(id) : null;
 	}, this);
 	
 	this.indexOfInstance = parentModel.instances.indexOf(this.instance);
