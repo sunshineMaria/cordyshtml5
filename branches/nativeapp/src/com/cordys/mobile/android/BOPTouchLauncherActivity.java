@@ -1,11 +1,11 @@
-package com.cordys.app;
+package com.cordys.mobile.android;
 
 import org.apache.cordova.DroidGap;
 
 import android.net.Uri;
 import android.os.Bundle;
 
-public class CordysPhoneGapTestActivity extends DroidGap {
+public class BOPTouchLauncherActivity extends DroidGap {
 	
 	/** 
 	 * Called when the activity is first created. 
