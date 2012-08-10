@@ -9,6 +9,12 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/jquery.mobile-1.1.1.min.css">
 
+<script type="text/html" id="instanceTemplate">
+	<li>
+		<a href="#app" data-bind="text: location() + ' - ' + username(), event: { taphold: $root.longPress, click: $root.click }"></a>
+	</li>
+</script>
+
 </head>
 <body>
 
@@ -27,10 +33,7 @@
 		<!-- /ko -->
 		
 		<!-- ko if: any -->
-			<ul data-role="listview" data-bind="foreach: instances">
-				<li data-icon="false">
-					<a href="#app" data-bind="text: location() + ' - ' + username(), event: { taphold: $root.longPress, click: $root.click }"></a>
-				</li>
+			<ul id="serverList" data-role="listview" data-bind="template: {name: 'instanceTemplate', foreach: instances}, jqmRefreshList:instances">
 			</ul>
 		<!-- /ko -->
 	</div>
@@ -41,7 +44,7 @@
 	<div data-role="header">
 		<h1> Add a new server </h1>
 	</div>
-	<form data-bind="submit: onSubmitAddServer" data-role="content">
+	<div data-role="content">
 		<!-- ko with: selected -->
 		<label for="addserver-location"> Location:  </label>
 		<input data-mini="true" type="url" id="addserver-location" data-bind="value: location">
@@ -57,8 +60,8 @@
 		<!-- /ko -->
 		
 		<a data-role="button" href="#servers"> Cancel </a>
-		<input type="submit" value="Add">
-	</form>
+		<a data-role="button" href="#servers" data-bind="click: onSubmitAddServer"> Add </a>
+	</div>
 </div>
 
 
@@ -67,7 +70,7 @@
 		<h1> Edit a server </h1>
 		<a data-icon="delete" href="#delete-server" class="ui-btn-right" data-iconpos="notext"> Delete </a>
 	</div>
-	<form data-bind="submit: onSubmitEditServer" data-role="content">
+	<div data-role="content">
 		<!-- ko with: selected -->
 		<label for="editserver-location"> Location: </label>
 		<input id="editserver-location" data-bind="value: location">
@@ -82,8 +85,8 @@
 		<input id="editserver-password" type="password" data-bind="value: password">
 		<!-- /ko -->
 		
-		<input type="submit" value="Ok">
-	</form>
+		<a data-role="button" href="#servers" data-bind="click: onSubmitEditServer"> Ok </a>
+	</div>
 </div>
 
 
@@ -91,7 +94,7 @@
 	<div data-role="header">
 		<h1> Are you sure you want to delete this server? </h1>
 	</div>
-	<form data-role="content" data-bind="with: selected">
+	<div data-role="content" data-bind="with: selected">
 		<dl>
 			<dt> Location: </dt><dd data-bind="text: location"></dd>
 			<dt> Organization: </dt><dd data-bind="text: organization"></dd>
@@ -100,7 +103,7 @@
 		
 		<input type="button" value="No" class="no" data-bind="click: $parent.onCloseDeleteServerDialog">
 		<input type="button" value="Yes" class="yes" data-bind="click: $parent.onSubmitDeleteServer">
-	</form>
+	</div>
 </div>
 
 
@@ -130,10 +133,10 @@
 </script>
 
 <!-- jQuery -->
-<script src="js/jquery-1.7.2.js"></script>
+<script src="js/jquery-1.7.2.min.js"></script>
 
 <!-- jQuery plugins -->
-<script src="js/jquery.mobile-1.1.1.js"></script>
+<script src="js/jquery.mobile-1.1.1.min.js"></script>
 
 <!-- Cordys requirements -->
 <script src="js/sha1.js"></script>
@@ -149,8 +152,8 @@
 <script> /*cordova.UsePolling = false;*/ </script>
 
 <!-- KnockoutJs -->
-<script src="js/knockout-2.1.0.debug.js"></script>
-<script src="js/knockout.mapping-latest.debug.js"></script>
+<script src="js/knockout-2.1.0.js"></script>
+<script src="js/knockout.mapping-latest.js"></script>
 
 <!-- Entities -->
 <script src="js/timer.js"></script>

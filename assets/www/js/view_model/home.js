@@ -13,6 +13,7 @@ function HomeViewModel(parentModel) {
 			username: 'demo', 
 			password: 'demo'
 		}));
+		$.mobile.changePage('#');
 	};
 	
 	this.click = function(server) {

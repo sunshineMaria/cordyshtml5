@@ -3,45 +3,36 @@
 	/*
 	 * All viewmodel and jQuery Mobile page bindings
 	 */
-	var ViewModelRegistry = [{
-		selector: '#servers',
-		viewModel: HomeViewModel
-	}, {
-		selector: '#add-server',
-		viewModel: AddInstancePageViewModel
-	}, {
-		selector: '#edit-server',
-		viewModel: EditInstanceViewModel
-	}, {
-		selector: '#delete-server',
-		viewModel: DeleteInstanceViewModel
-	}, {
-		selector: '#app',
-		viewModel: AppViewModel
-	}];
-	
-	$(document).on('pageinit', function() {
-		
-		/*
-		 * Apply bindings for all pages on `pagebeforeshow` jQuery Mobile event
-		 */
-		$.each(ViewModelRegistry, function(index, domViewModelCoupling) {
-			
-			var eventName = 'string' === typeof domViewModelCoupling.applyEvent
-				? domViewModelCoupling.applyEvent
-				: 'pagebeforeshow';
-			
-			/*
-			 * Use event bubbling. Because jQuery Mobile changes the dom when 
-			 * you navigate through the pages. So you can't bind the 
-			 * events hard.
-			 */
-			$(document).on(eventName, domViewModelCoupling.selector, function(e) {
-				ko.applyBindings(domViewModelCoupling.viewModel(parentModel), e.target);
-			});
+	ko.bindingHandlers.jqmRefreshList = { 
+		     update: function(element, valueAccessor) { 
+		       ko.utils.unwrapObservable(valueAccessor()); //just to create a dependency
+		       $(element).listview(); 
+		     } 
+		   };
+	$("#servers")
+		.bind("pageinit",function(event, ui) {
+			ko.applyBindings(HomeViewModel(parentModel), document.getElementById("servers"));
+		})
+		.bind("pageshow",function(event, ui) {
+    	   $("#serverList").listview();
 		});
-	});
-	
+	$("#add-server")
+		.bind("pageinit",function(event, ui) {
+			ko.applyBindings(AddInstancePageViewModel(parentModel), document.getElementById("add-server"));
+		});
+	$("#edit-server")
+		.bind("pageinit",function(event, ui) {
+			ko.applyBindings(EditInstanceViewModel(parentModel), document.getElementById("edit-server"));
+		});
+	$("#delete-server")
+		.bind("pageinit",function(event, ui) {
+			ko.applyBindings(DeleteInstanceViewModel(parentModel), document.getElementById("delete-server"));
+		});
+	$("#app")
+		.bind("pageinit",function(event, ui) {
+			ko.applyBindings(AppViewModel(parentModel), document.getElementById("app"));
+		});
+
 	/**
 	 * Set app-iframe postMessage handler
 	 */
