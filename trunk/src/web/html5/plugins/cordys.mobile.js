@@ -16,6 +16,8 @@
 ;(function (window, $, undefined) {
 
 	if (!$.cordys) $.cordys = {};
+	
+	var TESTSWARM_URI = 'http://10.195.2.65:8080';
 
 	$.cordys.mobile = {
 		origin: 'file://'
@@ -24,7 +26,7 @@
 	// Cookie methods
 	$.cordys.cookie = {};
 	$.cordys.cookie.getCookies = function(id) {
-		parent.postMessage({
+		postMessageToParent({
 			message: "getCookies",
 			parameters: { 
 				serverId: id 
@@ -56,7 +58,7 @@
 	$.cordys.mobile.camera.getPicture = function(successCallback, errorCallback, options) {
 		this.__onSuccess = successCallback;
 		this.__onError = errorCallback;
-		parent.postMessage({
+		postMessageToParent({
 			message: "camera.getPicture",
 			parameters: {
 				options: options
@@ -68,7 +70,7 @@
 	$.cordys.mobile.notification = {};
 	$.cordys.mobile.notification.alert = function(message, alertCallback, title, buttonName) {
 		this.__alertCallback = alertCallback;
-		parent.postMessage({
+		postMessageToParent({
 			message: "notification.alert",
 			parameters: {
 				message: message,
@@ -79,7 +81,7 @@
 	};
 	$.cordys.mobile.notification.confirm = function(message, confirmCallback, title, buttonLabels) {
 		this.__confirmCallback = confirmCallback;
-		parent.postMessage({
+		postMessageToParent({
 			message: "notification.confirm",
 			parameters: {
 				message: message,
@@ -89,7 +91,7 @@
 		}, $.cordys.mobile.origin);
 	}
 	$.cordys.mobile.notification.beep = function(times) {
-		parent.postMessage({
+		postMessageToParent({
 			message: "notification.beep",
 			parameters: {
 				times: times
@@ -97,7 +99,7 @@
 		}, $.cordys.mobile.origin);
 	}
 	$.cordys.mobile.notification.vibrate = function(milliseconds) {
-		parent.postMessage({
+		postMessageToParent({
 			message: "notification.vibrate",
 			parameters: {
 				milliseconds: milliseconds
@@ -110,7 +112,7 @@
 	$.cordys.mobile.fileTransfer.upload = function(filePath, server, successCallback, errorCallback, options) {
 		this.__uploadSuccess = successCallback;
 		this.__uploadError = errorCallback;
-		parent.postMessage({
+		postMessageToParent({
 			message: "fileTransfer.upload",
 			parameters: {
 				filePath: filePath,
@@ -125,7 +127,7 @@
 	$.cordys.mobile.fileReader.readAsDataURL = function(filePath, successCallback, errorCallback) {
 		this.__readURLSuccess = successCallback;
 		this.__readURLError = errorCallback;
-		parent.postMessage({
+		postMessageToParent({
 			message: "fileReader.readAsDataURL",
 			parameters: {
 				filePath: filePath
@@ -135,7 +137,7 @@
 	$.cordys.mobile.fileReader.readAsText = function(filePath, encoding, successCallback, errorCallback) {
 		this.__readTextSuccess = successCallback;
 		this.__readTextError = errorCallback;
-		parent.postMessage({
+		postMessageToParent({
 			message: "fileReader.readAsText",
 			parameters: {
 				filePath: filePath,
@@ -146,7 +148,7 @@
 	$.cordys.mobile.loadScript = function(filePath, successCallback, errorCallback) {
 		this.__loadScriptSuccess = successCallback;
 		this.__loadScriptError = errorCallback;
-		parent.postMessage({
+		postMessageToParent({
 			message: "loadScript",
 			parameters: {
 				filePath: filePath
@@ -154,8 +156,17 @@
 		}, $.cordys.mobile.origin);
 	}
 
+	postMessageToParent = function(data, origin){
+		// TODO: Fix this
+		// Temporary hack to communicate through the TestSwarm Runner
+		origin = (document.referrer.indexOf(TESTSWARM_URI) == 0) ? TESTSWARM_URI : origin;
+		parent.postMessage(data, origin);
+	}
+
 	window.addEventListener("message", function(evt) {
-		if (evt.origin !== $.cordys.mobile.origin || !evt.data) {
+		// TODO: Fix this
+		// Temporary hack to communicate with the testswarm runner
+		if ((evt.origin !== $.cordys.mobile.origin && evt.origin != TESTSWARM_URI) || !evt.data) {
 			return;
 		}
 		switch (evt.data.message) {
