@@ -131,6 +131,35 @@
 		);
 	}
 
+
+	function routeMessage(evt) {
+		// let us not go any further if we do not have any parent to escalate the messages to and to prevent recursion
+		if (window === window.parent) return;
+
+		if (evt.data && (typeof (evt.data) === "string") && (evt.data.indexOf("action=saverun") >= 0)) {
+			// testswarm event. let us not proporagate it.
+			return;
+		}
+		console.log("router : " + evt.origin + " Recieved message -" + evt.data);
+
+		if (evt.origin === 'file://') {
+			var childFrame = $('#iframes').children('iframe')[0];
+
+			if (!childFrame) {
+				console.log("router : Child frame not available. Could not post message from Origin:" + evt.origin + " Data:" + evt.data);
+				return;
+			}
+
+			var newChildWindow = childFrame.contentWindow;
+			console.log("router : Posting message to Child from Origin:" + evt.origin + " Data:" + evt.data);
+			newChildWindow.postMessage(evt.data, "*");
+		}
+		else {
+			console.log("router : Posting message to Parent from Origin:" + evt.origin + " Data:" + evt.data);
+			window.parent.postMessage(evt.data, "*");
+		}
+	}
+
 	/**
 	 * @param data Object: Reponse from api.php?action=getrun
 	 */
@@ -227,9 +256,16 @@
 
 	function handleMessage(e) {
 		e = e || window.event;
-		retrySend( e.data, function () {
-			handleMessage(e);
-		}, SWARM.runDone );
+
+		console.log("testswarm_run_message_handler: " + typeof (e.data) + e.data);
+		if (e.data && (typeof (e.data) === "string") && (e.data.indexOf("action=saverun") >= 0)) {
+			retrySend(e.data, function () {
+				handleMessage(e);
+			}, SWARM.runDone);
+		}
+		else {
+			console.log("Do not know how to handle this");
+		}
 	}
 
 	function confUpdate() {
@@ -262,12 +298,16 @@
 
 
 	/**
-	 * Bind
-	 */
-	if ( window.addEventListener ) {
-		window.addEventListener( 'message', handleMessage, false );
-	} else if ( window.attachEvent ) {
-		window.attachEvent( 'onmessage', handleMessage );
+	* Bind
+	*/
+	if (window.addEventListener) {
+		window.addEventListener('message', handleMessage, false);
+		window.addEventListener('message', routeMessage, false);
+
+	} else if (window.attachEvent) {
+		window.attachEvent('onmessage', handleMessage);
+		window.attachEvent('onmessage', routeMessage);
+
 	}
 
 	$( document).ready( function () {

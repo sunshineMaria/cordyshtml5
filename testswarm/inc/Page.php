@@ -42,7 +42,7 @@ abstract class Page {
 	protected $subTitle;
 	protected $content;
 
-	protected $frameOptions = 'DENY';
+	protected $frameOptions = 'GOFORIT';
 
 	/**
 	 * The execution method is where a Page invokes the main
