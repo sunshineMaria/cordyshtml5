@@ -13,11 +13,12 @@ function AddInstancePageViewModel(parentModel) {
 	this.onSubmitAddServer = function() {
 		var instance = self.selected();
 		instance.mayTryLogIn(true);
-		
+
 		parentModel.addInstance(instance);
 		
 		self.selected(Server({
 			mayTryLogIn: false
 		}));
+		$.mobile.changePage('#');
 	};
 }

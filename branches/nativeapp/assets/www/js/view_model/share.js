@@ -1,7 +1,7 @@
-function ShareViewModel(parentModel) {
+function ShareViewModel() {
 	
 	if (!(this instanceof ShareViewModel)) {
-		return new ShareViewModel(parentModel);
+		return new ShareViewModel();
 	}
 	
 	var self = this;
