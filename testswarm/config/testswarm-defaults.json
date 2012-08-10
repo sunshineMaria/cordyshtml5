@@ -33,18 +33,45 @@
 		"cacheDir": "$1/cache"
 	},
 	"browserSets": {
-		"desktop": [
+		"default":[
 			"Chrome|20",
 			"Chrome|21",
 			"Firefox|13",
 			"Firefox|14",
+			"IE|7",
 			"IE|8",
 			"IE|9",
 			"IE|10",
 			"Safari|4",
 			"Safari|5|0",
 			"Safari|5|1",
-			"Safari|6|0"
+			"Safari|6|0",
+			"Opera|12|0",
+			"Opera|12|1",
+			"Android|2|2",
+			"Android|2|3",
+			"Android|3|1",
+			"Android|3|2",
+			"Android|4|0",
+			"Android|4|1",
+			"iPhone|4|3",
+			"iPhone|5"
+		],
+		"desktop": [
+			"Chrome|20",
+			"Chrome|21",
+			"Firefox|13",
+			"Firefox|14",
+			"IE|7",
+			"IE|8",
+			"IE|9",
+			"IE|10",
+			"Safari|4",
+			"Safari|5|0",
+			"Safari|5|1",
+			"Safari|6|0",
+			"Opera|12|0",
+			"Opera|12|1"
 		],
 		"mobile": [
 
