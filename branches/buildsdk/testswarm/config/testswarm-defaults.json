@@ -1,0 +1,80 @@
+{
+	"general": {
+		"timezone": "UTC"
+	},
+	"database": {
+		"host": "localhost",
+		"database": "testswarm",
+		"username": "root",
+		"password": "root"
+	},
+	"customMsg": {
+		"homeIntro_html": "Welcome to $1! More information about what TestSwarm is and how it works can be found on <a href=\"//github.com/jquery/testswarm/wiki\">the TestSwarm wiki</a>."
+	},
+	"web": {
+		"server": null,
+		"contextpath": "/",
+		"title": "TestSwarm",
+		"ajaxUpdateInterval": 5
+	},
+	"client": {
+		"cooldownSleep": 2,
+		"nonewrunsSleep": 30,
+		"pingTime": 30,
+		"pingTimeMargin": 10,
+		"runTimeout": 180,
+		"saveReqTimeout": 10,
+		"saveRetryMax": 3,
+		"saveRetrySleep": 5,
+		"requireRunToken": false,
+		"refreshControl": 0
+	},
+	"storage": {
+		"cacheDir": "$1/cache"
+	},
+	"browserSets": {
+		"default": [
+			"Chrome|18",
+			"Chrome|19",
+			"Chrome|20",
+			"Firefox|11",
+			"Firefox|12",
+			"Firefox|13",
+			"IE|6",
+			"IE|7",
+			"IE|8",
+			"IE|9",
+			"IE|10",
+			"Opera|11|50",
+			"Opera|11|60",
+			"Opera|12|0",
+			"Safari|5|0",
+			"Safari|5|1",
+			"Android|2|2",
+			"Android|2|3",
+			"Fennec|4",
+			"iPhone|4|3",
+			"iPhone|5",
+			"iPad|3|2",
+			"iPad|4|3",
+			"iPad|5",
+			"Opera Mobile",
+			"Opera Mini|2",
+			"Palm Web|1",
+			"Palm Web|2",
+			"IEMobile|7"
+		],
+		"currentDesktop": [
+			"Chrome|20",
+			"Firefox|13",
+			"IE|9",
+			"Opera|12|0",
+			"Safari|5|1"
+		]
+	},
+	"debug": {
+		"showExceptionDetails": false,
+		"phpErrorReporting": false,
+		"dbLogQueries": false
+	}
+}
