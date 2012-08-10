@@ -104,6 +104,12 @@ class WipejobAction extends Action {
 						swarmdb_dateformat( SWARM_NOW ),
 						$runRow->id
 					));
+					$db->query(str_queryf(
+						'DELETE
+						FROM runresults
+						WHERE run_id = %u;',
+						$runRow->id
+					));
 				}
 			}
 		}
