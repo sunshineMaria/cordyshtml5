@@ -34,46 +34,68 @@
 	},
 	"browserSets": {
 		"default": [
-			"Chrome|18",
-			"Chrome|19",
 			"Chrome|20",
-			"Firefox|11",
-			"Firefox|12",
+			"Chrome|21",
 			"Firefox|13",
-			"IE|6",
-			"IE|7",
+			"Firefox|14",
 			"IE|8",
 			"IE|9",
 			"IE|10",
-			"Opera|11|50",
-			"Opera|11|60",
-			"Opera|12|0",
+			"Safari|4",
 			"Safari|5|0",
 			"Safari|5|1",
+			"Safari|6|0",
 			"Android|2|2",
 			"Android|2|3",
-			"Fennec|4",
+			"Android|3|1",
+			"Android|3|2",
+			"Android|4|0",
+			"Android|4|1",
 			"iPhone|4|3",
 			"iPhone|5",
-			"iPad|3|2",
-			"iPad|4|3",
-			"iPad|5",
-			"Opera Mobile",
-			"Opera Mini|2",
-			"Palm Web|1",
-			"Palm Web|2",
-			"IEMobile|7"
+			"Android|2|2",
+			"Android|2|3",
+			"Android|3|1",
+			"Android|3|2",
+			"Android|4|0",
+			"Android|4|1"
+			
 		],
-		"currentDesktop": [
+		"desktop": [
 			"Chrome|20",
+			"Chrome|21",
 			"Firefox|13",
+			"Firefox|14",
+			"IE|8",
 			"IE|9",
-			"Opera|12|0",
-			"Safari|5|1"
+			"IE|10",
+			"Safari|4",
+			"Safari|5|0",
+			"Safari|5|1",
+			"Safari|6|0"
+		],
+		"mobile": [
+
+			"Android|2|2",
+			"Android|2|3",
+			"Android|3|1",
+			"Android|3|2",
+			"Android|4|0",
+			"Android|4|1",
+			"iPhone|4|3",
+			"iPhone|5"
+		],
+		"native": [		
+			"Android|2|2",
+			"Android|2|3",
+			"Android|3|1",
+			"Android|3|2",
+			"Android|4|0",
+			"Android|4|1"
 		]
 	},
 	"debug": {
-		"showExceptionDetails": false,
+		"showExceptionDetails": true,
 		"phpErrorReporting": false,
 		"dbLogQueries": false
 	}
