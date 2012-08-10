@@ -17,7 +17,7 @@
 
 	if (!$.cordys) $.cordys = {};
 	
-	var TESTSWARM_URI = 'http://10.195.2.65:8080';
+	var TESTSWARM_URI = 'http://10.1.29.109:8080';
 
 	$.cordys.mobile = {
 		origin: 'file://'
