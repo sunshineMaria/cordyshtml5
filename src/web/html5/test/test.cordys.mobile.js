@@ -7,18 +7,33 @@
 		$.cordys.mobile.notification.beep(1);
 		start();
 	});
-	
+	/*
 	test("Notification Vibrate", 0, function(){
 		stop();
 		$.cordys.mobile.notification.vibrate(2000);
 		start();
 	});
-	
-/*	test("Notification Alert", 0, function(){
+	*/
+	test("Notification Alert", 1, function(){
+		$.cordys.mobile.notification.alert("Alert Notification Test", function(){
+			console.log('success callback in alert callback');
+			equal(true,true);
+			start();
+		},
+		"Alert Notification Test", "OK");
 		stop();
-		$.cordys.mobile.notification.alert("Alert Notification Test","Alert Notification Test","OK");
-		start();
-	}); */
+	});
+/*	
+
+	test("Notification Confirm", 0, function(){
+		stop();
+		$.cordys.mobile.notification.confirm('Confirm Notification Test',function(){
+			start();
+			console.log('success callback in confirm callback');
+		},'Cofirm Notification Test','Yes,No');
+		
+	});
+
 	
 	test("fileReader Read As Data URL", 1, function(){
 		stop();
@@ -52,6 +67,20 @@
 	
 	
 
-
+	test("camera getPicture", 1, function(){
+		stop();
+		$.cordys.mobile.camera.getPicture(function(parameters) {
+			start();
+			notEqual(parameters.imageData,undefined);
+			alert("Photo taken");
+		}, function(parameters) {
+			start();
+			alert("failed: " + parameters.message);
+		}, {
+			quality: 50, 
+			destinationType: $.cordys.mobile.camera.DestinationType.DATA_URL
+		});
+	});
+*/
 })(window, jQuery)
 	
