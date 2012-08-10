@@ -4,11 +4,19 @@
 (function(window, Cordys) {
 	
 	var isAppCache = null,
-		appWindow = null;
+		appWindow = null,
+		TESTSWARM_URI = '10.195.2.65:8080';
 	
 	$(window.document).on('ready', function() {
 		appWindow = $('#app').children('iframe')[0].contentWindow;
 	});
+	
+	postMessageToAppWindow = function(data, origin) {
+		// TODO - Fix this
+		// Temporary hack to allow communication with testswarm runner
+		origin =( appWindow.location.host === TESTSWARM_URI )?  "http://" + TESTSWARM_URI : origin;
+		appWindow.postMessage(data, origin);
+	}
 	
 	/**
 	 * @api
@@ -31,7 +39,7 @@
 		},
 		postMessageHandler: {
 			getCookies: function(e) {
-				appWindow.postMessage({
+				postMessageToAppWindow({
 					message: 'cookies.setCookies',
 					parameters: {
 						cookies: Cordys.api.getCookiesByServerId(e.data.parameters.serverId)
@@ -43,14 +51,14 @@
 					return;
 				}
 				navigator.camera.getPicture(function(imageData) {
-					appWindow.postMessage({
+					postMessageToAppWindow({
 						message: 'camera.getPicture.onSuccess',
 						parameters: {
 							imageData: imageData
 						}
 					}, Cordys.currentOrigin);
 				}, function(message) {
-					appWindow.postMessage({
+					postMessageToAppWindow({
 						message: 'camera.getPicture.onError',
 						parameters: {
 							error: message
@@ -63,7 +71,7 @@
 					return;
 				}
 				navigator.notification.alert(e.data.parameters.message, function() {
-					appWindow.postMessage({
+					postMessageToAppWindow({
 						message: 'notification.alert.onCallback'
 					}, Cordys.currentOrigin);
 				}, e.data.parameters.title, e.data.parameters.buttonName);
@@ -73,7 +81,7 @@
 					return;
 				}
 				navigator.notification.confirm(e.data.parameters.message, function(buttonIndex) {
-					appWindow.postMessage({
+					postMessageToAppWindow({
 						message: 'notification.confirm.onCallback',
 						parameters: {
 							buttonIndex: buttonIndex
@@ -101,7 +109,7 @@
 					fileEntry.file(function(file) {
 						var reader = new FileReader();
 						reader.onload = function(evt) {
-							appWindow.postMessage({
+							postMessageToAppWindow({
 								message: 'fileReader.readAsDataURL.onSuccess',
 								parameters: {
 									result: evt.target.result
@@ -109,7 +117,7 @@
 							}, Cordys.currentOrigin);						
 						};
 						reader.onerror = function(evt) {
-							appWindow.postMessage({
+							postMessageToAppWindow({
 								message: 'fileReader.readAsDataURL.onError',
 								parameters: {
 									error: evt.target.error
@@ -119,7 +127,7 @@
 						reader.readAsDataURL(file);
 					});
 				}, function(error) {
-					appWindow.postMessage({
+					postMessageToAppWindow({
 						message: 'fileReader.readAsDataURL.onError',
 						parameters: {
 							error: error
@@ -135,7 +143,7 @@
 					fileEntry.file(function(file) {
 						var reader = new FileReader();
 						reader.onload = function(evt) {
-							appWindow.postMessage({
+							postMessageToAppWindow({
 								message: 'fileReader.readAsText.onSuccess',
 								parameters: {
 									result: evt.target.result
@@ -143,7 +151,7 @@
 							}, Cordys.currentOrigin);						
 						};
 						reader.onerror = function(evt) {
-							appWindow.postMessage({
+							postMessageToAppWindow({
 								message: 'fileReader.readAsText.onError',
 								parameters: {
 									error: evt.target.error
@@ -153,7 +161,7 @@
 						reader.readAsText(file, e.data.parameters.encoding);
 					});
 				}, function(error) {
-					appWindow.postMessage({
+					postMessageToAppWindow({
 						message: 'fileReader.readAsText.onError',
 						parameters: {
 							error: error
@@ -167,14 +175,14 @@
 				}
 				var ft = new FileTransfer();
 				ft.upload(e.data.parameters.filePath, e.data.parameters.server, function(result) {
-					appWindow.postMessage({
+					postMessageToAppWindow({
 						message: 'fileTransfer.upload.onSuccess',
 						parameters: {
 							result: result
 						}
 					}, Cordys.currentOrigin);
 				}, function(error) {
-					appWindow.postMessage({
+					postMessageToAppWindow({
 						message: 'fileTransfer.upload.onError',
 						parameters: {
 							error: error
@@ -187,7 +195,7 @@
 					type: 'GET',
 					url: 'file:///android_asset/www/' + e.data.parameters.filePath,
 					success: function(result) {
-						appWindow.postMessage({
+						postMessageToAppWindow({
 							message: 'loadScript.onSuccess',
 							parameters: {
 								result: result
@@ -205,14 +213,21 @@
 	Cordys.currentOrigin = 'https://testbop.cordys.com';
 	
 	Cordys.api.postMessageHandle = function(e) {
-		if (e.originalEvent.origin !== Cordys.currentOrigin) {
-			//console.log('not able to handle message from ' + e.originalEvent.origin);
+		// TODO: Fix this
+		// Temporary hack to communicate with the testswarm runner
+		if (e.originalEvent.origin !== Cordys.currentOrigin && e.originalEvent.origin != "http://" + TESTSWARM_URI) {
+			console.log('not able to handle message from ' + e.originalEvent.origin);
 			return;
 		}
 		var eventName = e.originalEvent.data;
 		if (!eventName) {
 			return;
 		}
+		
+		if (! Cordys.api.postMessageHandler[eventName.message]){
+			console.log("Ignoring message: '" + eventName.message + "' .Do not know how to handle it");
+			return;
+		}	
 		return Cordys.api.postMessageHandler[eventName.message](e.originalEvent);
 	};
 	
