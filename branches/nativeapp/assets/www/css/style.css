@@ -44,8 +44,6 @@ iframe[seamless]{
 	width: 100%;
 	min-height: 100%!important;
 	height: 100%!important;
-	position:fixed;
-	top:42px;
 }
 
 /*
