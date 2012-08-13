@@ -6,8 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu">
-<link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/jquery.mobile-1.1.1.min.css">
+<link rel="stylesheet" href="css/style.css">
 
 <script type="text/html" id="instanceTemplate">
 	<li>
@@ -108,7 +108,7 @@
 
 
 <div data-role="page" data-title="app" id="app">
-	<div data-role="header" data-position="fixed">
+	<div data-role="header">
 		<a class="ui-btn-left" href="#servers" data-icon="cordys" data-iconpos="right"> &lt; </a>
 		<h1> App </h1>
 	</div>
@@ -134,6 +134,15 @@
 
 <!-- jQuery -->
 <script src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+$(document).bind("mobileinit", function() {
+	// Disable page transitions for better performance
+    $.mobile.defaultPageTransition = 'none';
+    $.mobile.defaultDialogTransition = 'none';
+    $.mobile.loadingMessage = false;
+    $("a").attr("data-transition", "none");
+});
+</script>
 
 <!-- jQuery plugins -->
 <script src="js/jquery.mobile-1.1.1.min.js"></script>
