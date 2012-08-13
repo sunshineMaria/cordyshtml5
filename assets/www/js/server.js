@@ -28,7 +28,7 @@ function Server(options) {
 	}, this);
 	
 	this.loginUrl = ko.computed(function() {
-		return this.location() + '/cordys/com.eibus.web.soap.Gateway.wcp';
+		return this.location() + '/com.eibus.web.soap.Gateway.wcp';
 	}, this);
 	
 	this.mayTryLogIn = ko.observable(undefined === options.mayTryLogIn ? true : !!options.mayTryLogIn);

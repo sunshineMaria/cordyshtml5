@@ -8,6 +8,10 @@ function ShareViewModel() {
 	
 	this.selected = ko.observable();
 	
+	this.selected.subscribe(function(newValue) {
+		if (newValue && Cordys) Cordys.currentOrigin = newValue.location().replace(/\/cordys$/, '');
+	}, this);
+	
 	this.instances = (function() {
 		var instances = ko.observableArray((function() {
 			var servers = JSON.parse(localStorage.instances || '[]');
