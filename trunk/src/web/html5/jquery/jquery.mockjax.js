@@ -130,8 +130,7 @@
 	function logMock( mockHandler, requestSettings ) {
 		var c = $.extend({}, $.mockjaxSettings, mockHandler);
 		if (c.log && $.isFunction(c.log)) {
-			// SHARBEL:Temporarily commented out the Mock to get a clean console output
-			//c.log('MOCK ' + requestSettings.type.toUpperCase() + ': ' + requestSettings.url, $.extend({}, requestSettings));
+			c.log('MOCK ' + requestSettings.type.toUpperCase() + ': ' + requestSettings.url, $.extend({}, requestSettings));
 		}
 	}
 
