@@ -44,18 +44,18 @@
 	});
 	
 //4. fileReader: Read As Text
-	test("fileReader Read As Text", 1, function(){
+	test("fileReader Read As Text", 2, function(){
 		stop();
-		$.cordys.mobile.fileReader.readAsDataURL('file:///sdcard/download/NativeAppTest.txt', 
-			function(){
+		$.cordys.mobile.fileReader.readAsText('file:///sdcard/download/NativeAppTest.txt', "UTF8",
+			function(data){
 				start();
 				ok(true, "inside fileReader Read As Text success callback");
-				//equal(data, "data:text/plain;base64,dGVzdA==", "file read as Text: Successful");
+				equal(data, "test", "file read as Text: Successful");
 			}, 	
 			function(){
 				start();
 				ok(false, "inside fileReader Read As text error callback");
-				//ok(false, "file read as Text: Failed");
+				ok(false, "file read as Text: Failed");
 		});
 	});
 	
