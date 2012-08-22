@@ -9,6 +9,13 @@
 (function ( $, SWARM, undefined ) {
 	var currRunId, currRunUrl, testTimeout, pauseTimer, cmds, errorOut;
 
+	if (($.browser.msie != undefined) && ($.browser.version == 8)) {
+		console = {
+			log: function() {
+			}
+		}	
+	}
+
 	function msg( htmlMsg ) {
 		$( '#msg' ).html( htmlMsg );
 	}
