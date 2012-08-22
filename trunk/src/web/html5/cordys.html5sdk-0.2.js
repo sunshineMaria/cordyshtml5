@@ -4,6 +4,15 @@ if (typeof(jQuery) == "undefined") {
 };
 if (!$.cordys) $.cordys = {};
 
+//For IE
+if(($.browser.msie != undefined) && ($.browser.version == 7 || $.browser.version == 8)){
+	console = {
+		log: function() {
+		}
+	}		
+	loadScript(("/cordys/html5/util/base64.js"));	
+}
+
 function getURLParameter(url, name) {
 	return (url.search.search( new RegExp("[\?\&]"+name+"=([^\&]*)") ) >= 0) ? RegExp.$1 : "";
 }
