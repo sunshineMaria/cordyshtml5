@@ -10,20 +10,40 @@
 		return createObjTree(oXMLParent, _nVerb, bFreeze || false, arguments.length > 3 ? bNesteAttributes : _nVerb === 3);
 	};
 	
+	//For IE
+	if(($.browser.msie != undefined) && ($.browser.version == 7 || $.browser.version == 8)){
+		XMLSerializer = function(){
+		}
+		XMLSerializer.prototype.serializeToString = function(inputXML){
+			return inputXML.xml;
+		}
+		document.XMLSerializer = XMLSerializer;
+		
+		String.prototype.trim = function(){
+			return this.replace(/^[/s]+/, "").replace(/[/s]+$/, "");
+		}	
+	}
+	
 	$.cordys.json.xml2jsstring = function (oXMLParent, nVerbosity /* optional */, bFreeze /* optional */, bNesteAttributes /* optional */) {
         if (! oXMLParent) return null;
         return JSON.stringify($.cordys.json.xml2js(oXMLParent, nVerbosity, bNesteAttributes));
 	};
 
 	$.cordys.json.js2xml = function (oObjTree) {
-		var oNewDoc = document.implementation.createDocument("", "", null);
+		var oNewDoc = null;
+		if (($.browser.msie != undefined) && ($.browser.version == 7 || $.browser.version == 8)) { 
+			oNewDoc = new ActiveXObject( "Microsoft.XMLDOM" ); // For IE
+		} else {
+			oNewDoc = document.implementation.createDocument("", "", null);
+		}
 		loadObjTree(oNewDoc, oNewDoc, oObjTree);
 		return oNewDoc;
 	};
 
 	$.cordys.json.js2xmlstring = function (oObjTree) {
 		var oWrappedTree = {o:oObjTree};	// wrap oObjTree into an object to prevent error with multiple roots
-		var sXML = (new XMLSerializer()).serializeToString($.cordys.json.js2xml(oWrappedTree));
+		var wrappedXML = $.cordys.json.js2xml(oWrappedTree);
+		var sXML = (new XMLSerializer()).serializeToString(wrappedXML.documentElement); //For IE
 		return sXML.slice(3, sXML.length-4); // remove the temporary object
 	};
 
@@ -78,8 +98,9 @@
 
 	function createObjTree (oParentNode, nVerb, bFreeze, bNesteAttr) {
 		var	nLevelStart = aCache.length, bChildren = oParentNode.hasChildNodes(),
-			bAttributes = oParentNode.hasAttributes(), bHighVerb = Boolean(nVerb & 2);
-
+			bHighVerb = Boolean(nVerb & 2);
+		var bAttributes = oParentNode.hasAttributes ? oParentNode.hasAttributes() : (oParentNode.attributes ? true : false); //For IE
+		
 		var	sProp, vContent, nLength = 0, sCollectedTxt = "",
 			vResult = bHighVerb ? {} : /* put here the default value for empty nodes: */ "";
 
@@ -162,7 +183,7 @@
 			} else if (sName === sAttributesProp) { /* verbosity level is 3 */
 				for (var sAttrib in vValue) { oParentEl.setAttribute(sAttrib, vValue[sAttrib]); }
 			} else if (sName.charAt(0) === sAttrPref) {
-				oParentEl.setAttribute(sName.slice(1), vValue);
+				oParentEl.setAttribute(sName.slice(1), new String(vValue)); //For IE 
 			} else if (vValue !== null && vValue.constructor === Array) {
 				for (var nItem = 0; nItem < vValue.length; nItem++) {
 					oChild = oXMLDoc.createElement(sName);

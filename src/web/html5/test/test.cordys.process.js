@@ -137,8 +137,8 @@
             beforeSend: function (xhr, settings) {
 				var getAttachRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAttachments xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"BPM\">001CC42E-BB14-11E1-F980-20A353CF14A7</instanceid></GetAttachments></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(getAttachRequest,settings.data), true, "Compare Request XML");
-                equal($(settings.data).find("instanceID").text(), "001CC42E-BB14-11E1-F980-20A353CF14A7", "Attachment InstanceID is 001CC42E-BB14-11E1-F980-20A353CF14A7");
-                equal($(settings.data).find("instanceID").attr("type"), "BPM", "Process type is BPM");
+                equal($($.parseXML(settings.data)).find("instanceid").text(), "001CC42E-BB14-11E1-F980-20A353CF14A7", "Attachment InstanceID is 001CC42E-BB14-11E1-F980-20A353CF14A7");
+                equal($($.parseXML(settings.data)).find("instanceid").attr("type"), "BPM", "Process type is BPM");
                 start();
             },
             error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
@@ -155,7 +155,7 @@
             beforeSend: function (xhr, settings) {
 				var uploadAttachRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UploadAttachment xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"BPM\">001CC42E-BB14-11E1-F993-CEB9864AF4A8</instanceid><attachmentname>attachmentName</attachmentname><filename>image</filename><description>fileDescription</description><content isURL=\"true\">http://fileurl.jpg</content></UploadAttachment></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(uploadAttachRequest,settings.data), true, "Compare Request XML");
-                equal($(settings.data).find("filename").text(), "image", "Filename is image");
+                equal($($.parseXML(settings.data)).find("filename").text(), "image", "Filename is image");
                 start();
             },
             error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
@@ -172,7 +172,7 @@
             beforeSend: function (xhr, settings) {
 				var removeAttachRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteAttachment xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"BPM\">001CC42E-BB14-11E1-F993-CEB9864AF4A8</instanceid><attachmentname>attachmentName</attachmentname><filename>image</filename></DeleteAttachment></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(removeAttachRequest,settings.data), true, "Compare Request XML");
-                equal($(settings.data).find("filename").text(), "image", "Filename is image");
+                equal($($.parseXML(settings.data)).find("filename").text(), "image", "Filename is image");
                 start();
             },
             error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
