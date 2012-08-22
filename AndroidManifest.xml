@@ -44,7 +44,7 @@
 		android:theme="@style/android:Theme.Holo.Light" >
 		
 		<activity
-			android:name=".BOPTouchLauncherActivity"
+			android:name=".CordysLauncherActivity"
 			android:configChanges="orientation|screenSize|keyboardHidden"
 			android:label="@string/app_name" >
 			<intent-filter>
