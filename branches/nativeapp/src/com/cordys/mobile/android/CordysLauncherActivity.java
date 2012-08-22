@@ -5,7 +5,7 @@ import org.apache.cordova.DroidGap;
 import android.net.Uri;
 import android.os.Bundle;
 
-public class BOPTouchLauncherActivity extends DroidGap {
+public class CordysLauncherActivity extends DroidGap {
 	
 	/** 
 	 * Called when the activity is first created. 
