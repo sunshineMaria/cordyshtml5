@@ -5,7 +5,7 @@ if (typeof(jQuery) == "undefined") {
 if (!$.cordys) $.cordys = {};
 
 //For IE
-if(($.browser.msie != undefined) && ($.browser.version == 7 || $.browser.version == 8)){
+if(($.browser.msie != undefined) && ($.browser.version == 9 || $.browser.version == 8)){
 	console = {
 		log: function() {
 		}
