@@ -66,7 +66,7 @@
 	<target name="concat_plugins" description="Concats all the plugins into the sdk file"
 				depends="copy_web">
 		<echo message="Concating all plugins into ${build.sdk.debug.filename}" />
-		<replaceregexp byline="true" file="${build.sdk.release.filename}" match="^loadScript\([^)]*\);" replace="" />
+		<replaceregexp byline="true" file="${build.sdk.release.filename}" match="^loadScript\([^)]*\);$" replace="" />
 		<concat destfile="${build.sdk.debug.filename}"
 			 fixlastline="yes" encoding="UTF-8" outputencoding="UTF-8">
 			<fileset file="${build.sdk.release.filename}" />
