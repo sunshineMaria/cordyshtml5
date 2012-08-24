@@ -82,7 +82,9 @@
 			"Android|4|0",
 			"Android|4|1",
 			"iPhone|4|3",
-			"iPhone|5"
+			"iPhone|5",
+			"Fennec|10",
+			"Opera Mobile"
 		],
 		"native": [		
 			"Android|2|2",
