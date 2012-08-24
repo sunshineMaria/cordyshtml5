@@ -32,6 +32,20 @@ function Server(options) {
 	}, this);
 	
 	this.mayTryLogIn = ko.observable(undefined === options.mayTryLogIn ? true : !!options.mayTryLogIn);
+	this.mayTryLogIn.subscribe(function(newValue) {
+		if (newValue === true) {
+			if (!self.cookies.ct.valid()) {
+				// do first prelogin
+				self.prelogin().done(function() {
+					// do a login
+					self.login();
+				});
+			} else {
+				// do a login
+				self.login();
+			}
+		}
+	}, this);
 	
 	
 	/**
@@ -221,7 +235,9 @@ Server.prototype = {
 			self.cookies.ct.valid(true);
 		});
 		
-		deferred.fail(function() {
+		deferred.fail(function(e) {
+			console.log('Error in prelogin: ' + 
+					$(e.error().responseXML).find('faultstring,error elem').text() || e.responseText);
 			self.cookies.ct.valid(false);
 		});
 		
@@ -229,7 +245,6 @@ Server.prototype = {
 		.done(function() {
 			
 			var prelogin = Cordys.ajax.createPrelogin(self.loginUrl());
-			
 			$.ajax(prelogin).done(function(data) {
 				var $data = $(data);
 				
@@ -240,8 +255,8 @@ Server.prototype = {
 				window.__sharedViewModel__.instances.notifySubscribers(undefined, undefined);
 				
 				deferred.resolve();
-			}).fail(function() {
-				deferred.reject();
+			}).fail(function(e) {
+				deferred.reject(e);
 			});
 		});
 		
@@ -256,7 +271,9 @@ Server.prototype = {
 				self = this,
 				deferred = $.Deferred();
 		
-		deferred.fail(function() {
+		deferred.fail(function(e) {
+			console.log('Error in login: ' + 
+					$(e.error().responseXML).find('faultstring,error elem').text() || e.responseText);
 			self.cookies.saml.valid(false);
 		});
 		
@@ -284,8 +301,8 @@ Server.prototype = {
 				window.__sharedViewModel__.instances.notifySubscribers(undefined, undefined);
 				
 				deferred.resolve();
-			}).fail(function() {
-				deferred.reject();
+			}).fail(function(e) {
+				deferred.reject(e);
 			});
 		});
 		
