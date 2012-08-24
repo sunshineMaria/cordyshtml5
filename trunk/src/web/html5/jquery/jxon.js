@@ -11,7 +11,7 @@
 	};
 	
 	//For IE
-	if(($.browser.msie != undefined) && ($.browser.version == 9 || $.browser.version == 8)){
+	if(($.browser.msie != undefined) && ($.browser.version >= 7 || $.browser.version <= 9)){
 		XMLSerializer = function(){
 		}
 		XMLSerializer.prototype.serializeToString = function(inputXML){
@@ -31,7 +31,7 @@
 
 	$.cordys.json.js2xml = function (oObjTree) {
 		var oNewDoc = null;
-		if (($.browser.msie != undefined) && ($.browser.version == 9 || $.browser.version == 8)) { 
+		if (($.browser.msie != undefined) && ($.browser.version >= 7 || $.browser.version <= 9)) { 
 			oNewDoc = new ActiveXObject( "Microsoft.XMLDOM" ); // For IE
 		} else {
 			oNewDoc = document.implementation.createDocument("", "", null);
