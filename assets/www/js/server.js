@@ -309,21 +309,14 @@ Server.prototype = {
 		return deferred.promise();
 	},
 	deleteCookies: function() {
-		var iframe = $('<iframe>', {
-			src: this.deleteCookiesUrl(),
-			'class': 'hidden'
-		}),
+		
 		deferred = $.Deferred();
 		
-		iframe.one('load', function() {
+		$.get(this.deleteCookiesUrl(), function (data) {
 			deferred.resolve();
-			// Remove iframe from dom
-			iframe.remove();
 		});
 		
-		// Insert in dom
-		$(document.body).append(iframe);
-		
+			
 		Timer(30000, true).done(function() {
 			if ('resolved' !== deferred.state()) {
 				deferred.reject('timeout');
