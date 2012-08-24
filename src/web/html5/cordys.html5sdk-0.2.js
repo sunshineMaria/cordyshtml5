@@ -6,13 +6,16 @@ if (!$.cordys) $.cordys = {};
 
 //For IE
 if ($.browser.msie != undefined){
-	if ($.browser.version == 8) {
+	if ($.browser.version == 7) {
+		loadScript(("/cordys/html5/util/json2.js"));
+	}
+	if ($.browser.version == 8 || $.browser.version == 7) {
 		console = {
 			log: function() {
 			}
 		}
 	}
-	if ($.browser.version == 8 || $.browser.version == 9) {
+	if ($.browser.version >= 7 || $.browser.version <= 9) {
 		loadScript(("/cordys/html5/util/base64.js"));
 	}
 }
