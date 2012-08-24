@@ -523,7 +523,7 @@
 		});
 		orderDemoModel.removeBusinessObject({OrderID:"25",Customer:"fj",Employee:"ss",Product:"aa",OrderDate:"2012-07-10T10:29:16.140000000",Quantity:"4",Discount:"21",Cost:"123456",Status:"CREATED",Notes:"test"});
 		response = orderDemoModel.synchronize({
-			method: "DeleteOrderDemo",
+			method: "DeleteOrderDemo"
 		});
 		equal(response,false);
 		start();
