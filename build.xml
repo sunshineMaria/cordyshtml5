@@ -58,6 +58,7 @@
 		<copy todir="${build.web}">
 			<fileset dir="${src.web}">
 				<include name="**/*" />
+				<exclude name="html5/test/**" />
 			</fileset>
 		</copy>
 	</target>
