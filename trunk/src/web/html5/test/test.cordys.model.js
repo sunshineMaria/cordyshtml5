@@ -1,4 +1,4 @@
-﻿(function(window, $) {
+(function(window, $) {
 
 	module("Model Plugin Test");
 	
@@ -29,7 +29,7 @@
 		22. Delete a BO and update the deleted BO
 		23. Use selectedItem with and without a selcted BO
 		24. Clear the model of all data
-		25. Get the number of Business Objects
+		25. Get the number of Business Objects    
 	
 	*/
 
