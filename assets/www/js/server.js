@@ -18,17 +18,26 @@ function Server(options) {
 	/**
 	 * Properties
 	 */
+	
 	this.location = ko.observable(options.location);
+	this.serverURL = ko.computed(function(){
+		var serverURL = this.location();
+		var serverURL =  serverURL ? ((/\/cordys[\/]*$/.test(serverURL)) ? serverURL : serverURL + '/cordys') : "";
+		serverURL = serverURL.replace(/[\/\\]$/, "");
+		
+		return serverURL;
+	}, this);
+	
 	this.organization = ko.observable(options.organization);
 	this.username = ko.observable(options.username);
 	this.password = ko.observable(options.password || '');
 	
 	this.deleteCookiesUrl = ko.computed(function() {
-		return this.location() + '/html5/touchbop.deletecookies.htm';
+		return this.serverURL() + '/html5/touchbop.deletecookies.htm';
 	}, this);
 	
 	this.loginUrl = ko.computed(function() {
-		return this.location() + '/com.eibus.web.soap.Gateway.wcp';
+		return this.serverURL() + '/com.eibus.web.soap.Gateway.wcp';
 	}, this);
 	
 	this.mayTryLogIn = ko.observable(undefined === options.mayTryLogIn ? true : !!options.mayTryLogIn);
@@ -218,14 +227,7 @@ Server.prototype = {
 		return 'Location: ' + this.location() + ', User: ' + this.username() + ', Organization: ' + this.organization();
 	},
 	getTouchBopIndexUrl: function(id) {
-		var url = this.location();
-		
-		if (!/\/cordys$/.test(url)) {
-			// add /cordys to the url
-			url += '/cordys';
-		}
-		
-		return url + '/html5/touchbopindex.htm?startfrom=native&org=' + this.organization() + '&serverId=' + id;
+		return this.serverURL() + '/html5/touchbopindex.htm?startfrom=native&org=' + this.organization() + '&serverId=' + id;
 	},
 	prelogin: function() {
 		var self = this, 
@@ -241,25 +243,23 @@ Server.prototype = {
 			self.cookies.ct.valid(false);
 		});
 		
-		this.deleteCookies()
-		.done(function() {
+
 			
-			var prelogin = Cordys.ajax.createPrelogin(self.loginUrl());
-			$.ajax(prelogin).done(function(data) {
-				var $data = $(data);
-				
-				self.cookies.saml.name($data.find('SamlArtifactCookieName').text());
-				self.cookies.ct.name($data.find('CheckName').text());
-				
-				// save change to localStorage
-				window.__sharedViewModel__.instances.notifySubscribers(undefined, undefined);
-				
-				deferred.resolve();
-			}).fail(function(e) {
-				deferred.reject(e);
-			});
+		var prelogin = Cordys.ajax.createPrelogin(self.loginUrl());
+		$.ajax(prelogin).done(function(data) {
+			var $data = $(data);
+			
+			self.cookies.saml.name($data.find('SamlArtifactCookieName').text());
+			self.cookies.ct.name($data.find('CheckName').text());
+			
+			// save change to localStorage
+			window.__sharedViewModel__.instances.notifySubscribers(undefined, undefined);
+			
+			deferred.resolve();
+		}).fail(function(e) {
+			deferred.reject(e);
 		});
-		
+
 		return deferred.promise();
 	},
 	login: function() {
@@ -308,15 +308,26 @@ Server.prototype = {
 		
 		return deferred.promise();
 	},
+	
 	deleteCookies: function() {
-		
+		var iframe = $('<iframe>', {
+			src: this.deleteCookiesUrl(),
+			'class': 'hidden'
+		}),
 		deferred = $.Deferred();
 		
-		$.get(this.deleteCookiesUrl(), function (data) {
+		iframe.on('load', function() {
 			deferred.resolve();
+			// Remove iframe from dom
+			// Wait for sometime as immediately removing the iframe was not running the script inside in Safari
+			Timer(100, true).done(function(){
+				iframe.remove();
+			})	
 		});
 		
-			
+		// Insert in dom
+		$(document.body).append(iframe);
+		
 		Timer(30000, true).done(function() {
 			if ('resolved' !== deferred.state()) {
 				deferred.reject('timeout');
