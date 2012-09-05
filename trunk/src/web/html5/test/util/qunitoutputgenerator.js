@@ -73,7 +73,7 @@ function getTestResultXML() {
 }
 
 // path to jquery css files for referring in the output htm
-var PATH_TO_QUNIT_CSS = "http://srv-nl-crd134/cordys/html5/jquery/qunit.css";
+var PATH_TO_QUNIT_CSS = "http://srv-nl-crd134/cordys/html5/test/util/qunit.css";
 
 /*
 Returns the result of the execution HTML
