@@ -10,8 +10,28 @@ function AddInstancePageViewModel(parentModel) {
 		mayTryLogIn: false
 	}));
 	
-	this.onSubmitAddServer = function() {
+	this.onSubmitAddServer = function(model, submitEvent) {
 		var instance = self.selected();
+		
+		if (! instance.validate()) {
+			/**
+			 * JQM closes a dialog when any of the button(data-role) is pressed. Prevent this
+			 * by cancelling the event and stopping propagation
+			 */
+			submitEvent.preventDefault();
+			submitEvent.cancelBubble = true;
+			if (submitEvent.stopPropagation)
+				submitEvent.stopPropagation();
+			
+			if (navigator.notification) {
+				navigator.notification.alert("Enter all the required details ");
+			} else {
+				window.alert("Enter all the required details ");
+			}
+			
+			return;
+		}	
+	
 		instance.mayTryLogIn(true);
 
 		parentModel.addInstance(instance);
