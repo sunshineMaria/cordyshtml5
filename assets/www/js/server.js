@@ -56,7 +56,13 @@ function Server(options) {
 		}
 	}, this);
 	
-	
+	this.validate = function() {
+		var validExp = /[\S]+/;
+		return (this.location() && validExp.test(this.location()) && 
+					this.organization() && validExp.test(this.organization()) && 
+					this.username() && validExp.test(this.username()) && 
+					this.password() && validExp.test(this.password()));
+	}
 	/**
 	 * Cookies, ct + saml
 	 */
