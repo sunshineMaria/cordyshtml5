@@ -233,7 +233,7 @@ Server.prototype = {
 		return 'Location: ' + this.location() + ', User: ' + this.username() + ', Organization: ' + this.organization();
 	},
 	getTouchBopIndexUrl: function(id) {
-		return this.serverURL() + '/html5/touchbopindex.htm?startfrom=native&org=' + this.organization() + '&serverId=' + id;
+		return this.serverURL() + '/html5/touchbopindex.htm?startfrom=native&organization=' + this.organization() + '&serverId=' + id;
 	},
 	prelogin: function() {
 		var self = this, 
