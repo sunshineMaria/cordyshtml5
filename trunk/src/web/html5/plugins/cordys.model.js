@@ -31,7 +31,7 @@
 			// let us add ko if the model is not readOnly
 			if (typeof(ko) === "undefined") loadScript("/cordys/html5/knockout/knockout-2.1.0.js");
 			// let us add the ko mapping plugin
-			if (typeof(ko) !== "undefined" && (! ko.mapping)) loadScript("/cordys/html5/knockout/knockout.mapping-latest.js");
+			if (typeof(ko) !== "undefined" && (! ko.mapping)) loadScript("/cordys/html5/knockout/knockout.mapping-2.3.2.js");
 		}
 
 		if (typeof(ko) !== "undefined") {
