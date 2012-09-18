@@ -4,15 +4,17 @@ function EditInstanceViewModel(parentModel) {
 		return new EditInstanceViewModel(parentModel);
 	}
 	
-	this.selected = parentModel.selected();
-	this.selected.mayTryLogIn(false);
+	this.selected = parentModel.selected;
+	this.selected().mayTryLogIn(false);
 	
 	/**
 	 * Only to preventDefault submit action
 	 */
 	this.onSubmitEditServer = function(model, submitEvent) {
 		
-		if (! this.selected.validate()) {
+		var selected = this.selected();
+
+		if (! selected.validate()) {
 			/**
 			 * JQM closes a dialog when any of the button(data-role) is pressed. Prevent this
 			 * by cancelling the event and stopping propagation
@@ -30,9 +32,9 @@ function EditInstanceViewModel(parentModel) {
 			return;
 		}
 
-		this.selected.mayTryLogIn(false);
-		this.selected.cookies.ct.valid(false);
-		this.selected.mayTryLogIn(true);
+		selected.mayTryLogIn(false);
+		selected.cookies.ct.valid(false);
+		selected.mayTryLogIn(true);
 		window.__sharedViewModel__.instances.notifySubscribers(undefined, undefined);
 		$.mobile.changePage('#servers');
 	};
