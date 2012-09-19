@@ -82,15 +82,72 @@
 		dataType:"xml"
 	}
 
+	function getOrganizationDN(organization, options){
+		if (! organization) return null;
+		if (organization.indexOf("=") >= 0) return organization;
+
+		// check if we have the list of organizations in $.cordys.ajax._organizations or in the local storage 
+		$.cordys.ajax._organizations = $.cordys.ajax._organizations || ((typeof(Storage) !== "undefined") ? (localStorage._organizations && localStorage._organizations.split("#"))	 : null);
+
+		var matchOrg = function(organization){
+			var orgDN = null;
+			var orgPattern = new RegExp("^o=" + organization + ",", "i");
+			$.each($.cordys.ajax._organizations, function(i, value){
+				if (orgPattern.test(value)){	
+					orgDN = value;
+					return false; // stop here
+				}
+			});
+			return orgDN;
+		};
+
+		var orgDN;
+		if (! ($.cordys.ajax._organizations) || !(orgDN = matchOrg(organization))){
+			// let us fetch the organizations from the server if we do not yet have it or we cannot match from the list
+
+			var GET_ORGS_REQ = "GetUserDetails", GET_ORGS_NS = "http://schemas.cordys.com/1.0/ldap";
+			if (options.method === GET_ORGS_REQ && options.namespace ===  GET_ORGS_NS){
+				return null; // stop recursing
+			}
+			// get the orgs
+			var getOrgsRequest = $.cordys.ajax({
+				method: GET_ORGS_REQ,
+				organization : false,
+				async : false,
+				namespace: GET_ORGS_NS,
+				dataType: 'json'
+			
+			}).done(function(data) {
+				// store to $.cordys.ajax._organizations
+				var organizationObjects = ($.type(data.tuple.old.user.organization) === "array") ? data.tuple.old.user.organization : [data.tuple.old.user.organization];
+				$.cordys.ajax._organizations = $.map(organizationObjects, function(organizationObject, index){
+					return organizationObject.dn;
+				});
+				
+				// store to local storage if available
+				if(typeof(Storage) !== "undefined"){
+					localStorage._organizations = $.cordys.ajax._organizations.join("#");
+				}
+			}).fail(function(error){
+				$.cordys.ajax._organizations = null;
+			});
+			orgDN = matchOrg(organization);
+		}
+
+		if (! orgDN){
+			// the user will go to the default organization if the organization specified does not exist
+			alert("Could not find Organization '" + organization + "'. Proceeding to default" );
+		}
+
+		return orgDN;
+	}
+
 	function configureGatewayUrl(url, options) {
 
 		url = url 
 				? url.replace(/^http:\//, window.location.protocol+"/").replace(/\/localhost\//, "/"+window.location.host+"/") 
 				: window.location.protocol + "//" + window.location.host + "/cordys/com.eibus.web.soap.Gateway.wcp";
-		var org = options.organization || getURLParameter(window.location, "organization");
-		if (org) {
-			url = addURLParameter(url, "organization", org);
-		}
+			
 /*
 		var saName = localStorage.getItem("cordysSAMLArtCookieName");
 		if (saName) {
@@ -119,6 +176,11 @@
 			}
 		}
 //*/
+		var orgDN = getOrganizationDN(options.organization || getURLParameter(window.location, "organization"), options);
+		if (orgDN) {
+			url = addURLParameter(url, "organization", orgDN);
+		}
+
 		return url;
 	}
 
