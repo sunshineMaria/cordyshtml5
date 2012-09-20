@@ -16,8 +16,28 @@ function HomeViewModel(parentModel) {
 		$.mobile.changePage('#');
 	};
 	
-	this.click = function(server) {
+	this.click = function(server, event) {
 		parentModel.selected(server);
+		//redirect to touchbopindex page only if the user credentials are valid.
+		if (!server.cookies.saml.valid()) {
+			event.preventDefault();
+			event.cancelBubble = true;
+			if (event.stopPropagation)
+				event.stopPropagation();
+		
+			if (!server.cookies.ct.valid()) {
+				// do first prelogin
+				server.prelogin().done(function() {
+					server.login().done(function() {
+						$.mobile.changePage('#app');
+					});
+				});
+			} else {
+				server.login().done(function() {
+					$.mobile.changePage('#app');
+				});
+			}
+		}
 	};
 	
 	this.longPress = function(server) {
