@@ -58,7 +58,10 @@
 			"iPhone|4|3",
 			"iPhone|5",
 			"Fennec|10",
-			"Opera Mobile"
+			"Opera Mobile",
+			"Blackberry|6",
+			"Blackberry|7|0",
+			"Blackberry|7|1"
 		],
 		"desktop": [
 			"Chrome|20",
@@ -88,7 +91,10 @@
 			"iPhone|4|3",
 			"iPhone|5",
 			"Fennec|10",
-			"Opera Mobile"
+			"Opera Mobile",
+			"Blackberry|6",
+			"Blackberry|7|0",
+			"Blackberry|7|1"
 		],
 		"native": [		
 			"Android|2|2",
