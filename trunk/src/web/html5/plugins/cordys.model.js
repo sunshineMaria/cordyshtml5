@@ -82,8 +82,13 @@
 					if (self.isReadOnly !== true){
 						// let us make every attribute Observable for identifying changes and add lock if the model is not readOnly
 						for (var objectKey in objects){
-							var object = objects[objectKey];
-							var observableObject = ko.mapping.fromJS(object);
+							var object = objects[objectKey], 
+								observableObject;
+							if (opts.template) {
+								observableObject = mapObject(object, opts.template);
+							} else {
+								observableObject = ko.mapping.fromJS(object);
+							}
 							addOptimisticLock(self, object, observableObject, false);
 							objects[objectKey] = observableObject;
 						}
@@ -551,6 +556,57 @@
 		}
 		return objects;
 	};
+
+	// Create observables from a data object against a template, supporting child objects, arrays, compute, paths and others.
+	mapObject = function(dataObject, objectTemplate, rootObject) {
+		if (!rootObject) rootObject = dataObject;
+		var returnObject = ko.mapping.fromJS(dataObject);
+
+		$.each(objectTemplate, function(i, f) {
+			if (typeof(f) === "string") {
+				if (!returnObject[f]) returnObject[f] = ko.observable();	// add the field if it is not there, to avoid ko "Unable to parse binding" error
+			} else {
+				if (!f.name) throw new Error("Mandatory property 'name' not specified");
+				var value = ko.utils.unwrapObservable(returnObject[f.name]);
+				if (f.path) {	// get the value from the dataObject via the specified path
+					var spath = f.path.split(".");
+					value = dataObject;
+					for (var i=0; i<spath.length; i++) {
+						if (typeof(value) == "undefined") break;
+						value = (spath[i] == "$root") ? rootObject : ko.utils.unwrapObservable(value[spath[i]]);
+					}
+				}
+				if (f.computed) {	// create a knockout computed object to get the value
+					returnObject[f.name] = ko.computed(f.computed, returnObject);
+					return returnObject;
+				}
+				if (f.isArray) {
+					if (value) {
+						if (!$.isArray(value)) {	// wrap the value into an array
+							value = [value];
+							returnObject[f.name] = ko.observableArray(value);
+						}
+					} else {	// create an empty array
+						returnObject[f.name] = ko.observableArray();
+					}
+				} else {
+					if (!returnObject[f.name] || f.path) returnObject[f.name] = ko.observable(value);
+				}
+				if (f.template) {	// recursively map child objects
+					if ($.isArray(value)) {
+						returnObject[f.name]([]); // Empty the array
+						for (var i=0; i<value.length; i++) {
+							returnObject[f.name]().push(mapObject(value[i], f.template, rootObject));
+						}
+					} else {
+						returnObject[f.name] = mapObject(value, f.template, rootObject);
+					}
+				}
+			}
+		})
+
+		return returnObject;
+	}
 
 	// Adds lock. This stores the initial state, so that you can identify objects that are changes as well as know their old values
 	addOptimisticLock = function(model, data, observableData, isInitiallyDirty) {
