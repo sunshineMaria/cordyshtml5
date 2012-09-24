@@ -55,21 +55,35 @@
 			ALLMEDIA: 2				// allow selection from all media types
 		}
 	};
+
 	$.cordys.mobile.camera.getPicture = function(successCallback, errorCallback, options) {
-		this.__onSuccess = successCallback;
-		this.__onError = errorCallback;
+		this.deferred = $.Deferred();
+		if (typeof(successCallback) !== "function") {
+			options = successCallback;
+		} else {
+			this.deferred.done(successCallback);
+			this.deferred.fail(errorCallback);
+		}
+
 		postMessageToParent({
 			message: "camera.getPicture",
 			parameters: {
 				options: options
 			}
 		}, $.cordys.mobile.origin);
+		return this.deferred.promise();
 	};
 
 	// Notification methods
 	$.cordys.mobile.notification = {};
 	$.cordys.mobile.notification.alert = function(message, alertCallback, title, buttonName) {
-		this.__alertCallback = alertCallback;
+		this.alertDeferred = $.Deferred();
+		if (typeof(alertCallback) !== "function") {
+			buttonName = title;
+			title = alertCallback;
+		} else {
+			this.deferred.done(alertCallback);
+		}
 		postMessageToParent({
 			message: "notification.alert",
 			parameters: {
@@ -78,9 +92,16 @@
 				buttonName: buttonName
 			}
 		}, $.cordys.mobile.origin);
+		return this.alertDeferred.promise();
 	};
 	$.cordys.mobile.notification.confirm = function(message, confirmCallback, title, buttonLabels) {
-		this.__confirmCallback = confirmCallback;
+		this.confirmDeferred = $.Deferred();
+		if (typeof(confirmCallback) !== "function") {
+			buttonLabels = title;
+			title = confirmCallback;
+		} else {
+			this.deferred.done(confirmCallback);
+		}
 		postMessageToParent({
 			message: "notification.confirm",
 			parameters: {
@@ -89,6 +110,7 @@
 				buttonLabels: buttonLabels
 			}
 		}, $.cordys.mobile.origin);
+		return this.confirmDeferred.promise();
 	}
 	$.cordys.mobile.notification.beep = function(times) {
 		postMessageToParent({
@@ -110,8 +132,14 @@
 	// File methods
 	$.cordys.mobile.fileTransfer = {};
 	$.cordys.mobile.fileTransfer.upload = function(filePath, server, successCallback, errorCallback, options) {
-		this.__uploadSuccess = successCallback;
-		this.__uploadError = errorCallback;
+		this.uploadDeferred = $.Deferred();
+		if (typeof(successCallback) !== "function") {
+			options = successCallback;
+		} else {
+			this.uploadDeferred.done(successCallback);
+			this.uploadDeferred.fail(errorCallback);
+		}
+
 		postMessageToParent({
 			message: "fileTransfer.upload",
 			parameters: {
@@ -120,23 +148,29 @@
 				options: options
 			}
 		}, $.cordys.mobile.origin);
+		return this.uploadDeferred.promise();
 	}
 	$.cordys.mobile.fileTransfer.download = function() {
 	}
 	$.cordys.mobile.fileReader = {};
 	$.cordys.mobile.fileReader.readAsDataURL = function(filePath, successCallback, errorCallback) {
-		this.__readURLSuccess = successCallback;
-		this.__readURLError = errorCallback;
+		this.readURLDeferred = $.Deferred();
+		this.readURLDeferred.done(successCallback);
+		this.readURLDeferred.fail(errorCallback);
+
 		postMessageToParent({
 			message: "fileReader.readAsDataURL",
 			parameters: {
 				filePath: filePath
 			}
 		}, $.cordys.mobile.origin);
+		return this.readURLDeferred.promise();
 	}
 	$.cordys.mobile.fileReader.readAsText = function(filePath, encoding, successCallback, errorCallback) {
-		this.__readTextSuccess = successCallback;
-		this.__readTextError = errorCallback;
+		this.readTextDeferred = $.Deferred();
+		this.readTextDeferred.done(successCallback);
+		this.readTextDeferred.fail(errorCallback);
+
 		postMessageToParent({
 			message: "fileReader.readAsText",
 			parameters: {
@@ -144,16 +178,20 @@
 				encoding: encoding
 			}
 		}, $.cordys.mobile.origin);
+		return this.readTextDeferred.promise();
 	}
 	$.cordys.mobile.loadScript = function(filePath, successCallback, errorCallback) {
-		this.__loadScriptSuccess = successCallback;
-		this.__loadScriptError = errorCallback;
+		this.loadScriptDeferred = $.Deferred();
+		this.loadScriptDeferred.done(successCallback);
+		this.loadScriptDeferred.fail(errorCallback);
+
 		postMessageToParent({
 			message: "loadScript",
 			parameters: {
 				filePath: filePath
 			}
 		}, $.cordys.mobile.origin);
+		return this.loadScriptDeferred.promise();
 	}
 
 	postMessageToParent = function(data, origin){
@@ -178,40 +216,40 @@
 				window.location.reload();
 				break;
 			case "camera.getPicture.onSuccess":
-				if ($.cordys.mobile.camera.__onSuccess) $.cordys.mobile.camera.__onSuccess(evt.data.parameters);
+				$.cordys.mobile.camera.deferred.resolve(evt.data.parameters);
 				break;
 			case "camera.getPicture.onError":
-				if ($.cordys.mobile.camera.__onError) $.cordys.mobile.camera.__onError(evt.data.parameters.error);
+				$.cordys.mobile.camera.deferred.reject(evt.data.parameters.error);
 				break;
 			case "notification.alert.onCallback":
-				if ($.cordys.mobile.notification.__alertCallback) $.cordys.mobile.notification.__alertCallback(evt.data.parameters);
+				$.cordys.mobile.notification.alertDeferred.resolve(evt.data.parameters);
 				break;
 			case "notification.confirm.onCallback":
-				if ($.cordys.mobile.notification.__confirmCallback) $.cordys.mobile.notification.__confirmCallback(evt.data.parameters);
+				$.cordys.mobile.notification.confirmDeferred.resolve(evt.data.parameters);
 				break;
 			case "fileTransfer.upload.onSuccess":
-				if ($.cordys.mobile.fileTransfer.__uploadSuccess) $.cordys.mobile.fileTransfer.__uploadSuccess(evt.data.parameters.result);
+				$.cordys.mobile.fileTransfer.uploadDeferred.resolve(evt.data.parameters.result);
 				break;
 			case "fileTransfer.upload.onError":
-				if ($.cordys.mobile.fileTransfer.__uploadError) $.cordys.mobile.fileTransfer.__uploadError(evt.data.parameters.error);
+				$.cordys.mobile.fileTransfer.uploadDeferred.reject(evt.data.parameters.error);
 				break;
 			case "fileReader.readAsDataURL.onSuccess":
-				if ($.cordys.mobile.fileReader.__readURLSuccess) $.cordys.mobile.fileReader.__readURLSuccess(evt.data.parameters.result);
+				$.cordys.mobile.fileReader.readURLDeferred.resolve(evt.data.parameters.result);
 				break;
 			case "fileReader.readAsDataURL.onError":
-				if ($.cordys.mobile.fileReader.__readURLError) $.cordys.mobile.fileReader.__readURLError(evt.data.parameters.error);
+				$.cordys.mobile.fileReader.readURLDeferred.reject(evt.data.parameters.error);
 				break;
 			case "fileReader.readAsText.onSuccess":
-				if ($.cordys.mobile.fileReader.__readTextSuccess) $.cordys.mobile.fileReader.__readTextSuccess(evt.data.parameters.result);
+				$.cordys.mobile.fileReader.readTextDeferred.resolve(evt.data.parameters.result);
 				break;
 			case "fileReader.readAsText.onError":
-				if ($.cordys.mobile.fileReader.__readTextError) $.cordys.mobile.fileReader.__readTextError(evt.data.parameters.error);
+				$.cordys.mobile.fileReader.readTextDeferred.reject(evt.data.parameters.error);
 				break;
 			case "loadScript.onSuccess":
-				if ($.cordys.mobile.__loadScriptSuccess) $.cordys.mobile.__loadScriptSuccess(evt.data.parameters.result);
+				$.cordys.mobile.loadScriptDeferred.resolve(evt.data.parameters.result);
 				break;
 			case "loadScript.onError":
-				if ($.cordys.mobile.__loadScriptError) $.cordys.mobile.__loadScriptError(evt.data.parameters.error);
+				$.cordys.mobile.loadScriptDeferred.reject(evt.data.parameters.error);
 				break;
 		}
 	}, false);
