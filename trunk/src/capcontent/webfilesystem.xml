@@ -56,10 +56,11 @@
     <artifact guid="002170BA-4014-11E2-E0DA-6A2271CAF626" itempath="html5/knockout/knockout.mapping-2.3.2.debug.js" name="html5/knockout/knockout.mapping-2.3.2.debug.js" source="${build.web}/html5/knockout/knockout.mapping-2.3.2.debug.js"/>
     <artifact guid="002170BA-4014-11E2-E0DA-6A2271CB1626" itempath="html5/util/base64.js" name="html5/util/base64.js" source="${build.web}/html5/util/base64.js"/>
     <artifact guid="002170BA-4014-11E2-E0DA-6A2271CB3626" itempath="html5/fusion/charts-3.2.3/FusionCharts.jqueryplugin.js" name="html5/fusion/charts-3.2.3/FusionCharts.jqueryplugin.js" source="${build.web}/html5/fusion/charts-3.2.3/FusionCharts.jqueryplugin.js"/>
-    <artifact guid="002170BA-4014-11E2-E0DA-6A2271CB5626" itempath="html5/cordys.html5sdk-0.2.debug.js" name="html5/cordys.html5sdk-0.2.debug.js" source="${build.web}/html5/cordys.html5sdk-0.2.debug.js"/>
     <artifact guid="002170BA-4014-11E2-E0DA-6A2271CB7626" itempath="html5/fusion/charts-3.2.3/FusionCharts.HC.Charts.js" name="html5/fusion/charts-3.2.3/FusionCharts.HC.Charts.js" source="${build.web}/html5/fusion/charts-3.2.3/FusionCharts.HC.Charts.js"/>
     <artifact guid="002170BA-4014-11E2-E0DA-6A2271CB9626" itempath="html5/jquery/jquery.mobile-1.2.0-alpha.1.min.css" name="html5/jquery/jquery.mobile-1.2.0-alpha.1.min.css" source="${build.web}/html5/jquery/jquery.mobile-1.2.0-alpha.1.min.css"/>
     <artifact guid="002170BA-4014-11E2-E0DA-6A2271CBB626" itempath="html5/demo/uploadphoto.htm" name="html5/demo/uploadphoto.htm" source="${build.web}/html5/demo/uploadphoto.htm"/>
     <artifact guid="002170BA-4014-11E2-E0DA-6A2271CBD626" itempath="html5/knockout/knockout.mapping-2.3.2.js" name="html5/knockout/knockout.mapping-2.3.2.js" source="${build.web}/html5/knockout/knockout.mapping-2.3.2.js"/>
     <artifact guid="002170BA-4014-11E2-E0DA-6A2271CBF626" itempath="html5/fusion/charts-3.2.3/FusionCharts.js" name="html5/fusion/charts-3.2.3/FusionCharts.js" source="${build.web}/html5/fusion/charts-3.2.3/FusionCharts.js"/>
+    <artifact guid="002170BA-4014-11E2-E0E2-CA1772CAD626" itempath="html5/cordys.html5sdk-0.3.debug.js" name="html5/cordys.html5sdk-0.3.debug.js" source="${build.web}/html5/cordys.html5sdk-0.3.debug.js"/>
+    <artifact guid="002170BA-4014-11E2-E0E2-CA1772CAF626" itempath="html5/cordys.html5sdk-0.3.js" name="html5/cordys.html5sdk-0.3.js" source="${build.web}/html5/cordys.html5sdk-0.3.js"/>
 </artifacts>
