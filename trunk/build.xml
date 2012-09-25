@@ -91,11 +91,11 @@
 		
 	<target name="updatewebfilesystem" description="Updating the webfilesystem.xml based on the addition or deletion of files">
 		<echo message="updating the webfilesystem.xml ${src.capcontent.web.filesystem.xml}'" />
-		<echo message="updating from ${build.web}" />
+		<echo message="updating from ${build.web}/html5" />
 	   	
 	   	<trycatch property="updatefilesystemerrormessage" reference="updatewebfilesystem">
 		  <try>
-		    <updatefilesystemxml inputxmlpath="${src.capcontent.web.filesystem.xml}" buildlocation="${build.web}" />
+		    <updatefilesystemxml inputxmlpath="${src.capcontent.web.filesystem.xml}" buildlocation="${build.web}/html5" />
 		  </try>
 		
 		  <catch>
