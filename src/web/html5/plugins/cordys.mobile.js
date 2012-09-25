@@ -82,7 +82,7 @@
 			buttonName = title;
 			title = alertCallback;
 		} else {
-			this.deferred.done(alertCallback);
+			this.alertDeferred.done(alertCallback);
 		}
 		postMessageToParent({
 			message: "notification.alert",
@@ -100,7 +100,7 @@
 			buttonLabels = title;
 			title = confirmCallback;
 		} else {
-			this.deferred.done(confirmCallback);
+			this.confirmDeferred.done(confirmCallback);
 		}
 		postMessageToParent({
 			message: "notification.confirm",
