@@ -79,17 +79,19 @@
 				
 				self.cursor = cursor ? cursor : null;
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
-					if (self.isReadOnly !== true){
+					if (self.isReadOnly !== true || opts.template){
 						// let us make every attribute Observable for identifying changes and add lock if the model is not readOnly
 						for (var objectKey in objects){
 							var object = objects[objectKey], 
 								observableObject;
 							if (opts.template) {
-								observableObject = mapObject(object, opts.template);
+								observableObject = mapObject(object, opts.template, null, !self.isReadOnly);
 							} else {
 								observableObject = ko.mapping.fromJS(object);
 							}
-							addOptimisticLock(self, object, observableObject, false);
+							if (!self.isReadOnly) {
+								addOptimisticLock(self, object, observableObject, false);
+							}
 							objects[objectKey] = observableObject;
 						}
 					}
@@ -112,7 +114,7 @@
 			async : false,
 			beforeSend: function (xhr, settings){
 				// cancel the request if there is nothing to update or call the custom beforeSend handler (he can cancels it too)
-				return (self.objectsToBeUpdated.length > 0) && (self._beforeSend ? self._beforeSend(xhr, settings, self.objectsToBeUpdated) : true);
+				return !self.isReadOnly && (self.objectsToBeUpdated.length > 0) && (self._beforeSend ? self._beforeSend(xhr, settings, self.objectsToBeUpdated) : true);
 			},
 
 			success: function (data, textStatus, jqXHR){
@@ -558,13 +560,13 @@
 	};
 
 	// Create observables from a data object against a template, supporting child objects, arrays, compute, paths and others.
-	mapObject = function(dataObject, objectTemplate, rootObject) {
+	mapObject = function(dataObject, objectTemplate, rootObject, createObservables) {
 		if (!rootObject) rootObject = dataObject;
-		var returnObject = ko.mapping.fromJS(dataObject);
+		var returnObject = createObservables ? ko.mapping.fromJS(dataObject) : dataObject;
 
 		$.each(objectTemplate, function(i, f) {
 			if (typeof(f) === "string") {
-				if (!returnObject[f]) returnObject[f] = ko.observable();	// add the field if it is not there, to avoid ko "Unable to parse binding" error
+				if (!returnObject[f]) returnObject[f] = createObservables ? ko.observable() : "";	// add the field if it is not there, to avoid ko "Unable to parse binding" error
 			} else {
 				if (!f.name) throw new Error("Mandatory property 'name' not specified");
 				var value = ko.utils.unwrapObservable(returnObject[f.name]);
@@ -584,22 +586,22 @@
 					if (value) {
 						if (!$.isArray(value)) {	// wrap the value into an array
 							value = [value];
-							returnObject[f.name] = ko.observableArray(value);
+							returnObject[f.name] = createObservables ? ko.observableArray(value) : value;
 						}
 					} else {	// create an empty array
-						returnObject[f.name] = ko.observableArray();
+						returnObject[f.name] = createObservables ? ko.observableArray() : [];
 					}
 				} else {
-					if (!returnObject[f.name] || f.path) returnObject[f.name] = ko.observable(value);
+					if (!returnObject[f.name] || f.path) returnObject[f.name] = createObservables ? ko.observable(value) : value;
 				}
 				if (f.template) {	// recursively map child objects
 					if ($.isArray(value)) {
 						returnObject[f.name]([]); // Empty the array
 						for (var i=0; i<value.length; i++) {
-							returnObject[f.name]().push(mapObject(value[i], f.template, rootObject));
+							returnObject[f.name]().push(mapObject(value[i], f.template, rootObject, createObservables));
 						}
 					} else {
-						returnObject[f.name] = mapObject(value, f.template, rootObject);
+						returnObject[f.name] = mapObject(value, f.template, rootObject, createObservables);
 					}
 				}
 			}
