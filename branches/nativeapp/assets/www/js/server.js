@@ -28,7 +28,7 @@ function Server(options) {
 		return serverURL;
 	}, this);
 	
-	this.organization = ko.observable(options.organization);
+	this.organization = ko.observable(options.organization ? options.organization : "");
 	this.username = ko.observable(options.username);
 	this.password = ko.observable(options.password || '');
 	
@@ -59,7 +59,6 @@ function Server(options) {
 	this.validate = function() {
 		var validExp = /[\S]+/;
 		return (this.location() && validExp.test(this.location()) && 
-					this.organization() && validExp.test(this.organization()) && 
 					this.username() && validExp.test(this.username()) && 
 					this.password() && validExp.test(this.password()));
 	}
