@@ -242,12 +242,17 @@ Server.prototype = {
 			self.cookies.ct.valid(true);
 		});
 		
-		deferred.fail(function(e) {
-			console.log('Error in prelogin: ' + 
-					$(e.error().responseXML).find('faultstring,error elem').text() || e.responseText);
+		deferred.fail(function(e, statusText, errorThrown) {
+			var errorText = (e.error().responseXML && $(e.error().responseXML).find('faultstring,error elem').text()) || e.responseText || errorThrown || statusText;
+			var errorMessage = "Error in prelogin. Error is '" + errorText + "'";
+			console.log(errorMessage);
+			if (navigator.notification) {
+				navigator.notification.alert(errorMessage);
+			} else {
+				window.alert(errorMessage);
+			}
 			self.cookies.ct.valid(false);
 		});
-		
 
 			
 		var prelogin = Cordys.ajax.createPrelogin(self.loginUrl());
@@ -261,8 +266,8 @@ Server.prototype = {
 			window.__sharedViewModel__.instances.notifySubscribers(undefined, undefined);
 			
 			deferred.resolve();
-		}).fail(function(e) {
-			deferred.reject(e);
+		}).fail(function(e, statusText, errorThrown) {
+			deferred.reject(e, statusText, errorThrown);
 		});
 
 		return deferred.promise();
