@@ -31,7 +31,6 @@
 							"OrderID": "161",
 							"Customer": "csc",
 							"Employee": "ss",
-							"OrderDate": "2012-07-10 12:15:17.257",
 							"Discount": "21",
 							"Cost": "1",
 							OrderDemoLines: [{
@@ -126,19 +125,28 @@
 			computed: function () {
 				return this.OrderID() + " " + this.Status()
 			}
+		},{
+				name: "Birthday",
+				type: "string",
+				path: "OrderDate"
 		}]
 	});
 
 	/* Test	
 	1) If computed observables are getting added
 	2) If the values of the computed observables are correct
+	3) If observables get correctly added with path specified, with the correct values
 	*/
-	test("Template Computed Observables Test", 2, function () {
+	test("Template Computed Observables Test", 4, function () {
 		stop();
 		var currentSubscription = templateTestModel2.OrderDemo.subscribe(function (orders) {
 
 			ok(ko.isObservable(orders[1].StatusMessage), "Observable added for computed field");
 			strictEqual(orders[0].StatusMessage(), "160 CREATED", "Computed field has correct value");
+
+			ok(ko.isObservable(orders[1].Birthday), "Observable added for field with path even if the path does not exist");
+			strictEqual(orders[0].Birthday(), "2012-07-10 10:29:16.140000000", "Field with path has correct value");
+
 			currentSubscription.dispose(currentSubscription);
 		});
 		templateTestModel2.read({
@@ -206,6 +214,10 @@
 				computed: function () {
 					return new Number(this.Quantity()) * new Number(this.Price());
 				}
+			}, {
+				name: "ItemName",
+				type: "string",
+				path: "Product"
 			}]
 		}]
 	});
@@ -215,7 +227,7 @@
 	a) Observables gettting added from inner templates, response with the correct values
 	b) Computer Observables gettting added from inner templates with the correct values
 	*/
-	test("Inner Template Test", 8, function () {
+	test("Inner Template Test", 10, function () {
 		stop();
 		var currentSubscription = templateTestModel4.OrderDemo.subscribe(function (orders) {
 
@@ -230,6 +242,10 @@
 
 			strictEqual($.type(orders[2].OrderDemoLines), "function", "Observable added for non-existing inner template");
 			strictEqual($.type(orders[2].OrderDemoLines()), "undefined", "Observable added for non-existing inner template returns undefined");
+
+			ok(ko.isObservable(orders[0].OrderDemoLines.ItemName), "Observable added for field with path even if the path does not exist");
+			strictEqual(orders[0].OrderDemoLines.ItemName(), "Tyre", "Field with path has correct value");
+
 		});
 		templateTestModel4.read({
 			method: "GetTemplateTestRequest"
@@ -256,6 +272,10 @@
 				computed: function () {
 					return new Number(this.Quantity()) * new Number(this.Price());
 				}
+			}, {
+				name: "ItemName",
+				type: "string",
+				path: "Product"
 			}]
 		}]
 	});
@@ -266,7 +286,7 @@
 	b) Computer Observables gettting added from inner templates with the correct values
 	c) Arrays getting added for templates in case of none, singleton and multiple value in the return
 	*/
-	test("Inner Template Array Test", 9, function () {
+	test("Inner Template Array Test", 11, function () {
 		stop();
 		var currentSubscription = templateTestModel5.OrderDemo.subscribe(function (orders) {
 
@@ -284,6 +304,9 @@
 
 			strictEqual($.type(orders[2].OrderDemoLines), "function", "Observable added for array template");
 			//strictEqual($.type(orders[2].OrderDemoLines()), "array", "Observable added for array template returns array even if it is not there in the response");
+
+			ok(ko.isObservable(orders[0].OrderDemoLines()[0].ItemName), "Observable added for field with path even if the path does not exist");
+			strictEqual(orders[0].OrderDemoLines()[0].ItemName(), "Tyre", "Field with path has correct value");
 		});
 		templateTestModel5.read({
 			method: "GetTemplateTestRequest"
