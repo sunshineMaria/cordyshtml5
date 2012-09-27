@@ -586,11 +586,11 @@
 					if (value) {
 						if (!$.isArray(value)) {	// wrap the value into an array
 							value = [value];
-							returnObject[f.name] = createObservables ? ko.observableArray(value) : value;
 						}
 					} else {	// create an empty array
-						returnObject[f.name] = createObservables ? ko.observableArray() : [];
+						value = [];
 					}
+					returnObject[f.name] = createObservables ? ko.observableArray(value) : value;
 				} else {
 					if (!returnObject[f.name] || f.path) returnObject[f.name] = createObservables ? ko.observable(value) : value;
 				}

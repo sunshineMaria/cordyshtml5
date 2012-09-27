@@ -230,7 +230,6 @@
 	test("Inner Template Test", 10, function () {
 		stop();
 		var currentSubscription = templateTestModel4.OrderDemo.subscribe(function (orders) {
-
 			ok(ko.isObservable(orders[0].OrderDemoLines.Dummy), "Observable for inner template added even if attribute is not present in response");
 			strictEqual($.type(orders[2].OrderDemoLines.Dummy()), "undefined", "Observable added has value undefined");
 
@@ -286,7 +285,7 @@
 	b) Computer Observables gettting added from inner templates with the correct values
 	c) Arrays getting added for templates in case of none, singleton and multiple value in the return
 	*/
-	test("Inner Template Array Test", 11, function () {
+	test("Inner Template Array Test", 12, function () {
 		stop();
 		var currentSubscription = templateTestModel5.OrderDemo.subscribe(function (orders) {
 
@@ -303,7 +302,7 @@
 			strictEqual(orders[0].OrderDemoLines()[0].Cost(), 416000, "Computer observable value for inner template correct");
 
 			strictEqual($.type(orders[2].OrderDemoLines), "function", "Observable added for array template");
-			//strictEqual($.type(orders[2].OrderDemoLines()), "array", "Observable added for array template returns array even if it is not there in the response");
+			strictEqual($.type(orders[2].OrderDemoLines()), "array", "Observable added for array template returns array even if it is not there in the response");
 
 			ok(ko.isObservable(orders[0].OrderDemoLines()[0].ItemName), "Observable added for field with path even if the path does not exist");
 			strictEqual(orders[0].OrderDemoLines()[0].ItemName(), "Tyre", "Field with path has correct value");
