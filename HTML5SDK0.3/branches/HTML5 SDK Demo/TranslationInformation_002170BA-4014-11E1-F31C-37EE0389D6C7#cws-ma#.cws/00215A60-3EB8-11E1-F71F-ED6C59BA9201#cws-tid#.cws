@@ -1,0 +1,25 @@
+
+<TextIdentifier
+	xmlns=""
+	xmlns:cws="http://schemas.cordys.com/cws/1.0"
+	type="com.cordys.translation.TextIdentifier"
+	typeVersion="55890f21-u239-76j6-988a-92j7opq6ws09"
+	RuntimeDocumentID="00215A60-3EB8-11E1-F71F-ED6C59BAB201">
+	<DocumentID>00215A60-3EB8-11E1-F71F-ED6C59BA9201</DocumentID>
+	<Name>00215A60-3EB8-11E1-F71F-ED6C59BA9201</Name>
+	<Description>ApproveOrder</Description>
+	<CreatedBy>sswathi</CreatedBy>
+	<CreationDate>2012-06-18T05:02:02.716</CreationDate>
+	<Notes/>
+	<DefaultText>ApproveOrder</DefaultText>
+	<TranslationInformation>
+		<uri
+			id="002170BA-4014-11E1-F31C-37EE038976C7"
+		/>
+	</TranslationInformation>
+	<Translations>
+		<uri
+			id="00215A60-3EB8-11E1-F71F-ED6C59BAD201"
+		/>
+	</Translations>
+</TextIdentifier>

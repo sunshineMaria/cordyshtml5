@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title> Cordys </title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+<!-- PhoneGap / Cordova -->
+<!-- 
+<script src="js/cordova/cordova-1.7.0rc1.js"></script>
+<script src="js/cordova/cordova-1.8.1.js"></script>
+<script src="js/cordova/cordova-2.0.0.js"></script>
+ -->
+<script src="cordova-2.0.0.js"></script>
+<script> /*cordova.UsePolling = false;*/ </script>
+
+<link rel="stylesheet" href="css/jquery.mobile-1.1.1.min.css">
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/html" id="instanceTemplate">
+	<li>
+		<a href="#app" data-bind="text: location() + ' - ' + username(), event: { taphold: $root.longPress, click: $root.click }"></a>
+	</li>
+</script>
+
+</head>
+<body>
+
+<div data-role="page" data-title="Home - Server list" id="servers"> 
+	<div data-role="header">
+		<h1> Cordys </h1>
+		<a class="ui-btn-right" data-icon="add" data-iconpos="notext" href="#add-server"> Add </a>
+	</div>
+	<div data-role="content">
+		<!-- ko ifnot: any -->
+			<h1> At the moment there are no instances stored. </h1>
+			<ul data-role="listview">
+				<li><a href="#add-server"> Create a new bop instance. </a></li>
+				<li><a data-bind="click: onCreateDemoInstance"> For getting started, create a demo instance. </a></li>
+			</ul>
+		<!-- /ko -->
+		
+		<!-- ko if: any -->
+			<ul id="serverList" data-role="listview" data-bind="template: {name: 'instanceTemplate', foreach: instances}, jqmRefreshList:instances">
+			</ul>
+		<!-- /ko -->
+	</div>
+</div>
+
+
+<div data-role="dialog" id="add-server">
+	<div data-role="header">
+		<h1> Add a new server </h1>
+	</div>
+	<div data-role="content">
+		<!-- ko with: selected -->
+		<label for="addserver-location"> Location:  </label>
+		<input data-mini="true" type="url" id="addserver-location" data-bind="value: location">
+		
+		<label for="addserver-organization"> Organization: </label>
+		<input data-mini="true" id="addserver-organization" data-bind="value: organization" placeholder="- Leave empty for default -">
+		
+		<label for="addserver-username"> User name: </label>
+		<input data-mini="true" id="addserver-username" data-bind="value: username"> 
+		
+		<label for="addserver-password"> Password: </label>
+		<input data-mini="true" id="addserver-password" type="password" data-bind="value: password">
+		<!-- /ko -->
+		
+		<a data-role="button" href="#servers"> Cancel </a>
+		<a data-role="button" href="#servers" data-bind="click: onSubmitAddServer"> Add </a>
+	</div>
+</div>
+
+
+<div data-role="dialog" id="edit-server">
+	<div data-role="header">
+		<h1> Edit a server </h1>
+		<a data-icon="delete" href="#delete-server" class="ui-btn-right" data-iconpos="notext"> Delete </a>
+	</div>
+	<div data-role="content">
+		<!-- ko with: selected -->
+		<label for="editserver-location"> Location: </label>
+		<input id="editserver-location" data-bind="value: location">
+		
+		<label for="editserver-organization"> Organization: </label>
+		<input id="editserver-organization" data-bind="value: organization" placeholder="- Leave empty for default -">
+		
+		<label for="editserver-username"> User name: </label>
+		<input id="editserver-username" data-bind="value: username">
+		
+		<label for="editserver-password"> Password: </label>
+		<input id="editserver-password" type="password" data-bind="value: password">
+		<!-- /ko -->
+		
+		<a data-role="button" href="#servers" data-bind="click: onSubmitEditServer"> Ok </a>
+	</div>
+</div>
+
+
+<div data-role="dialog" id="delete-server">
+	<div data-role="header">
+		<h1> Are you sure you want to delete this server? </h1>
+	</div>
+	<div data-role="content" data-bind="with: selected">
+		<dl>
+			<dt> Location: </dt><dd data-bind="text: location"></dd>
+			<dt> Organization: </dt><dd data-bind="text: organization"></dd>
+			<dt> User name: </dt><dd data-bind="text: username"></dd>
+		</dl>
+		
+		<input type="button" value="No" class="no" data-bind="click: $parent.onCloseDeleteServerDialog">
+		<input type="button" value="Yes" class="yes" data-bind="click: $parent.onSubmitDeleteServer">
+	</div>
+</div>
+
+
+<div data-role="page" data-title="app" id="app">
+	<div data-role="header">
+		<a class="ui-btn-left" href="#servers" data-icon="cordys" data-iconpos="right"> &lt; </a>
+		<h1> App </h1>
+	</div>
+	<iframe data-bind="attr: { src: bopTouchIndexUrl }" data-role="content" seamless></iframe>
+</div>
+
+
+<div data-role="dialog" id="create-demo-server">
+	<div data-role="header">
+		<h1> Do you want to create a link to our demo server? </h1>
+	</div>
+	<form data-role="content">
+		<input class="no" type="submit" value="No">
+		<input class="yes" type="submit" value="Yes">
+	</form>
+</div>
+
+
+<!-- Configuration -->
+<script>
+	var DEBUG = false;
+</script>
+
+<!-- jQuery -->
+<script src="js/jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+$(document).bind("mobileinit", function() {
+	// Disable page transitions for better performance
+    $.mobile.defaultPageTransition = 'none';
+    $.mobile.defaultDialogTransition = 'none';
+    $.mobile.loadingMessage = false;
+    $("a").attr("data-transition", "none");
+});
+</script>
+
+<!-- jQuery plugins -->
+<script src="js/jquery/jquery.mobile-1.1.1.min.js"></script>
+
+<!-- Cordys requirements -->
+<script src="js/util/sha1.js"></script>
+<script src="js/app.api.js"></script>
+
+<!-- KnockoutJs -->
+<script src="js/knockout/knockout-2.1.0.js"></script>
+<script src="js/knockout/knockout.mapping-latest.js"></script>
+
+<!-- Entities -->
+<script src="js/util/timer.js"></script>
+<script src="js/server.js"></script>
+
+<!-- ViewModel entities -->
+<script src="js/view_model/add_instance.js"></script>
+<script src="js/view_model/app.js"></script>
+<script src="js/view_model/delete_instance.js"></script>
+<script src="js/view_model/edit_instance.js"></script>
+<script src="js/view_model/home.js"></script>
+<script src="js/view_model/share.js"></script>
+
+<!-- default -->
+<script src="js/util/arrayutil.js"></script>
+
+<!-- main -->
+<script src="js/index.js"></script>
