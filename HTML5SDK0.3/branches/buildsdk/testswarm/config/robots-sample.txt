@@ -1,4 +1,0 @@
-User-agent: *
-# https://github.com/jquery/testswarm/issues/146
-Disallow: /*.php
-Disallow: /*?*
