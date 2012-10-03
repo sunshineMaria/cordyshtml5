@@ -421,7 +421,7 @@
 		}
 
 		// handles error in insert, update, delete, sync response. Updates the lock and current state to the current state from the response if specified
-		handleError = function(error, objectsToBeUpdated){
+		var handleError = function(error, objectsToBeUpdated){
 			if (opts.useTupleProtocol){
 				// let us find the tuples from the error detail
 				var tuples = $(error.responseXML).find("detail tuple");
@@ -459,7 +459,7 @@
 		};
 
 		// merges the response received after insert, update, delete, sync with the current data
-		mergeUpdate = function (data, objectsToBeUpdated){
+		var mergeUpdate = function (data, objectsToBeUpdated){
 			// let us get the updated tuples if we are using tuple protocol
 			if (opts.useTupleProtocol){
 				var synchronizedObjects =  $.map($.isArray(data.tuple) ? data.tuple : [data.tuple], function(tuple){
@@ -506,7 +506,7 @@
 		
 		// create a json structure to represent the tuple with the specified old and new Business Object (can alson pass null  values 
 		// in case where the old or new is not required
-		createTuple = function(oldBusObject, newBusObject) {
+		var createTuple = function(oldBusObject, newBusObject) {
 			var tuple = {};
 			if (oldBusObject) {	
 				tuple.old = {};
