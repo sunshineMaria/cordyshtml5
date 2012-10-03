@@ -1,0 +1,94 @@
+@CHARSET "UTF-8";
+
+iframe[seamless]{
+    background-color: transparent;
+    border: 0 none transparent;
+    padding: 0;
+    overflow: hidden;
+}
+
+
+.ui-dialog  .ui-header .ui-btn-icon-notext:first-child {
+	/* removes only the dialog close button */
+	display: none;
+}
+
+
+.ui-listview .ui-btn-text {
+	font-weight: normal;
+}
+
+
+.ui-dialog .ui-header .ui-title {
+	margin-left: 20px;
+	margin-right: 20px;
+	
+	white-space: normal;
+}
+
+
+.ui-btn .ui-btn-inner {
+	white-space: normal;
+}
+
+
+#app > iframe {
+	width: 100%;
+	min-height: 100%!important;
+	height: 100%!important;
+}
+
+/*
+`html body` for overriding the default icon
+*/
+body .ui-icon-cordys {
+	background-image: url(images/cordys_36x36.png);
+	background-size: 18px 18px;
+	background-color: transparent;
+	-webkit-box-shadow: none;
+	
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+.ui-icon-cordys .ui-btn-text {
+}
+
+body .ui-icon-up {
+	content: '<';
+	background-size: 18px 18px;
+}
+
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	.ui-icon-cordys {
+		background-image: url(images/cordys_96x96.png);
+		background-size: 18px 18px;
+	}
+}
+
+
+
+/* ==|== non-semantic helper classes ========================================
+   Please define your styles before this section.
+   ========================================================================== */
+
+/* For image replacement */
+.ir { border: 0; font: 0/0 a; text-shadow: none; color: transparent; background-color: transparent; }
+
+/* Hide from both screenreaders and browsers: h5bp.com/u */
+.hidden { display: none !important; visibility: hidden; }
+
+/* Hide only visually, but have it available for screenreaders: h5bp.com/v */
+.visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+
+/* Extends the .visuallyhidden class to allow the element to be focusable when navigated to via the keyboard: h5bp.com/p */
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus { clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; }
+
+/* Hide visually and from screenreaders, but maintain layout */
+.invisible { visibility: hidden; }
+
+/* Contain floats: h5bp.com/q */
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { *zoom: 1; }

@@ -1,0 +1,12 @@
+How to start the app in the browser
+
+Chrome or Chromium:
+
+	- First kill all your Chrome or Chromium processess. 
+	- Start Chrome or Chromium with a few flags:
+		chromium-browser --disable-web-security --allow-file-access-from-files --disable-web-security --enable-file-cookies --allow-file-access
+	or
+		google-chrome --disable-web-security --allow-file-access-from-files --disable-web-security --enable-file-cookies --allow-file-access
+	- Open the page in file://<location-of-checkout>/Cordys/assets/www/index.html
+	
+	

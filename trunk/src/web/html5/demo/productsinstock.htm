@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Products</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="stylesheet" href="/cordys/html5/jquery/jquery.mobile-1.1.0.min.css" />
+		<script src="/cordys/html5/jquery/jquery-1.7.1.min.js" type="text/javascript"></script>
+		<script src="/cordys/html5/jquery/jquery.mobile-1.1.0.min.js" type="text/javascript"></script>
+	
+		<script src="/cordys/html5/cordys.html5sdk-0.3.js" type="text/javascript"></script>
+
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			google.load('visualization', '1', {packages: ['corechart']});
+
+			var productsModel;
+			function drawProductChart() {
+				productsModel = new $.cordys.model({
+					objectName: "Products",
+					read: {
+						namespace: "http://schemas.cordys.com/NW",
+						dataType: "json",
+						method: "GetProductsObjects",
+						parameters: {
+							fromProductID: "0",
+							toProductID: "99999"
+						},
+						success: function(products) {
+							var data = new google.visualization.DataTable();
+							data.addColumn('string', 'Product');
+							data.addColumn('number', 'In Stock');
+							$.each(products, function(p) {
+								data.addRow([this.ProductName, parseInt(this.UnitsInStock)]);
+							});
+							new google.visualization.BarChart(document.getElementById('visualization')).
+								draw(data,
+									 {title:"Products in stock",
+									  width:"100%", height:"100%",
+									 chartArea: {width:"70%", left:"50%",height:"90%"},
+									  vAxis: {title: "Product", textStyle:{fontSize:10}},fontSize:10,
+									  hAxis: {title: "In Stock"},
+									 legend: {position:"left"}}
+								);
+						}
+					}
+				});
+				productsModel.read();
+			}
+
+			google.setOnLoadCallback(drawProductChart);
+		</script>
+
+	</head>
+
+	<body>
+
+		<div data-role="page" id="myPage">
+			<div data-role="header" data-theme="b">
+				<h1>Products</h1>
+			</div>
+
+			<div data-role="content" data-theme="d">
+				<!-- Content comes here -->
+				<div id="visualization" style="width: 100%; height: 2000px"></div>
+				</div>
+		</div>
+
+	</body>
+</html>

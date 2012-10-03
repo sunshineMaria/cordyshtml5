@@ -1,0 +1,25 @@
+
+<TextIdentifier
+	xmlns=""
+	xmlns:cws="http://schemas.cordys.com/cws/1.0"
+	type="com.cordys.translation.TextIdentifier"
+	typeVersion="55890f21-u239-76j6-988a-92j7opq6ws09"
+	RuntimeDocumentID="002170BA-4014-11E1-F6DA-4A8C53F27FD7">
+	<DocumentID>002170BA-4014-11E1-F6DA-4A8C53F25FD7</DocumentID>
+	<Name>002170BA-4014-11E1-F6DA-4A8C53F25FD7</Name>
+	<Description>Update Order Status  to Approved</Description>
+	<CreatedBy>csharbel</CreatedBy>
+	<CreationDate>2012-06-15T10:17:05.138</CreationDate>
+	<Notes/>
+	<DefaultText>Update Order Status  to Approved</DefaultText>
+	<TranslationInformation>
+		<uri
+			id="002170BA-4014-11E1-F31C-37EE038976C7"
+		/>
+	</TranslationInformation>
+	<Translations>
+		<uri
+			id="002170BA-4014-11E1-F6DA-4A8C53F29FD7"
+		/>
+	</Translations>
+</TextIdentifier>
