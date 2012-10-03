@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>Cordys BOP</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"/> 
+	<link rel="stylesheet" href="/cordys/html5/jquery/jquery.mobile-1.2.0-alpha.1.min.css" />
+	<script src="/cordys/html5/jquery/jquery-1.7.1.min.js" type="text/javascript"></script>
+	<script src="/cordys/html5/jquery/jquery.mobile-1.2.0-alpha.1.min.js" type="text/javascript"></script>
+	
+	<script src="/cordys/html5/knockout/knockout-2.1.0.js" type="text/javascript"></script>	
+	<script src="/cordys/html5/cordys.html5sdk-0.3.js" type="text/javascript"></script>
+	<script src="plugins/cordys.mobile.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+	
+		$(document).bind('mobileinit', function(){
+			$.mobile.pushStateEnabled = false;
+		});
+
+		$(document).bind('pagebeforechange', function(e, data) {
+			var to = data.toPage;
+			if (typeof(to) === 'string') {
+				var u = $.mobile.path.parseUrl(to);
+				if (!u.hash) return;
+				to = u.hash;
+
+				$.mobile.changePage($(to), {dataUrl: '', changeHash: false});
+				e.preventDefault();
+			}
+		});
+	
+		var taskModel, targetModel, uiTasksModel;
+		$(function() {
+			ko.bindingHandlers.date = { 
+				update: function(element, valueAccessor) { 
+					ko.utils.unwrapObservable(valueAccessor()); //just to create a dependency
+					var dt = getDateFromXML(valueAccessor());
+					if (dt) $(element).text(dt.toDateString() + " " + dt.toLocaleTimeString()); 
+				}
+			};
+			taskModel = $.cordys.workflow.getTasks({
+				context: document.getElementById("mainPage"),
+				success: function() { showBusinessIdentifiers(); }
+			});
+		});
+		function selectTask() {
+			return function(data) {
+				$.cordys.workflow.openTask(data, "detailsPage");
+			}
+		}
+		function selectWorklist() {
+			return function(data) {
+				if (targetModel.selectedItem) targetModel.selectedItem(data);
+			}
+		}
+		function getWorkHeader(item) {
+			if (item.DisplayName) return item.DisplayName;
+			return item.Id.substring(3).replace(/,.*/, "");
+		}
+		var re_longDT = new RegExp("^(\\d{4})\-(\\d{2})\-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})[.]?(\\d{0,9})(\\d*)?([Z+\-].*)?$");
+		function getDateFromXML(XMLValue)
+		{
+			// Parse the xmlvalue and create a date object with the right values
+			var found = XMLValue.search(re_longDT);
+			var dObject;
+			if (found >= 0)
+			{
+				dObject = new Date(RegExp.$2+"/"+RegExp.$3+"/"+RegExp.$1+" "+RegExp.$4+":"+RegExp.$5+":"+RegExp.$6+" +000")
+			}
+			return dObject;
+		}
+	</script>
+
+</head> 
+
+<body> 
+
+	<div data-role="page" id="mainPage">
+		<div data-role="content" data-theme="d">
+			<div data-role="navbar" data-type="horizontal" data-theme="c">
+				<ul>
+					<li><a href="#mainPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Tasks</a></li>
+					<li><a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c">Worklists</a></li>
+					<li><a href="#appsPage" data-role="button" data-transition="fade" data-theme="c">Apps</a></li>
+				</ul>
+			</div>
+
+			<ul id="taskList" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
+				<li>
+					<a href="#" data-transition="pop" class="ui-link-inherit" data-bind="click:selectTask($data)">
+						<h3 class="ui-li-heading" data-bind="text:Activity.text">Activity</h3>
+						<p class="ui-li-desc"><span data-bind="date:StartDate"></span>&nbsp;<span data-bind="text:State"></span></p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div data-role="footer" data-theme="c" data-position="fixed">
+			<a href="javascript:refeshTaskList()" data-role="button" data-icon="refresh" data-rel="refresh" data-inline="true" data-mini="true">Refresh</a>
+		</div>
+	</div>
+
+	<div data-role="page" id="detailsPage">
+		<div data-role="header" data-theme="b">
+			<a href="#mainPage" data-role="button" data-icon="back" data-rel="back">Tasklist</a>
+			<h1>Task</h1>
+		</div>
+		<div data-role="content" data-theme="d">
+			<ul data-role="listview" data-inset="true" id="detailView">
+				<li data-role="heading" data-theme="c" data-mini="true">
+					<div data-bind="with: selectedItem">
+						<a class="ui-link-inherit">
+							<h3 class="ui-li-heading"><span data-bind="text:Activity"></span></h3>
+						</a>
+					</div>
+				</li>
+				<li data-role="fieldcontain" data-mini="true">
+					<div data-bind="with: selectedItem">
+						<div >
+							<label for="fldProcess" class="ui-input-text">Process</label>
+							<input type="text" readonly='true' id="fldProcess" data-bind="value:ProcessName" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div >
+							<label for="fldState" class="ui-input-text">State</label>
+							<input type="text" readonly='true' id="fldState" data-bind="value:State" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div >
+							<label for="fldAssignee" class="ui-input-text">Assignee</label>
+							<input type="text" readonly='true' id="fldAssignee" data-bind="value:Assignee" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div >
+							<label for="fldStartDate" class="ui-input-text">Start Date</label>
+							<input type="text" readonly='true' id="fldStartDate" data-bind="value:StartDate" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div data-role="controlgroup" data-type="horizontal" data-theme="d">
+						<a data-role="button" data-theme="c">Start</a>
+						<a data-role="button" data-theme="c">Stop</a>
+						<a data-role="button" data-theme="c">Pause</a>
+						<a data-role="button" data-theme="c">Complete</a>
+						<a data-role="button" data-theme="c">Skip</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div data-role="page" id="worklistPage">
+		<div data-role="content" data-theme="d">
+			<div data-role="navbar" data-type="horizontal" data-theme="c">
+				<ul>
+					<li><a href="#mainPage" data-role="button" data-transition="fade" data-theme="c">Tasks</a></li>
+					<li><a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Worklists</a></li>
+					<li><a href="#appsPage" data-role="button" data-transition="fade" data-theme="c">Apps</a></li>
+				</ul>
+			</div>
+
+			<ul id="Ul1" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Target">
+				<li>
+					<div >
+						<a href="#workListTasksPage" data-transition="pop" class="ui-link-inherit" data-bind="click:selectWorklist($data)">
+							<h3 class="ui-li-heading">
+								<span data-bind="text:getWorkHeader($data)"></span>
+							<!-- ko if:TaskStates -->
+								<span>(</span><span data-bind="text:TaskStates.State.Count"></span><span>)</span>
+							<!-- /ko -->
+							</h3>
+						</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div data-role="page" id="workListTasksPage">
+		<div data-role="header" data-theme="b">
+			<a href="#worklistPage" data-role="button" data-icon="back">Worklist</a>
+			<h1>Tasks by worklist</h1>
+		</div>
+
+		<div data-role="content" data-theme="d">
+			<ul id="Ul2" data-role="listview" data-theme="c" data-inset="true" data-bind="foreach:Task">
+				<li>
+					<div >
+						<a href="#detailsPage" data-transition="pop" class="ui-link-inherit" data-bind="click:selectTask($data)">
+							<h3 class="ui-li-heading" data-bind="text:Activity.text">{{:Activity}}</h3>
+							<p class="ui-li-desc"><span data-bind="date:StartDate"></span>&nbsp;<span data-bind="text:State"></p>
+						</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div data-role="page" id="appsPage">
+		<div data-role="content" data-theme="d">
+			<div data-role="navbar" data-type="horizontal" data-theme="c">
+				<ul>
+					<li><a href="#mainPage" data-role="button" data-transition="fade" data-theme="c">Tasks</a></li>
+					<li><a href="#worklistPage" data-role="button" data-transition="fade" data-theme="c">Worklists</a></li>
+					<li><a href="#appsPage" data-role="button" data-transition="fade" data-theme="c" class="ui-btn-active">Apps</a></li>
+				</ul>
+			</div>
+
+			<ul id="Ul3" data-role="listview" data-theme="d" data-inset="true" data-bind="foreach:resource">
+				<li>
+					<div>
+						<a href="#" data-theme="b" data-transition="pop" 
+									data-bind="click:selectUITask($data)">
+							<h3><span data-bind="text:$data['@description']"></span></h3>
+						</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+<script type="text/javascript">
+	var userRolesModel, taskRolesModel;
+	$("#mainPage")
+		.bind("pageinit",function(event, ui) {
+			$(this)
+				.swipeleft(function(event){
+					$.mobile.changePage( "#worklistPage" );
+					event.preventDefault();
+					return false;
+				});
+			})
+		.bind("pageshow",function(event, ui) {
+			refeshTaskList();
+		});
+	function refeshTaskList() {
+		if (taskModel) {
+			taskModel.read({
+				success: function(){
+					$("#taskList").listview("refresh");
+					showBusinessIdentifiers();
+				}
+			});
+		}
+	}
+	function showBusinessIdentifiers(rowNr) {
+		if (typeof(rowNr) === "undefined") rowNr = 0;
+		var taskRow = $("#taskList li")[rowNr];
+		if (!taskRow) return;
+		taskRow = $(taskRow).find("a")[0];
+		var task = ko.dataFor(taskRow);
+		if (task && !$.cordys.workflow.isCaseActivity(task)) {
+			$.cordys.process.getBusinessIdentifiers(task, { success: addIdents(rowNr) });
+		} else {
+			showBusinessIdentifiers(rowNr+1);
+		}
+	}
+	function addIdents(rowNr) {
+		return function(identifiers) {
+			if (identifiers.length > 0) {
+				var sIdent = "";
+				for (var i=0; i<identifiers.length; i++) {
+					sIdent += "<b>"+identifiers[i].Description + "</b>: " + identifiers[i].Value + " / ";
+				}
+				$("<p class='ui-li-desc' style='white-space:normal'><span>" + sIdent + "</span></p>").appendTo($("#taskList li a")[rowNr]);
+			}
+			showBusinessIdentifiers(rowNr+1);
+		}
+	}
+	$("#worklistPage")
+		.bind("pageinit",function(event, ui) {
+			$(this)
+				.swipeleft(function(event){
+					$.mobile.changePage( "#appsPage" );
+					event.preventDefault();
+					return false;
+				})
+				.swiperight(function(){
+					$.mobile.changePage( "#mainPage" );
+					event.preventDefault();
+					return false;
+				});
+			targetModel = $.cordys.workflow.getWorkLists({
+				context: document.getElementById("worklistPage")
+			});
+		})
+		.bind("pageshow",function(event, ui) {
+			if (targetModel) targetModel.read();
+		});
+	$("#workListTasksPage")
+		.bind("pageinit",function(event, ui) {
+			ko.applyBindings(taskModel, document.getElementById("workListTasksPage"));
+		})
+		.bind("pageshow",function(event, ui) {
+			if (taskModel) taskModel.read({
+				parameters: {
+					Target: {
+						'@type': 'role', 
+						text: targetModel.selectedItem().Id
+					}
+				}
+			});
+		});
+	$("#appsPage")
+		.bind("pageinit",function(event, ui) {
+			$(this)
+				.swiperight(function(event){
+					$.mobile.changePage( "#worklistPage" );
+					event.preventDefault();
+					return false;
+				});
+			uiTasksModel = new $.cordys.model({
+				objectName: "resource",
+				read: {
+					method: "GetResourcesForTags",
+					namespace: "http://schemas.cordys.com/TagServer/1.0",
+					dataType: "json",
+					parameters: {
+						tags: {
+							tag: {
+								"@name": "Mobile"
+							}
+						},
+						filter: {
+							resource: {
+								"@type": "com.cordys.ui.Task"
+							}
+						}
+					}
+				},
+				xcontext: document.getElementById("appsPage")
+			});
+			// Get all roles of current user
+			userRolesModel = new $.cordys.model({
+				objectName: "role",
+				read: {
+					method: "GetRoles",
+					namespace: "http://schemas.cordys.com/1.0/ldap",
+					dataType: "json",
+					parameters: {
+						dn: "",
+						depth: "0"
+					}
+				}
+			});
+			userRolesModel.read({success: function(roles) {
+					// Get all tasks for all roles
+					taskRolesModel = new $.cordys.model({
+						objectName: "Task",
+						read: {
+							method: "GetTasksForRoles",
+							namespace: "http://schemas.cordys.com/task/1.0/runtime/",
+							dataType: "json",
+							parameters: getRoleParameters
+						}
+					});
+					if (roles.length > 0) {
+						taskRolesModel.read({ success: function(tasks) {
+							uiTasksModel.read({success: function(resources) {
+								if (taskRolesModel.Task().length > 0) {
+									// check for each Mobile app if it is in tasks, if not: remove from mobile apps
+									for (var r=resources.length-1; r>=0; r--) {
+										var rId = resources[r]["@uri"];
+										if (!findTaskRoleByID(rId)) uiTasksModel.resource.remove(resources[r]);
+									}
+								}
+							}});
+						}});
+					}
+				}
+			});
+			ko.applyBindings(uiTasksModel, document.getElementById("appsPage"));
+		})
+		.bind( 'pageshow',function(event, ui) {
+			//if (uiTasksModel) uiTasksModel.read();
+		});
+
+	function getRoleParameters() {
+		var roles = [];
+		for (var i=0; i<userRolesModel.role().length; i++) {
+			var role = {Role: { "@dn": userRolesModel.role()[i]["@id"], "@detail": "true" } };
+			roles.push($.cordys.json.js2xmlstring(role));
+		}
+		return roles.join("");
+	}
+	function findTaskRoleByID(id) {
+		for (var i=0; i<taskRolesModel.Task().length; i++) {
+			if (taskRolesModel.Task()[i]["@id"] == id) return true;
+		}
+		return false;
+	}
+	function renderApp(elmt, data) {
+	//	debugger;
+	}
+	function selectUITask() {
+		return function(data) {
+			if (uiTasksModel && uiTasksModel.selectedItem) uiTasksModel.selectedItem(data);
+			var uri = data["@uri"];
+			if (uri) {
+				$.cordys.ajax({
+					method: "GetTaskCollection",
+					namespace: "http://schemas.cordys.com/task/1.0/runtime/",
+					parameters: {
+						Task : {
+							"@id": uri,
+							"@detail": true,
+							"@acl": false
+						}
+					},
+					dataType: 'json',
+					success:function(data) {
+						var app = $.cordys.json.find(data, "Application");
+						if (app) {
+							document.location = app.url;
+							//$.mobile.changePage( url, { transition: "fade", changeHash: true } );
+						}
+					}
+				});
+			}
+		}
+	}
+</script>
+
+</body>
+</html>
