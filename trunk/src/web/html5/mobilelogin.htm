@@ -1,14 +1,14 @@
-﻿<!DOCTYPE html> 
-<html> 
-	<head> 
-		<title>Cordys Login</title> 
-		<meta name="viewport" content="width=device-width, initial-scale=1"> 
-		<link rel="stylesheet" href="/cordys/html5/jquery/jquery.mobile-1.1.0.min.css" />
-		<script src="/cordys/html5/jquery/jquery-1.7.1.min.js" type="text/javascript"></script>
-		<script src="/cordys/html5/jquery/jquery.mobile-1.1.0.min.js" type="text/javascript"></script>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Cordys Login</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/cordys/html5/jquery/jquery.mobile-1.2.0.min.css" />
+		<script src="/cordys/html5/jquery/jquery-1.8.2.min.js"></script>
+		<script src="/cordys/html5/jquery/jquery.mobile-1.2.0.min.js"></script>
 
-	</head> 
-<body> 
+	</head>
+<body>
 
 	<div data-role="dialog" id="loginDialog">
 
@@ -28,7 +28,7 @@
 			<input id="inputPassword" placeholder="" value="" type="password" />
 			<button id="btnLogin" type="submit" data-theme="b">Login</button>
 		</div>
-		<script src="/cordys/wcp/library/util/sha1.js" type="text/javascript"></script>	
+		<script src="/cordys/wcp/library/util/sha1.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var __cordysSAMLArtCookieName, __cordysCheckName;
 
@@ -58,7 +58,7 @@
 					error:function (e) {
 						console.log(e);
 						var err = $(e.error().responseXML).find("faultstring,error elem").text()
-							|| e.responseText 
+							|| e.responseText
 							|| "General error, see response.";
 						alert("Error on login: '" + err + "'");
 					},
@@ -112,7 +112,7 @@
 					error:function (e) {
 						console.log(e);
 						var err = $(e.error().responseXML).find("faultstring,error elem").text()
-							|| e.responseText 
+							|| e.responseText
 							|| "General error, see response.";
 						alert("Error on login: '" + err + "'");
 					},

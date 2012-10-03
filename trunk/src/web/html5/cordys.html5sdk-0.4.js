@@ -1,6 +1,6 @@
 if (typeof(jQuery) == "undefined") {
 	throw new Error("jQuery is required, please ensure it is loaded before this library");
-//	document.write('<script src="/cordys/html5/jquery/jquery-1.7.1.min.js"><\/script>');
+//	document.write('<script src="/cordys/html5/jquery/jquery-1.8.2.min.js"><\/script>');
 };
 if (!$.cordys) $.cordys = {};
 
