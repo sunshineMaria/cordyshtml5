@@ -45,12 +45,9 @@
 			if (!self.businessIdentifiersModel) {
 				self.businessIdentifiersModel = new $.cordys.model({
 					objectName: "BusinessIdentifier",
+					context:options.context,
 					read: options
 				});
-				if (options.context) {
-				//	ko.applyBindingsToNode(options.context, null, self.businessIdentifiersModel);
-					ko.applyBindings(self.businessIdentifiersModel, options.context);
-				}
 			}
 			self.businessIdentifiersModel.read(options);
 			return self.businessIdentifiersModel;
@@ -97,11 +94,9 @@
 			if (!self.processAttachmentsModel) {
 				self.processAttachmentsModel = new $.cordys.model({
 					objectName: "instance",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.processAttachmentsModel, options.context);
-				}
 			}
 			self.processAttachmentsModel.read(options);
 			return self.processAttachmentsModel;

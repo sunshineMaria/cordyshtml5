@@ -15,6 +15,7 @@
 		// Create a new model
 		empModel = new $.cordys.model({
 			objectName: "Employees", // Name of the Business Object
+			context : document.body, // Where the data is bound to
 			read: {
 				// Settings for the read method
 				namespace: "http://schemas.cordys.com/NW",
@@ -30,9 +31,6 @@
 				}
 			}
 		});
-
-		// Invoke Knockout to bind to our Model
-		ko.applyBindings(empModel);
 
 		// Call the read method. This would fire the method with the namespace and parameters as specified in the read settings above.
 		empModel.read();

@@ -38,10 +38,10 @@
 			// make the object collection observable
 			this[this.objectName] = ko.observableArray();
 			this.selectedItem = ko.observable();
-			// let us bind automatically if the context is not set to null
-			/*if (settings.context !== null || settings.context !== false){
-				ko.applyBindings(self, typeof(settings.context) === "undefined" ? null : settings.context);
-			}*/
+			// let us bind automatically if the context is set
+			if (typeof(settings.context) !== "undefined"){
+				ko.applyBindings(self, settings.context);
+			}
 		} else {
 			this[this.objectName] = [];
 			// Selects an Item

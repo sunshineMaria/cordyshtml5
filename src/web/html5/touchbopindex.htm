@@ -305,6 +305,7 @@
 				});
 			uiTasksModel = new $.cordys.model({
 				objectName: "resource",
+				context: document.getElementById("appsPage"),
 				read: {
 					method: "GetResourcesForTags",
 					namespace: "http://schemas.cordys.com/TagServer/1.0",
@@ -363,7 +364,6 @@
 					}
 				}
 			});
-			ko.applyBindings(uiTasksModel, document.getElementById("appsPage"));
 		})
 		.bind( 'pageshow',function(event, ui) {
 			//if (uiTasksModel) uiTasksModel.read();

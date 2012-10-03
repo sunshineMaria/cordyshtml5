@@ -44,6 +44,7 @@
 			});
 			targetModel = new $.cordys.model({
 				objectName: "Target",
+				context: document.getElementById("worklistPage"),
 				defaults: {
 					namespace: "http://schemas.cordys.com/notification/workflow/1.0",
 					dataType: "json",
@@ -69,7 +70,7 @@
 					iteratorSize: 50
 				}
 			});
-			ko.applyBindings(targetModel, document.getElementById("worklistPage"));
+
 			targetModel.read();
 		});
 		function selectWorklist() {
