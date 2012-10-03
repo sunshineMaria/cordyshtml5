@@ -510,7 +510,7 @@
 
 	//9. Synchronize without any change   
 
-	test("Synchronize without any change", 4, function () {
+	test("Synchronize without any change", function () {
 		stop();
 		orderDemoModel.clear();
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -529,17 +529,19 @@
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		response = orderDemoModel.synchronize({
-			method: "UpdateOrderDemo"
+			method: "UpdateOrderDemo",
+			beforeSend: function () {
+				fail("The request is cancelled as there is nothing to update");
+			}
 		});
 		orderDemoObjectsAfterSync = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects, orderDemoObjectsAfterSync, "BOs same before and after sync");
-		equal(response, false);
 		start();
 	});
 
 	//10. Update with no change in data  
 
-	test("Update OrderDemo - Update fail as no change in data", 4, function () {
+	test("Update OrderDemo - Update fail as no change in data", function () {
 		stop();
 		orderDemoModel.clear();
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -558,11 +560,13 @@
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		response = orderDemoModel.update({
-			method: "UpdateOrderDemo"
+			method: "UpdateOrderDemo",
+			beforeSend: function () {
+				fail("The request is cancelled as there is nothing to update");
+			}
 		});
 		orderDemoObjectsAfterUpdate = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects, orderDemoObjectsAfterUpdate, "BOs same before and after update");
-		equal(response, false, "");
 		start();
 	});
 
@@ -647,7 +651,7 @@
 
 	//12. Delete a non existing record   
 
-	test("Delete a non existing record", 5, function () {
+	test("Delete a non existing record", function () {
 		stop();
 		orderDemoModel.clear();
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -670,17 +674,19 @@
 		orderDemoModel.removeBusinessObject({ OrderID: "25", Customer: "fj", Employee: "ss", Product: "aa", OrderDate: "2012-07-10T10:29:16.140000000", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "test" });
 
 		response = orderDemoModel.synchronize({
-			method: "DeleteOrderDemo"
+			method: "DeleteOrderDemo",
+			beforeSend: function () {
+				fail("The request is cancelled as there is nothing to update");
+			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 2, "no records deleted");
-		equal(response, false);
 		start();
 	});
 
 	//13. Add a BO and revert inserion  
 
-	test("Create OrderDemo Object Revert Insertion", 4, function () {
+	test("Create OrderDemo Object Revert Insertion", function () {
 		stop();
 		orderDemoModel.clear();
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -695,9 +701,11 @@
 		equal(orderDemoObjects.length, 0, "no record found after insertion reverted");
 
 		response = orderDemoModel.synchronize({
-			method: "CreateBORevertInsertion"
+			method: "CreateBORevertInsertion",
+			beforeSend: function () {
+				fail("The request is cancelled as there is nothing to update");
+			}
 		});
-		equal(response, false);
 		start();
 	});
 
@@ -741,7 +749,7 @@
 
 	//14. Update a BO and revert updation  
 
-	test("Update OrderDemo Object Revert Updation", 6, function () {
+	test("Update OrderDemo Object Revert Updation", function () {
 		stop();
 		orderDemoModel.clear();
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -771,9 +779,11 @@
 		equal(orderDemoObjects, orderDemoObjectsRevertUpdate, "update reverted in the record");
 
 		response = orderDemoModel.synchronize({
-			method: "UpdateBORevertUpdation"
+			method: "UpdateBORevertUpdation",
+			beforeSend: function () {
+				fail("The request is cancelled as there is nothing to update");
+			}
 		});
-		equal(response, false);
 		start();
 	});
 
@@ -1096,7 +1106,7 @@
 
 	//19. Insert a BO, delete the inserted BO and sync
 
-	test("Insert a BO, delete the inserted BO and sync", 4, function () {
+	test("Insert a BO, delete the inserted BO and sync", function () {
 		stop();
 		orderDemoModel.clear();
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -1112,12 +1122,10 @@
 
 		response = orderDemoModel.synchronize({
 			method: "DeleteAfterInsertBO",
-			beforeSend: function (jqXHR, settings) {
-				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteBOInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Delete BO and Insert a new BO</Notes></OrderDemo></new></tuple></DeleteBOInsertNew></SOAP:Body></SOAP:Envelope>";
-				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			beforeSend: function () {
+				fail("The request is cancelled as there is nothing to update");
 			}
 		});
-		equal(response, false);
 		start();
 	});
 
