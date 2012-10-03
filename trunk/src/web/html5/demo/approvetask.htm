@@ -59,10 +59,10 @@
 		</div>
 
 		<script type="text/javascript">
-			var taskDetailModel, bindingsApplied = false, currentLocation,
-				taskId = getURLParameter(window.location, "taskId");
+			var taskDetailModel, currentLocation, taskId = getURLParameter(window.location, "taskId");
 			$("#approvePage").bind( 'pageshow',function(event, ui) {
 				taskDetailModel = $.cordys.workflow.getTaskDetails(taskId, {
+					context:document.getElementById("approvePage"),
 					success:function(tasks) {
 					//	var pid = tasks[0].ProcessInstanceId;
 						$.cordys.process.getBusinessIdentifiers(tasks[0], {
@@ -88,10 +88,7 @@
 				taskDetailModel.fields = ko.observableArray();
 				taskDetailModel.attachments = ko.observableArray();
 				taskDetailModel.selectedAttachment = ko.observable();
-				if (!bindingsApplied) {
-					ko.applyBindings(taskDetailModel, document.getElementById("approvePage"));
-					bindingsApplied = true;
-				}
+
 			});
 
 			var claimDone = false;

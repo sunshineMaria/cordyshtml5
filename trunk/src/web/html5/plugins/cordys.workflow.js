@@ -30,11 +30,9 @@
 			if (!self.taskModel) {
 				self.taskModel = new $.cordys.model({
 					objectName: "Task",
+					context: options.context,
 					read: options
 				});
-			}
-			if (options.context) {
-				ko.applyBindings(self.taskModel, options.context);
 			}
 			self.taskModel.read(options);
 			return self.taskModel;
@@ -46,11 +44,9 @@
 			if (!self.personalTaskModel) {
 				self.personalTaskModel = new $.cordys.model({
 					objectName: "Task",
+					context: options.context,
 					read: options
 				});
-			}
-			if (options.context) {
-				ko.applyBindings(self.personalTaskModel, options.context);
 			}
 			self.personalTaskModel.read(options);
 			return self.personalTaskModel;
@@ -78,11 +74,9 @@
 			if (!self.taskDetailModel) {
 				self.taskDetailModel = new $.cordys.model({
 					objectName: "Task",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.taskDetailModel, options.context);
-				}
 			}
 			self.taskDetailModel.read(options);
 			return self.taskDetailModel;
@@ -94,11 +88,9 @@
 			if (!self.worklistModel) {
 				self.worklistModel = new $.cordys.model({
 					objectName: "Target",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.worklistModel, options.context);
-				}
 			}
 			self.worklistModel.read(options);
 			return self.worklistModel;

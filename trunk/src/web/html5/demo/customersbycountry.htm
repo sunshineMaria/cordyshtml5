@@ -18,8 +18,9 @@
 	$(function() {
 		// Create a new model
 		customerModel = new $.cordys.model({
-			
+
 			objectName: "Customers", // Name of the Business Object
+			context: $("#customersList")[0], // Where to bind the data to
 			isReadOnly:false,
 			read: {
 				// Settings for the read method
@@ -34,9 +35,6 @@
 				}
 			}
 		});
-
-		// Invoke Knockout to bind to our Model
-		ko.applyBindings(customerModel);
 
 		// Call the read method. This would fire the method with the namespace and parameters as specified in the read settings above.
 		customerModel.read();

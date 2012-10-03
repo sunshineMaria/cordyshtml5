@@ -17,6 +17,7 @@
 	// Create a new model on page ready
 	$(function() {
 		empModel = new $.cordys.model({
+			context: document.body,
 			objectName: "Employees", // Name of the Business Object
 			// Common settings for all methods - read, create, update, delete, synchronize
 			defaults: { 
@@ -36,8 +37,7 @@
 				}
 			}
 		});
-		// Invoke Knockout to bind to our Model
-		ko.applyBindings(empModel);
+
 		// Call the read method. This would fire the method with the namespace and parameters as specified in the read settings above. 
 		empModel.read();
 	});

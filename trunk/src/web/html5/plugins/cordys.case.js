@@ -87,11 +87,9 @@
 			if (!self.activityDefinitionModel) {
 				self.activityDefinitionModel = new $.cordys.model({
 					objectName: "activity",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.activityDefinitionModel, options.context);
-				}
 			}
 			self.activityDefinitionModel.read(options);
 			return self.activityDefinitionModel;
@@ -106,11 +104,9 @@
 			if (!self.activityInstanceModel) {
 				self.activityInstanceModel = new $.cordys.model({
 					objectName: "ACTIVITY_INSTANCE",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.activityInstanceModel, options.context);
-				}
 			}
 			self.activityInstanceModel.read(options);
 			return self.activityInstanceModel;
@@ -121,11 +117,9 @@
 			if (!self.businessEventsModel) {
 				self.businessEventsModel = new $.cordys.model({
 					objectName: "events",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.businessEventsModel, options.context);
-				}
 			}
 			self.businessEventsModel.read(options);
 			return self.businessEventsModel;
@@ -136,11 +130,9 @@
 			if (!self.caseInstanceModel) {
 				self.caseInstanceModel = new $.cordys.model({
 					objectName: "CASE_INSTANCE",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.caseInstanceModel, options.context);
-				}
 			}
 			self.caseInstanceModel.read(options);
 			return self.caseInstanceModel;
@@ -151,11 +143,9 @@
 			if (!self.caseDataModel) {
 				self.caseDataModel = new $.cordys.model({
 					objectName: "data",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.caseDataModel, options.context);
-				}
 			}
 			self.caseDataModel.read(options);
 			return self.caseDataModel;
@@ -182,11 +172,9 @@
 			if (!self.caseVariablesModel) {
 				self.caseVariablesModel = new $.cordys.model({
 					objectName: "data",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.caseVariablesModel, options.context);
-				}
 			}
 			self.caseVariablesModel.read(options);
 			return self.caseVariablesModel;
@@ -197,11 +185,9 @@
 			if (!self.followupActivitiesModel) {
 				self.followupActivitiesModel = new $.cordys.model({
 					objectName: "followups",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.followupActivitiesModel, options.context);
-				}
 			}
 			self.followupActivitiesModel.read(options);
 			return self.followupActivitiesModel;
@@ -277,11 +263,9 @@
 			if (!self.caseAttachmentsModel) {
 				self.caseAttachmentsModel = new $.cordys.model({
 					objectName: "instance",
+					context: options.context,
 					read: options
 				});
-				if (options.context) {
-					ko.applyBindings(self.caseAttachmentsModel, options.context);
-				}
 			}
 			self.caseAttachmentsModel.read(options);
 			return self.caseAttachmentsModel;
