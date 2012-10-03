@@ -31,6 +31,12 @@
 	$("#app")
 		.bind("pageinit",function(event, ui) {
 			ko.applyBindings(AppViewModel(parentModel), document.getElementById("app"));
+		}).bind("pageshow", function(){
+			var bopTouchIndexURL = ko.dataFor(document.getElementById("app")).bopTouchIndexUrl();
+			if (bopTouchIndexURL !== document.getElementById("appFrame").contentWindow.location.href){
+				document.getElementById("appFrame").src = bopTouchIndexURL;
+			};
+			
 		});
 
 	/**
