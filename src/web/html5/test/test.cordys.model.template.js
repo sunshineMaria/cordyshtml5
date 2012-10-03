@@ -104,6 +104,15 @@
 		templateTestModel1.read({
 			method: "GetTemplateTestRequest"
 		});
+
+		// Template definitions should make a change in the original object and set the dirty flag
+		templateTestModel1.synchronize({
+			method: "UpdateTemplateTestRequest",
+			beforeSend: function (jqXHR, settings) {
+				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+			}
+		});
+
 		start();
 	});
 
@@ -125,10 +134,10 @@
 			computed: function () {
 				return this.OrderID() + " " + this.Status()
 			}
-		},{
-				name: "Birthday",
-				type: "string",
-				path: "OrderDate"
+		}, {
+			name: "Birthday",
+			type: "string",
+			path: "OrderDate"
 		}]
 	});
 
@@ -152,6 +161,15 @@
 		templateTestModel2.read({
 			method: "GetTemplateTestRequest"
 		});
+
+		// Template definitions should make a change in the original object and set the dirty flag
+		templateTestModel2.synchronize({
+			method: "UpdateTemplateTestRequest",
+			beforeSend: function (jqXHR, settings) {
+				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+			}
+		});
+
 		start();
 	});
 
@@ -192,6 +210,15 @@
 		templateTestModel3.read({
 			method: "GetTemplateTestRequest"
 		});
+
+		// Template definitions should make a change in the original object and set the dirty flag
+		templateTestModel3.synchronize({
+			method: "UpdateTemplateTestRequest",
+			beforeSend: function (jqXHR, settings) {
+				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+			}
+		});
+
 		start();
 	});
 
@@ -249,6 +276,15 @@
 		templateTestModel4.read({
 			method: "GetTemplateTestRequest"
 		});
+
+		// Template definitions should make a change in the original object and set the dirty flag
+		templateTestModel4.synchronize({
+			method: "UpdateTemplateTestRequest",
+			beforeSend: function (jqXHR, settings) {
+				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+			}
+		});
+
 		start();
 	});
 
@@ -310,6 +346,15 @@
 		templateTestModel5.read({
 			method: "GetTemplateTestRequest"
 		});
+
+		// Template definitions should make a change in the original object and set the dirty flag
+		templateTestModel5.synchronize({
+			method: "UpdateTemplateTestRequest",
+			beforeSend: function (jqXHR, settings) {
+				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+			}
+		});
+
 		start();
 	});
 
