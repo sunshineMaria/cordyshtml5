@@ -1,6 +1,6 @@
 (function (window, $) {
 
-	module("Model Plugin Template Test");
+	module("Model Plugin with Templating Test");
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
 		data: /GetTemplateTestRequest/,
@@ -63,7 +63,52 @@
 		}
 	});
 
-	templateTestModel1 = new $.cordys.model({
+	var templateTestModel1 = new $.cordys.model({
+		objectName: "OrderDemo",
+		isReadOnly: true,
+		defaults: {
+			namespace: "http://schemas.cordys.com/html5sdk/orderdemo/1.0",
+			async: false,
+			dataType: "json",
+			error: function () {
+				return false;
+			}
+		},
+		template: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
+			name: "Discount",
+			type: "string"
+		}]
+	});
+
+	/* Test	
+	1) If Observables gets added if specified in the template or is part of the response
+	2) Observables gets added if specified in the template in both the short and the detailed forms
+	3) Observables gets added with the right value in both cases
+	*/
+	test("Template Attribute Test Without Observables", 7, function () {
+		stop();
+
+		templateTestModel1.read({
+			method: "GetTemplateTestRequest"
+		});
+
+		var orders = templateTestModel1.OrderDemo();
+
+		ok(!ko.isObservable(orders[0].Cost), "Object added when model is read only");
+		strictEqual(typeof (orders[0].Cost), "undefined", "Object added even if attribute is not present in response when model is read only");
+
+		ok(!ko.isObservable(orders[1].Status), "Object added when model is read only");
+
+		ok(!ko.isObservable(orders[0].Notes), "Object added when model is read only");
+		strictEqual(orders[0].Notes, "test", "Added Object from response has correct value");
+
+		ok(!ko.isObservable(orders[0].Discount), "Object added when model is read only");
+		strictEqual(typeof (orders[0].Discount), "undefined", "Added Object has undefined value");
+
+		start();
+	});
+
+	var templateTestModel1Obs = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -85,9 +130,9 @@
 	2) Observables gets added if specified in the template in both the short and the detailed forms
 	3) Observables gets added with the right value in both cases
 	*/
-	test("Template Attribute Test", 7, function () {
+	test("Template Attribute Test With Observables", 7, function () {
 		stop();
-		var currentSubscription = templateTestModel1.OrderDemo.subscribe(function (orders) {
+		var currentSubscription = templateTestModel1Obs.OrderDemo.subscribe(function (orders) {
 			ok(ko.isObservable(orders[0].Cost), "Observable added even if attribute is not present in response");
 			strictEqual(typeof (orders[0].Cost()), "undefined", "Added observable has undefined value");
 
@@ -101,15 +146,15 @@
 
 			currentSubscription.dispose(currentSubscription);
 		});
-		templateTestModel1.read({
+		templateTestModel1Obs.read({
 			method: "GetTemplateTestRequest"
 		});
 
 		// Template definitions should make a change in the original object and set the dirty flag
-		templateTestModel1.synchronize({
+		templateTestModel1Obs.synchronize({
 			method: "UpdateTemplateTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
@@ -117,7 +162,7 @@
 	});
 
 
-	templateTestModel2 = new $.cordys.model({
+	var templateTestModel2 = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -166,7 +211,7 @@
 		templateTestModel2.synchronize({
 			method: "UpdateTemplateTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
@@ -174,7 +219,7 @@
 	});
 
 
-	templateTestModel3 = new $.cordys.model({
+	var templateTestModel3 = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -215,7 +260,7 @@
 		templateTestModel3.synchronize({
 			method: "UpdateTemplateTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
@@ -223,7 +268,7 @@
 	});
 
 
-	templateTestModel4 = new $.cordys.model({
+	var templateTestModel4 = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -281,14 +326,14 @@
 		templateTestModel4.synchronize({
 			method: "UpdateTemplateTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
 		start();
 	});
 
-	templateTestModel5 = new $.cordys.model({
+	var templateTestModel5 = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -351,7 +396,7 @@
 		templateTestModel5.synchronize({
 			method: "UpdateTemplateTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				fail("Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
