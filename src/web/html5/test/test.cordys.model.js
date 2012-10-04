@@ -145,7 +145,7 @@
 
 	//2. Insert a new Businss Object using create
 
-	test("Create OrderDemo Object using create", 5, function () {
+	test("Create OrderDemo Object using create", 7, function () {
 		stop();
 
 		orderDemoModel.clear();
@@ -155,6 +155,8 @@
 		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Create Order Demo" });
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 1, "Added BO, but not synchronized yet. 1 record in the model");
+		equal(ko.isObservable(orderDemoModel.OrderDemo()[0].Employee), true, "Observable created for the attribute Employee of the Business Obejct added");
+		equal(orderDemoModel.OrderDemo()[0].Employee(), "ss", "Observable for the attribute of the Business Object added returns the correct value");
 
 		response = orderDemoModel.create({
 			method: "CreateOrderDemo",
@@ -1115,6 +1117,8 @@
 		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "BO for revertion" });
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 1, "1 record in model after addBO");
+		equal(ko.isObservable(orderDemoModel.OrderDemo()[0].Employee), true, "Observable created for the attribute of the Business Obejct added");
+		equal(orderDemoModel.OrderDemo()[0].Employee(), "ss", "Observable for the attribute of the Business Obejct added returns the correct value");
 
 		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
 		orderDemoObjects = orderDemoModel.OrderDemo();
