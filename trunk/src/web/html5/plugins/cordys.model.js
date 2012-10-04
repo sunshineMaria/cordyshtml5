@@ -83,14 +83,9 @@
 						// let us make every attribute Observable for identifying changes and add lock if the model is not readOnly
 						for (var objectKey in objects){
 							var object = objects[objectKey], 
-								observableObject;
-							if (opts.template) {
-								observableObject = mapObject(object, opts.template, null, !self.isReadOnly);
-							} else {
-								observableObject = ko.mapping.fromJS(object);
-							}
+								observableObject = mapObject(object, null, opts.template, self.isReadOnly);
 							if (!self.isReadOnly) {
-								addOptimisticLock(self, object, observableObject, false);
+								addOptimisticLock(self, opts, object, observableObject, false);
 							}
 							objects[objectKey] = observableObject;
 						}
@@ -492,13 +487,13 @@
 					if (opts.useTupleProtocol){
 						var objectAfterInsertion = synchronizedObjects[count];
 						// let us set the lock with the inserted object we get from the backend
-						addOptimisticLock(self, objectAfterInsertion, object, false);
+						addOptimisticLock(self, opts, objectAfterInsertion, object, false);
 						// let us also update the object with what we got from the backend
 						object.lock._update(objectAfterInsertion);
 					}
 					else{
 						// other we set the lock to the latest state of the object
-						addOptimisticLock(self, ko.mapping.toJS(object), object, false);
+						addOptimisticLock(self, opts, ko.mapping.toJS(object), object, false);
 					}
 				}
 			}
@@ -559,8 +554,23 @@
 		return objects;
 	};
 
+	// Maps a JS object into an observable
+	mapObject = function(data, existingObservable, template, isReadOnly){
+		var mappedObject;
+		if (template) {
+			mappedObject = mapObjectByTemplate(data, template, null, ! isReadOnly);
+		} else {
+			if (existingObservable){
+				mappedObject = ko.mapping.fromJS(data, existingObservable);
+			}else{
+				mappedObject = ko.mapping.fromJS(data);
+			}
+		}
+		return mappedObject;
+	}
+
 	// Create observables from a data object against a template, supporting child objects, arrays, compute, paths and others.
-	mapObject = function(dataObject, objectTemplate, rootObject, createObservables) {
+	mapObjectByTemplate = function(dataObject, objectTemplate, rootObject, createObservables) {
 		if (!rootObject) rootObject = dataObject;
 		var returnObject = createObservables ? ko.mapping.fromJS(dataObject) : dataObject;
 
@@ -598,10 +608,10 @@
 					if ($.isArray(value)) {
 						returnObject[f.name]([]); // Empty the array
 						for (var i=0; i<value.length; i++) {
-							returnObject[f.name]().push(mapObject(value[i], f.template, rootObject, createObservables));
+							returnObject[f.name]().push(mapObjectByTemplate(value[i], f.template, rootObject, createObservables));
 						}
 					} else {
-						returnObject[f.name] = mapObject(value, f.template, rootObject, createObservables);
+						returnObject[f.name] = mapObjectByTemplate(value, f.template, rootObject, createObservables);
 					}
 				}
 			}
@@ -611,7 +621,7 @@
 	}
 
 	// Adds lock. This stores the initial state, so that you can identify objects that are changes as well as know their old values
-	addOptimisticLock = function(model, data, observableData, isInitiallyDirty) {
+	addOptimisticLock = function(model, opts, data, observableData, isInitiallyDirty) {
 		var result = function() {}
 		var _initialState = data;
 		var _initialJSONString = ko.toJSON(observableData);
@@ -640,7 +650,7 @@
 		// Strictly to be used internally. Updates the current state and the lock after successful update/insert
 		result._update = function(newData) {
 			_initialState = newData;
-			ko.mapping.fromJS(newData, observableData);
+			mapObject(newData, observableData, opts.template, false);
 			this._updateLock(newData);
 		}
 
