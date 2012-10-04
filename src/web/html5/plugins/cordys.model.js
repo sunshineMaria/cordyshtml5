@@ -572,10 +572,10 @@
 		
 			if (typeof(f) === "string") {
 				if (! mappedObject[f]){
-					mappedObject[f] = createObservables ? ko.observable() : "";	// add the field if it is not there, to avoid ko "Unable to parse binding" error
+					mappedObject[f] = createObservables ? ko.observable() : undefined;	// add the field if it is not there, to avoid ko "Unable to parse binding" error
 				}
 				else if (! dataObject[f]){
-					createObservables ? mappedObject[f](undefined) : (mappedObject[f] = "");
+					createObservables ? mappedObject[f](undefined) : (mappedObject[f] = undefined);
 				}
 			} else {
 				if (!f.name) throw new Error("Mandatory property 'name' not specified");
