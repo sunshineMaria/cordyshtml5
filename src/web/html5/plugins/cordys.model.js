@@ -354,7 +354,7 @@
 		this.addBusinessObject = function(object){
 			if (! object) return null;
 			if (! ko.isObservable(object)){
-				object =  ko.mapping.fromJS(object);
+				object = mapObject(object, null, opts.template, self.isReadOnly);
 			}
 			self[self.objectName].push(object);
 			return object;
@@ -555,31 +555,32 @@
 	};
 
 	// Maps a JS object into an observable
-	mapObject = function(data, existingObservable, template, isReadOnly){
-		var mappedObject;
+	mapObject = function(dataObject, existingObservable, template, isReadOnly){
+		var mappedObject = isReadOnly ? dataObject : (existingObservable ? ko.mapping.fromJS(dataObject, existingObservable) : ko.mapping.fromJS(dataObject));
 		if (template) {
-			mappedObject = mapObjectByTemplate(data, template, null, ! isReadOnly);
-		} else {
-			if (existingObservable){
-				mappedObject = ko.mapping.fromJS(data, existingObservable);
-			}else{
-				mappedObject = ko.mapping.fromJS(data);
-			}
+			mappedObject = mapObjectByTemplate(dataObject, mappedObject, template, null, ! isReadOnly, existingObservable);
 		}
+
 		return mappedObject;
 	}
 
 	// Create observables from a data object against a template, supporting child objects, arrays, compute, paths and others.
-	mapObjectByTemplate = function(dataObject, objectTemplate, rootObject, createObservables) {
+	mapObjectByTemplate = function(dataObject, mappedObject, objectTemplate, rootObject, createObservables, existingObservable) {
 		if (!rootObject) rootObject = dataObject;
-		var returnObject = createObservables ? ko.mapping.fromJS(dataObject) : dataObject;
 
 		$.each(objectTemplate, function(i, f) {
+		
 			if (typeof(f) === "string") {
-				if (!returnObject[f]) returnObject[f] = createObservables ? ko.observable() : "";	// add the field if it is not there, to avoid ko "Unable to parse binding" error
+				if (! mappedObject[f]){
+					mappedObject[f] = createObservables ? ko.observable() : "";	// add the field if it is not there, to avoid ko "Unable to parse binding" error
+				}
+				else if (! dataObject[f]){
+					createObservables ? mappedObject[f](undefined) : (mappedObject[f] = "");
+				}
 			} else {
 				if (!f.name) throw new Error("Mandatory property 'name' not specified");
-				var value = ko.utils.unwrapObservable(returnObject[f.name]);
+				var value = ko.utils.unwrapObservable(mappedObject[f.name]);
+
 				if (f.path) {	// get the value from the dataObject via the specified path
 					var spath = f.path.split(".");
 					value = dataObject;
@@ -589,8 +590,10 @@
 					}
 				}
 				if (f.computed) {	// create a knockout computed object to get the value
-					returnObject[f.name] = ko.computed(f.computed, returnObject);
-					return returnObject;
+					if (! ko.isComputed(mappedObject[f.name])){
+						mappedObject[f.name] = ko.computed(f.computed, mappedObject);
+					}
+					return mappedObject;
 				}
 				if (f.isArray) {
 					if (value) {
@@ -600,24 +603,27 @@
 					} else {	// create an empty array
 						value = [];
 					}
-					returnObject[f.name] = createObservables ? ko.observableArray(value) : value;
+					if ($.isArray(mappedObject[f.name])){
+						mappedObject[f.name](value);
+					}else{
+						mappedObject[f.name] = createObservables ? ko.observableArray(value) : value;
+					}
 				} else {
-					if (!returnObject[f.name] || f.path) returnObject[f.name] = createObservables ? ko.observable(value) : value;
+					if (!mappedObject[f.name] || f.path) mappedObject[f.name] = createObservables ? ko.observable(value) : value;
 				}
 				if (f.template) {	// recursively map child objects
 					if ($.isArray(value)) {
-						returnObject[f.name]([]); // Empty the array
 						for (var i=0; i<value.length; i++) {
-							returnObject[f.name]().push(mapObjectByTemplate(value[i], f.template, rootObject, createObservables));
+							mapObjectByTemplate(value[i], mappedObject[f.name]()[i], f.template, rootObject, createObservables);
 						}
 					} else {
-						returnObject[f.name] = mapObjectByTemplate(value, f.template, rootObject, createObservables);
+						mapObjectByTemplate(value, mappedObject[f.name], f.template, rootObject, createObservables);
 					}
 				}
 			}
 		})
 
-		return returnObject;
+		return mappedObject;
 	}
 
 	// Adds lock. This stores the initial state, so that you can identify objects that are changes as well as know their old values
