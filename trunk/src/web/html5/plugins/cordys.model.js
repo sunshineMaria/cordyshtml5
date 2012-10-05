@@ -133,6 +133,7 @@
 				}
 				return false;
 			},
+
 			parameters : function (settings, sendInsert, sendUpdate, sendDelete){
 				var synchronizeContent = [];
 				self.objectsToBeUpdated = [];
@@ -553,7 +554,13 @@
 						mappedObject[f.name] = createObservables ? ko.observableArray(value) : value;
 					}
 				} else {
-					if (!mappedObject[f.name] || f.path) mappedObject[f.name] = createObservables ? ko.observable(value) : value;
+					if (!mappedObject[f.name] || f.path){
+						 if (mappedObject[f.name]){
+							createObservables ? mappedObject[f.name](value) : (mappedObject[f.name] = value);
+						 }else{
+							mappedObject[f.name] = createObservables ? ko.observable(value) : value;
+						}
+					}
 				}
 				if (f.template) {	// recursively map child objects
 					if ($.isArray(value)) {

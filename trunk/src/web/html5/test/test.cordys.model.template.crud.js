@@ -60,7 +60,6 @@
 					'new': {
 						OrderDemo: {
 							"OrderID": "1160",
-							"Customer": "fj",
 							"Employee": "ss",
 							"OrderDate": "2012-07-10T10:29:16.140000002",
 							"Product": "aa",
@@ -77,7 +76,7 @@
 	// Insert a new Business Object using create with the template. See that the observables added from template definition are not send
 	// The objects that are returned back should get merged with the existing observables
 	// Changes in the observables added by templating should not trigger updates
-	test("Add Business Object with templating", 31, function () {
+	test("Add Business Object with templating", 32, function () {
 		stop();
 
 		// Insert a new Business Object using create with the template. See that the observables added from template definition are not send
@@ -132,13 +131,13 @@
 		orders[0].Cost(10000);
 
 		// Changes in the observables added by templating should not trigger updates
-		orderDemoModel.synchronize({
-			method: "UpdateTemplateTestRequest",
-			beforeSend: function (jqXHR, settings) {
-				// TODO - Fix this. The object appears changed to KO
-				//ok(false, "Error : Changes in the observables added by templating triggered update");
-			}
-		});
+		/*orderDemoModel.synchronize({
+		method: "UpdateTemplateTestRequest",
+		beforeSend: function (jqXHR, settings) {
+		// TODO - Fix this. The object appears changed to KO
+		//ok(false, "Error : Changes in the observables added by templating triggered update");
+		}
+		});*/
 
 		orders[0].Status("DISCOVERED");
 
@@ -146,7 +145,7 @@
 		orderDemoModel.synchronize({
 			method: "UpdateTemplateTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateTemplateTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>1160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000002</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>JUMPED</Status><Notes>Create Order Demo2</Notes></OrderDemo></old><new><OrderDemo><OrderID>1160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>DISCOVERED</Status><Notes>Create Order Demo2</Notes><OrderDate>2012-07-10T10:29:16.140000002</OrderDate></OrderDemo></new></tuple></UpdateTemplateTestRequest></SOAP:Body></SOAP:Envelope>";
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateTemplateTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>RECOVERED</Status><Notes>Create Order Demo1</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>DISCOVERED</Status><Notes>Create Order Demo1</Notes><OrderDate>2012-07-10T10:29:16.140000001</OrderDate></OrderDemo></new></tuple></UpdateTemplateTestRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML sent for update");
 			}
 		});
@@ -156,8 +155,9 @@
 		strictEqual(orderDemoObjects.length, 1, "Inserted a new BO using create. Synchronized. 1 record found");
 		strictEqual(orderDemoObjects[0].Notes(), "Create Order Demo2", "Observable merged with the response data");
 
+		strictEqual(orderDemoObjects[0].Customer(), undefined, "Observable set to undefined if not found with the response data after updation");
+
 		ok(ko.isObservable(orders[0].Cost), "Observable merged even if attribute is not present in response");
-		// TODO - Fix this. If the attribute is not returned, then we need to set it as undefined
 		strictEqual(typeof (orders[0].Cost()), "undefined", "Merged observable has undefined value after update");
 
 		ok(ko.isObservable(orders[0].Status), "Observable merged even if attribute is not present in template after update");
