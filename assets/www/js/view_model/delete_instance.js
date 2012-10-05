@@ -8,6 +8,7 @@ function DeleteInstanceViewModel(parentModel) {
 	
 	this.onSubmitDeleteServer = function(server) {
 		parentModel.instances.remove(server);
+		server.deleteCookies();
 		$.mobile.changePage('#');
 	};
 	
