@@ -132,42 +132,8 @@
 					showErrorDialog(jqXHR.error(), "Error on Update");
 				}
 				return false;
-			}
-		}
-
-		// Handlers and settings for the update part
-		this.updateSettings = {
-			parameters : function (settings){
-				var updateContent = [];
-				self.objectsToBeUpdated = [];
-
-				if (typeof(self[self.objectName]) === "function") { // in case of knockout
-					var objects = self[self.objectName]();
-
-					if (objects){
-						for (var objectKey in objects){
-							var object = objects[objectKey];
-							// get xml content for changed objects. Make sure we do not take objects marked for deletion
-							if (object._destroy !== true && object.lock && object.lock.isDirty()){
-								self.objectsToBeUpdated.push(object);
-								// let us get the old bo from the saved state
-								var oldObject = object.lock.getInitialState();
-								// the objects here are Observavables, let us unmap to get the new bo
-								var newObject = ko.mapping.toJS(object);
-								// get the corresponding XML for the object and add it to the updateContent
-								updateContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,newObject)));
-							}
-						}
-					}
-
-				}
-				return updateContent.join("");
-			}
-		}
-
-		// Handlers and settings for the Sync part
-		this.synchronizeSettings = {
-			parameters : function (settings){
+			},
+			parameters : function (settings, sendInsert, sendUpdate, sendDelete){
 				var synchronizeContent = [];
 				self.objectsToBeUpdated = [];
 
@@ -180,14 +146,14 @@
 							// check for persistence
 							if (object.lock){
 								// deleted object
-								if (object._destroy === true){
+								if (sendDelete && object._destroy === true){
 									self.objectsToBeUpdated.push(object);
 									// let us get the old bo from the initial saved state
 									var oldObject = object.lock.getInitialState();
 									// get the corresponding XML for the deleted object and add it to the deleteContent
 									synchronizeContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,null)));
 								}
-								else if (object.lock.isDirty()){
+								else if (sendUpdate && object.lock.isDirty()){
 									self.objectsToBeUpdated.push(object);
 									// let us get the old bo from the saved state
 									var oldObject = object.lock.getInitialState();
@@ -198,7 +164,7 @@
 								}	
 							}
 							// not persisted - new
-							else if (object._destroy !== true){
+							else if (sendInsert && object._destroy !== true){
 								// just double check whether it was an object deleted before persisting directly using KO API's
 								self.objectsToBeUpdated.push(object);
 								// let us get the new bo by unwrapping the Observable
@@ -215,54 +181,32 @@
 			}
 		}
 
-		// Handlers and settings for the delete part
-		this.deleteSettings = {
-			parameters : function (settings){
-				var deleteContent = [];
-				self.objectsToBeUpdated = [];
-				if (typeof(self[self.objectName]) === "function") { // in case of knockout
-					var objects = self[self.objectName]();
-					if (objects){
-						for (var objectKey in objects){
-							var object = objects[objectKey];
-							// find deleted objects which were already persisted
-							if (object.lock && object._destroy === true){
-								self.objectsToBeUpdated.push(object);
-								// let us get the old bo from the initial saved state
-								var oldObject = object.lock.getInitialState();
-								// get the corresponding XML for the deleted object and add it to the deleteContent
-								deleteContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,null)));
-							}
-						}
-					}
-				}
-				return deleteContent.join("");
-			}
-		}
-
-			
 		// Handlers and settings for the create part
 		this.createSettings = {
 			parameters : function (settings){
-				var insertContent = [];
-				self.objectsToBeUpdated = [];
-				if (typeof(self[self.objectName]) === "function") { // in case of knockout
-					var objects = self[self.objectName]();
-					if (objects){
-						for (var objectKey in objects){
-							var object = objects[objectKey];
-							// find objects to be inserted
-							if (! object.lock && object._destroy !== true){
-								self.objectsToBeUpdated.push(object);
-								// let us get the new bo by unwrapping the Observable
-								var newObject = ko.mapping.toJS(object);
-								// get the corresponding XML for the inserted object and add it to the insertContent
-								insertContent.push($.cordys.json.js2xmlstring(createTuple(null,newObject)));
-							}
-						}
-					}
-				}
-				return insertContent.join("");
+				return self.defaultUpdateSettings.parameters(settings, true, false, false);
+			}
+		}
+
+		// Handlers and settings for the update part
+		this.updateSettings = {
+			parameters : function (settings){
+				return self.defaultUpdateSettings.parameters(settings, false, true, false);
+			}
+		}
+
+
+		// Handlers and settings for the delete part
+		this.deleteSettings = {
+			parameters : function (settings){
+				return self.defaultUpdateSettings.parameters(settings, false, false, true);
+			}
+		}
+
+		// Handlers and settings for the Sync part
+		this.synchronizeSettings = {
+			parameters : function (settings){
+				return self.defaultUpdateSettings.parameters(settings, true, true, true);
 			}
 		}
 
