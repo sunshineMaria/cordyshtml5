@@ -6,16 +6,16 @@
 
 	<description>Cordys</description>
 	
-	<icon src="../../platforms/ios/res/icon/ios_144.png"    width="144" height="144" gap:platform="ios" />
+	<icon src="img/ios/icon/ios_144.png"    width="144" height="144" gap:platform="ios" />
 
-	<gap:splash src="../../platforms/ios/res/screen/ipad_landscape.png"              width="1024" height="748"  gap:platform="ios" />
-	<gap:splash src="../../platforms/ios/res/screen/ipad_portrait.png"               width="768"  height="1004" gap:platform="ios" />
-	<gap:splash src="../../platforms/ios/res/screen/ipad_retina_landscape.png"       width="2048" height="1496" gap:platform="ios" />
-	<gap:splash src="../../platforms/ios/res/screen/ipad_retina_portrait.png"        width="1536" height="2008" gap:platform="ios" />
-	<gap:splash src="../../platforms/ios/res/screen/iphone_landscape.png"            width="480"  height="320"  gap:platform="ios" />
-	<gap:splash src="../../platforms/ios/res/screen/iphone_portrait.png"             width="320"  height="480"  gap:platform="ios" />
-	<gap:splash src="../../platforms/ios/res/screen/iphone_retina_landscape.png"     width="960"  height="640"  gap:platform="ios" />
-	<gap:splash src="../../platforms/ios/res/screen/iphone_retina_portrait.png"      width="640"  height="960"  gap:platform="ios" />
+	<gap:splash src="img/ios/screen/ipad_landscape.png"              width="1024" height="748"  gap:platform="ios" />
+	<gap:splash src="img/ios/screen/ipad_portrait.png"               width="768"  height="1004" gap:platform="ios" />
+	<gap:splash src="img/ios/screen/ipad_retina_landscape.png"       width="2048" height="1496" gap:platform="ios" />
+	<gap:splash src="img/ios/screen/ipad_retina_portrait.png"        width="1536" height="2008" gap:platform="ios" />
+	<gap:splash src="img/ios/screen/iphone_landscape.png"            width="480"  height="320"  gap:platform="ios" />
+	<gap:splash src="img/ios/screen/iphone_portrait.png"             width="320"  height="480"  gap:platform="ios" />
+	<gap:splash src="img/ios/screen/iphone_retina_landscape.png"     width="960"  height="640"  gap:platform="ios" />
+	<gap:splash src="img/ios/screen/iphone_retina_portrait.png"      width="640"  height="960"  gap:platform="ios" />
 
 	<feature name="http://api.phonegap.com/1.0/device" />
 
