@@ -68,16 +68,31 @@
             -pre-clean
     -->
     
-    <target name="-post-compile" depends="copy-platform-specific-web-files">
+	<target name="-pre-build" depends="clean-android-assets">
+    	<!-- Handler before building. -->
+    </target>
+	
+	 <target name="clean-android-assets">
+    	<!-- Cleans the build content - Deletes all contents in the android assets folder -->
+		<delete dir="${asset.www.dir}"/>
+    </target>
+	
+    <target name="-post-compile" depends="copy-assets">
     	<!-- Handler called after compilation. -->
     </target>
-    
-    <target name="copy-platform-specific-web-files" >
-        <copy todir="${asset.www.dir}">
-		<fileset dir="${platforms.android.www.dir}">
-			<include name="**/*" />
-		</fileset>
-	</copy>
+	
+    <target name="copy-assets" >
+        <copy todir="${asset.dir}">
+			<fileset dir="${root.dir}/assets">
+				<include name="**/*" />
+				<exclude name="www/img/**" />
+			</fileset>
+		</copy>
+		<copy todir="${asset.dir}">
+			<fileset dir="${platforms.android.www.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
     </target>
     
     <import file="custom_rules.xml" optional="true" />
