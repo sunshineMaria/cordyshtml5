@@ -31,6 +31,15 @@ function HomeViewModel(parentModel) {
 					server.login().done(function() {
 						$.mobile.changePage('#app');
 					});
+				}).fail(function (e, statusText, errorThrown) {
+					var errorText = (e.error().responseXML && $(e.error().responseXML).find('faultstring,error elem').text()) || e.responseText || errorThrown || statusText;
+					var errorMessage = "Error in prelogin. Error is '" + errorText + "'";
+					console.log(errorMessage);
+					if (navigator.notification) {
+						navigator.notification.alert(errorMessage);
+					} else {
+						window.alert(errorMessage);
+					}
 				});
 			} else {
 				server.login().done(function() {

@@ -243,15 +243,29 @@ Server.prototype = {
 		});
 		
 		deferred.fail(function(e, statusText, errorThrown) {
+
+			self.cookies.ct.valid(false);
+
 			var errorText = (e.error().responseXML && $(e.error().responseXML).find('faultstring,error elem').text()) || e.responseText || errorThrown || statusText;
 			var errorMessage = "Error in prelogin. Error is '" + errorText + "'";
 			console.log(errorMessage);
-			if (navigator.notification) {
-				navigator.notification.alert(errorMessage);
-			} else {
-				window.alert(errorMessage);
+
+			//stop trying to prelogin if failed once, self.stopRetryToPrelogin is set to false when failed in first attempt.
+			if (self.stopRetryToPrelogin) return;
+
+			if (errorText === 'Forbidden') {
+				//When cookie-ct still persists, it is being recognized as CSRF attack and we get 403:Forbidden Error
+				//so deleting cookies and doing prelogin again.
+				self.deleteCookies().done(function () {
+					self.stopRetryToPrelogin = true;
+					self.prelogin().done(function () {
+						// do a login
+						self.login();
+					}).always(function () {
+						self.stopRetryToPrelogin = false;
+					});
+				});
 			}
-			self.cookies.ct.valid(false);
 		});
 
 			
