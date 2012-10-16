@@ -27,7 +27,7 @@
 <body>
 
 <div data-role="page" data-title="Home - Server list" id="servers"> 
-	<div data-role="header">
+	<div data-role="header" data-position="fixed">
 		<h1> Cordys </h1>
 		<a class="ui-btn-right" data-icon="add" data-iconpos="notext" href="#add-server"> Add </a>
 	</div>
@@ -116,11 +116,13 @@
 
 
 <div data-role="page" data-title="app" id="app">
-	<div data-role="header">
+	<div data-role="header" data-position="fixed">
 		<a class="ui-btn-left" href="#servers" data-icon="cordys" data-iconpos="right"> &lt; </a>
 		<h1> App </h1>
 	</div>
-	<iframe id="appFrame" data-role="content" seamless></iframe>
+	<div id="appPage-content">
+		<iframe id="appFrame" data-role="content" seamless></iframe>
+	</div>
 </div>
 
 
