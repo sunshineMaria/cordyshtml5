@@ -8,7 +8,7 @@
 		TESTSWARM_URI = '10.1.29.109:8080';
 	
 	$(window.document).on('ready', function() {
-		appWindow = $('#app').children('iframe')[0].contentWindow;
+		appWindow = $('#app').find('div iframe')[0].contentWindow;
 	});
 	
 	postMessageToAppWindow = function(data, origin) {

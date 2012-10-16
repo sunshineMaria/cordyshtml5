@@ -1,10 +1,14 @@
 @CHARSET "UTF-8";
 
+body {
+	overflow: auto;
+}
+
 iframe[seamless]{
-    background-color: transparent;
-    border: 0 none transparent;
-    padding: 0;
-    overflow: hidden;
+	background-color: transparent;
+	border: 0 none transparent;
+	padding: 0;
+	overflow: hidden;
 }
 
 
@@ -19,10 +23,14 @@ iframe[seamless]{
 }
 
 
+.ui-header {
+	height:42px;
+}
+
+
 .ui-dialog .ui-header .ui-title {
 	margin-left: 20px;
 	margin-right: 20px;
-	
 	white-space: normal;
 }
 
@@ -32,10 +40,16 @@ iframe[seamless]{
 }
 
 
-#app > iframe {
+#appPage-content {
+	position: absolute;
+	top: 44px;
+	bottom: 0px;
 	width: 100%;
-	min-height: 100%!important;
-	height: 100%!important;
+}
+
+#appFrame {
+	width: 100%;
+	height: 100%;
 }
 
 /*
