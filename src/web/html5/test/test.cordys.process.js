@@ -4,7 +4,7 @@
 
 	$.mockjax({
         url: '*/com.eibus.web.soap.Gateway.wcp',
-        data: /GetBusinessIdentifier/,
+        data: /001CC42E-BB14-11E1-F984-5F61BA2114A7/,
         responseText: {
             tuple: {
                 old: {
@@ -21,7 +21,7 @@
         }
     });
 	
-    test("Get Business Identifier JSON", 2, function () {
+    test("Get Business Identifier JSON 1", 2, function () {
         stop();
         $.cordys.process.getBusinessIdentifiers("001CC42E-BB14-11E1-F984-5F61BA2114A7", {
              beforeSend: function (xhr, settings) {
@@ -38,7 +38,46 @@
                 return false;
             }
         })
+   });
+
+    $.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /001CC42E-BB14-11E1-F984-5F61BA2114A8/,
+		responseText: {
+			tuple: {
+				old: {
+             		BusinessIdentifier: {
+             			"Name": "BAM/Business Identifiers",
+             			"Description": "Business Identifier",
+             			"Type": "1",
+             			"Prec": "0",
+             			"Value": "1",
+             			"Sequence": "1"
+             		}
+				}
+			}
+		}
     });
+
+    test("Get Business Identifier JSON 2", 2, function () {
+		stop();
+		$.cordys.process.getBusinessIdentifiers("001CC42E-BB14-11E1-F984-5F61BA2114A8", {
+			beforeSend: function (xhr, settings) {
+				var getBIrequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetBusinessIdentifierValues xmlns='http://schemas.cordys.com/pim/queryinstancedata/1.0'><processInstanceID>001CC42E-BB14-11E1-F984-5F61BA2114A8</processInstanceID></GetBusinessIdentifierValues></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(getBIrequest, settings.data), true, "Compare Request XML");
+			},
+			success: function (identifiers) {
+				equal(identifiers[0].Name, "BAM/Business Identifiers", "Business Identifier Name is BAM/Business Identifier");
+				start();
+			},
+			error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
+				ok(false, "error found: " + errorMessage);
+				start();
+				return false;
+			}
+		})
+    });
+
 
     $.mockjax({
         url: '*/com.eibus.web.soap.Gateway.wcp',

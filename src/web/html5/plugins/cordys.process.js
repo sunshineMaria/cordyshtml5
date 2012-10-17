@@ -45,8 +45,7 @@
 			if (!self.businessIdentifiersModel) {
 				self.businessIdentifiersModel = new $.cordys.model({
 					objectName: "BusinessIdentifier",
-					context:options.context,
-					read: options
+					context:options.context
 				});
 			}
 			self.businessIdentifiersModel.read(options);
@@ -94,8 +93,7 @@
 			if (!self.processAttachmentsModel) {
 				self.processAttachmentsModel = new $.cordys.model({
 					objectName: "instance",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.processAttachmentsModel.read(options);

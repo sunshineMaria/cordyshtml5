@@ -30,8 +30,7 @@
 			if (!self.taskModel) {
 				self.taskModel = new $.cordys.model({
 					objectName: "Task",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.taskModel.read(options);
@@ -44,8 +43,7 @@
 			if (!self.personalTaskModel) {
 				self.personalTaskModel = new $.cordys.model({
 					objectName: "Task",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.personalTaskModel.read(options);
@@ -74,8 +72,7 @@
 			if (!self.taskDetailModel) {
 				self.taskDetailModel = new $.cordys.model({
 					objectName: "Task",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.taskDetailModel.read(options);
@@ -88,8 +85,7 @@
 			if (!self.worklistModel) {
 				self.worklistModel = new $.cordys.model({
 					objectName: "Target",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.worklistModel.read(options);
