@@ -87,8 +87,7 @@
 			if (!self.activityDefinitionModel) {
 				self.activityDefinitionModel = new $.cordys.model({
 					objectName: "activity",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.activityDefinitionModel.read(options);
@@ -104,8 +103,7 @@
 			if (!self.activityInstanceModel) {
 				self.activityInstanceModel = new $.cordys.model({
 					objectName: "ACTIVITY_INSTANCE",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.activityInstanceModel.read(options);
@@ -117,8 +115,7 @@
 			if (!self.businessEventsModel) {
 				self.businessEventsModel = new $.cordys.model({
 					objectName: "events",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.businessEventsModel.read(options);
@@ -130,8 +127,7 @@
 			if (!self.caseInstanceModel) {
 				self.caseInstanceModel = new $.cordys.model({
 					objectName: "CASE_INSTANCE",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.caseInstanceModel.read(options);
@@ -143,8 +139,7 @@
 			if (!self.caseDataModel) {
 				self.caseDataModel = new $.cordys.model({
 					objectName: "data",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.caseDataModel.read(options);
@@ -172,8 +167,7 @@
 			if (!self.caseVariablesModel) {
 				self.caseVariablesModel = new $.cordys.model({
 					objectName: "data",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.caseVariablesModel.read(options);
@@ -185,8 +179,7 @@
 			if (!self.followupActivitiesModel) {
 				self.followupActivitiesModel = new $.cordys.model({
 					objectName: "followups",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.followupActivitiesModel.read(options);
@@ -263,8 +256,7 @@
 			if (!self.caseAttachmentsModel) {
 				self.caseAttachmentsModel = new $.cordys.model({
 					objectName: "instance",
-					context: options.context,
-					read: options
+					context: options.context
 				});
 			}
 			self.caseAttachmentsModel.read(options);

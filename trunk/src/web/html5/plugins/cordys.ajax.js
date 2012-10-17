@@ -28,8 +28,25 @@
 		}
 	});
 
+	// Function that will stop copying content and url object structure
+	function ajaxExtend(target, src) {
+		var key, deep,
+		flatOptions = jQuery.ajaxSettings.flatOptions || {};
+		for (key in src) {
+			if (src[key] !== undefined) {
+				(flatOptions[key] ? target : (deep || (deep = {})))[key] = src[key];
+			}
+		}
+		if (deep) {
+			jQuery.extend(true, target, deep);
+		}
+		return target;
+	}
+
+
 	$.cordys.ajax = function(options) {
-		var opts = $.extend({}, $.cordys.ajax.defaults, options);
+		var opts = $.extend({}, $.cordys.ajax.defaults);
+		opts = ajaxExtend(opts, options);
 		opts.url = configureGatewayUrl(opts.url, opts);
 		if (!opts.url) return null;
 		if (typeof(opts.data) === "undefined" && opts.method && opts.namespace) {
@@ -206,7 +223,11 @@
 				}
 			}
 		} else if (typeof(parameters) === "function") {
-			pStrings.push(parameters(settings));
+			if (typeof(settings.context) === "object"){
+				pStrings.push(parameters.call(settings.context, settings));
+			}else{
+				pStrings.push(parameters(settings));
+			}
 		} else if (typeof(parameters) === "string") {
 			pStrings.push(parameters);
 		}

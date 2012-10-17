@@ -91,13 +91,13 @@
 						}
 					}
 					self[self.objectName](objects);
-					if (self._readSuccess) {
-						self._readSuccess(self[self.objectName]());
+					if (this._readSuccess) {
+						this._readSuccess(self[self.objectName]());
 					}
 				} else {
 					self[self.objectName] = objects;
-					if (self._readSuccess) {
-						self._readSuccess(self[self.objectName]);
+					if (this._readSuccess) {
+						this._readSuccess(self[self.objectName]);
 					}
 				}
 				
@@ -109,24 +109,23 @@
 			async : false,
 			beforeSend: function (xhr, settings){
 				// cancel the request if there is nothing to update or call the custom beforeSend handler (he can cancels it too)
-				return !self.isReadOnly && (self.objectsToBeUpdated.length > 0) && (self._beforeSend ? self._beforeSend(xhr, settings, self.objectsToBeUpdated) : true);
+				return !self.isReadOnly && (this.objectsToBeUpdated.length > 0) && (this._beforeSend ? this._beforeSend(xhr, settings, this.objectsToBeUpdated) : true);
 			},
 
 			success: function (data, textStatus, jqXHR){
 				// invoke the custom success handler
-				if (self._success) self._success(data, textStatus, jqXHR);
+				if (this._success) this._success(data, textStatus, jqXHR);
 				// merge the insert, update, delete
-				mergeUpdate(data, self.objectsToBeUpdated);
-				self.objectsToBeUpdated = null;
+				mergeUpdate(data, this.objectsToBeUpdated);
 			},
 
 			error : function (jqXHR, textStatus, errorThrown, messCode, errorMessage, opts){
-				handleError(jqXHR.error(), self.objectsToBeUpdated);
-				self.objectsToBeUpdated = null;
+
+				handleError(jqXHR.error(), this.objectsToBeUpdated);
 
 				var showError = true;
-				if (self._error && typeof(self._error) === "function"){
-					showError = self._error(jqXHR, textStatus, errorThrown, messCode, errorMessage, opts) !== false;
+				if (this._error && typeof(this._error) === "function"){
+					showError = this._error(jqXHR, textStatus, errorThrown, messCode, errorMessage, opts) !== false;
 				}
 				if (showError){
 					showErrorDialog(jqXHR.error(), "Error on Update");
@@ -135,8 +134,9 @@
 			},
 
 			parameters : function (settings, sendInsert, sendUpdate, sendDelete){
+				var context = this;
 				var synchronizeContent = [];
-				self.objectsToBeUpdated = [];
+				var objectsToBeUpdated = [];
 
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
 					var objects = self[self.objectName]();
@@ -148,14 +148,14 @@
 							if (object.lock){
 								// deleted object
 								if (sendDelete && object._destroy === true){
-									self.objectsToBeUpdated.push(object);
+									objectsToBeUpdated.push(object);
 									// let us get the old bo from the initial saved state
 									var oldObject = object.lock.getInitialState();
 									// get the corresponding XML for the deleted object and add it to the deleteContent
 									synchronizeContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,null)));
 								}
 								else if (sendUpdate && object.lock.isDirty()){
-									self.objectsToBeUpdated.push(object);
+									objectsToBeUpdated.push(object);
 									// let us get the old bo from the saved state
 									var oldObject = object.lock.getInitialState();
 									// the objects here are Observavables, let us unmap to get the new bo
@@ -167,7 +167,7 @@
 							// not persisted - new
 							else if (sendInsert && object._destroy !== true){
 								// just double check whether it was an object deleted before persisting directly using KO API's
-								self.objectsToBeUpdated.push(object);
+								objectsToBeUpdated.push(object);
 								// let us get the new bo by unwrapping the Observable
 								var newObject = ko.mapping.toJS(object);
 								// get the corresponding XML for the inserted object and add it to the insertContent
@@ -178,6 +178,7 @@
 					}
 
 				}
+				this.objectsToBeUpdated = objectsToBeUpdated;
 				return synchronizeContent.join("");
 			}
 		}
@@ -185,14 +186,14 @@
 		// Handlers and settings for the create part
 		this.createSettings = {
 			parameters : function (settings){
-				return self.defaultUpdateSettings.parameters(settings, true, false, false);
+				return self.defaultUpdateSettings.parameters.call(this, settings, true, false, false);
 			}
 		}
 
 		// Handlers and settings for the update part
 		this.updateSettings = {
 			parameters : function (settings){
-				return self.defaultUpdateSettings.parameters(settings, false, true, false);
+				return self.defaultUpdateSettings.parameters.call(this, settings, false, true, false);
 			}
 		}
 
@@ -200,54 +201,71 @@
 		// Handlers and settings for the delete part
 		this.deleteSettings = {
 			parameters : function (settings){
-				return self.defaultUpdateSettings.parameters(settings, false, false, true);
+				return self.defaultUpdateSettings.parameters.call(this, settings, false, false, true);
 			}
 		}
 
 		// Handlers and settings for the Sync part
 		this.synchronizeSettings = {
 			parameters : function (settings){
-				return self.defaultUpdateSettings.parameters(settings, true, true, true);
+				return self.defaultUpdateSettings.parameters.call(this, settings, true, true, true);
 			}
 		}
 
 		// Sends all inserted objects to the backend
 		this.create = function(createSettings) {
-			self._beforeSend = (createSettings && createSettings.beforeSend) ? createSettings.beforeSend : (settings.create ? settings.create.beforeSend : null);
-			self._success = (createSettings && createSettings.success) ? createSettings.success : (settings.create ? settings.create.success : null);
-			self._error = (createSettings && createSettings.error) ? createSettings.error : (settings.create ? settings.create.error : null);
-			return $.cordys.ajax($.extend({}, settings.defaults, settings.create, createSettings, self.defaultUpdateSettings, self.createSettings));
+			createSettings._context = (createSettings && createSettings.context) ? createSettings.context : (settings.create ? settings.create.context : null);
+
+			createSettings._beforeSend = (createSettings && createSettings.beforeSend) ? createSettings.beforeSend : (settings.create ? settings.create.beforeSend : null);
+			createSettings._success = (createSettings && createSettings.success) ? createSettings.success : (settings.create ? settings.create.success : null);
+			createSettings._error = (createSettings && createSettings.error) ? createSettings.error : (settings.create ? settings.create.error : null);
+
+			var opts = $.extend({}, settings.defaults, settings.create, createSettings, self.defaultUpdateSettings, self.createSettings);
+			opts.context = opts;
+			return $.cordys.ajax(opts);
 		};
 
 		// Sends the get/read request
 		this.read = function(readSettings) {
-			var options = $.extend(true, {}, settings.defaults, settings.read, readSettings, self.readSettings);
-			self._readSuccess = (readSettings && readSettings.success) ? readSettings.success : (settings.read ? settings.read.success : null);
-			return $.cordys.ajax(options);
+			readSettings._context = (readSettings && readSettings.context) ? readSettings.context : (settings.read ? settings.read.context : null);
+			readSettings._readSuccess = (readSettings && readSettings.success) ? readSettings.success : (settings.read ? settings.read.success : null);
+
+			var opts = $.extend(true, {}, settings.defaults, settings.read, readSettings, self.readSettings);
+			opts.context = opts;
+			return $.cordys.ajax(opts);
 		};
 
 		// Sends all updated objects to the backend
 		this.update = function(updateSettings) {
-			self._beforeSend = (updateSettings && updateSettings.beforeSend) ? updateSettings.beforeSend : (settings.update ? settings.update.beforeSend :null);
-			self._success = (updateSettings && updateSettings.success) ? updateSettings.success : (settings.update ? settings.update.success : null);
-			self._error = (updateSettings && updateSettings.error) ? updateSettings.error : (settings.update ? settings.update.error : null);  
-			return $.cordys.ajax($.extend({}, settings.defaults, settings.update, updateSettings, self.defaultUpdateSettings, self.updateSettings));
+			updateSettings._beforeSend = (updateSettings && updateSettings.beforeSend) ? updateSettings.beforeSend : (settings.update ? settings.update.beforeSend :null);
+			updateSettings._success = (updateSettings && updateSettings.success) ? updateSettings.success : (settings.update ? settings.update.success : null);
+			updateSettings._error = (updateSettings && updateSettings.error) ? updateSettings.error : (settings.update ? settings.update.error : null);  
+
+			var opts = $.extend({}, settings.defaults, settings.update, updateSettings, self.defaultUpdateSettings, self.updateSettings);
+			opts.context = opts;
+			return $.cordys.ajax(opts);
 		};
 
 		// Sends all deleted objects to the backend.
 		this['delete'] = function(deleteSettings) {
-			self._beforeSend = (deleteSettings && deleteSettings.beforeSend) ? deleteSettings.beforeSend : (settings['delete'] ? settings['delete'].beforeSend :null);
-			self._success = (deleteSettings && deleteSettings.success) ? deleteSettings.success : (settings['delete'] ? settings['delete'].success : null); 
-			self._error = (deleteSettings && deleteSettings.error) ? deleteSettings.error : (settings['delete'] ? settings['delete'].error : null); 
-			return $.cordys.ajax($.extend({}, settings.defaults, settings['delete'], deleteSettings, self.defaultUpdateSettings, self.deleteSettings));
+			deleteSettings._beforeSend = (deleteSettings && deleteSettings.beforeSend) ? deleteSettings.beforeSend : (settings['delete'] ? settings['delete'].beforeSend :null);
+			deleteSettings._success = (deleteSettings && deleteSettings.success) ? deleteSettings.success : (settings['delete'] ? settings['delete'].success : null); 
+			deleteSettings._error = (deleteSettings && deleteSettings.error) ? deleteSettings.error : (settings['delete'] ? settings['delete'].error : null); 
+
+			var opts = $.extend({}, settings.defaults, settings['delete'], deleteSettings, self.defaultUpdateSettings, self.deleteSettings);
+			opts.context = opts;
+			return $.cordys.ajax(opts);
 		};
 
 		// Sends all local changes (inserted, updated, deleted objects) to the backend.
 		this.synchronize = function(synchronizeSettings) {
-			self._beforeSend = (synchronizeSettings && synchronizeSettings.beforeSend) ? synchronizeSettings.beforeSend : (settings.update ? settings.update.beforeSend : null);
-			self._success = (synchronizeSettings && synchronizeSettings.success) ? synchronizeSettings.success : (settings.update ? settings.update.success : null);
-			self._error = (synchronizeSettings && synchronizeSettings.error) ? synchronizeSettings.error : (settings.update ? settings.update.error : null);
-			return $.cordys.ajax($.extend({}, settings.defaults, settings.update, synchronizeSettings, self.defaultUpdateSettings, self.synchronizeSettings));
+			synchronizeSettings._beforeSend = (synchronizeSettings && synchronizeSettings.beforeSend) ? synchronizeSettings.beforeSend : (settings.update ? settings.update.beforeSend : null);
+			synchronizeSettings._success = (synchronizeSettings && synchronizeSettings.success) ? synchronizeSettings.success : (settings.update ? settings.update.success : null);
+			synchronizeSettings._error = (synchronizeSettings && synchronizeSettings.error) ? synchronizeSettings.error : (settings.update ? settings.update.error : null);
+
+			var opts = $.extend({}, settings.defaults, settings.update, synchronizeSettings, self.defaultUpdateSettings, self.synchronizeSettings);
+			opts.context = opts;
+			return $.cordys.ajax(opts);
 		};
 
 		// Returns the number of Business Objects
