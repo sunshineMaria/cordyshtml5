@@ -42,11 +42,12 @@
 		}
 		return target;
 	}
-
+ 
 
 	$.cordys.ajax = function(options) {
 		var opts = $.extend({}, $.cordys.ajax.defaults);
 		opts = ajaxExtend(opts, options);
+
 		opts.url = configureGatewayUrl(opts.url, opts);
 		if (!opts.url) return null;
 		if (typeof(opts.data) === "undefined" && opts.method && opts.namespace) {
