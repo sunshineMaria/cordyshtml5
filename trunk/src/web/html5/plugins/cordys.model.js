@@ -52,6 +52,17 @@
 				return this.__selectedItem;
 			}
 		}
+
+		opts.mappingOptions = opts.mappingOptions || {};
+		if (opts.template){
+			opts.mappingOptions.include = opts.mappingOptions.include || [];
+			$.each(opts.template, function(i, f) {
+				var persisted = typeof(f.persisted) !== "undefined" ? f.persisted : (typeof(f) === "string" || f.isArray || f.template);
+				if (persisted){
+					opts.mappingOptions.include.push(f);
+				}
+			});
+		}
 	
 		// Handlers and settings for the read part
 		this.readSettings = {
@@ -83,7 +94,7 @@
 						// let us make every attribute Observable for identifying changes and add lock if the model is not readOnly
 						for (var objectKey in objects){
 							var object = objects[objectKey], 
-								observableObject = mapObject(object, null, opts.template, self.isReadOnly);
+								observableObject = mapObject(object, null, opts.template, opts.mappingOptions, self.isReadOnly);
 							if (!self.isReadOnly) {
 								addOptimisticLock(self, opts, object, observableObject, false);
 							}
@@ -227,44 +238,46 @@
 
 		// Sends the get/read request
 		this.read = function(readSettings) {
-			readSettings._context = (readSettings && readSettings.context) ? readSettings.context : (settings.read ? settings.read.context : null);
-			readSettings._readSuccess = (readSettings && readSettings.success) ? readSettings.success : (settings.read ? settings.read.success : null);
-
 			var opts = $.extend(true, {}, settings.defaults, settings.read, readSettings, self.readSettings);
 			opts.context = opts;
+
+			opts._context = (readSettings && readSettings.context) ? readSettings.context : (settings.read ? settings.read.context : null);
+			opts._readSuccess = (readSettings && readSettings.success) ? readSettings.success : (settings.read ? settings.read.success : null);
 			return $.cordys.ajax(opts);
 		};
 
 		// Sends all updated objects to the backend
 		this.update = function(updateSettings) {
-			updateSettings._beforeSend = (updateSettings && updateSettings.beforeSend) ? updateSettings.beforeSend : (settings.update ? settings.update.beforeSend :null);
-			updateSettings._success = (updateSettings && updateSettings.success) ? updateSettings.success : (settings.update ? settings.update.success : null);
-			updateSettings._error = (updateSettings && updateSettings.error) ? updateSettings.error : (settings.update ? settings.update.error : null);  
-
 			var opts = $.extend({}, settings.defaults, settings.update, updateSettings, self.defaultUpdateSettings, self.updateSettings);
 			opts.context = opts;
+
+			opts._beforeSend = (updateSettings && updateSettings.beforeSend) ? updateSettings.beforeSend : (settings.update ? settings.update.beforeSend :null);
+			opts._success = (updateSettings && updateSettings.success) ? updateSettings.success : (settings.update ? settings.update.success : null);
+			opts._error = (updateSettings && updateSettings.error) ? updateSettings.error : (settings.update ? settings.update.error : null);  
+
 			return $.cordys.ajax(opts);
 		};
 
 		// Sends all deleted objects to the backend.
 		this['delete'] = function(deleteSettings) {
-			deleteSettings._beforeSend = (deleteSettings && deleteSettings.beforeSend) ? deleteSettings.beforeSend : (settings['delete'] ? settings['delete'].beforeSend :null);
-			deleteSettings._success = (deleteSettings && deleteSettings.success) ? deleteSettings.success : (settings['delete'] ? settings['delete'].success : null); 
-			deleteSettings._error = (deleteSettings && deleteSettings.error) ? deleteSettings.error : (settings['delete'] ? settings['delete'].error : null); 
-
 			var opts = $.extend({}, settings.defaults, settings['delete'], deleteSettings, self.defaultUpdateSettings, self.deleteSettings);
 			opts.context = opts;
+
+			opts._beforeSend = (deleteSettings && deleteSettings.beforeSend) ? deleteSettings.beforeSend : (settings['delete'] ? settings['delete'].beforeSend :null);
+			opts._success = (deleteSettings && deleteSettings.success) ? deleteSettings.success : (settings['delete'] ? settings['delete'].success : null); 
+			opts._error = (deleteSettings && deleteSettings.error) ? deleteSettings.error : (settings['delete'] ? settings['delete'].error : null); 
+
 			return $.cordys.ajax(opts);
 		};
 
 		// Sends all local changes (inserted, updated, deleted objects) to the backend.
 		this.synchronize = function(synchronizeSettings) {
-			synchronizeSettings._beforeSend = (synchronizeSettings && synchronizeSettings.beforeSend) ? synchronizeSettings.beforeSend : (settings.update ? settings.update.beforeSend : null);
-			synchronizeSettings._success = (synchronizeSettings && synchronizeSettings.success) ? synchronizeSettings.success : (settings.update ? settings.update.success : null);
-			synchronizeSettings._error = (synchronizeSettings && synchronizeSettings.error) ? synchronizeSettings.error : (settings.update ? settings.update.error : null);
-
 			var opts = $.extend({}, settings.defaults, settings.update, synchronizeSettings, self.defaultUpdateSettings, self.synchronizeSettings);
 			opts.context = opts;
+
+			opts._beforeSend = (synchronizeSettings && synchronizeSettings.beforeSend) ? synchronizeSettings.beforeSend : (settings.update ? settings.update.beforeSend : null);
+			opts._success = (synchronizeSettings && synchronizeSettings.success) ? synchronizeSettings.success : (settings.update ? settings.update.success : null);
+			opts._error = (synchronizeSettings && synchronizeSettings.error) ? synchronizeSettings.error : (settings.update ? settings.update.error : null);
 			return $.cordys.ajax(opts);
 		};
 
@@ -317,7 +330,7 @@
 		this.addBusinessObject = function(object){
 			if (! object) return null;
 			if (! ko.isObservable(object)){
-				object = mapObject(object, null, opts.template, self.isReadOnly);
+				object = mapObject(object, null, opts.template, opts.mappingOptions, self.isReadOnly);
 			}
 			self[self.objectName].push(object);
 			return object;
@@ -518,8 +531,8 @@
 	};
 
 	// Maps a JS object into an observable
-	mapObject = function(dataObject, existingObservable, template, isReadOnly){
-		var mappedObject = isReadOnly ? dataObject : (existingObservable ? ko.mapping.fromJS(dataObject, existingObservable) : ko.mapping.fromJS(dataObject));
+	mapObject = function(dataObject, existingObservable, template, mappingOptions, isReadOnly){
+		var mappedObject = isReadOnly ? dataObject : (existingObservable ? ko.mapping.fromJS(dataObject, mappingOptions, existingObservable) : ko.mapping.fromJS(dataObject, mappingOptions));
 		if (template) {
 			mappedObject = mapObjectByTemplate(dataObject, mappedObject, template, null, ! isReadOnly, existingObservable);
 		}
@@ -599,7 +612,7 @@
 	addOptimisticLock = function(model, opts, data, observableData, isInitiallyDirty) {
 		var result = function() {}
 		var _initialState = data;
-		var _initialJSONString = ko.toJSON(observableData);
+		var _initialJSONString = ko.mapping.toJSON(observableData);
 		var _isInitiallyDirty = ko.observable(isInitiallyDirty);
 		
 		// Gets initial state of the objects
@@ -610,7 +623,7 @@
 		// Returns if the object is changed
 		result.isDirty = ko.computed({
 				read:function() {
-					return observableData && (_isInitiallyDirty() || _initialJSONString !== ko.toJSON(observableData));
+					return observableData && (_isInitiallyDirty() || _initialJSONString !== ko.mapping.toJSON(observableData));
 				},
 				deferEvaluation : true
 		});
@@ -625,7 +638,7 @@
 		// Strictly to be used internally. Updates the current state and the lock after successful update/insert
 		result._update = function(newData) {
 			_initialState = newData;
-			mapObject(newData, observableData, opts.template, false);
+			mapObject(newData, observableData, opts.template, opts.mappingOptions, false);
 			this._updateLock(newData);
 		}
 

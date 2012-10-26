@@ -184,6 +184,8 @@
 				for (var sAttrib in vValue) { oParentEl.setAttribute(sAttrib, vValue[sAttrib]); }
 			} else if (sName.charAt(0) === sAttrPref) {
 				oParentEl.setAttribute(sName.slice(1), new String(vValue)); //For IE 
+			} else if (typeof(vValue) === "undefined"){
+				oParentEl.appendChild(oXMLDoc.createElement(sName));
 			} else if (vValue !== null && vValue.constructor === Array) {
 				for (var nItem = 0; nItem < vValue.length; nItem++) {
 					oChild = oXMLDoc.createElement(sName);

@@ -102,9 +102,7 @@
 		response = orderDemoModel.create({
 			method: "InsertTemplateTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				// The request should only contain the attributes that were originally there, not the ones added by templating
-				// TODO - This actually will create problems where you have some attribute that needs to be persisted. Needs to look into this.
-				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><InsertTemplateTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>COMPLETED</Status><Notes>Create Order Demo</Notes><OrderDate>2012-07-10T10:29:16.140000000</OrderDate></OrderDemo></new></tuple></InsertTemplateTestRequest></SOAP:Body></SOAP:Envelope>";
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><InsertTemplateTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>COMPLETED</Status><Notes>Create Order Demo</Notes><OrderDate>2012-07-10T10:29:16.140000000</OrderDate><BirthDate/><Cost/></OrderDemo></new></tuple></InsertTemplateTestRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML sent for create");
 			}
 		});
@@ -145,7 +143,7 @@
 		orderDemoModel.synchronize({
 			method: "UpdateTemplateTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateTemplateTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>RECOVERED</Status><Notes>Create Order Demo1</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>DISCOVERED</Status><Notes>Create Order Demo1</Notes><OrderDate>2012-07-10T10:29:16.140000001</OrderDate></OrderDemo></new></tuple></UpdateTemplateTestRequest></SOAP:Body></SOAP:Envelope>";
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateTemplateTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>RECOVERED</Status><Notes>Create Order Demo1</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>DISCOVERED</Status><Notes>Create Order Demo1</Notes><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><BirthDate/><Cost>10000</Cost></OrderDemo></new></tuple></UpdateTemplateTestRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML sent for update");
 			}
 		});
