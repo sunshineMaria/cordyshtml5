@@ -27,6 +27,15 @@ function addURLParameter(url, name, value) {
 	var parSeparator = url.indexOf("?") < 0 ? "?" : "&";
 	return url + parSeparator + name + "=" + encodeURIComponent(value);
 }
+
+function addOrganizationContextToURL(url) {
+	var orgDN = getURLParameter(window.location, "organization");
+	if (orgDN) {
+		url = addURLParameter(url, "organization", orgDN);
+	}
+	return url;
+}
+
 function getCookie(cookieName)
 {
 	return (window.document.cookie.search( new RegExp("\\b("+cookieName+")=([^;]*)") ) >= 0) ? RegExp.$2 : "";

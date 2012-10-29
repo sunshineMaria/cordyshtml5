@@ -409,7 +409,7 @@
 					success:function(data) {
 						var app = $.cordys.json.find(data, "Application");
 						if (app) {
-							document.location = app.url;
+							document.location = addOrganizationContextToURL(app.url);
 							//$.mobile.changePage( url, { transition: "fade", changeHash: true } );
 						}
 					}
