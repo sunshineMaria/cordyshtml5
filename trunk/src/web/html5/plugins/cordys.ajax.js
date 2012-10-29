@@ -70,9 +70,12 @@
 		}
 		opts.error = function(jqXHR, textStatus, errorThrown) {
 			console.log("Error Response received ", jqXHR, jqXHR.error());
-			if (!jqXHR.error().responseText && !jqXHR.error().responseXML) return;// skip this error, there is no description
-			var $response = $(jqXHR.error().responseXML);
-			var messCode = $response.find("MessageCode").text();
+			var messCode = "";
+			if (jqXHR.error().responseXML){
+				var $response = $(jqXHR.error().responseXML);
+				messCode = $response.find("MessageCode").text();
+			}
+			
 			if (messCode.search(/Cordys.*(AccessDenied|Artifact_Unbound)/)>=0 || jqXHR.statusText === "Forbidden") {
 				loginIntoCordys();
 			} else {

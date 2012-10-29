@@ -54,6 +54,7 @@
 			self.getTaskDetails(task, {success: function(tasks) {
 				var url = tasks[0].url;
 				if (url.search(/\.html?$/) > 0) {
+					url = addOrganizationContextToURL(url);
 					url = addURLParameter(url, "taskId", tasks[0].TaskId);
 					//$.mobile.changePage( url, { transition: "pop", changeHash: false } );
 					document.location = url;
