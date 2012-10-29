@@ -15,14 +15,14 @@
 				ok($.cordys.workflow.isCaseActivity(tasks[1]), "Task is Case");
 				$.cordys.workflow.getTaskDetails(tasks[1], {
 					beforeSend: function (xhr, settings) {
-						var getTaskDetailsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId><ReturnTaskData>true</ReturnTaskData><RetrievePossibleActions>true</RetrievePossibleActions></GetTask></SOAP:Body></SOAP:Envelope>";
+						var getTaskDetailsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><ReturnTaskData>true</ReturnTaskData><RetrievePossibleActions>true</RetrievePossibleActions><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId></GetTask></SOAP:Body></SOAP:Envelope>";
 						equal(compareXML(getTaskDetailsRequest, settings.data), true, "Compare Request XML");
 					},
 					success: function (tasks) {
 						equal(tasks.length, 1, "1 task details found");
-					} 
+					}
 				});
-			} 
+			}
 		});
 		setTimeout(function () {
 			start();
@@ -154,7 +154,7 @@
 					},
 					success: function (data) {
 						equal(data.error, undefined, "Case Data updated");
-					} 
+					}
 				});
 				$.cordys['case'].updateCaseVariables(data.caseinstanceid, getCaseVariables(), {
 					beforeSend: function (xhr, settings) {
@@ -163,7 +163,7 @@
 					},
 					success: function (data) {
 						equal(data.error, undefined, "Case Variables updated");
-					} 
+					}
 				});
 				$.cordys['case'].getCaseData(data.caseinstanceid, {
 					beforeSend: function (xhr, settings) {
@@ -172,7 +172,7 @@
 					},
 					success: function (data) {
 						equal(data[0]["ns:TestCase"]["ns:Number"], "1234567890", "Getting Case Data");
-					} 
+					}
 				});
 				$.cordys['case'].getCaseInstance(data.caseinstanceid, {
 					beforeSend: function (xhr, settings) {
@@ -181,7 +181,7 @@
 					},
 					success: function (data) {
 						equal(data[0].CASE_INSTANCE_IDENTIFIERS.INSTANCE_ID, "someCaseInstanceID", "Getting Case Instance");
-					} 
+					}
 				});
 				$.cordys['case'].getCaseVariables(data.caseinstanceid, {
 					beforeSend: function (xhr, settings) {
@@ -191,7 +191,7 @@
 					success: function (vars) {
 						equal(vars.length, 3, "3 case variables found");
 						equal(vars[0].User.text, "user1", "First variable contains User");
-					} 
+					}
 				});
 				$.cordys['case'].sendEvent(data.caseinstanceid, "test", {
 					beforeSend: function (xhr, settings) {
@@ -200,7 +200,7 @@
 					},
 					success: function (data) {
 						equal(data.result["@success"], "false", "Event Send");
-					} 
+					}
 				});
 			}
 		});
@@ -299,7 +299,7 @@
 			success: function (attachments) {
 				equal(attachments.length, 2, "2 attachments found");
 				equal(attachments[0]["@name"], "image1.jpg", "First attachment image1");
-			} 
+			}
 		});
 		$.cordys['case'].addAttachment("someCaseInstanceID", "Photo", "image3.jpg", "some image", window.btoa("some content"), {
 			beforeSend: function (xhr, settings) {
@@ -308,7 +308,7 @@
 			},
 			success: function (data) {
 				equal(data.attachment["@name"], "image3.jpg", "Attachment added");
-			} 
+			}
 		});
 		$.cordys['case'].removeAttachment("someCaseInstanceID", "Photo", "image3.jpg", {
 			beforeSend: function (xhr, settings) {
@@ -317,7 +317,7 @@
 			},
 			success: function (data) {
 				equal(data.error, undefined, "Attachment removed");
-			} 
+			}
 		});
 		setTimeout(function () {
 			start();
@@ -486,7 +486,7 @@
 			},
 			success: function (data) {
 				equal(data.error, undefined, "Getting activity definition");
-				
+
 				start();
 			},
 			error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
