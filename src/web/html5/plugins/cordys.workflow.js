@@ -24,26 +24,26 @@
 			taskModel, personalTaskModel, worklistModel, taskDetailModel;
 
 		this.getTasks = function(options) {
-			options = getOptionsForWorkflowMethod("GetAllTasksForUser", options, {
-					OrderBy: "Task.StartDate DESC"
-			});
 			if (!self.taskModel) {
 				self.taskModel = new $.cordys.model({
 					objectName: "Task",
-					context: options.context
+					context: options.context,
+					defaults: getOptionsForWorkflowMethod("GetAllTasksForUser", null, {
+						OrderBy: "Task.StartDate DESC"
+					})
 				});
 			}
 			self.taskModel.read(options);
 			return self.taskModel;
 		};
 		this.getPersonalTasks = function(options) {
-			options = getOptionsForWorkflowMethod("GetTasks", options, {
-					OrderBy: "Task.StartDate DESC"
-			});
 			if (!self.personalTaskModel) {
 				self.personalTaskModel = new $.cordys.model({
 					objectName: "Task",
-					context: options.context
+					context: options.context,
+					defaults: getOptionsForWorkflowMethod("GetTasks", null, {
+						OrderBy: "Task.StartDate DESC"
+					})
 				});
 			}
 			self.personalTaskModel.read(options);
@@ -64,28 +64,31 @@
 			}})
 		};
 		this.getTaskDetails = function(task, options) {
-			options = getOptionsForWorkflowMethod("GetTask", options, {
-					TaskId:getTaskId(task),
-					ReturnTaskData:"true",
-					RetrievePossibleActions:"true"
-			});
 			if (!self.taskDetailModel) {
 				self.taskDetailModel = new $.cordys.model({
 					objectName: "Task",
-					context: options.context
+					context: options.context,
+					defaults: getOptionsForWorkflowMethod("GetTask", null, {
+						ReturnTaskData:"true",
+						RetrievePossibleActions:"true"
+					})
 				});
 			}
+			
+			options = options || {};
+			options.parameters = options.parameters || {};
+			options.parameters.TaskId = getTaskId(task);
 			self.taskDetailModel.read(options);
 			return self.taskDetailModel;
 		};
 		this.getWorkLists = function(options) {
-			options = getOptionsForWorkflowMethod("GetAllTargets", options, {
-					TaskCountRequired: "true"
-			});
 			if (!self.worklistModel) {
 				self.worklistModel = new $.cordys.model({
 					objectName: "Target",
-					context: options.context
+					context: options.context,
+					defaults: getOptionsForWorkflowMethod("GetAllTargets", null, {
+							TaskCountRequired: "true"
+					})
 				});
 			}
 			self.worklistModel.read(options);
