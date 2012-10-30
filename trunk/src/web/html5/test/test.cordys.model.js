@@ -168,6 +168,14 @@
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 1, "Inserted a new BO using create. Synchronized. 1 record found");
 		equal(orderDemoObjects[0].Notes(), "Create Order Demo");
+
+		response = orderDemoModel.synchronize({
+			method: "CreateOrderDemo",
+			beforeSend: function (jqXHR, settings) {
+				ok(false, "Request sent unexepectedly. Request send after inserted object has been merged");
+			}
+		});
+
 		start();
 	});
 
