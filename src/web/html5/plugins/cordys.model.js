@@ -623,12 +623,9 @@
 		}
 
 		// Returns if the object is changed
-		result.isDirty = ko.computed({
-				read:function() {
-					return observableData && (_isInitiallyDirty() || _initialJSONString !== ko.mapping.toJSON(observableData));
-				},
-				deferEvaluation : true
-		});
+		result.isDirty = function() {
+			return observableData && (_isInitiallyDirty() || _initialJSONString !== ko.mapping.toJSON(observableData));
+		}
 
 		// Strictly to be used internally. Updates the lock(the initial state) to the current state of the object
 		result._updateLock = function(data) {
