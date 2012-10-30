@@ -1191,13 +1191,21 @@
 		equal(orderDemoObjects[0]._destroy, undefined, "Deletion Reverted");
 
 		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Update BO Revert Insertion and Inser a new BO" });
+		response = orderDemoModel.update({
+			method: "DeleteBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				ok(false, "Request send after reverting a deleted object");
+			}
+		});
+
 		response = orderDemoModel.synchronize({
 			method: "DeleteBORevertInsertNew",
 			beforeSend: function (jqXHR, settings) {
-				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO Revert Insertion and Inser a new BO</Notes></OrderDemo></new></tuple></UpdateBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
-				//equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO Revert Insertion and Inser a new BO</Notes></OrderDemo></new></tuple></DeleteBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML. Should only have the inserted object");
 			}
 		});
+
 		start();
 	});
 

@@ -54,6 +54,8 @@
 		}
 
 		opts.mappingOptions = opts.mappingOptions || {};
+		opts.mappingOptions.ignore = opts.mappingOptions.ignore || [];
+		opts.mappingOptions.ignore.push("_destroy");
 		if (opts.template){
 			opts.mappingOptions.include = opts.mappingOptions.include || [];
 			$.each(opts.template, function(i, f) {
