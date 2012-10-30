@@ -633,13 +633,12 @@
 		// Strictly to be used internally. Updates the lock(the initial state) to the current state of the object
 		result._updateLock = function(data) {
 			_initialState = data ? data : ko.mapping.toJS(observableData); 
-			_initialJSONString = ko.toJSON(observableData);
+			_initialJSONString = ko.mapping.toJSON(observableData);
 			_isInitiallyDirty(false);
 		};
 
 		// Strictly to be used internally. Updates the current state and the lock after successful update/insert
 		result._update = function(newData) {
-			_initialState = newData;
 			mapObject(newData, observableData, opts.template, opts.mappingOptions, false);
 			this._updateLock(newData);
 		}
