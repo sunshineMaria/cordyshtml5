@@ -287,6 +287,14 @@
 		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
 		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
 
+
+		response = orderDemoModel.update({
+			method: "UpdateOrderDemo",
+			beforeSend: function (jqXHR, settings) {
+				ok(false, "Request sent unexpectedely. Send on update after update merge");
+			}
+		});
+
 		start();
 	});
 
