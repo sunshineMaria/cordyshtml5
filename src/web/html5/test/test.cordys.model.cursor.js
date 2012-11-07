@@ -191,14 +191,14 @@
 				equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 			}
 		});
-		equal($.parseJSON(paginationTestResponse.responseText).tuple.length, 2, "2 records found");
-		equal($.parseJSON(paginationTestResponse.responseText).tuple[0].old.OrderDemo.OrderID, "160");
-		equal($.parseJSON(paginationTestResponse.responseText).tuple[1].old.OrderDemo.OrderID, "161");
+		orderDemoCursorModelObjects = orderDemoCursorModel.OrderDemo();
+
+		equal(orderDemoCursorModelObjects.length, 2, "2 records found");
+		equal(orderDemoCursorModelObjects[0].OrderID(), "160");
+		equal(orderDemoCursorModelObjects[1].OrderID(), "161");
 		equal($.parseJSON(paginationTestResponse.responseText).cursor['@position'], "2");
 		
-		orderDemoCursorModelObjects = orderDemoCursorModel.OrderDemo();
 		equal(orderDemoCursorModelObjects.length,orderDemoCursorModel.getSize(),"Model Object Size");
-		
 		equal(true,orderDemoCursorModel.hasNext(),"hasNext");
 		
 		paginationTestResponse = orderDemoCursorModel.getNextPage({
@@ -215,9 +215,10 @@
 				//Commented temorarily as the assertion is failing in firefox. Error: xmlns attribute for cursor is removed in firefox
 			}
 		});
-		equal($.parseJSON(paginationTestResponse.responseText).tuple.length, 2, "2 records found");
-		equal($.parseJSON(paginationTestResponse.responseText).tuple[0].old.OrderDemo.OrderID, "162");
-		equal($.parseJSON(paginationTestResponse.responseText).tuple[1].old.OrderDemo.OrderID, "163");
+		orderDemoCursorModelObjects = orderDemoCursorModel.OrderDemo();
+		equal(orderDemoCursorModelObjects.length, 2, "2 records found");
+		equal(orderDemoCursorModelObjects[0].OrderID(), "162");
+		equal(orderDemoCursorModelObjects[1].OrderID(), "163");
 		equal($.parseJSON(paginationTestResponse.responseText).cursor['@position'], "4");
 		
 		equal(true,orderDemoCursorModel.hasPrevious(),"hasPrevious");
@@ -236,9 +237,10 @@
 				//Commented temorarily as the assertion is failing in firefox. Error: xmlns attribute for cursor is removed in firefox
 			}
 		});
-		equal($.parseJSON(paginationTestResponse.responseText).tuple.length, 2, "2 records found");
-		equal($.parseJSON(paginationTestResponse.responseText).tuple[0].old.OrderDemo.OrderID, "160");
-		equal($.parseJSON(paginationTestResponse.responseText).tuple[1].old.OrderDemo.OrderID, "161");
+		orderDemoCursorModelObjects = orderDemoCursorModel.OrderDemo();
+		equal(orderDemoCursorModelObjects.length, 2, "2 records found");
+		equal(orderDemoCursorModelObjects[0].OrderID(), "160");
+		equal(orderDemoCursorModelObjects[1].OrderID(), "161");
 		equal($.parseJSON(paginationTestResponse.responseText).cursor['@position'], "2");
 		start();
 	});
