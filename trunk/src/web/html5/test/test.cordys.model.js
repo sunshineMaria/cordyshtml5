@@ -6,6 +6,8 @@
 	
 	The following tests are covered under model plugin test
 
+	** Synchronous read/create/update/delete/synchronize operations **
+
 	1. Read
 	2. AddBO/Create/Sync(with no change)
 	3. AddBO/Create/Create(with no change)
@@ -55,6 +57,14 @@
 	46. Use selectedItem with and without a selcted BO
 	47. Clear the model of all data 
 	48. Get the number of Business Objects 
+
+	** Async Read **
+	
+	49. AsyncRead 
+	50. AsyncRead/ChangeBO/Update/Update(with no change) 
+	51. AsyncRead/Update/ChangeBO/Update/Update(with no change) 
+	52. AsyncRead/Sync(with no change)
+	53. AsyncRead/Update(with no change)
 	
 	*/
 
@@ -198,6 +208,7 @@
 		response = orderDemoModel.synchronize({
 			method: "CreateOrderDemo",
 			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
 				ok(false, "Request sent unexepectedly. Request send after inserted object has been merged");
 			}
 		});
@@ -333,7 +344,6 @@
 		response = orderDemoModel.update({
 			method: "CreateOrderDemo",
 			beforeSend: function (jqXHR, settings) {
-				console.log("6");
 				console.log(settings.data);
 				ok(false, "Request sent unexepectedly. Update getting called for insert/sync opertaion");
 			}
@@ -369,7 +379,6 @@
 		response = orderDemoModel['delete']({
 			method: "CreateOrderDemo",
 			beforeSend: function (jqXHR, settings) {
-				console.log("7");
 				console.log(settings.data);
 				ok(false, "Request sent unexepectedly. Update getting called for insert/sync opertaion");
 			}
@@ -1384,6 +1393,7 @@
 		response = orderDemoModel.synchronize({
 			method: "DeleteOrderDemo",
 			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
 		});
@@ -1420,6 +1430,7 @@
 		response = orderDemoModel['delete']({
 			method: "DeleteOrderDemo",
 			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
 		});
@@ -2235,6 +2246,7 @@
 		response = orderDemoModel.update({
 			method: "DeleteBORevertInsertNew",
 			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
 				ok(false, "Request send after reverting a deleted object");
 			}
 		});
@@ -2283,12 +2295,12 @@
 		equal(orderDemoObjects.length, 2, "Deletion of BO reverted");
 		equal(orderDemoObjects[0]._destroy, undefined, "Deletion Reverted");
 
-		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Update BO Revert Insertion and Inser a new BO" });
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Delete BO Revert Deletion and Inser a new BO" });
 		response = orderDemoModel.create({
 			method: "DeleteBORevertInsertNew",
 			beforeSend: function (jqXHR, settings) {
-				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO Revert Insertion and Inser a new BO</Notes></OrderDemo></new></tuple></UpdateBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
-				//equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Delete BO Revert Deletion and Inser a new BO</Notes></OrderDemo></new></tuple></DeleteBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			}
 		});
 		start();
@@ -2586,4 +2598,277 @@
 		start();
 	});
 
+
+	// Tests with async read
+
+	orderDemoAsyncModel = new $.cordys.model({
+		objectName: "OrderDemo",
+		isReadOnly: false,
+		defaults: {
+			namespace: "http://schemas.cordys.com/html5sdk/orderdemo/1.0",
+			async: true,
+			dataType: "json",
+			error: function () {
+				return false;
+			}
+		}
+	});
+
+	//49. Async Read 
+
+	test("AsyncRead two OrderDemo Objects", function () {
+		stop();
+		orderDemoAsyncModel.clear();
+		orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "no records in the model");
+
+		orderDemoAsyncModel.read({
+			method: "GetOrderDemoObjects",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "161"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			},
+			success: function (data, textStatus, jqXHR) {
+				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+				equal(orderDemoObjects.length, 2, "2 records found. Read two BO.");
+				equal(orderDemoObjects[0].OrderID(), "160");
+				start();
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				ok(false, "Failed in read. Error Thrown : " + errorThrown);
+			}
+		});
+		
+		orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Async Read. Success handler not executed yet.");
+		
+	});
+
+	//50. AsyncRead/ChangeBO/Update/Update(with no change) - Update an existing Business Object using update
+
+	test("Update an existing Business Object using update - AsyncRead/ChangeBO/Update/Update(with no change)", function () {
+		stop();
+
+		orderDemoAsyncModel.clear();
+		orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoAsyncModel.read({
+			method: "GetOrderDemoObjects",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "161"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			},
+			success: function (data, textStatus, jqXHR) {
+				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+				equal(orderDemoObjects.length, 2, "2 records found after read");
+				equal(orderDemoObjects[0].OrderID(), "160");
+				equal(orderDemoObjects[0].Status(), "CREATED", "Status before updating");
+				orderDemoObjects[0].Status("TEST UPDATE");
+				equal(orderDemoObjects[0].Status(), "TEST UPDATE", "Status after first update");
+				orderDemoObjects[0].Status("UPDATED");
+				equal(orderDemoObjects[0].Status(), "UPDATED", "Status after second update");
+
+				orderDemoAsyncModel.update({
+					method: "UpdateOrderDemo",
+					beforeSend: function (jqXHR, settings) {
+						var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>UPDATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateOrderDemo></SOAP:Body></SOAP:Envelope>";
+						equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+					},
+					success: function (data, textStatus, jqXHR) {
+						orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+						equal(orderDemoObjects.length, 2, "2 records found");
+						equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
+						equal($.parseJSON(jqXHR.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+						equal($.parseJSON(jqXHR.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						ok(false, "Failed in read in Read/ChangeBO/Update. Error Thrown : " + errorThrown);
+					}
+				});
+				response = orderDemoAsyncModel.update({
+					method: "UpdateOrderDemo",
+					beforeSend: function (jqXHR, settings) {
+						console.log(settings.data);
+						ok(false, "No data to be synchronized, But yet request firing");
+					}
+				});
+				equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+				start();
+				
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				ok(false, "Failed in read in Read. Error Thrown : " + errorThrown);
+				start();
+			}
+		});
+
+		orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Async Read. Success handler not executed yet.");
+
+	});
+	
+	//51. AsyncRead/Update/ChangeBO/Update/Update(with no change) - Update an existing Business Object using update
+
+	test("Update an existing Business Object using update - AsyncRead/ChangeBO/Update/Update(with no change)", function () {
+		stop();
+
+		orderDemoAsyncModel.clear();
+		orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoAsyncModel.read({
+			method: "GetOrderDemoObjects",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "161"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			},
+			success: function (data, textStatus, jqXHR) {
+				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+				equal(orderDemoObjects.length, 2, "2 records found after read");
+				equal(orderDemoObjects[0].OrderID(), "160");
+				equal(orderDemoObjects[0].Status(), "CREATED", "Status before updating");
+				orderDemoObjects[0].Status("TEST UPDATE");
+				equal(orderDemoObjects[0].Status(), "TEST UPDATE", "Status after first update");
+				orderDemoObjects[0].Status("UPDATED");
+				equal(orderDemoObjects[0].Status(), "UPDATED", "Status after second update");
+
+				orderDemoAsyncModel.update({
+					method: "UpdateOrderDemo",
+					beforeSend: function (jqXHR, settings) {
+						var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>UPDATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateOrderDemo></SOAP:Body></SOAP:Envelope>";
+						equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+					},
+					success: function (data, textStatus, jqXHR) {
+						orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+						equal(orderDemoObjects.length, 2, "2 records found");
+						equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
+						equal($.parseJSON(jqXHR.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+						equal($.parseJSON(jqXHR.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						ok(false, "Failed in read in Read/ChangeBO/Update. Error Thrown : " + errorThrown);
+					}
+				});
+				response = orderDemoAsyncModel.update({
+					method: "UpdateOrderDemo",
+					beforeSend: function (jqXHR, settings) {
+						console.log(settings.data);
+						ok(false, "No data to be synchronized, But yet request firing");
+					}
+				});
+				equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+				start();
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				ok(false, "Failed in read in Read. Error Thrown : " + errorThrown);
+				start();
+			}
+		});
+
+		response = orderDemoAsyncModel.update({
+			method: "UpdateOrderDemo",
+			beforeSend: function (jqXHR, settings) {
+				ok(false, "No data to be synchronized, But yet request firing");
+			}
+		});
+		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+	});
+
+	//52. AsyncRead/Sync Synchronize without any change   
+
+	test("AsyncRead Synchronize without any change", function () {
+		stop();
+		orderDemoAsyncModel.clear();
+		orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoAsyncModel.read({
+			method: "GetOrderDemoObjects",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "161"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			},
+			success: function (data, textStatus, jqXHR) {
+				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+				response = orderDemoAsyncModel.synchronize({
+					method: "UpdateOrderDemo",
+					beforeSend: function (jqXHR, settings) {
+						console.log(settings.data);
+						ok(false, "No data to be synchronized, But yet request firing");
+					}
+				});
+
+				equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+
+				orderDemoObjectsAfterSync = orderDemoAsyncModel.OrderDemo();
+				equal(orderDemoObjects, orderDemoObjectsAfterSync, "BOs same before and after sync");
+				start();
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				ok(false, "Failed in read in Read. Error Thrown : " + errorThrown);
+				start();
+			}
+		});
+		
+	});
+
+	//53. AsyncRead/Update(with no change)
+
+	test("AsyncRead/Update(with no change) - Update fail as no change in data", function () {
+		stop();
+		orderDemoAsyncModel.clear();
+		orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoAsyncModel.read({
+			method: "GetOrderDemoObjects",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "161"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoObjects xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>161</toOrderID></GetOrderDemoObjects></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			},
+			success: function (data, textStatus, jqXHR) {
+				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+				response = orderDemoAsyncModel.update({
+					method: "UpdateOrderDemo",
+					beforeSend: function (jqXHR, settings) {
+						console.log(settings.data);
+						ok(false, "No data to be synchronized, But yet request firing");
+					}
+				});
+				equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+
+				orderDemoObjectsAfterUpdate = orderDemoAsyncModel.OrderDemo();
+				equal(orderDemoObjects, orderDemoObjectsAfterUpdate, "BOs same before and after update");
+				start();
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				ok(false, "Failed in read in Read. Error Thrown : " + errorThrown);
+				start();
+			}
+		});
+		
+	});
+
+	
 })(window, jQuery)
