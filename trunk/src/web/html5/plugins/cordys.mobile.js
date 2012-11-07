@@ -211,7 +211,7 @@
 			case "cookies.setCookies":
 				deleteAllCookies();
 				$.each(evt.data.parameters.cookies, function(index, cookie) {
-					window.document.cookie = cookie.name + "=" + cookie.value + "; path=/cordys;";
+					if (cookie.name) window.document.cookie = cookie.name + "=" + cookie.value + "; path=/cordys;";
 				});
 				window.location.reload();
 				break;
