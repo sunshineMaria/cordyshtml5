@@ -1,0 +1,23 @@
+
+<TranslatedText
+	xmlns:cws="http://schemas.cordys.com/cws/1.0"
+	type="com.cordys.translation.TranslatedText"
+	RuntimeDocumentID="00215A60-3EB8-11E2-E5C4-B99CF071528E">
+	<DocumentID>00215A60-3EB8-11E2-E5C4-B99CF071328E</DocumentID>
+	<Name>00215A60-3EB8-11E2-E5C4-B99CF071328E</Name>
+	<Description>testForm</Description>
+	<CreatedBy>sswathi</CreatedBy>
+	<CreationDate>2012-11-14T07:30:52.81</CreationDate>
+	<Notes/>
+	<Text>testForm</Text>
+	<Language>
+		<uri
+			id="00215A60-3EB8-11E2-E453-5F902B09B26B"
+		/>
+	</Language>
+	<TextIdentifier>
+		<uri
+			id="00215A60-3EB8-11E2-E5C4-B99CF070F28E"
+		/>
+	</TextIdentifier>
+</TranslatedText>

@@ -1,33 +1,38 @@
 
 <Project
-	xmlns=""
 	xmlns:cws="http://schemas.cordys.com/cws/1.0"
 	type="com.cordys.cws.documenttypes.project.Project"
 	typeVersion="0019B980-5ADC-71DF-9C5A-1C9DE0779704"
-	RuntimeDocumentID="002170BA-4014-11E1-F31C-37EE038956C7">
-	<DocumentID>002170BA-4014-11E1-F31C-37EE038936C7</DocumentID>
+	RuntimeDocumentID="00215A60-3EB8-11E2-E453-5F902B0B526B">
+	<DocumentID>00215A60-3EB8-11E2-E453-5F902B0B326B</DocumentID>
 	<Name>HTML5 SDK Demo</Name>
 	<Description>HTML5 SDK Demo</Description>
-	<CreatedBy>csharbel</CreatedBy>
-	<CreationDate>2012-05-08T07:45:22.551</CreationDate>
+	<CreatedBy>sswathi</CreatedBy>
+	<CreationDate>2012-10-30T14:18:23.41</CreationDate>
 	<Notes/>
 	<NamespacePrefix></NamespacePrefix>
 	<ISVPackageInfo>
 		<ISVPackageInfo
 			type="com.cordys.cws.packaging.isvp.ISVPackageInfo"
-			RuntimeDocumentID="002170BA-4014-11E1-F31C-37EE038AF6C7">
-			<DocumentID>002170BA-4014-11E1-F31C-37EE038AD6C7</DocumentID>
-			<Name>Cordys Northwind</Name>
-			<Description>Cordys Northwind</Description>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-05-08T07:45:22.55</CreationDate>
+			typeVersion="00215A62-2E6A-11E1-FCAC-F71EBE253749"
+			RuntimeDocumentID="00215A60-3EB8-11E2-E453-5F902B0A926B">
+			<DocumentID>00215A60-3EB8-11E2-E453-5F902B0A726B</DocumentID>
+			<Name>My Company HTML5 SDK Demo</Name>
+			<Description>My Company HTML5 SDK Demo</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-10-30T14:18:23.412</CreationDate>
 			<Notes/>
 			<BuildNumber>0</BuildNumber>
-			<ISVPackageFileName>Cordys Northwind 1.0.0</ISVPackageFileName>
-			<ISVPackageOwner>Cordys</ISVPackageOwner>
+			<ISVPackageFileName>My Company HTML5 SDK Demo 1.0.0</ISVPackageFileName>
+			<ISVPackageOwner>My Company</ISVPackageOwner>
 			<PackageForRuntime>true</PackageForRuntime>
 			<PostISVLoaderInformation/>
-			<Product>Northwind</Product>
+			<Product>HTML5 SDK Demo</Product>
+			<SupportedDeploymentSpaces
+				xmlns:cws="http://schemas.cordys.com/cws/1.0"
+				cws:type="collection">
+				<cws:item>SYSTEM</cws:item>
+			</SupportedDeploymentSpaces>
 			<Version>1.0</Version>
 			<LicenseAgreement/>
 			<ThirdPartyAgreement/>
@@ -36,7 +41,7 @@
 	<RuntimeQualifiedName/>
 	<SourceFolder>
 		<uri
-			id="002170BA-4014-11E1-F31C-37EE038A96C7"
+			id="00215A60-3EB8-11E2-E453-5F902B0AF26B"
 			path="HTML5 SDK Demo"
 			type="com.cordys.cws.runtime.types.folder.StudioFolder"
 		/>
@@ -45,48 +50,48 @@
 		<TranslationInformation
 			type="com.cordys.translation.TranslationInformation"
 			typeVersion="b81bb9b4-8af7-470f-a5fa-864be49acb9d"
-			RuntimeDocumentID="002170BA-4014-11E1-F31C-37EE038996C7">
-			<DocumentID>002170BA-4014-11E1-F31C-37EE038976C7</DocumentID>
+			RuntimeDocumentID="00215A60-3EB8-11E2-E453-5F902B0A526B">
+			<DocumentID>00215A60-3EB8-11E2-E453-5F902B0A326B</DocumentID>
 			<Name>TranslationInformation</Name>
-			<Description/>
-			<CreatedBy>csharbel</CreatedBy>
-			<CreationDate>2012-05-08T07:45:22.549</CreationDate>
+			<Description>TranslationInformation</Description>
+			<CreatedBy>sswathi</CreatedBy>
+			<CreationDate>2012-10-30T14:18:23.412</CreationDate>
 			<Notes/>
 			<LanguagePacks>
 				<LanguagePack
 					type="com.cordys.translation.LanguagePack"
 					typeVersion="11456b87-q895-32f2-584q-58f3tlm2so65"
-					RuntimeDocumentID="002170BA-4014-11E1-F31C-37EE038A36C7">
-					<DocumentID>002170BA-4014-11E1-F31C-37EE038A16C7</DocumentID>
+					RuntimeDocumentID="00215A60-3EB8-11E2-E453-5F902B09D26B">
+					<DocumentID>00215A60-3EB8-11E2-E453-5F902B09B26B</DocumentID>
 					<Name>en-US</Name>
-					<Description/>
-					<CreatedBy>csharbel</CreatedBy>
-					<CreationDate>2012-05-08T07:45:22.551</CreationDate>
+					<Description>en-US</Description>
+					<CreatedBy>sswathi</CreatedBy>
+					<CreationDate>2012-10-30T14:18:23.411</CreationDate>
 					<Notes/>
 					<Language>English - United States</Language>
 					<Texts>
 						<uri
-							id="002170BA-4014-11E1-F31C-37EE038A56C7"
-							path="HTML5 SDK Demo/en-US_002170BA-4014-11E1-F31C-37EE038A56C7"
+							id="00215A60-3EB8-11E2-E453-5F902B09726B"
+							path="HTML5 SDK Demo/en-US_00215A60-3EB8-11E2-E453-5F902B09726B"
 							type="com.cordys.cws.associations.MergeableAssociation"
 						/>
 					</Texts>
 					<TranslationInformation>
 						<uri
-							id="002170BA-4014-11E1-F31C-37EE038976C7"
+							id="00215A60-3EB8-11E2-E453-5F902B0A326B"
 						/>
 					</TranslationInformation>
 				</LanguagePack>
 			</LanguagePacks>
 			<ProjectLanguage>
 				<uri
-					id="002170BA-4014-11E1-F31C-37EE038A16C7"
+					id="00215A60-3EB8-11E2-E453-5F902B09B26B"
 				/>
 			</ProjectLanguage>
 			<Texts>
 				<uri
-					id="002170BA-4014-11E1-F31C-37EE0389D6C7"
-					path="HTML5 SDK Demo/TranslationInformation_002170BA-4014-11E1-F31C-37EE0389D6C7"
+					id="00215A60-3EB8-11E2-E453-5F902B09F26B"
+					path="HTML5 SDK Demo/TranslationInformation_00215A60-3EB8-11E2-E453-5F902B09F26B"
 					type="com.cordys.cws.associations.MergeableAssociation"
 				/>
 			</Texts>
