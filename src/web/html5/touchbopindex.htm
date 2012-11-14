@@ -43,6 +43,7 @@
 				context: document.getElementById("mainPage"),
 				success: function() { showBusinessIdentifiers(); }
 			});
+			ko.applyBindings(taskModel, document.getElementById("detailsPage"));
 		});
 		function selectTask() {
 			return function(data) {
