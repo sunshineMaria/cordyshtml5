@@ -196,7 +196,9 @@
 		equal(orderDemoCursorModelObjects.length, 2, "2 records found");
 		equal(orderDemoCursorModelObjects[0].OrderID(), "160");
 		equal(orderDemoCursorModelObjects[1].OrderID(), "161");
-		equal($.parseJSON(paginationTestResponse.responseText).cursor['@position'], "2");
+		paginationTestResponse.always(function(responseObject) {
+			equal(responseObject.cursor['@position'], "2");
+		})
 		
 		equal(orderDemoCursorModelObjects.length,orderDemoCursorModel.getSize(),"Model Object Size");
 		equal(true,orderDemoCursorModel.hasNext(),"hasNext");
@@ -219,7 +221,9 @@
 		equal(orderDemoCursorModelObjects.length, 2, "2 records found");
 		equal(orderDemoCursorModelObjects[0].OrderID(), "162");
 		equal(orderDemoCursorModelObjects[1].OrderID(), "163");
-		equal($.parseJSON(paginationTestResponse.responseText).cursor['@position'], "4");
+		paginationTestResponse.always(function(responseObject) {
+			equal(responseObject.cursor['@position'], "4");
+		})
 		
 		equal(true,orderDemoCursorModel.hasPrevious(),"hasPrevious");
 		
@@ -236,13 +240,14 @@
 				//equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 				//Commented temorarily as the assertion is failing in firefox. Error: xmlns attribute for cursor is removed in firefox
 			}
+		}).done(function(responseObject) {
+			orderDemoCursorModelObjects = orderDemoCursorModel.OrderDemo();
+			equal(orderDemoCursorModelObjects.length, 2, "2 records found");
+			equal(orderDemoCursorModelObjects[0].OrderID(), "160");
+			equal(orderDemoCursorModelObjects[1].OrderID(), "161");
+			equal(responseObject.cursor['@position'], "2");
+			start();
 		});
-		orderDemoCursorModelObjects = orderDemoCursorModel.OrderDemo();
-		equal(orderDemoCursorModelObjects.length, 2, "2 records found");
-		equal(orderDemoCursorModelObjects[0].OrderID(), "160");
-		equal(orderDemoCursorModelObjects[1].OrderID(), "161");
-		equal($.parseJSON(paginationTestResponse.responseText).cursor['@position'], "2");
-		start();
 	});
 	
 	

@@ -250,9 +250,9 @@
 				console.log(settings.data);
 				ok(false, "Request sent unexepectedly. Request send after inserted object has been merged");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be inserted");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be inserted");
+		})
 
 		start();
 	});
@@ -287,8 +287,9 @@
 				console.log(settings.data);
 				ok(false, "Request sent unexepectedly. Request send after inserted object has been merged");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be inserted");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be inserted");
+		})
 		start();
 	});
 
@@ -322,9 +323,9 @@
 				console.log(settings.data);
 				ok(false, "Request sent unexepectedly. Request send after inserted object has been merged");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be inserted");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be inserted");
+		})
 		start();
 	});
 
@@ -345,10 +346,11 @@
 			method: "CreateOrderDemo",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
-				ok(false, "Request sent unexepectedly. Update getting called for insert/sync opertaion");
+				ok(false, "Request sent unexepectedly. Update getting called for insert/sync operation");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		response = orderDemoModel.synchronize({
 			method: "CreateOrderDemo",
@@ -380,10 +382,12 @@
 			method: "CreateOrderDemo",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
-				ok(false, "Request sent unexepectedly. Update getting called for insert/sync opertaion");
+				ok(false, "Request sent unexepectedly. Update getting called for insert/sync operation");
 			}
 		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		response.always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		response = orderDemoModel.synchronize({
 			method: "CreateOrderDemo",
@@ -476,11 +480,13 @@
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			}
 		});
-		orderDemoObjects = orderDemoModel.OrderDemo();
-		equal(orderDemoObjects.length, 2, "2 records found");
-		equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
-		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
+		response.done(function(responseObject){
+			orderDemoObjects = orderDemoModel.OrderDemo();
+			equal(orderDemoObjects.length, 2, "2 records found");
+			equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
+			equal(responseObject.tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+			equal(responseObject.tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
+		});
 
 		response = orderDemoModel.update({
 			method: "UpdateOrderDemo",
@@ -488,9 +494,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		start();
 	});
@@ -535,12 +541,13 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>UPDATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateOrderDemo></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			}
-		});
-		orderDemoObjects = orderDemoModel.OrderDemo();
-		equal(orderDemoObjects.length, 2, "2 records found");
-		equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
-		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
+		}).done(function(responseObject) {
+			orderDemoObjects = orderDemoModel.OrderDemo();
+			equal(orderDemoObjects.length, 2, "2 records found");
+			equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
+			equal(responseObject.tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+			equal(responseObject.tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
+		})
 
 		response = orderDemoModel.synchronize({
 			method: "UpdateOrderDemo",
@@ -548,9 +555,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		start();
 	});
@@ -592,10 +599,9 @@
 				console.log(settings.data);
 				ok(false, "Request should not be sent when using method Create to do an update");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be inserted");
-
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be inserted");
+		})
 
 		response = orderDemoModel.update({
 			method: "UpdateOrderDemo",
@@ -603,13 +609,13 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>UPDATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateOrderDemo></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			}
-		});
-		orderDemoObjects = orderDemoModel.OrderDemo();
-		equal(orderDemoObjects.length, 2, "2 records found");
-		equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
-		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
-
+		}).done(function(responseObject) {
+			orderDemoObjects = orderDemoModel.OrderDemo();
+			equal(orderDemoObjects.length, 2, "2 records found");
+			equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
+			equal(responseObject.tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+			equal(responseObject.tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
+		})
 		start();
 	});
 
@@ -650,10 +656,9 @@
 				console.log(settings.data);
 				ok(false, "Request should not be sent when using method Delete to do an update");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be deleted");
-
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be deleted");
+		})
 
 		response = orderDemoModel.update({
 			method: "UpdateOrderDemo",
@@ -661,13 +666,13 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>UPDATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateOrderDemo></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			}
+		}).done(function(responseObject) {
+			orderDemoObjects = orderDemoModel.OrderDemo();
+			equal(orderDemoObjects.length, 2, "2 records found");
+			equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
+			equal(responseObject.tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+			equal(responseObject.tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
 		});
-		orderDemoObjects = orderDemoModel.OrderDemo();
-		equal(orderDemoObjects.length, 2, "2 records found");
-		equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
-		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
-
 		start();
 	});
 
@@ -709,12 +714,13 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>UPDATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateOrderDemo></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			}
+		}).done(function(responseObject) {
+			orderDemoObjects = orderDemoModel.OrderDemo();
+			equal(orderDemoObjects.length, 2, "2 records found in the model");
+			equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using synchronize.");
+			equal(responseObject.tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+			equal(responseObject.tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
 		});
-		orderDemoObjects = orderDemoModel.OrderDemo();
-		equal(orderDemoObjects.length, 2, "2 records found in the model");
-		equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using synchronize.");
-		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
 
 		response = orderDemoModel.synchronize({
 			method: "UpdateOrderDemo",
@@ -722,9 +728,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		start();
 	});
@@ -765,12 +771,13 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10 10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>UPDATED</Status><Notes>test</Notes></OrderDemo></new></tuple></UpdateOrderDemo></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			}
+		}).done(function(responseObject) {
+			orderDemoObjects = orderDemoModel.OrderDemo();
+			equal(orderDemoObjects.length, 2, "2 records found in the model");
+			equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using synchronize.");
+			equal(responseObject.tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
+			equal(responseObject.tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
 		});
-		orderDemoObjects = orderDemoModel.OrderDemo();
-		equal(orderDemoObjects.length, 2, "2 records found in the model");
-		equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using synchronize.");
-		equal($.parseJSON(response.responseText).tuple.old.OrderDemo.Status, "CREATED", "Status in old Tuple");
-		equal($.parseJSON(response.responseText).tuple['new'].OrderDemo.Status, "UPDATED", "Status in new Tuple");
 
 		response = orderDemoModel.update({
 			method: "UpdateOrderDemo",
@@ -778,9 +785,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be updated, But yet request firing");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		start();
 	});
@@ -861,9 +868,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be deleted, But yet request firing");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be deleted");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be deleted");
+		})
 
 		start();
 	});
@@ -920,9 +927,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be deleted");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be deleted");
+		})
 
 		start();
 	});
@@ -979,9 +986,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be deleted");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be deleted");
+		})
 
 		start();
 	});
@@ -1038,9 +1045,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be deleted, But yet request firing");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be deleted");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be deleted");
+		})
 
 		start();
 	});
@@ -1085,9 +1092,9 @@
 				console.log(settings.data);
 				ok(false, "Request should not be sent when using method create to removeBO and sync");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be deleted");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be deleted");
+		})
 
 		response = orderDemoModel.synchronize({
 			method: "DeleteOrderDemo",
@@ -1143,9 +1150,9 @@
 				console.log(settings.data);
 				ok(false, "Request should not be sent when using method update to removeBO and sync");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be deleted");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be deleted");
+		})
 
 		response = orderDemoModel.synchronize({
 			method: "DeleteOrderDemo",
@@ -1244,9 +1251,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		orderDemoObjectsAfterSync = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects, orderDemoObjectsAfterSync, "BOs same before and after sync");
@@ -1279,8 +1286,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		orderDemoObjectsAfterUpdate = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects, orderDemoObjectsAfterUpdate, "BOs same before and after update");
@@ -1396,8 +1404,10 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
+
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 2, "no records deleted");
 		start();
@@ -1433,8 +1443,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 2, "no records deleted");
 		start();
@@ -1462,8 +1473,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 		start();
 	});
 
@@ -1489,8 +1501,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be inserted, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 		start();
 	});
 
@@ -1569,8 +1582,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be updaetd, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 		start();
 	});
 
@@ -1611,8 +1625,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 		start();
 	});
 
@@ -1690,8 +1705,9 @@
 			error: function () {
 				return false;
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		start();
 	});
@@ -1737,8 +1753,9 @@
 			error: function () {
 				return false;
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 
 		start();
 	});
@@ -2040,8 +2057,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be updated, But yet request firing");
 			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
 		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
 		start();
 	});
 
@@ -2093,8 +2111,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 		start();
 	});
 
@@ -2122,8 +2141,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 		start();
 	});
 
@@ -2151,8 +2171,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 		start();
 	});
 
@@ -2180,8 +2201,9 @@
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
-		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		})
 		start();
 	});
 
@@ -2700,8 +2722,9 @@
 						console.log(settings.data);
 						ok(false, "No data to be synchronized, But yet request firing");
 					}
+				}).always(function(responseObject, statusText) {
+					equal(statusText, "canceled", "Request cancelled as no data to be updated");
 				});
-				equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
 				start();
 				
 			},
@@ -2768,8 +2791,9 @@
 						console.log(settings.data);
 						ok(false, "No data to be synchronized, But yet request firing");
 					}
+				}).always(function(responseObject, statusText) {
+					equal(statusText, "canceled", "Request cancelled as no data to be updated");
 				});
-				equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
 				start();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -2783,8 +2807,9 @@
 			beforeSend: function (jqXHR, settings) {
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
 		});
-		equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
 	});
 
 	//52. AsyncRead/Sync Synchronize without any change   
@@ -2813,9 +2838,9 @@
 						console.log(settings.data);
 						ok(false, "No data to be synchronized, But yet request firing");
 					}
+				}).always(function(responseObject, statusText) {
+					equal(statusText, "canceled", "Request cancelled as no data to be updated");
 				});
-
-				equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
 
 				orderDemoObjectsAfterSync = orderDemoAsyncModel.OrderDemo();
 				equal(orderDemoObjects, orderDemoObjectsAfterSync, "BOs same before and after sync");
@@ -2855,8 +2880,9 @@
 						console.log(settings.data);
 						ok(false, "No data to be synchronized, But yet request firing");
 					}
+				}).always(function(responseObject, statusText) {
+					equal(statusText, "canceled", "Request cancelled as no data to be updated");
 				});
-				equal(response.statusText, "canceled", "Request cancelled as no data to be updated");
 
 				orderDemoObjectsAfterUpdate = orderDemoAsyncModel.OrderDemo();
 				equal(orderDemoObjects, orderDemoObjectsAfterUpdate, "BOs same before and after update");
