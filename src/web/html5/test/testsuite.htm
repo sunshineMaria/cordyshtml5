@@ -40,7 +40,9 @@
 	$(window).unload(saveCoverageData);
 
 	function saveCoverageData() {
-		if (__COVERAGE_REGISTRY__ && __COVERAGE_SAVE__) __COVERAGE_SAVE__();
+		if (typeof(__COVERAGE_REGISTRY__) !== "undefined"){
+			__COVERAGE_SAVE__();
+		}
 	}
 
 	function __COVERAGE_SAVE__() {
