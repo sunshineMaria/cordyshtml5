@@ -109,6 +109,8 @@ class BrowserInfo {
 		 * )
 		 */
 		$browscapInstance = new Browscap( $browscapCacheDir );
+		$browscapInstance->doAutoUpdate = false;
+		$browscapInstance->localFile = $this->context->getConf()->storage->cacheDir . '/phpbrowscap/browscap.ini';
 		// Default cache is 5 days...
 		$browscapInstance->updateInterval = 3600; // 1 hour
 
