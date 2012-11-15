@@ -1,6 +1,6 @@
 (function (window, $) {
 
-	module("Model Plugin with Templating and Crude Operations Test");
+	module("Model Plugin with Non-Tuple Protocol");
 
 	var orderDemoModel = new $.cordys.model({
 		objectName: "OrderDemo",
@@ -19,16 +19,16 @@
 		data: /GetOrdersNTPRequest/,
 		responseText: {
 			OrderDemo: [{
-						"OrderID": "160",
-						"Customer": "fj",
-						"Employee": "ss",
-						"OrderDate": "2012-07-10T10:29:16.140000001",
-						"Product": "aa",
-						"Quantity": "4",
-						"Discount": "21",
-						"Status": "RECOVERED",
-						"Notes": "Create Order Demo1"
-					},
+				"OrderID": "160",
+				"Customer": "fj",
+				"Employee": "ss",
+				"OrderDate": "2012-07-10T10:29:16.140000001",
+				"Product": "aa",
+				"Quantity": "4",
+				"Discount": "21",
+				"Status": "RECOVERED",
+				"Notes": "Create Order Demo1"
+			},
 					{
 						"OrderID": "161",
 						"Customer": "uhg",
@@ -61,7 +61,7 @@
 						"Discount": "21",
 						"Status": "RECOVERED",
 						"Notes": "Create Order Demo1"
-					},
+					}
 			]
 		}
 	});
@@ -70,7 +70,7 @@
 	test("Read with Non-tuple protocol", 4, function () {
 		stop();
 		orderDemoModel.clear();
-		orderDemoObjects = orderDemoModel.OrderDemo();
+		var orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 0, "no records in the model");
 
 		response = orderDemoModel.read({
@@ -85,7 +85,7 @@
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
-		equal(orderDemoObjects.length, 4, "2 records found. Read two BO.");
+		equal(orderDemoObjects.length, 4, "4 records found.");
 		equal(orderDemoObjects[0].OrderID(), "160");
 		start();
 	});
@@ -96,17 +96,17 @@
 		data: /CreateOrderDemoNTP/,
 		responseText: {
 			OrderDemo: {
-							"OrderID": "160",
-							"Customer": "fj",
-							"Employee": "ss",
-							"OrderDate": "2012-07-10T10:29:16.140000000",
-							"Product": "aa",
-							"Quantity": "4",
-							"Discount": "21",
-							"Cost": "123456",
-							"Status": "CREATED",
-							"Notes": "Create Order Demo"
-						}
+				"OrderID": "160",
+				"Customer": "fj",
+				"Employee": "ss",
+				"OrderDate": "2012-07-10T10:29:16.140000000",
+				"Product": "aa",
+				"Quantity": "4",
+				"Discount": "21",
+				"Cost": "123456",
+				"Status": "CREATED",
+				"Notes": "Create Order Demo"
+			}
 		}
 	});
 
@@ -114,7 +114,7 @@
 		stop();
 
 		orderDemoModel.clear();
-		orderDemoObjects = orderDemoModel.OrderDemo();
+		var orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
 
 		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Create Order Demo" });
