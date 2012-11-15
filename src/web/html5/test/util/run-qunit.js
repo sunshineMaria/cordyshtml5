@@ -113,7 +113,7 @@ page.open(system.args[1], function(status){
 
 			onLoadFinished();
 			phantom.exit((parseInt(failedNum, 10) > 0) ? 1 : 0);
-		});
+		}, 300000);
 	}
 });
 
