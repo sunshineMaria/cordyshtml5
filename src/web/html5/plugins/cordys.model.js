@@ -165,7 +165,7 @@
 									// let us get the old bo from the initial saved state
 									var oldObject = object.lock.getInitialState();
 									// get the corresponding XML for the deleted object and add it to the deleteContent
-									synchronizeContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,null)));
+									synchronizeContent.push($.cordys.json.js2xmlstring(opts.useTupleProtocol ? wrapInTuple(oldObject,null): wrapInObject(opts.objectName, oldObject)));
 								}
 								else if (sendUpdate && object.lock.isDirty()){
 									objectsToBeUpdated.push(object);
@@ -174,7 +174,7 @@
 									// the objects here are Observavables, let us unmap to get the new bo
 									var newObject = ko.mapping.toJS(object);
 									// get the corresponding XML for the object and add it to the updateContent
-									synchronizeContent.push($.cordys.json.js2xmlstring(createTuple(oldObject,newObject)));
+									synchronizeContent.push($.cordys.json.js2xmlstring(opts.useTupleProtocol ? wrapInTuple(oldObject,newObject) : wrapInObject(opts.objectName, newObject)));
 								}	
 							}
 							// not persisted - new
@@ -184,7 +184,7 @@
 								// let us get the new bo by unwrapping the Observable
 								var newObject = ko.mapping.toJS(object);
 								// get the corresponding XML for the inserted object and add it to the insertContent
-								synchronizeContent.push($.cordys.json.js2xmlstring(createTuple(null,newObject)));
+								synchronizeContent.push($.cordys.json.js2xmlstring(opts.useTupleProtocol ? wrapInTuple(null,newObject) : wrapInObject(opts.objectName, newObject)));
 
 							}
 						}
@@ -433,11 +433,14 @@
 
 		// merges the response received after insert, update, delete, sync with the current data
 		var mergeUpdate = function (data, objectsToBeUpdated){
+			var synchronizedObjects;
 			// let us get the updated tuples if we are using tuple protocol
 			if (opts.useTupleProtocol){
-				var synchronizedObjects =  $.map($.isArray(data.tuple) ? data.tuple : [data.tuple], function(tuple){
+				synchronizedObjects =  $.map($.isArray(data.tuple) ? data.tuple : [data.tuple], function(tuple){
 						return getObjects(tuple['new'] ? tuple['new'] : tuple['old'], self.objectName)
 				});
+			}else{
+				synchronizedObjects = getObjects(data, self.objectName);
 			}
 
 			for (var count=0; count<objectsToBeUpdated.length; count++){
@@ -479,17 +482,21 @@
 		
 		// create a json structure to represent the tuple with the specified old and new Business Object (can alson pass null  values 
 		// in case where the old or new is not required
-		var createTuple = function(oldBusObject, newBusObject) {
+		var wrapInTuple = function(oldBusObject, newBusObject) {
 			var tuple = {};
 			if (oldBusObject) {	
-				tuple.old = {};
-				tuple.old[self.objectName] = oldBusObject;
+				tuple.old = wrapInObject(self.objectName, oldBusObject);
 			}
 			if (newBusObject) {	
-				tuple['new'] = {};
-				tuple['new'][self.objectName] = newBusObject;
+				tuple['new'] = wrapInObject(self.objectName, newBusObject);
 			}
 			return {tuple:tuple};
+		}
+
+		var wrapInObject = function(name, object){
+			var wrappedObject = {};
+			wrappedObject[name] = object;
+			return wrappedObject;
 		}
 	};
 
