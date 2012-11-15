@@ -59,11 +59,11 @@ function loginIntoCordys(loginUrl) {
 	if ($.mobile) {
 		$.mobile.changePage( loginUrl || baseUrl + "mobilelogin.htm", { 
 			transition: "pop", 
-			changeHash: false
+			changeHash: true
 		});
 	} else {
 		window.showModalDialog(loginUrl || baseUrl + "login.htm");
-		window.location.reload();
+		//window.location.reload();
 	}
 }
 

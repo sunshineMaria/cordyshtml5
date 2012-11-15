@@ -106,7 +106,12 @@
 						//		localStorage.setItem(__cordysCheckName, ct);
 								document.cookie=__cordysCheckName+"="+ct+"; path=/cordys;";
 							}
-							window.location.reload();
+							if (window._$DefCookies) {
+								window._$DefCookies.resolve();
+								history.back();
+							} else {
+								window.location.reload();
+							}
 						}
 					},
 					error:function (e) {
