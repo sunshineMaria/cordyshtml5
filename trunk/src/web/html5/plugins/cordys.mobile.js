@@ -26,6 +26,7 @@
 	// Cookie methods
 	$.cordys.cookie = {};
 	$.cordys.cookie.getCookies = function(id) {
+		window._$DefCookies = window._$DefCookies || $.Deferred();
 		postMessageToParent({
 			message: "getCookies",
 			parameters: { 
@@ -213,7 +214,12 @@
 				$.each(evt.data.parameters.cookies, function(index, cookie) {
 					if (cookie.name) window.document.cookie = cookie.name + "=" + cookie.value + "; path=/cordys;";
 				});
-				window.location.reload();
+				if (window._$DefCookies) {
+					window._$DefCookies.resolve();
+					history.back();
+				} else {
+					window.location.reload();
+				}
 				break;
 			case "camera.getPicture.onSuccess":
 				$.cordys.mobile.camera.deferred.resolve(evt.data.parameters);
