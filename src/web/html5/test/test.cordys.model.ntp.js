@@ -402,7 +402,6 @@
 			}
 		});
 		response.done(function(responseObject){
-		debugger;
 			orderDemoObjects = orderDemoModel.OrderDemo();
 			equal(orderDemoObjects.length, 4, "4 records found");
 			equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
@@ -582,7 +581,6 @@
 		response = orderDemoModel.update({
 			method: "UpdateNTPOrderDemo",
 			beforeSend: function (jqXHR, settings) {
-				console.log(settings.data);
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateNTPOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>UPDATED</Status><Notes>Create Order Demo1</Notes></OrderDemo></UpdateNTPOrderDemo></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			}
@@ -1280,7 +1278,6 @@
 		response = orderDemoModel.create({
 			method: "CreateNTPBODuplicateOrderID",
 			beforeSend: function (jqXHR, settings) {
-			console.log(settings.data);
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><CreateNTPBODuplicateOrderID xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>test</Notes></OrderDemo></CreateNTPBODuplicateOrderID></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			},
