@@ -71,7 +71,7 @@
 
 
 
-	orderDemoModel = new $.cordys.model({
+	var orderDemoModel = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -180,7 +180,7 @@
 
 	//2. AddBO/Create/Sync(with no change) - Insert a new Businss Object using create
 
-	test("Insert a new Businss Object using create - AddBO/Create/Sync(with no change)", 7, function () {
+	test("Insert a new Businss Object using create - AddBO/Create/Sync(with no change)", function () {
 		stop();
 
 		orderDemoModel.clear();
@@ -211,6 +211,8 @@
 				console.log(settings.data);
 				ok(false, "Request sent unexepectedly. Request send after inserted object has been merged");
 			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be inserted");
 		});
 		start();
 	});
@@ -252,7 +254,7 @@
 			}
 		}).always(function(responseObject, statusText) {
 			equal(statusText, "canceled", "Request cancelled as no data to be inserted");
-		})
+		});
 
 		start();
 	});
@@ -800,7 +802,7 @@
 				{
 					old: {
 						OrderDemo: {
-							"OrderID": "161",
+							"OrderID": "160",
 							"Customer": "fj",
 							"Employee": "ss",
 							"OrderDate": "2012-07-10T10:29:16.140000000",
@@ -860,7 +862,7 @@
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 1, "Record in queue for deletion is removed using delte method. 1 record in model object after sync");
 
-		equal(orderDemoObjects[0].OrderID(), "161", "OrderID of record deleted");
+		equal(orderDemoObjects[0].OrderID(), "161", "Record with ID 160 deleted. So OrderID of first record in model object now is 161");
 
 		response = orderDemoModel['delete']({
 			method: "DeleteOrderDemo",
@@ -1171,34 +1173,36 @@
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
 		data: /ReadOrderDemoObjectInvalidInputParameter/,
-		responseText: "<SOAP:Fault xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">\
-				<faultcode xmlns:ns0=\"http://schemas.xmlsoap.org/soap/envelope/\"></faultcode>\
-				<faultstring xml:lang=\"en-US\">Database update failed.</faultstring>\
-				<faultactor>http://schemas.cordys.com/html5sdk/orderdemo/1.0</faultactor>\
-				<detail>\
-					<cordys:FaultDetails xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
-						<cordys:LocalizableMessage xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
-							<cordys:MessageCode xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">Cordys.DBConnectors.Messages.databaseUpdateError</cordys:MessageCode>\
-						</cordys:LocalizableMessage>\
-					</cordys:FaultDetails>\
-					<UpdateOrderDemo>\
-						<tuple>\
-							<new>\
-								<OrderDemo>\
-									<OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>1</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Read OrderDemo Object Invalid Input Parameter</Notes>\
-								</OrderDemo>\
-							</new>\
-							<error>\
-								<elem>Failed to map parameter OrderDate to the appropriate database data type</elem>\
-								<cordys:LocalizableMessage xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
-									<cordys:MessageCode>Cordys.Database.Native.Messages.paramConversionError</cordys:MessageCode>\
-									<cordys:Insertion>OrderDate</cordys:Insertion>\
-								</cordys:LocalizableMessage>\
-							</error>\
-						</tuple>\
-					</UpdateOrderDemo>\
-				</detail>\
-			</SOAP:Fault>"
+		responseText: "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">\
+						<SOAP:Header xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">\
+							<header xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns=\"http://schemas.cordys.com/General/1.0/\">\
+								<msg-id>00215A60-3EB8-11E2-E5E1-79042180D6EA</msg-id>\
+								<license>License has expired since 162 day(s)</license>\
+							</header>\
+						</SOAP:Header>\
+						<SOAP:Body>\
+							<SOAP:Fault>\
+								<faultcode xmlns:ns0=\"http://schemas.xmlsoap.org/soap/envelope/\">ns0:Server</faultcode>\
+								<faultstring xml:lang=\"en-US\">Database read failed.</faultstring>\
+								<faultactor>http://schemas.cordys.com/html5sdk/orderdemo/1.0</faultactor>\
+								<detail>\
+									<cordys:FaultDetails xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
+										<cordys:LocalizableMessage xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
+											<cordys:MessageCode xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">Cordys.DBConnectors.Messages.databaseReadError</cordys:MessageCode>\
+										</cordys:LocalizableMessage>\
+									</cordys:FaultDetails>\
+									<error xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\" TYPE=\"Enumeration\">\
+										<elem>Failed to map parameter OrderID to the appropriate database data type</elem>\
+										<elem>Error while setting the parameters to the request</elem><elem>Executing statement is not completed</elem>\
+											<cordys:LocalizableMessage xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
+												<cordys:MessageCode>Cordys.Database.Native.Messages.paramConversionError</cordys:MessageCode>\
+												<cordys:Insertion>OrderID</cordys:Insertion>\
+											</cordys:LocalizableMessage>\
+									</error>\
+								</detail>\
+							</SOAP:Fault>\
+						</SOAP:Body>\
+					</SOAP:Envelope>"
 	});
 
 	//20. Read Business Object with Invalid Input Parameter
@@ -1218,6 +1222,9 @@
 			beforeSend: function (jqXHR, settings) {
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><ReadOrderDemoObjectInvalidInputParameter xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderID>a</OrderID></ReadOrderDemoObjectInvalidInputParameter></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				return false;
 			}
 		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
@@ -1366,9 +1373,9 @@
 			}
 		});
 
-		orderDemoObjects = orderDemoObjects = orderDemoModel.OrderDemo();
+		orderDemoObjects = orderDemoModel.OrderDemo();
 		orderDemoModel.removeBusinessObject(orderDemoObjects[2]);
-		orderDemoObjects = orderDemoObjects = orderDemoModel.OrderDemo();
+		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 2);
 
 		start();
