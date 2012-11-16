@@ -139,7 +139,7 @@
 
 
 		response = orderDemoModel.synchronize({
-			method: "CreateOrderDemo",
+			method: "CreateNTPOrderDemo",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
 				ok(false, "Request sent unexepectedly. Request send after inserted object has been merged");
@@ -836,7 +836,7 @@
 		equal(orderDemoObjects[0].OrderID(), "161", "Record with ID 160 deleted. So OrderID of first record in model object now is 161");
 
 		response = orderDemoModel.synchronize({
-			method: "DeleteOrderDemo",
+			method: "DeleteNTPOrderDemo",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
 				ok(false, "No data to be deleted, But yet request firing");
@@ -895,7 +895,7 @@
 		equal(orderDemoObjects[0].OrderID(), "161", "Record with ID 160 deleted. So OrderID of first record in model object now is 161");
 
 		response = orderDemoModel.synchronize({
-			method: "DeleteOrderDemo",
+			method: "DeleteNTPOrderDemo",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
 				ok(false, "No data to be deleted, But yet request firing");
@@ -954,7 +954,7 @@
 		equal(orderDemoObjects[0].OrderID(), "161", "Record with ID 160 deleted. So OrderID of first record in model object now is 161");
 
 		response = orderDemoModel['delete']({
-			method: "DeleteOrderDemo",
+			method: "DeleteNTPOrderDemo",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
 				ok(false, "No data to be deleted, But yet request firing");
@@ -1001,7 +1001,7 @@
 		equal(orderDemoObjects.length, 4, "first record in queue for deletion. Record still in model object");
 
 		response = orderDemoModel.create({
-			method: "DeleteOrderDemo",
+			method: "DeleteNTPOrderDemo",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
 				ok(false, "No data to be deleted, But yet request firing");
@@ -1060,7 +1060,7 @@
 		equal(orderDemoObjects.length, 4, "first record in queue for deletion. Record still in model object");
 
 		response = orderDemoModel.update({
-			method: "DeleteOrderDemo",
+			method: "DeleteNTPOrderDemo",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
 				ok(false, "No data to be deleted, But yet request firing");
@@ -1174,7 +1174,7 @@
 			}
 		}).always(function(responseObject, statusText) {
 			equal(statusText, "canceled", "Request cancelled as no data to be updated");
-		})
+		});
 
 		orderDemoObjectsAfterSync = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects, orderDemoObjectsAfterSync, "BOs same before and after sync");
@@ -1209,7 +1209,7 @@
 			}
 		}).always(function(responseObject, statusText) {
 			equal(statusText, "canceled", "Request cancelled as no data to be updated");
-		})
+		});
 
 		orderDemoObjectsAfterUpdate = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects, orderDemoObjectsAfterUpdate, "BOs same before and after update");
@@ -1229,22 +1229,6 @@
 							<cordys:MessageCode xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">Cordys.DBConnectors.Messages.databaseUpdateError</cordys:MessageCode>\
 						</cordys:LocalizableMessage>\
 					</cordys:FaultDetails>\
-					<UpdateOrderDemo>\
-						<tuple>\
-							<new>\
-								<OrderDemo>\
-									<OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000000</OrderDate><Product>aa</Product><Quantity>1</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Create OrderDemo Object Duplicate OrderID</Notes>\
-								</OrderDemo>\
-							</new>\
-							<error>\
-								<elem>Failed to map parameter OrderDate to the appropriate database data type</elem>\
-								<cordys:LocalizableMessage xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
-									<cordys:MessageCode>Cordys.Database.Native.Messages.paramConversionError</cordys:MessageCode>\
-									<cordys:Insertion>OrderDate</cordys:Insertion>\
-								</cordys:LocalizableMessage>\
-							</error>\
-						</tuple>\
-					</UpdateOrderDemo>\
 				</detail>\
 			</SOAP:Fault>"
 	});
@@ -1326,7 +1310,7 @@
 			}
 		}).always(function(responseObject, statusText) {
 			equal(statusText, "canceled", "Request cancelled as no data to be updated");
-		})
+		});
 
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 4, "no records deleted");
@@ -1365,7 +1349,7 @@
 			}
 		}).always(function(responseObject, statusText) {
 			equal(statusText, "canceled", "Request cancelled as no data to be updated");
-		})
+		});
 		orderDemoObjects = orderDemoModel.OrderDemo();
 		equal(orderDemoObjects.length, 4, "no records deleted");
 		start();
@@ -1388,14 +1372,14 @@
 		equal(orderDemoObjects.length, 0, "no record found after insertion reverted");
 
 		response = orderDemoModel.synchronize({
-			method: "CreateBORevertInsertion",
+			method: "CreateNTPBORevertInsertion",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
 				ok(false, "No data to be synchronized, But yet request firing");
 			}
 		}).always(function(responseObject, statusText) {
 			equal(statusText, "canceled", "Request cancelled as no data to be updated");
-		})
+		});
 		start();
 	});
 
@@ -1416,17 +1400,899 @@
 		equal(orderDemoObjects.length, 0, "no record found after insertion reverted");
 
 		response = orderDemoModel.create({
-			method: "CreateBORevertInsertion",
+			method: "CreateNTPBORevertInsertion",
 			beforeSend: function (jqXHR, settings) {
 				console.log(settings.data);
 				ok(false, "No data to be inserted, But yet request firing");
 			}
 		}).always(function(responseObject, statusText) {
 			equal(statusText, "canceled", "Request cancelled as no data to be updated");
-		})
+		});
 		start();
 	});
 
-	
+	//28. read/updateBO/revert/update - Update a BO and revert updation 
 
+	test("Update OrderDemo Object Revert Updation - read/updateBO/revert/update", function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records in model after read");
+
+		var statusBeforeUpdate = orderDemoObjects[0].Status();
+		orderDemoObjects[0].Status("UPDATED");
+		var orderDemoObjectsAfterUpdate = orderDemoModel.OrderDemo();
+		notEqual(statusBeforeUpdate, orderDemoObjectsAfterUpdate[0].Status(), "Record updated in the model object");
+
+		orderDemoModel.revert();
+		orderDemoObjectsRevertUpdate = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects, orderDemoObjectsRevertUpdate, "update reverted in the record");
+
+		response = orderDemoModel.update({
+			method: "UpdateBORevertUpdation",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "No data to be updaetd, But yet request firing");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+		start();
+	});
+	
+	//29. read /updateBO/revert/sync - Update OrderDemo Object Revert Updation
+
+	test("Update OrderDemo Object Revert Updation - read /updateBO/revert/sync", function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records in model after read");
+
+		var statusBeforeUpdate = orderDemoObjects[0].Status();
+		orderDemoObjects[0].Status("UPDATED");
+		var orderDemoObjectsAfterUpdate = orderDemoModel.OrderDemo();
+		notEqual(statusBeforeUpdate, orderDemoObjectsAfterUpdate[0].Status(), "Record updated in the model object");
+
+		orderDemoModel.revert();
+		orderDemoObjectsRevertUpdate = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects, orderDemoObjectsRevertUpdate, "update reverted in the record");
+
+		response = orderDemoModel.synchronize({
+			method: "UpdateBORevertUpdation",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "No data to be updaetd, But yet request firing");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+		start();
+	});
+
+	//30. read/removeBO/revert/delete - Delete a BO and revert deletion
+
+	test("Delete OrderDemo Object Revert Deletion - read/removeBO/revert/delete", function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects[0]._destroy, true, "Destroy flag is set for the record");
+
+		orderDemoModel.revert();
+
+		orderDemoObjectsRevertDelete = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects, orderDemoObjectsRevertDelete, "delete reverted in the record");
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects[0]._destroy, undefined, "Destroy flag is removed for the record");
+
+		response = orderDemoModel['delete']({
+			method: "DeleteBORevertDeletion",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "No data to be deleted, But yet request firing");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+
+		start();
+	});
+
+	//31. read/removeBO/revert/sync - Delete OrderDemo Object Revert Deletion
+
+	test("Delete OrderDemo Object Revert Deletion - read/removeBO/revert/sync", function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects[0]._destroy, true, "Destroy flag is set for the record");
+
+		orderDemoModel.revert();
+
+		orderDemoObjectsRevertDelete = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects, orderDemoObjectsRevertDelete, "delete reverted in the record");
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects[0]._destroy, undefined, "Destroy flag is removed for the record");
+
+		response = orderDemoModel.synchronize({
+			method: "DeleteBORevertDeletion",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "No data to be deleted, But yet request firing");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+
+		start();
+	});
+
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /InsertBORevertInsertNew/,
+		responseText: {
+				OrderDemo: {
+					"OrderID": "160",
+					"Customer": "fj",
+					"Employee": "ss",
+					"OrderDate": "2012-07-10T10:29:16.140000000",
+					"Product": "aa",
+					"Quantity": "4",
+					"Discount": "21",
+					"Cost": "123456",
+					"Status": "CREATED",
+					"Notes": "Insert BO Revert Insertion and Inser a new BO"
+				}
+		}
+	});
+
+	//32. addBO/revert/addBO/sync - Add a BO, revert inserion and insert BO 
+
+	test("Insert BO Revert Insertion and Insert a new BO - addBO/revert/addBO/sync", 5, function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "BO for revertion" });
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 1, "1 record added to the model object");
+
+		orderDemoModel.revert();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "added BO is reverted");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Insert BO Revert Insertion and Inser a new BO" });
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 1, "1 record added to the model object");
+
+		response = orderDemoModel.synchronize({
+			method: "InsertBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><InsertBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Insert BO Revert Insertion and Inser a new BO</Notes></OrderDemo></InsertBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		start();
+	});
+
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /UpdateBOInsertNew/,
+		responseText: {
+			OrderDemo: [{
+						"OrderID": "160",
+						"Customer": "fj",
+						"Employee": "ss",
+						"OrderDate": "2012-07-10T10:29:16.140000000",
+						"Product": "aa",
+						"Quantity": "4",
+						"Discount": "21",
+						"Cost": "123456",
+						"Status": "UPDATED",
+						"Notes": "Updated"
+					},
+					{
+						"OrderID": "170",
+						"Customer": "fj",
+						"Employee": "ss",
+						"OrderDate": "2012-07-10T10:29:16.140000000",
+						"Product": "aa",
+						"Quantity": "4",
+						"Discount": "21",
+						"Cost": "123456",
+						"Status": "CREATED",
+						"Notes": "Update BO and Insert a new BO"
+					}
+			]
+		}		
+	});
+
+	//33. read/updateBO/addBO/sync - Update a BO and insert BO
+
+	test("Update BO and Insert a new BO - read/updateBO/addBO/sync", 7, function () {
+		stop();
+
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records found after read");
+		orderDemoObjects[0].Status("UPDATED");
+		equal(orderDemoObjects[0].Status(), "UPDATED", "Status after update");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Update BO and Insert a new BO" });
+		response = orderDemoModel.synchronize({
+			method: "UpdateBOInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateBOInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>UPDATED</Status><Notes>Create Order Demo1</Notes></OrderDemo><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO and Insert a new BO</Notes></OrderDemo></UpdateBOInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 5, "5 records found after sync");
+		equal(orderDemoObjects[0].Status(), "UPDATED", "Comparing the Updated Record");
+		start();
+	});
+
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /UpdateBORevertInsertNew/,
+		responseText: {
+			tuple:
+				{
+					'new': {
+						OrderDemo: {
+							"OrderID": "160",
+							"Customer": "fj",
+							"Employee": "ss",
+							"OrderDate": "2012-07-10T10:29:16.140000000",
+							"Product": "aa",
+							"Quantity": "4",
+							"Discount": "21",
+							"Cost": "123456",
+							"Status": "CREATED",
+							"Notes": "Update BO Revert Insertion and Inser a new BO"
+						}
+					}
+				}
+		}
+	});
+
+	//34. Read/updateBO/revert/addBO/sync - Update a BO, revert updation and insert BO  
+
+	test("Update BO Revert Update and Insert a new BO - Read/updateBO/revert/addBO/sync", 6, function () {
+		stop();
+
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records in model after read");
+
+		statusBeforeUpdate = orderDemoObjects[0].Status();
+		orderDemoObjects[0].Status("UPDATED");
+		orderDemoObjectsAfterUpdate = orderDemoModel.OrderDemo();
+		notEqual(statusBeforeUpdate, orderDemoObjectsAfterUpdate[0].Status(), "Record updated in the model object");
+
+		orderDemoModel.revert();
+		orderDemoObjectsRevertUpdate = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects, orderDemoObjectsRevertUpdate, "update reverted in the record");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Update BO Revert Insertion and Inser a new BO" });
+		response = orderDemoModel.synchronize({
+			method: "UpdateBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO Revert Insertion and Inser a new BO</Notes></OrderDemo></UpdateBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		start();
+	});
+
+	//35. Read/updateBO/revert/addBO/create - Update BO Revert Update and Insert a new BO
+
+	test("Update BO Revert Update and Insert a new BO - Read/updateBO/revert/addBO/create", 6, function () {
+		stop();
+		
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records in model after read");
+
+		statusBeforeUpdate = orderDemoObjects[0].Status();
+		orderDemoObjects[0].Status("UPDATED");
+		orderDemoObjectsAfterUpdate = orderDemoModel.OrderDemo();
+		notEqual(statusBeforeUpdate, orderDemoObjectsAfterUpdate[0].Status(), "Record updated in the model object");
+
+		orderDemoModel.revert();
+		orderDemoObjectsRevertUpdate = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects, orderDemoObjectsRevertUpdate, "update reverted in the record");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Update BO Revert Insertion and Inser a new BO" });
+		response = orderDemoModel.create({
+			method: "UpdateBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO Revert Insertion and Inser a new BO</Notes></OrderDemo></UpdateBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		start();
+	});
+
+	//36. Read/updateBO/revert/addBO/update - Update BO Revert Update and Insert a new BO
+
+	test("Update BO Revert Update and Insert a new BO - Read/updateBO/revert/addBO/update", 6, function () {
+		stop();
+
+		
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records in model after read");
+
+		statusBeforeUpdate = orderDemoObjects[0].Status();
+		orderDemoObjects[0].Status("UPDATED");
+		orderDemoObjectsAfterUpdate = orderDemoModel.OrderDemo();
+		notEqual(statusBeforeUpdate, orderDemoObjectsAfterUpdate[0].Status(), "Record updated in the model object");
+
+		orderDemoModel.revert();
+		orderDemoObjectsRevertUpdate = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects, orderDemoObjectsRevertUpdate, "update reverted in the record");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Update BO Revert Insertion and Inser a new BO" });
+		response = orderDemoModel.update({
+			method: "UpdateBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "No data to be updated, But yet request firing");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+		start();
+	});
+
+	//37. addBO/removeBO/Sync - Insert a BO, delete the inserted BO and sync
+
+	test("Insert a BO, delete the inserted BO and sync - addBO/removeBO/Sync", function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "BO for revertion" });
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 1, "1 record in model after addBO");
+		equal(ko.isObservable(orderDemoModel.OrderDemo()[0].Employee), true, "Observable created for the attribute of the Business Obejct added");
+		equal(orderDemoModel.OrderDemo()[0].Employee(), "ss", "Observable for the attribute of the Business Obejct added returns the correct value");
+
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "added BO is deleted");
+
+		response = orderDemoModel.synchronize({
+			method: "DeleteAfterInsertBO",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "No data to be synchronized, But yet request firing");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+		start();
+	});
+
+	//38. addBO/removeBO/Create 
+
+	test("addBO/removeBO/Create", function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "BO for revertion" });
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 1, "1 record in model after addBO");
+		equal(ko.isObservable(orderDemoModel.OrderDemo()[0].Employee), true, "Observable created for the attribute of the Business Obejct added");
+		equal(orderDemoModel.OrderDemo()[0].Employee(), "ss", "Observable for the attribute of the Business Obejct added returns the correct value");
+
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "added BO is deleted");
+
+		response = orderDemoModel.create({
+			method: "DeleteAfterInsertBO",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "No data to be synchronized, But yet request firing");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+		start();
+	});
+
+	//39. addBO/removeBO/Delete
+
+	test("addBO/removeBO/Delete", function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "BO for revertion" });
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 1, "1 record in model after addBO");
+		equal(ko.isObservable(orderDemoModel.OrderDemo()[0].Employee), true, "Observable created for the attribute of the Business Obejct added");
+		equal(orderDemoModel.OrderDemo()[0].Employee(), "ss", "Observable for the attribute of the Business Obejct added returns the correct value");
+
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "added BO is deleted");
+
+		response = orderDemoModel['delete']({
+			method: "DeleteAfterInsertBO",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "No data to be synchronized, But yet request firing");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+		start();
+	});
+
+	//40. addBO/removeBO/Update
+
+	test("addBO/removeBO/Update", function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "BO for revertion" });
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 1, "1 record in model after addBO");
+		equal(ko.isObservable(orderDemoModel.OrderDemo()[0].Employee), true, "Observable created for the attribute of the Business Obejct added");
+		equal(orderDemoModel.OrderDemo()[0].Employee(), "ss", "Observable for the attribute of the Business Obejct added returns the correct value");
+
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "added BO is deleted");
+
+		response = orderDemoModel.update({
+			method: "DeleteAfterInsertBO",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "No data to be synchronized, But yet request firing");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+		start();
+	});
+
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /DeleteBORevertInsertNew/,
+		responseText: {
+				OrderDemo: {
+					"OrderID": "160",
+					"Customer": "fj",
+					"Employee": "ss",
+					"OrderDate": "2012-07-10T10:29:16.140000000",
+					"Product": "aa",
+					"Quantity": "4",
+					"Discount": "21",
+					"Cost": "123456",
+					"Status": "CREATED",
+					"Notes": "Insert BO Revert Insertion and Inser a new BO"
+				}
+		}
+	});
+
+	//41. Read/removeBO/revert/addBO/update/sync - Delete a BO, revert deletion and insert BO
+
+	test("Delete BO Revert Deletion and Insert a new BO - Read/removeBO/revert/addBO/update/sync", function () {
+		stop();
+
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records in model after read");
+
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+		equal(orderDemoObjects[0]._destroy, true, "Destroy flag is set for the record");
+		orderDemoModel.revert();
+
+		orderDemoObjectsRevertDelete = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects, orderDemoObjectsRevertDelete, "delete reverted in the record");
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "Deletion of BO reverted");
+		equal(orderDemoObjects[0]._destroy, undefined, "Deletion Reverted");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Update BO Revert Insertion and Inser a new BO" });
+		response = orderDemoModel.update({
+			method: "DeleteBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "Request send after reverting a deleted object");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+
+		response = orderDemoModel.synchronize({
+			method: "DeleteBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO Revert Insertion and Inser a new BO</Notes></OrderDemo></DeleteBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML. Should only have the inserted object");
+			}
+		});
+
+		response = orderDemoModel.update({
+			method: "DeleteBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				ok(false, "Request send after reverting a deleted object");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+
+		start();
+	});
+
+	//42. Read/removeBO/revert/addBO/create - Delete BO Revert Deletion and Insert a new BO
+
+	test("Delete BO Revert Deletion and Insert a new BO - Read/removeBO/revert/addBO/create", function () {
+		stop();
+
+		orderDemoModel.clear();
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "Clearing model object. no records in the model");
+
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records in model after read");
+
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+		equal(orderDemoObjects[0]._destroy, true, "Destroy flag is set for the record");
+		orderDemoModel.revert();
+
+		orderDemoObjectsRevertDelete = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects, orderDemoObjectsRevertDelete, "delete reverted in the record");
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "Deletion of BO reverted");
+		equal(orderDemoObjects[0]._destroy, undefined, "Deletion Reverted");
+
+		orderDemoModel.addBusinessObject({ Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Cost: "123456", Status: "CREATED", Notes: "Update BO Revert Insertion and Inser a new BO" });
+		response = orderDemoModel['delete']({
+			method: "DeleteBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				console.log(settings.data);
+				ok(false, "Request send after reverting a deleted object");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+
+		response = orderDemoModel.create({
+			method: "DeleteBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteBORevertInsertNew xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Cost>123456</Cost><Status>CREATED</Status><Notes>Update BO Revert Insertion and Inser a new BO</Notes></OrderDemo></DeleteBORevertInsertNew></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML. Should only have the inserted object");
+			}
+		});
+
+		response = orderDemoModel.update({
+			method: "DeleteBORevertInsertNew",
+			beforeSend: function (jqXHR, settings) {
+				ok(false, "Request send after reverting a deleted object");
+			}
+		}).always(function(responseObject, statusText) {
+			equal(statusText, "canceled", "Request cancelled as no data to be updated");
+		});
+
+		start();
+	});
+
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /UpdateNTPBOOnDeletedBO/,
+		responseText: "<SOAP:Fault xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">\
+						<faultcode xmlns:ns0=\"http://schemas.xmlsoap.org/soap/envelope/\"></faultcode>\
+						<faultstring xml:lang=\"en-US\">Database update failed.</faultstring>\
+						<faultactor>http://schemas.cordys.com/html5sdk/orderdemo/1.0</faultactor>\
+						<detail>\
+							<cordys:FaultDetails xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
+								<cordys:LocalizableMessage xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
+									<cordys:MessageCode xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">Cordys.DBConnectors.Messages.databaseUpdateError</cordys:MessageCode>\
+								</cordys:LocalizableMessage>\
+							</cordys:FaultDetails>\
+						</detail>\
+					</SOAP:Fault>"
+	});
+
+	//43. Read/removeBO/upateBO/Sync - Update BO on BO that is deleted
+
+	test("Update BO on BO that is deleted - Read/removeBO/upateBO/Sync", 5, function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records in model after read");
+
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+		equal(orderDemoObjects[0]._destroy, true, "Destroy flag is set for the record");
+
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		orderDemoObjects[0].Notes("Updation on Deleted BO");
+		var updatedNotes = orderDemoObjects[0].Notes();
+
+		response = orderDemoModel.synchronize({
+			method: "UpdateNTPBOOnDeletedBO",
+			error: function () {
+				return false;
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateNTPBOOnDeletedBO xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>RECOVERED</Status><Notes>Create Order Demo1</Notes></OrderDemo></UpdateNTPBOOnDeletedBO></SOAP:Body></SOAP:Envelope>";
+				notEqual($($.parseXML(settings.data)).find("Notes").text(), updatedNotes);
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		start();
+	});
+		
+	//44. Read/removeBO/upateBO/Delete - Update BO on BO that is deleted
+
+	test("Update BO on BO that is deleted - Read/removeBO/upateBO/Delete", 5, function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records in model after read");
+
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+		equal(orderDemoObjects[0]._destroy, true, "Destroy flag is set for the record");
+
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		orderDemoObjects[0].Notes("Updation on Deleted BO");
+		var updatedNotes = orderDemoObjects[0].Notes();
+
+		response = orderDemoModel['delete']({
+			method: "UpdateNTPBOOnDeletedBO",
+			error: function () {
+				return false;
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateNTPBOOnDeletedBO xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>RECOVERED</Status><Notes>Create Order Demo1</Notes></OrderDemo></UpdateNTPBOOnDeletedBO></SOAP:Body></SOAP:Envelope>";
+				notEqual($($.parseXML(settings.data)).find("Notes").text(), updatedNotes);
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		start();
+	});
+
+	$.mockjax({
+		url: '*/com.eibus.web.soap.Gateway.wcp',
+		data: /ReadNTPBOOnDeletedBO/,
+		responseText: "<SOAP:Fault xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">\
+						<faultcode xmlns:ns0=\"http://schemas.xmlsoap.org/soap/envelope/\"></faultcode>\
+						<faultstring xml:lang=\"en-US\">Database update failed.</faultstring>\
+						<faultactor>http://schemas.cordys.com/html5sdk/orderdemo/1.0</faultactor>\
+						<detail>\
+							<cordys:FaultDetails xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
+								<cordys:LocalizableMessage xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">\
+									<cordys:MessageCode xmlns:cordys=\"http://schemas.cordys.com/General/1.0/\">Cordys.DBConnectors.Messages.databaseUpdateError</cordys:MessageCode>\
+								</cordys:LocalizableMessage>\
+							</cordys:FaultDetails>\
+						</detail>\
+					</SOAP:Fault>"
+	});
+
+	//45. Read/removeBO/Sync/Read - Read BO on BO that is deleted
+
+	test("Read BO on BO that is deleted - Read/removeBO/Sync/Read", function () {
+		stop();
+		orderDemoModel.clear();
+		orderDemoModel.read({
+			method: "GetOrdersNTPRequest",
+			parameters: {
+				fromOrderID: "160",
+				toOrderID: "163"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 4, "4 records found after read");
+
+		orderDemoModel.removeBusinessObject(orderDemoObjects[0]);
+		equal(orderDemoObjects[0]._destroy, true, "Destroy flag is set for the record with OrderID 160");
+
+		response = orderDemoModel.synchronize({
+			method: "DeleteNTPOrderDemo",
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><DeleteNTPOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>RECOVERED</Status><Notes>Create Order Demo1</Notes></OrderDemo></DeleteNTPOrderDemo></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 3, "3 records found. 1 record deleted");
+		orderDemoModel.clear();
+		response = orderDemoModel.read({
+			method: "ReadNTPBOOnDeletedBO",
+			parameters: {
+				OrderID: "160"
+			},
+			beforeSend: function (jqXHR, settings) {
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><ReadNTPBOOnDeletedBO xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderID>160</OrderID></ReadNTPBOOnDeletedBO></SOAP:Body></SOAP:Envelope>";
+				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+			},
+			error: function () {
+				return false;
+			}
+		});
+		orderDemoObjects = orderDemoModel.OrderDemo();
+		equal(orderDemoObjects.length, 0, "no record found");
+
+		start();
+	});
+		
 })(window, jQuery)
