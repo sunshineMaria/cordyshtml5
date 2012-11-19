@@ -32,10 +32,6 @@ function Server(options) {
 	this.username = ko.observable(options.username);
 	this.password = ko.observable(options.password || '');
 	
-	this.deleteCookiesUrl = ko.computed(function() {
-		return this.serverURL() + '/html5/touchbop.deletecookies.htm';
-	}, this);
-	
 	this.loginUrl = ko.computed(function() {
 		return this.serverURL() + '/com.eibus.web.soap.Gateway.wcp';
 	}, this);
@@ -94,8 +90,13 @@ function Server(options) {
 			value: ko.observable(options.cookies ? options.cookies.saml.value : ''),
 			time: ko.observable(options.cookies ? new Date(options.cookies.saml.time) : new Date()),
 			valid: ko.observable(isSamlValid)
-		}
+		},
+		path: '/cordys'
 	};
+	
+	this.deleteCookiesUrl = ko.computed(function() {
+		return this.serverURL() + '/html5/touchbop.deletecookies.htm'+ '?cookiepath=' + this.cookies.path;
+	}, this);
 	
 	(function() {
 		
@@ -232,7 +233,7 @@ Server.prototype = {
 		return 'Location: ' + this.location() + ', User: ' + this.username() + ', Organization: ' + this.organization();
 	},
 	getTouchBopIndexUrl: function(id) {
-		return this.serverURL() + '/html5/touchbopindex.htm?startfrom=native&organization=' + this.organization() + '&serverId=' + id;
+		return this.serverURL() + '/html5/touchbopindex.htm?startfrom=native&organization=' + this.organization() + '&serverId=' + id + '&cookiepath=' + this.cookies.path;
 	},
 	prelogin: function() {
 		var self = this, 
@@ -275,6 +276,8 @@ Server.prototype = {
 			
 			self.cookies.saml.name($data.find('SamlArtifactCookieName').text());
 			self.cookies.ct.name($data.find('CheckName').text());
+			var cookiePath = $data.find('SamlArtifactCookiePath').text();
+			if (cookiePath) self.cookies.path = cookiePath;
 			
 			// save change to localStorage
 			window.__sharedViewModel__.instances.notifySubscribers(undefined, undefined);
