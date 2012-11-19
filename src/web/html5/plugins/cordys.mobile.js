@@ -210,13 +210,16 @@
 		}
 		switch (evt.data.message) {
 			case "cookies.setCookies":
+				var cookiePath = evt.data.parameters.cookies.path;
+				if (cookiePath) {
+					$.cordys.cookiePath = cookiePath;
+				}
 				deleteAllCookies();
 				$.each(evt.data.parameters.cookies, function(index, cookie) {
-					if (cookie.name) window.document.cookie = cookie.name + "=" + cookie.value + "; path=/cordys;";
+					if (cookie.name) window.document.cookie = cookie.name + "=" + cookie.value + "; path=" + $.cordys.cookiePath;
 				});
 				if (window._$DefCookies) {
 					window._$DefCookies.resolve();
-					history.back();
 				} else {
 					window.location.reload();
 				}

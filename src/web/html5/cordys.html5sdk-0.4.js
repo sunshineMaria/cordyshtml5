@@ -2,7 +2,10 @@ if (typeof(jQuery) == "undefined") {
 	throw new Error("jQuery is required, please ensure it is loaded before this library");
 //	document.write('<script src="/cordys/html5/jquery/jquery-1.8.2.min.js"><\/script>');
 };
-if (!$.cordys) $.cordys = {};
+if (!$.cordys) $.cordys = {
+	cookiePath: "/cordys",
+	baseUrlPath: ""
+};
 
 //For IE
 if ($.browser.msie != undefined){
@@ -45,7 +48,7 @@ function deleteAllCookies()
 	var cookies = document.cookie.split(";");
 	for (var i=0; i < cookies.length; ++i) {
 		document.cookie = $.trim(cookies[i].split("=")[0]) + 
-				"=;expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/cordys";
+				"=;expires=Thu, 01-Jan-1970 00:00:01 GMT; path=" + $.cordys.cookiePath;
 	}
 }
 
