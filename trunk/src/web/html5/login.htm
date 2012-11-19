@@ -24,6 +24,10 @@
 					success:function (data) {
 						__cordysSAMLArtCookieName = $(data).find("SamlArtifactCookieName").text();
 						__cordysCheckName = $(data).find("CheckName").text();
+						var cookiePath = $(data).find("SamlArtifactCookiePath");
+						if (cookiePath && cookiePath.text()) $.cordys.cookiePath = cookiePath.text();
+						var baseUrlPath = $(data).find("BaseUrlPath");
+						if (baseUrlPath && baseUrlPath.text()) $.cordys.baseUrlPath = baseUrlPath.text();
 					},
 					error:function (e) {
 						console.log(e);
@@ -68,11 +72,11 @@
 							$("#inputName").focus();
 						}
 						else {
-							document.cookie=__cordysSAMLArtCookieName+"="+artifact+"; path=/cordys;";
+							document.cookie=__cordysSAMLArtCookieName+"="+artifact+"; path=" + $.cordys.cookiePath;
 							if (__cordysCheckName) {
 								var chrsz = 16;
 								var ct = hex_sha1(artifact);
-								document.cookie=__cordysCheckName+"="+ct+"; path=/cordys;";
+								document.cookie=__cordysCheckName+"="+ct+"; path=" + $.cordys.cookiePath;
 							}
 							window.close();
 						}
