@@ -10,10 +10,9 @@
 	
 	<script src="/cordys/html5/knockout/knockout-2.1.0.js" type="text/javascript"></script>	
 	<script src="/cordys/html5/cordys.html5sdk-0.4.js" type="text/javascript"></script>
-	<script src="plugins/cordys.mobile.js" type="text/javascript"></script>
+	<script src="/cordys/html5/plugins/cordys.mobile.js" type="text/javascript"></script>
 
 	<script type="text/javascript">
-	
 		$(document).bind('mobileinit', function(){
 			$.mobile.pushStateEnabled = false;
 		});
@@ -99,6 +98,9 @@
 		</div>
 		<div data-role="footer" data-theme="c" data-position="fixed">
 			<a href="javascript:refeshTaskList()" data-role="button" data-icon="refresh" data-rel="refresh" data-inline="true" data-mini="true">Refresh</a>
+			<a href="javascript:loginIntoCordys()" data-role="button" 
+				data-icon="home" data-inline="true" data-mini="true"
+				style="position:absolute;right:0">Logout</a>
 		</div>
 	</div>
 
@@ -354,10 +356,10 @@
 							parameters: getRoleParameters
 						}
 					});
-					if (roles.length > 0) {
+					if (roles && roles.length > 0) {
 						taskRolesModel.read({ success: function(tasks) {
 							uiTasksModel.read({success: function(resources) {
-								if (taskRolesModel.Task().length > 0) {
+								if (resources && taskRolesModel.Task().length > 0) {
 									// check for each Mobile app if it is in tasks, if not: remove from mobile apps
 									for (var r=resources.length-1; r>=0; r--) {
 										var rId = resources[r]["@uri"];

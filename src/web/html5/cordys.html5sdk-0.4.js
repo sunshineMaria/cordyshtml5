@@ -6,6 +6,11 @@ if (!$.cordys) $.cordys = {
 	cookiePath: "/cordys",
 	baseUrlPath: ""
 };
+// In BOP4.2 we need to set the base, as most urls are relative
+var _baseTag =	document.getElementsByTagName("base")[0] ||
+	document.getElementsByTagName("head")[0].appendChild(document.createElement("base"));
+
+_baseTag.href = document.location.href.split('/').slice(0,(document.location.href.split('/')[3] == 'cordys' ? 4 : 5)).join('/') + '/';  // protocol://domain[:port]/virtualroot/organization/  or (compatible protocol://domain[:port]/cordys/
 
 
 if (! window.console) window.console = {};
@@ -60,7 +65,8 @@ function loginIntoCordys(loginUrl) {
 	if ($.mobile) {
 		$.mobile.changePage( loginUrl || baseUrl + "mobilelogin.htm", { 
 			transition: "pop", 
-			changeHash: true
+			changeHash: false,
+			data: "pageFrom=" + $.mobile.activePage.attr("id")
 		});
 	} else {
 		window.showModalDialog(loginUrl || baseUrl + "login.htm");
