@@ -32,6 +32,10 @@
 		<script type="text/javascript">
 			var __cordysSAMLArtCookieName, __cordysCheckName;
 
+			function getStrParam(urlString, name) {
+				return (urlString.search( new RegExp("[\?\&]"+name+"=([^\&]*)") ) >= 0) ? RegExp.$1 : "";
+			}
+
 			$("#loginDialog")
 				.on('pageinit', function() {
 					prelogin();
@@ -112,7 +116,8 @@
 							}
 							if (window._$DefCookies) {
 								window._$DefCookies.resolve();
-								history.back();
+								var prevPage = getStrParam($.mobile.activePage.data("url"), "pageFrom");
+								$.mobile.changePage(prevPage ? $("#"+prevPage) : $.mobile.firstPage);
 							} else {
 								window.location.reload();
 							}
