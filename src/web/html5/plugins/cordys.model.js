@@ -119,7 +119,6 @@
 
 		// Common handlers for all the update methods. Can be over-ridden
 		this.defaultUpdateSettings = {
-			async : false,
 			beforeSend: function (xhr, settings){
 				// cancel the request if there is nothing to update or call the custom beforeSend handler (he can cancels it too)
 				return !self.isReadOnly && (this.objectsToBeUpdated.length > 0) && (this._beforeSend ? this._beforeSend(xhr, settings, this.objectsToBeUpdated) : true);
