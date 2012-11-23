@@ -20,16 +20,7 @@
 	}
 
 	$.cordys['case'] = new function() {
-		var self = this,
-			activityDefinitionModel,
-			activityInstanceModel,
-			businessEventsModel,
-			caseAttachmentsModel,
-			caseInstanceModel,
-			caseIdentifiersModel,
-			caseDataModel,
-			caseVariablesModel,
-			followupActivitiesModel;
+		var self = this;
 
 		this.createCase = function(caseModel, caseVariables, caseData, options) {
 			if (caseVariables) {
@@ -77,14 +68,7 @@
 		};
 
 		this.getActivityDefinition = function(caseInstance, options) {
-			if (!self.activityDefinitionModel) {
-				self.activityDefinitionModel = new $.cordys.model({
-					objectName: "activity",
-					context: options.context,
-					defaults: getOptionsForCaseMethod("GetActivityDefinition")
-				});
-			}
-			options = options || {};
+			options = getOptionsForCaseMethod("GetActivityDefinition", options);
 			options.parameters = options.parameters || {};
 
 			var activityId = (typeof(caseInstance) === "object") ? caseInstance.ActivityId : "";
@@ -94,136 +78,90 @@
 					activityid: activityId
 				}
 			});
-			self.activityDefinitionModel.read(options);
-			return self.activityDefinitionModel;
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.find(response, "activity");
+			});
 		};
 
 		this.getActivityInstance = function(caseInstance, options) {
 			var activityInstanceId = (typeof(caseInstance) === "object") ? caseInstance.ParentTaskId : "";
 
-			if (!self.activityInstanceModel) {
-				self.activityInstanceModel = new $.cordys.model({
-					objectName: "ACTIVITY_INSTANCE",
-					context: options.context,
-					defaults: getOptionsForCaseMethod("GetActivityInstance")
-				});
-			}
-
-			options = options || {};
+			options = getOptionsForCaseMethod("GetActivityInstance", options);
 			options.parameters = options.parameters || {};
 			$.extend(options.parameters, {
 				caseinstanceid: getCaseInstanceId(caseInstance),
 				activityinstanceid: activityInstanceId
 			});
 
-			self.activityInstanceModel.read(options);
-			return self.activityInstanceModel;
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.find(response, "ACTIVITY_INSTANCE");
+			});
 		};
 
 		this.getBusinessEvents = function(caseInstance, options) {
-			if (!self.businessEventsModel) {
-				self.businessEventsModel = new $.cordys.model({
-					objectName: "events",
-					context: options.context,
-					defaults: getOptionsForCaseMethod("GetBusinessEvents")
-				});
-			}
-
-			options = options || {};
+			options = getOptionsForCaseMethod("GetBusinessEvents", options);
 			options.parameters = options.parameters || {};
 			options.parameters.caseinstanceid = getCaseInstanceId(caseInstance);
 
-			self.businessEventsModel.read(options);
-			return self.businessEventsModel;
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.findObjects(response, "events");
+			});
 		};
 
 		this.getCaseInstance = function(caseInstance, options) {
-			if (!self.caseInstanceModel) {
-				self.caseInstanceModel = new $.cordys.model({
-					objectName: "CASE_INSTANCE",
-					context: options.context,
-					defaults: getOptionsForCaseMethod("GetCaseInstance")
-				});
-			}
-
-			options = options || {};
+			options = getOptionsForCaseMethod("GetCaseInstance", options);
 			options.parameters = options.parameters || {};
 			options.parameters.caseinstanceid = getCaseInstanceId(caseInstance);
 
-			self.caseInstanceModel.read(options);
-			return self.caseInstanceModel;
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.find(response, "CASE_INSTANCE");
+			});
 		};
 
 		this.getCaseData = function(caseInstance, options) {
-			if (!self.caseDataModel) {
-				self.caseDataModel = new $.cordys.model({
-					objectName: "data",
-					context: options.context,
-					defaults: getOptionsForCaseMethod("GetCaseData")
-				});
-			}
-
-			options = options || {};
+			options = getOptionsForCaseMethod("GetCaseData", options);
 			options.parameters = options.parameters || {};
 			options.parameters.caseinstanceid = getCaseInstanceId(caseInstance);
 
-			self.caseDataModel.read(options);
-			return self.caseDataModel;
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.find(response, "data");
+			});
 		};
 
 		this.getCaseVariables = function(caseInstance, options) {
-			if (!self.caseVariablesModel) {
-				// store the success for us to call back
-				var callback = options.success;
-				var defaultOptions = {};
-				defaultOptions.success = function(data) {
-					// Get the case variables as an array of the variables, removing the case prefix.
-					var vars = data[0]["case:casevariables"],
-						variables = [];
-					for (var v in vars) {
-						if (typeof(vars[v]) === "object") {
-							var newVar = {};
-							newVar[v.replace(/^[^:]*:/,"")] = vars[v];
-							variables.push(newVar);
-						}
-					}
-					if (callback) {
-						callback(variables);
-					}
-				};
-				
-
-				self.caseVariablesModel = new $.cordys.model({
-					objectName: "data",
-					context: options.context,
-					read: getOptionsForCaseMethod("GetCaseVariables", defaultOptions)
-				});
-			}
-
-			options = options || {};
+			var callback = options.success;
 			delete options.success; // clear any success handler so that we get to handle it first
+			options = getOptionsForCaseMethod("GetCaseVariables", options);
 			options.parameters = options.parameters || {};
 			options.parameters.caseinstanceid = getCaseInstanceId(caseInstance);
 
-			self.caseVariablesModel.read(options);
-			return self.caseVariablesModel;
+			return $.cordys.ajax(options).then(function(response) {
+				var data = $.cordys.json.find(response, "data");
+				// Get the case variables as an array of the variables, removing the case prefix.
+				var vars = data["case:casevariables"],
+					variables = [];
+				for (var v in vars) {
+					if (typeof(vars[v]) === "object") {
+						var newVar = {};
+						newVar[v.replace(/^[^:]*:/,"")] = vars[v];
+						variables.push(newVar);
+					}
+				}
+				if (callback) {
+					callback(variables);
+				}
+				return variables;
+			});
 		};
 
 		this.getFollowupActivities = function(caseInstance, options) {
-			if (!self.followupActivitiesModel) {
-				self.followupActivitiesModel = new $.cordys.model({
-					objectName: "followups",
-					context: options.context,
-					defaults: getOptionsForCaseMethod("GetFollowupActivities")
-				});
-			}
-
-			options = options || {};
+			options = getOptionsForCaseMethod("GetFollowupActivities", options);
 			options.parameters = options.parameters || {};
 			options.parameters.caseinstanceid = getCaseInstanceId(caseInstance);
 
-			self.followupActivitiesModel.read(options);
-			return self.followupActivitiesModel;
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.findObjects(response, "followups");
+			});
 		};
 
 		this.planActivities = function(caseInstance, options) {
@@ -288,15 +226,7 @@
 					text: getCaseInstanceId(caseInstance)
 				}
 			}, "http://schemas.cordys.com/bpm/attachments/1.0");
-			if (!self.caseAttachmentsModel) {
-				self.caseAttachmentsModel = new $.cordys.model({
-					objectName: "instance",
-					context: options.context,
-					defaults: getOptionsForCaseMethod("GetAttachments")
-				});
-			}
 
-			options = options || {};
 			options.parameters = options.parameters || {};
 			$.extend(options.parameters, {
 					instanceid: {
@@ -305,8 +235,9 @@
 					}
 			});
 
-			self.caseAttachmentsModel.read(options);
-			return self.caseAttachmentsModel;
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.findObjects(response, "instance");
+			});
 		}
 
 		this.addAttachment = function(caseInstance, attachmentName, fileName, description, content, options) {
