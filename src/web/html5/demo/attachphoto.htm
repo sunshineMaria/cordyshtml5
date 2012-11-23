@@ -26,17 +26,14 @@
 		</div>
 		<script>
 			var taskId = getURLParameter(window.location, "taskId");
-			var taskDetailModel, identifiersModel;
+			var currentTask;
 			$("#photoPage").on("pageinit", function() {
 				$("#btnTakePhoto").bind("click", takePhoto);
-				taskDetailModel = $.cordys.workflow.getTaskDetails(taskId, {
-					success: function(tasks) {
-						identifiersModel = $.cordys.process.getBusinessIdentifiers(tasks[0], {
-							success: function(identifiers) {
-								$("#fldDescription").val(identifiers[0].Value);
-							}
-						});
-					}
+				$.cordys.workflow.getTaskDetails(taskId).done(function(task) {
+					currentTask = task;
+					$.cordys.process.getBusinessIdentifiers(task).done(function(identifiers) {
+						$("#fldDescription").val(identifiers[0].Value);
+					});
 				});
 			})
 
@@ -56,13 +53,12 @@
 			function attachPhoto(parameters) {
 				var imageURI = parameters.imageData;
 				$("#imgPhoto")[0].src = imageURI;
-				var taskObject = taskDetailModel.Task()[0];
-				if (imageURI && taskObject) {
+				if (imageURI && currentTask) {
 					var fileName =  imageURI.substr(imageURI.lastIndexOf('/')+1);
 
-					$.cordys.process.addAttachment(taskObject, "Photo",  fileName+".jpg", "Photo " + fileName, imageURI, {
+					$.cordys.process.addAttachment(currentTask, "Photo",  fileName+".jpg", "Photo " + fileName, imageURI, {
 						success: function() {
-							$.cordys.workflow.completeTask(taskObject);
+							$.cordys.workflow.completeTask(currentTask);
 							$.cordys.mobile.notification.alert("Photo attached!", function() {
 								window.close();
 							}, "Report Damage", "OK");

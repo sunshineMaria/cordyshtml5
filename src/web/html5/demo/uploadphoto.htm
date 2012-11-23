@@ -26,12 +26,13 @@
 			})
 
 			function takePhoto() {
-				$.cordys.mobile.camera.getPicture(uploadPhoto, function(parameters) {
-					alert("failed: " + parameters.message);
-				}, {
+				$.cordys.mobile.camera.getPicture({
 					sourceType: $.cordys.mobile.camera.PictureSourceType.PHOTOLIBRARY,
 					destinationType: $.cordys.mobile.camera.DestinationType.DATA_URL,
 					mediaType: $.cordys.mobile.camera.MediaType.PICTURE
+				}).done(uploadPhoto)
+				.fail(function(parameters) {
+					alert("failed: " + parameters.message);
 				});
 			}
 

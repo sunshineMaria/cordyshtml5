@@ -62,21 +62,23 @@
 		<script type="text/javascript">
 			var taskDetailModel, currentLocation, taskId = getURLParameter(window.location, "taskId");
 			$("#approvePage").bind( 'pageshow',function(event, ui) {
-				taskDetailModel = $.cordys.workflow.getTaskDetails(taskId, {
-					context:document.getElementById("approvePage"),
-					success:function(tasks) {
-					//	var pid = tasks[0].ProcessInstanceId;
-						$.cordys.process.getBusinessIdentifiers(tasks[0], {
-							success:function(identifiers) {
-								taskDetailModel.fields(identifiers);
-							}
+				taskDetailModel = new $.cordys.model({
+					objectName: "Task",
+					context: document.getElementById("approvePage")
+				});
+				$.cordys.workflow.getTaskDetails(taskId).done(function(task) {
+				//	var pid = tasks[0].ProcessInstanceId;
+					taskDetailModel.Task(task);
+					$.cordys.process.getBusinessIdentifiers(task)
+						.done(function(identifiers) {
+							taskDetailModel.fields(identifiers);
 						});
-						$.cordys.process.getAttachments(tasks[0], {
-							success:function(attachments) {
-								taskDetailModel.attachments(attachments);
-							}
+					$.cordys.process.getAttachments(task)
+						.done(function(attachments) {
+							taskDetailModel.attachments(attachments);
 						});
-						var taskLocation = tasks[0].TaskData.ApplicationData.ApproveTask.geolocation;
+					if (task.TaskData && task.TaskData.ApplicationData && task.TaskData.ApplicationData.ApproveTask) {
+						var taskLocation = task.TaskData.ApplicationData.ApproveTask.geolocation;
 						if (taskLocation && taskLocation.latitude.text && taskLocation.longitude.text) {
 							currentLocation = taskLocation;
 							// create button - Show Location

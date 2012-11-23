@@ -20,80 +20,57 @@
 	}
 
 	$.cordys.workflow = new function() {
-		var self = this,
-			taskModel, personalTaskModel, worklistModel, taskDetailModel;
+		var self = this;
 
 		this.getTasks = function(options) {
-			if (!self.taskModel) {
-				self.taskModel = new $.cordys.model({
-					objectName: "Task",
-					context: options.context,
-					defaults: getOptionsForWorkflowMethod("GetAllTasksForUser", null, {
-						OrderBy: "Task.StartDate DESC"
-					})
-				});
-			}
-			self.taskModel.read(options);
-			return self.taskModel;
+			options = getOptionsForWorkflowMethod("GetAllTasksForUser", options, {
+				OrderBy: "Task.StartDate DESC"
+			});
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.findObjects(response, "Task");
+			});
 		};
 		this.getPersonalTasks = function(options) {
-			if (!self.personalTaskModel) {
-				self.personalTaskModel = new $.cordys.model({
-					objectName: "Task",
-					context: options.context,
-					defaults: getOptionsForWorkflowMethod("GetTasks", null, {
-						OrderBy: "Task.StartDate DESC"
-					})
-				});
-			}
-			self.personalTaskModel.read(options);
-			return self.personalTaskModel;
+			options = getOptionsForWorkflowMethod("GetTasks", options, {
+				OrderBy: "Task.StartDate DESC"
+			});
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.findObjects(response, "Task");
+			});
 		};
 		this.openTask = function(task, detailsPageId) {
-			if (typeof(task) === "object" && self.taskModel && self.taskModel.selectedItem) self.taskModel.selectedItem(task);
-			self.getTaskDetails(task, {success: function(tasks) {
-				var url = tasks[0].url;
+			self.getTaskDetails(task).done(function(task) {
+				var url = task.url;
 				if (url.search(/\.html?$/) > 0) {
 					url = addOrganizationContextToURL(url);
-					url = addURLParameter(url, "taskId", tasks[0].TaskId);
+					url = addURLParameter(url, "taskId", task.TaskId);
 					//$.mobile.changePage( url, { transition: "pop", changeHash: false } );
 					document.location = url;
 				}
 				else {
 					$.mobile.changePage( "#" + (detailsPageId && typeof(detailsPageId)==="string" ? detailsPageId : "detailsPage"), { transition: "pop", changeHash: false } );
 				}
-			}})
+			})
 		};
 		this.getTaskDetails = function(task, options) {
-			if (!self.taskDetailModel) {
-				self.taskDetailModel = new $.cordys.model({
-					objectName: "Task",
-					context: options.context,
-					defaults: getOptionsForWorkflowMethod("GetTask", null, {
-						ReturnTaskData:"true",
-						RetrievePossibleActions:"true"
-					})
-				});
-			}
-			
 			options = options || {};
 			options.parameters = options.parameters || {};
 			options.parameters.TaskId = getTaskId(task);
-			self.taskDetailModel.read(options);
-			return self.taskDetailModel;
+			options = getOptionsForWorkflowMethod("GetTask", options, {
+				ReturnTaskData:"true",
+				RetrievePossibleActions:"true"
+			});
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.find(response, "Task");
+			});
 		};
 		this.getWorkLists = function(options) {
-			if (!self.worklistModel) {
-				self.worklistModel = new $.cordys.model({
-					objectName: "Target",
-					context: options.context,
-					defaults: getOptionsForWorkflowMethod("GetAllTargets", null, {
-							TaskCountRequired: "true"
-					})
-				});
-			}
-			self.worklistModel.read(options);
-			return self.worklistModel;
+			options = getOptionsForWorkflowMethod("GetAllTargets", options, {
+					TaskCountRequired: "true"
+			});
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.findObjects(response, "Target");
+			});
 		};
 
 		this.claimTask = function(task, options) {

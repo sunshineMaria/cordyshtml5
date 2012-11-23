@@ -38,14 +38,15 @@
 					if (dt) $(element).text(dt.toDateString() + " " + dt.toLocaleTimeString()); 
 				}
 			};
-			taskModel = $.cordys.workflow.getTasks({
-				context: document.getElementById("mainPage"),
-				success: function() { showBusinessIdentifiers(); }
+			taskModel = new $.cordys.model({
+				objectName: "Task",
+				context: document.getElementById("mainPage")
 			});
 			ko.applyBindings(taskModel, document.getElementById("detailsPage"));
 		});
 		function selectTask() {
 			return function(data) {
+				if (taskModel.selectedItem) taskModel.selectedItem(data);
 				$.cordys.workflow.openTask(data, "detailsPage");
 			}
 		}
@@ -235,14 +236,13 @@
 			refeshTaskList();
 		});
 	function refeshTaskList() {
-		if (taskModel) {
-			taskModel.read({
-				success: function(){
-					$("#taskList").listview("refresh");
-					showBusinessIdentifiers();
-				}
-			});
-		}
+		$.cordys.workflow.getTasks().done(function(tasks) {
+			if (tasks && taskModel) {
+				taskModel.Task(tasks);
+				$("#taskList").listview("refresh");
+				showBusinessIdentifiers();
+			}
+		});
 	}
 	function showBusinessIdentifiers(rowNr) {
 		if (typeof(rowNr) === "undefined") rowNr = 0;
@@ -281,26 +281,39 @@
 					event.preventDefault();
 					return false;
 				});
-			targetModel = $.cordys.workflow.getWorkLists({
-				context: document.getElementById("worklistPage")
+			targetModel = new $.cordys.model({
+					objectName: "Target",
+					context: document.getElementById("worklistPage")
 			});
 		})
 		.bind("pageshow",function(event, ui) {
-			if (targetModel) targetModel.read();
+			if (targetModel) {
+				$.cordys.workflow.getWorkLists().done(function(targets) {
+					if (targets && targetModel) {
+						targetModel.Target(targets);
+					}
+				});
+			}
 		});
 	$("#workListTasksPage")
 		.bind("pageinit",function(event, ui) {
 			ko.applyBindings(taskModel, document.getElementById("workListTasksPage"));
 		})
 		.bind("pageshow",function(event, ui) {
-			if (taskModel) taskModel.read({
-				parameters: {
-					Target: {
-						'@type': 'role', 
-						text: targetModel.selectedItem().Id
+			if (taskModel) {
+				$.cordys.workflow.getTasks({
+					parameters: {
+						Target: {
+							'@type': 'role', 
+							text: targetModel.selectedItem().Id
+						}
 					}
-				}
-			});
+				}).done(function(tasks) {
+					if (tasks && taskModel) {
+						taskModel.Task(tasks);
+					}
+				});
+			}
 		});
 	$("#appsPage")
 		.bind("pageinit",function(event, ui) {
@@ -329,8 +342,7 @@
 							}
 						}
 					}
-				},
-				xcontext: document.getElementById("appsPage")
+				}
 			});
 			// Get all roles of current user
 			userRolesModel = new $.cordys.model({

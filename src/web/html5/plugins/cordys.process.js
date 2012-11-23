@@ -20,40 +20,27 @@
 	}
 
 	$.cordys.process = new function() {
-		var self = this,
-			processAttachmentsModel,
-			businessIdentifiersModel;
+		var self = this;
 
 		this.getBusinessIdentifiers = function(processInstance, options) {
-			if (!self.businessIdentifiersModel) {
-				var defaultOptions = {};
-				var callback = defaultOptions.success;
-				defaultOptions.success = function(data) {
-					var identifiers = data.sort(function(a, b) {
-						return parseInt(a.Sequence) > parseInt(b.Sequence);
-					});
-					if (callback) {
-						callback(identifiers);
-					}
-				};
-				self.businessIdentifiersModel = new $.cordys.model({
-					objectName: "BusinessIdentifier",
-					context:options.context,
-					defaults:{
-						method: "GetBusinessIdentifierValues",
-						namespace: "http://schemas.cordys.com/pim/queryinstancedata/1.0",
-						dataType: 'json'
-					},
-					read: defaultOptions
+			options = getOptionsForProcessMethod("GetBusinessIdentifierValues", 
+				"http://schemas.cordys.com/pim/queryinstancedata/1.0", 
+				options, {processInstanceID : getProcessInstanceId(processInstance)}
+			);
+
+			var callback = options.success;
+			options.success = null;
+
+			return $.cordys.ajax(options).then(function(response) {
+				var identifiers = $.cordys.json.findObjects(response, "BusinessIdentifier");
+				identifiers = identifiers.sort(function(a, b) {
+					return parseInt(a.Sequence) > parseInt(b.Sequence);
 				});
-			}
-
-			options = options || {};
-			options.parameters = options.parameters || {};
-			options.parameters.processInstanceID = getProcessInstanceId(processInstance);
-
-			self.businessIdentifiersModel.read(options);
-			return self.businessIdentifiersModel;
+				if (callback) {
+					callback(identifiers);
+				}
+				return identifiers;
+			});
 		};
 
 		this.startProcess = function(processIdent, processMessage, options) {
@@ -87,15 +74,7 @@
 
 		// Attachments
 		this.getAttachments = function(processInstance, options) {
-			if (!self.processAttachmentsModel) {
-				self.processAttachmentsModel = new $.cordys.model({
-					objectName: "instance",
-					context: options.context,
-					defaults: getOptionsForProcessMethod("GetAttachments", "http://schemas.cordys.com/bpm/attachments/1.0")
-				});
-			}
-
-			options = options || {};
+			options = getOptionsForProcessMethod("GetAttachments", "http://schemas.cordys.com/bpm/attachments/1.0", options);
 			options.parameters = options.parameters || {};
 			$.extend(options.parameters, {
 				instanceid: {
@@ -105,8 +84,9 @@
 				activityid: processInstance.ActivityId
 			});
 
-			self.processAttachmentsModel.read(options);
-			return self.processAttachmentsModel;
+			return $.cordys.ajax(options).then(function(response) {
+				return $.cordys.json.findObjects(response, "instance");
+			});
 		}
 
 		this.addAttachment = function(processInstance, attachmentName, fileName, description, content, options) {

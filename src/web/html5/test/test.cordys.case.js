@@ -9,20 +9,18 @@
 			beforeSend: function (xhr, settings) {
 				var getTasksRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAllTasksForUser xmlns='http://schemas.cordys.com/notification/workflow/1.0'><OrderBy>Task.StartDate DESC</OrderBy></GetAllTasksForUser></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(getTasksRequest, settings.data), true, "Compare Request XML");
-			},
-			success: function (tasks) {
-				equal(tasks.length, 2, "2 task found");
-				ok($.cordys.workflow.isCaseActivity(tasks[1]), "Task is Case");
-				$.cordys.workflow.getTaskDetails(tasks[1], {
-					beforeSend: function (xhr, settings) {
-						var getTaskDetailsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><ReturnTaskData>true</ReturnTaskData><RetrievePossibleActions>true</RetrievePossibleActions><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId></GetTask></SOAP:Body></SOAP:Envelope>";
-						equal(compareXML(getTaskDetailsRequest, settings.data), true, "Compare Request XML");
-					},
-					success: function (tasks) {
-						equal(tasks.length, 1, "1 task details found");
-					}
-				});
 			}
+		}).done(function (tasks) {
+			equal(tasks.length, 2, "2 task found");
+			ok($.cordys.workflow.isCaseActivity(tasks[1]), "Task is Case");
+			$.cordys.workflow.getTaskDetails(tasks[1], {
+				beforeSend: function (xhr, settings) {
+					var getTaskDetailsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetTask xmlns='http://schemas.cordys.com/notification/workflow/1.0'><ReturnTaskData>true</ReturnTaskData><RetrievePossibleActions>true</RetrievePossibleActions><TaskId>903483C7-59BA-11E1-F75D-21B2E4E1D684</TaskId></GetTask></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(getTaskDetailsRequest, settings.data), true, "Compare Request XML");
+				}
+			}).done(function (task) {
+				ok(task, "task details found");
+			});
 		});
 		setTimeout(function () {
 			start();
@@ -169,29 +167,26 @@
 					beforeSend: function (xhr, settings) {
 						var getCaseDataRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetCaseData xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>someCaseInstanceID</caseinstanceid></GetCaseData></SOAP:Body></SOAP:Envelope>";
 						equal(compareXML(getCaseDataRequest, settings.data), true, "Compare Request XML");
-					},
-					success: function (data) {
-						equal(data[0]["ns:TestCase"]["ns:Number"], "1234567890", "Getting Case Data");
 					}
+				}).done(function (data) {
+					equal(data["ns:TestCase"]["ns:Number"], "1234567890", "Getting Case Data");
 				});
 				$.cordys['case'].getCaseInstance(data.caseinstanceid, {
 					beforeSend: function (xhr, settings) {
 						var getCaseInstanceRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetCaseInstance xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>someCaseInstanceID</caseinstanceid></GetCaseInstance></SOAP:Body></SOAP:Envelope>";
 						equal(compareXML(getCaseInstanceRequest, settings.data), true, "Compare Request XML");
-					},
-					success: function (data) {
-						equal(data[0].CASE_INSTANCE_IDENTIFIERS.INSTANCE_ID, "someCaseInstanceID", "Getting Case Instance");
 					}
+				}).done(function (data) {
+					equal(data.CASE_INSTANCE_IDENTIFIERS.INSTANCE_ID, "someCaseInstanceID", "Getting Case Instance");
 				});
 				$.cordys['case'].getCaseVariables(data.caseinstanceid, {
 					beforeSend: function (xhr, settings) {
 						var getCaseVariablesRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetCaseVariables xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>someCaseInstanceID</caseinstanceid></GetCaseVariables></SOAP:Body></SOAP:Envelope>";
 						equal(compareXML(getCaseVariablesRequest, settings.data), true, "Compare Request XML");
-					},
-					success: function (vars) {
-						equal(vars.length, 3, "3 case variables found");
-						equal(vars[0].User.text, "user1", "First variable contains User");
 					}
+				}).done(function (vars) {
+					equal(vars.length, 3, "3 case variables found");
+					equal(vars[0].User.text, "user1", "First variable contains User");
 				});
 				$.cordys['case'].sendEvent(data.caseinstanceid, "test", {
 					beforeSend: function (xhr, settings) {
@@ -295,11 +290,10 @@
 			beforeSend: function (xhr, settings) {
 				var getAttachmentsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetAttachments xmlns='http://schemas.cordys.com/bpm/attachments/1.0'><instanceid type=\"CASE\">someCaseInstanceID</instanceid></GetAttachments></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(getAttachmentsRequest, settings.data), true, "Compare Request XML");
-			},
-			success: function (attachments) {
-				equal(attachments.length, 2, "2 attachments found");
-				equal(attachments[0]["@name"], "image1.jpg", "First attachment image1");
 			}
+		}).done(function (attachments) {
+			equal(attachments.length, 2, "2 attachments found");
+			equal(attachments[0]["@name"], "image1.jpg", "First attachment image1");
 		});
 		$.cordys['case'].addAttachment("someCaseInstanceID", "Photo", "image3.jpg", "some image", window.btoa("some content"), {
 			beforeSend: function (xhr, settings) {
@@ -533,17 +527,15 @@
 			beforeSend: function (xhr, settings) {
 				var getActivityInstanceRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetActivityInstance xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>001CC42E-BB14-11E1-FA4E-3E43A945D4AF</caseinstanceid><activityinstanceid></activityinstanceid></GetActivityInstance></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(getActivityInstanceRequest, settings.data), true, "Compare Request XML");
-			},
-			success: function (data) {
-				equal(data[0].CASE_ACTIVITY.ACTIVITY_NAME, "Activity1", "Activity instance name is Activity1");
-				start();
-			},
-			error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
-				ok(false, "error found: " + errorMessage);
-				start();
-				return false;
 			}
-		})
+		}).done(function (data) {
+			equal(data.CASE_ACTIVITY.ACTIVITY_NAME, "Activity1", "Activity instance name is Activity1");
+			start();
+		}).fail(function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
+			ok(false, "error found: " + errorMessage);
+			start();
+			return false;
+		});
 	});
 
 	$.mockjax({
@@ -624,18 +616,16 @@
 			beforeSend: function (xhr, settings) {
 				var getBusinessEventsRequest = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetBusinessEvents xmlns='http://schemas.cordys.com/casemanagement/execution/1.0'><caseinstanceid>001CC42E-BB14-11E1-FA4E-3E43A945D4AF</caseinstanceid></GetBusinessEvents></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(getBusinessEventsRequest, settings.data), true, "Compare Request XML");
-			},
-			success: function (data) {
-				equal(data[0].event[0]["@name"], "Solution.Approved", "First event is Solution.Approved");
-				equal(data[0].event[1]["@name"], "Solution.Rejected", "Second event is Solution.Rejected");
-				start();
-			},
-			error: function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
-				ok(false, "error found: " + errorMessage);
-				start();
-				return false;
 			}
-		})
+		}).done(function (data) {
+			equal(data[0].event[0]["@name"], "Solution.Approved", "First event is Solution.Approved");
+			equal(data[0].event[1]["@name"], "Solution.Rejected", "Second event is Solution.Rejected");
+			start();
+		}).fail(function (jqXHR, errorStatus, errorThrown, errorCode, errorMessage) {
+			ok(false, "error found: " + errorMessage);
+			start();
+			return false;
+		});
 	});
 
 })(window, jQuery)
