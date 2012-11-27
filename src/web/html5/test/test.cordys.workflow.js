@@ -394,7 +394,7 @@
 		});
 		setTimeout(function () {
 			start();
-		}, 3000);
+		}, 8000);
 	});
 
 	$.mockjax({
@@ -551,7 +551,7 @@
 		});
 		setTimeout(function () {
 			start();
-		}, 4000);
+		}, 10000);
 	});
 
 })(window, jQuery)

@@ -24,7 +24,7 @@
 		});
 		setTimeout(function () {
 			start();
-		}, 2000);
+		}, 5000);
 	});
 
 	$.mockjax({
@@ -201,7 +201,7 @@
 		});
 		setTimeout(function () {
 			start();
-		}, 4000);
+		}, 10000);
 	});
 
 	function getCaseVariables() {
@@ -315,7 +315,7 @@
 		});
 		setTimeout(function () {
 			start();
-		}, 3000);
+		}, 8000);
 	});
 
 	$.mockjax({
