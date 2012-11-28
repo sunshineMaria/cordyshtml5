@@ -197,11 +197,10 @@
 		equal(orderDemoCursorModelObjects[0].OrderID(), "160");
 		equal(orderDemoCursorModelObjects[1].OrderID(), "161");
 		paginationTestResponse.always(function(responseObject) {
-			equal(responseObject.cursor['@position'], "2");
+			equal(orderDemoCursorModel.cursor['@position'], "2");
+			equal(orderDemoCursorModelObjects.length,orderDemoCursorModel.getSize(),"Model Object Size");
+			equal(true,orderDemoCursorModel.hasNext(),"hasNext");
 		})
-		
-		equal(orderDemoCursorModelObjects.length,orderDemoCursorModel.getSize(),"Model Object Size");
-		equal(true,orderDemoCursorModel.hasNext(),"hasNext");
 		
 		paginationTestResponse = orderDemoCursorModel.getNextPage({
 			parameters : {
@@ -216,38 +215,36 @@
 				//equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
 				//Commented temorarily as the assertion is failing in firefox. Error: xmlns attribute for cursor is removed in firefox
 			}
-		});
-		orderDemoCursorModelObjects = orderDemoCursorModel.OrderDemo();
-		equal(orderDemoCursorModelObjects.length, 2, "2 records found");
-		equal(orderDemoCursorModelObjects[0].OrderID(), "162");
-		equal(orderDemoCursorModelObjects[1].OrderID(), "163");
-		paginationTestResponse.always(function(responseObject) {
-			equal(responseObject.cursor['@position'], "4");
-		})
-		
-		equal(true,orderDemoCursorModel.hasPrevious(),"hasPrevious");
-		
-		paginationTestResponse = orderDemoCursorModel.getPreviousPage({
-			parameters : {
-				notes : "PaginationTestGetPreviousPage"
-			},
-			beforeSend : function(jqXHR,settings) {
-				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoCursorModelObjectsPageWithTwoRows xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>165</toOrderID><cursor numRows=\"2\" xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns=\"http://schemas.cordys.com/html5sdk/orderdemo/1.0\" id=\"1.63\" position=\"0\" maxRows=\"99999995\"/><notes>PaginationTestGetPreviousPage</notes></GetOrderDemoCursorModelObjectsPageWithTwoRows></SOAP:Body></SOAP:Envelope>";
-				equal($($.parseXML(settings.data)).find("cursor").attr("numRows"),"2");
-				equal($($.parseXML(settings.data)).find("cursor").attr("id"),"1.63");
-				equal($($.parseXML(settings.data)).find("cursor").attr("position"),"0");
-				equal($($.parseXML(settings.data)).find("cursor").attr("maxRows"),"99999995");
-				//equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
-				//Commented temorarily as the assertion is failing in firefox. Error: xmlns attribute for cursor is removed in firefox
-			}
-		}).done(function(responseObject) {
-			orderDemoCursorModelObjects = orderDemoCursorModel.OrderDemo();
+		}).done(function(orderDemoCursorModelObjects){
 			equal(orderDemoCursorModelObjects.length, 2, "2 records found");
-			equal(orderDemoCursorModelObjects[0].OrderID(), "160");
-			equal(orderDemoCursorModelObjects[1].OrderID(), "161");
-			equal(responseObject.cursor['@position'], "2");
-			start();
-		});
+			equal(orderDemoCursorModelObjects[0].OrderID(), "162");
+			equal(orderDemoCursorModelObjects[1].OrderID(), "163");
+
+			equal(orderDemoCursorModel.cursor['@position'], "4");
+		
+			equal(true,orderDemoCursorModel.hasPrevious(),"hasPrevious");
+		
+			paginationTestResponse = orderDemoCursorModel.getPreviousPage({
+				parameters : {
+					notes : "PaginationTestGetPreviousPage"
+				},
+				beforeSend : function(jqXHR,settings) {
+					var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrderDemoCursorModelObjectsPageWithTwoRows xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>165</toOrderID><cursor numRows=\"2\" xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns=\"http://schemas.cordys.com/html5sdk/orderdemo/1.0\" id=\"1.63\" position=\"0\" maxRows=\"99999995\"/><notes>PaginationTestGetPreviousPage</notes></GetOrderDemoCursorModelObjectsPageWithTwoRows></SOAP:Body></SOAP:Envelope>";
+					equal($($.parseXML(settings.data)).find("cursor").attr("numRows"),"2");
+					equal($($.parseXML(settings.data)).find("cursor").attr("id"),"1.63");
+					equal($($.parseXML(settings.data)).find("cursor").attr("position"),"0");
+					equal($($.parseXML(settings.data)).find("cursor").attr("maxRows"),"99999995");
+					//equal(compareXML(expectedRequestXML,settings.data), true, "Comparing Request XML");
+					//Commented temorarily as the assertion is failing in firefox. Error: xmlns attribute for cursor is removed in firefox
+				}
+			}).done(function(orderDemoCursorModelObjects) {
+				equal(orderDemoCursorModelObjects.length, 2, "2 records found");
+				equal(orderDemoCursorModelObjects[0].OrderID(), "160");
+				equal(orderDemoCursorModelObjects[1].OrderID(), "161");
+				equal(orderDemoCursorModel.cursor['@position'], "2");
+				start();
+			});
+		})
 	});
 	
 	
