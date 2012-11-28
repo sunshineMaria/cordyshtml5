@@ -2329,15 +2329,13 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			},
-			success: function (data, textStatus, jqXHR) {
-				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
-				equal(orderDemoObjects.length, 4, "4 records found. Read two BO.");
-				equal(orderDemoObjects[0].OrderID(), "160");
-				start();
-			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				ok(false, "Failed in read. Error Thrown : " + errorThrown);
 			}
+		}).done(function (orderDemoObjects) {
+			equal(orderDemoObjects.length, 4, "4 records found. Read two BO.");
+			equal(orderDemoObjects[0].OrderID(), "160");
+			start();
 		});
 		
 		orderDemoObjects = orderDemoAsyncModel.OrderDemo();
@@ -2364,50 +2362,48 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			},
-			success: function (data, textStatus, jqXHR) {
-				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
-				equal(orderDemoObjects.length, 4, "4 records found after read");
-				equal(orderDemoObjects[0].OrderID(), "160");
-				equal(orderDemoObjects[0].Status(), "RECOVERED", "Status before updating");
-				orderDemoObjects[0].Status("TEST UPDATE");
-				equal(orderDemoObjects[0].Status(), "TEST UPDATE", "Status after first update");
-				orderDemoObjects[0].Status("UPDATED");
-				equal(orderDemoObjects[0].Status(), "UPDATED", "Status after second update");
-
-				orderDemoAsyncModel.update({
-					method: "UpdateNTPOrderDemo",
-					async: false,
-					beforeSend: function (jqXHR, settings) {
-						var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateNTPOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>UPDATED</Status><Notes>Create Order Demo1</Notes></OrderDemo></UpdateNTPOrderDemo></SOAP:Body></SOAP:Envelope>";
-						equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
-					},
-					success: function (data, textStatus, jqXHR) {
-						orderDemoObjects = orderDemoAsyncModel.OrderDemo();
-						equal(orderDemoObjects.length, 4, "4 records found");
-						equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
-						equal($.parseJSON(jqXHR.responseText).OrderDemo.Status, "UPDATED", "Status");
-					},
-					error: function (jqXHR, textStatus, errorThrown) {
-						ok(false, "Failed in read in Read/ChangeBO/Update. Error Thrown : " + errorThrown);
-					}
-				});
-				response = orderDemoAsyncModel.update({
-					method: "UpdateNTPOrderDemo",
-					async: false,
-					beforeSend: function (jqXHR, settings) {
-						console.log(settings.data);
-						ok(false, "No data to be synchronized, But yet request firing");
-					}
-				}).always(function(responseObject, statusText) {
-					equal(statusText, "canceled", "Request cancelled as no data to be updated");
-				});
-				start();
-				
-			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				ok(false, "Failed in read in Read. Error Thrown : " + errorThrown);
 				start();
 			}
+		}).done(function (orderDemoObjects) {
+			equal(orderDemoObjects.length, 4, "4 records found after read");
+			equal(orderDemoObjects[0].OrderID(), "160");
+			equal(orderDemoObjects[0].Status(), "RECOVERED", "Status before updating");
+			orderDemoObjects[0].Status("TEST UPDATE");
+			equal(orderDemoObjects[0].Status(), "TEST UPDATE", "Status after first update");
+			orderDemoObjects[0].Status("UPDATED");
+			equal(orderDemoObjects[0].Status(), "UPDATED", "Status after second update");
+
+			orderDemoAsyncModel.update({
+				method: "UpdateNTPOrderDemo",
+				async: false,
+				beforeSend: function (jqXHR, settings) {
+					var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateNTPOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>UPDATED</Status><Notes>Create Order Demo1</Notes></OrderDemo></UpdateNTPOrderDemo></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+				},
+				success: function (data, textStatus, jqXHR) {
+					orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+					equal(orderDemoObjects.length, 4, "4 records found");
+					equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
+					equal($.parseJSON(jqXHR.responseText).OrderDemo.Status, "UPDATED", "Status");
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					ok(false, "Failed in read in Read/ChangeBO/Update. Error Thrown : " + errorThrown);
+				}
+			});
+			response = orderDemoAsyncModel.update({
+				method: "UpdateNTPOrderDemo",
+				async: false,
+				beforeSend: function (jqXHR, settings) {
+					console.log(settings.data);
+					ok(false, "No data to be synchronized, But yet request firing");
+				}
+			}).always(function(responseObject, statusText) {
+				equal(statusText, "canceled", "Request cancelled as no data to be updated");
+			});
+			start();
+				
 		});
 
 		orderDemoObjects = orderDemoAsyncModel.OrderDemo();
@@ -2434,49 +2430,47 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			},
-			success: function (data, textStatus, jqXHR) {
-				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
-				equal(orderDemoObjects.length, 4, "4 records found after read");
-				equal(orderDemoObjects[0].OrderID(), "160");
-				equal(orderDemoObjects[0].Status(), "RECOVERED", "Status before updating");
-				orderDemoObjects[0].Status("TEST UPDATE");
-				equal(orderDemoObjects[0].Status(), "TEST UPDATE", "Status after first update");
-				orderDemoObjects[0].Status("UPDATED");
-				equal(orderDemoObjects[0].Status(), "UPDATED", "Status after second update");
-
-				orderDemoAsyncModel.update({
-					method: "UpdateNTPOrderDemo",
-					async: false,
-					beforeSend: function (jqXHR, settings) {
-						var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateNTPOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>UPDATED</Status><Notes>Create Order Demo1</Notes></OrderDemo></UpdateNTPOrderDemo></SOAP:Body></SOAP:Envelope>";
-						equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
-					},
-					success: function (data, textStatus, jqXHR) {
-						orderDemoObjects = orderDemoAsyncModel.OrderDemo();
-						equal(orderDemoObjects.length, 4, "4 records found");
-						equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
-						equal($.parseJSON(jqXHR.responseText).OrderDemo.Status, "UPDATED", "Status");
-					},
-					error: function (jqXHR, textStatus, errorThrown) {
-						ok(false, "Failed in read in Read/ChangeBO/Update. Error Thrown : " + errorThrown);
-					}
-				});
-				response = orderDemoAsyncModel.update({
-					method: "UpdateNTPOrderDemo",
-					async: false,
-					beforeSend: function (jqXHR, settings) {
-						console.log(settings.data);
-						ok(false, "No data to be synchronized, But yet request firing");
-					}
-				}).always(function(responseObject, statusText) {
-					equal(statusText, "canceled", "Request cancelled as no data to be updated");
-				});
-				start();
-			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				ok(false, "Failed in read in Read. Error Thrown : " + errorThrown);
 				start();
 			}
+		}).done(function (orderDemoObjects) {
+			equal(orderDemoObjects.length, 4, "4 records found after read");
+			equal(orderDemoObjects[0].OrderID(), "160");
+			equal(orderDemoObjects[0].Status(), "RECOVERED", "Status before updating");
+			orderDemoObjects[0].Status("TEST UPDATE");
+			equal(orderDemoObjects[0].Status(), "TEST UPDATE", "Status after first update");
+			orderDemoObjects[0].Status("UPDATED");
+			equal(orderDemoObjects[0].Status(), "UPDATED", "Status after second update");
+
+			orderDemoAsyncModel.update({
+				method: "UpdateNTPOrderDemo",
+				async: false,
+				beforeSend: function (jqXHR, settings) {
+					var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateNTPOrderDemo xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>UPDATED</Status><Notes>Create Order Demo1</Notes></OrderDemo></UpdateNTPOrderDemo></SOAP:Body></SOAP:Envelope>";
+					equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
+				},
+				success: function (data, textStatus, jqXHR) {
+					orderDemoObjects = orderDemoAsyncModel.OrderDemo();
+					equal(orderDemoObjects.length, 4, "4 records found");
+					equal(orderDemoObjects[0].Status(), "UPDATED", "Checking the status after sync using update method.");
+					equal($.parseJSON(jqXHR.responseText).OrderDemo.Status, "UPDATED", "Status");
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					ok(false, "Failed in read in Read/ChangeBO/Update. Error Thrown : " + errorThrown);
+				}
+			});
+			response = orderDemoAsyncModel.update({
+				method: "UpdateNTPOrderDemo",
+				async: false,
+				beforeSend: function (jqXHR, settings) {
+					console.log(settings.data);
+					ok(false, "No data to be synchronized, But yet request firing");
+				}
+			}).always(function(responseObject, statusText) {
+				equal(statusText, "canceled", "Request cancelled as no data to be updated");
+			});
+			start();
 		});
 
 		response = orderDemoAsyncModel.update({
@@ -2508,27 +2502,25 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			},
-			success: function (data, textStatus, jqXHR) {
-				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
-				response = orderDemoAsyncModel.synchronize({
-					method: "UpdateNTPOrderDemo",
-					async: false,
-					beforeSend: function (jqXHR, settings) {
-						console.log(settings.data);
-						ok(false, "No data to be synchronized, But yet request firing");
-					}
-				}).always(function(responseObject, statusText) {
-					equal(statusText, "canceled", "Request cancelled as no data to be updated");
-				});
-
-				orderDemoObjectsAfterSync = orderDemoAsyncModel.OrderDemo();
-				equal(orderDemoObjects, orderDemoObjectsAfterSync, "BOs same before and after sync");
-				start();
-			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				ok(false, "Failed in read in Read. Error Thrown : " + errorThrown);
 				start();
 			}
+		}).done(function (orderDemoObjects) {
+			response = orderDemoAsyncModel.synchronize({
+				method: "UpdateNTPOrderDemo",
+				async: false,
+				beforeSend: function (jqXHR, settings) {
+					console.log(settings.data);
+					ok(false, "No data to be synchronized, But yet request firing");
+				}
+			}).always(function(responseObject, statusText) {
+				equal(statusText, "canceled", "Request cancelled as no data to be updated");
+			});
+
+			orderDemoObjectsAfterSync = orderDemoAsyncModel.OrderDemo();
+			equal(orderDemoObjects, orderDemoObjectsAfterSync, "BOs same before and after sync");
+			start();
 		});
 		
 	});
@@ -2551,27 +2543,25 @@
 				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><GetOrdersNTPRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><fromOrderID>160</fromOrderID><toOrderID>163</toOrderID></GetOrdersNTPRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML");
 			},
-			success: function (data, textStatus, jqXHR) {
-				orderDemoObjects = orderDemoAsyncModel.OrderDemo();
-				response = orderDemoAsyncModel.update({
-					method: "UpdateNTPOrderDemo",
-					async: false,
-					beforeSend: function (jqXHR, settings) {
-						console.log(settings.data);
-						ok(false, "No data to be synchronized, But yet request firing");
-					}
-				}).always(function(responseObject, statusText) {
-					equal(statusText, "canceled", "Request cancelled as no data to be updated");
-				});
-
-				orderDemoObjectsAfterUpdate = orderDemoAsyncModel.OrderDemo();
-				equal(orderDemoObjects, orderDemoObjectsAfterUpdate, "BOs same before and after update");
-				start();
-			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				ok(false, "Failed in read in Read. Error Thrown : " + errorThrown);
 				start();
 			}
+		}).done(function (orderDemoObjects) {
+			response = orderDemoAsyncModel.update({
+				method: "UpdateNTPOrderDemo",
+				async: false,
+				beforeSend: function (jqXHR, settings) {
+					console.log(settings.data);
+					ok(false, "No data to be synchronized, But yet request firing");
+				}
+			}).always(function(responseObject, statusText) {
+				equal(statusText, "canceled", "Request cancelled as no data to be updated");
+			});
+
+			orderDemoObjectsAfterUpdate = orderDemoAsyncModel.OrderDemo();
+			equal(orderDemoObjects, orderDemoObjectsAfterUpdate, "BOs same before and after update");
+			start();
 		});
 		
 	});

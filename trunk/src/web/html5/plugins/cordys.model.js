@@ -28,9 +28,8 @@
 		this.isReadOnly = settings.hasOwnProperty("isReadOnly") ? (settings.isReadOnly === true) : 
 			(typeof(settings.create || settings.update || settings['delete']) === "undefined") ? $.cordys.model.defaults.isReadOnly : false;
 		if (this.isReadOnly !== true){
-			// let us add ko if the model is not readOnly
+			// add knockoutJS and the mapping plugin if the model is not readOnly
 			if (typeof(ko) === "undefined") loadScript("/cordys/html5/knockout/knockout-2.1.0.js");
-			// let us add the ko mapping plugin
 			if (typeof(ko) !== "undefined" && (! ko.mapping)) loadScript("/cordys/html5/knockout/knockout.mapping-2.3.2.js");
 		}
 
@@ -38,7 +37,7 @@
 			// make the object collection observable
 			this[this.objectName] = ko.observableArray();
 			this.selectedItem = ko.observable();
-			// let us bind automatically if the context is set
+			// bind automatically if the context is set
 			if (typeof(settings.context) !== "undefined"){
 				ko.applyBindings(self, settings.context);
 			}
@@ -66,221 +65,137 @@
 			});
 		}
 	
-		// Handlers and settings for the read part
-		this.readSettings = {
-			success : function(data) {
-				// clear the current cursor if there is one so that it doesn't get sent with all request
-				if (self.readSettings.parameters && self.readSettings.parameters.cursor){
-					delete self.readSettings.parameters.cursor;
-				}
+		// Sends the get/read request
+		this.read = function(readSettings) {
+			var readOptions = $.extend(true, {}, settings.defaults, settings.read, readSettings);
+			readOptions._$Def = $.Deferred();
+			readOptions.context = readOptions;
 
+			$.cordys.ajax(readOptions).done(function(data) {
 				var objects = getObjects(data, self.objectName);
-				var cursor = getObjects(data, "cursor")[0];
-				if (typeof(cursor) !== "undefined" && typeof(cursor['@id']) === "undefined" && typeof(self.cursor) !== "undefined" && typeof(self.cursor['@position']) !== "undefined"){
-					if (objects.length === 0){
-						cursor['@position'] = parseInt(self.cursor['@position']);
-						self.cursor = cursor;
-						self[self.objectName].valueWillMutate();
-						self[self.objectName].valueHasMutated();
-						return false;
-					}
-					else{
-						// in case we do not have an id copy the cursor position from the earlier one and adjust so that we know how to go previous
-						cursor['@position'] = parseInt(self.cursor['@position']) + parseInt(cursor['@numRows']);
-					}
-				}
-				
-				self.cursor = cursor ? cursor : null;
+				handleCursorAfterRead(data, objects.length);
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
 					if (self.isReadOnly !== true || opts.template){
-						// let us make every attribute Observable for identifying changes and add lock if the model is not readOnly
+						// make every attribute Observable for identifying changes and add lock if the model is not readOnly
 						for (var objectKey in objects){
 							var object = objects[objectKey], 
 								observableObject = mapObject(object, null, opts.template, opts.mappingOptions, self.isReadOnly);
 							if (!self.isReadOnly) {
-								addOptimisticLock(self, opts, object, observableObject, false);
+								addOptimisticLock(self, readOptions, object, observableObject, false);
 							}
 							objects[objectKey] = observableObject;
 						}
 					}
 					self[self.objectName](objects);
-					if (this._readSuccess) {
-						this._readSuccess(self[self.objectName]());
-					}
 				} else {
 					self[self.objectName] = objects;
-					if (this._readSuccess) {
-						this._readSuccess(self[self.objectName]);
-					}
 				}
-				
-			}
-		}
-
-		// Common handlers for all the update methods. Can be over-ridden
-		this.defaultUpdateSettings = {
-			beforeSend: function (xhr, settings){
-				// cancel the request if there is nothing to update or call the custom beforeSend handler (he can cancels it too)
-				return !self.isReadOnly && (this.objectsToBeUpdated.length > 0) && (this._beforeSend ? this._beforeSend(xhr, settings, this.objectsToBeUpdated) : true);
-			},
-
-			success: function (data, textStatus, jqXHR){
-				// invoke the custom success handler
-				if (this._success) this._success(data, textStatus, jqXHR);
-				// merge the insert, update, delete
-				mergeUpdate(data, this.objectsToBeUpdated);
-			},
-
-			error : function (jqXHR, textStatus, errorThrown, messCode, errorMessage, opts){
-
-				handleError(jqXHR.error(), this.objectsToBeUpdated);
-
-				var showError = true;
-				if (this._error && typeof(this._error) === "function"){
-					showError = this._error(jqXHR, textStatus, errorThrown, messCode, errorMessage, opts) !== false;
-				}
-				if (showError){
-					showErrorDialog(jqXHR.error(), "Error on Update");
-				}
-				return false;
-			},
-
-			parameters : function (settings, sendInsert, sendUpdate, sendDelete){
-				var context = this;
-				var synchronizeContent = [];
-				var objectsToBeUpdated = [];
-
-				if (typeof(self[self.objectName]) === "function") { // in case of knockout
-					var objects = self[self.objectName]();
-
-					if (objects){
-						for (var objectKey in objects){
-							var object = objects[objectKey];
-							// check for persistence
-							if (object.lock){
-								// deleted object
-								if (sendDelete && object._destroy === true){
-									objectsToBeUpdated.push(object);
-									// let us get the old bo from the initial saved state
-									var oldObject = object.lock.getInitialState();
-									// get the corresponding XML for the deleted object and add it to the deleteContent
-									synchronizeContent.push($.cordys.json.js2xmlstring(opts.useTupleProtocol ? wrapInTuple(oldObject,null): wrapInObject(opts.objectName, oldObject)));
-								}
-								else if (sendUpdate && object.lock.isDirty()){
-									objectsToBeUpdated.push(object);
-									// let us get the old bo from the saved state
-									var oldObject = object.lock.getInitialState();
-									// the objects here are Observavables, let us unmap to get the new bo
-									var newObject = ko.mapping.toJS(object);
-									// get the corresponding XML for the object and add it to the updateContent
-									synchronizeContent.push($.cordys.json.js2xmlstring(opts.useTupleProtocol ? wrapInTuple(oldObject,newObject) : wrapInObject(opts.objectName, newObject)));
-								}	
-							}
-							// not persisted - new
-							else if (sendInsert && object._destroy !== true){
-								// just double check whether it was an object deleted before persisting directly using KO API's
-								objectsToBeUpdated.push(object);
-								// let us get the new bo by unwrapping the Observable
-								var newObject = ko.mapping.toJS(object);
-								// get the corresponding XML for the inserted object and add it to the insertContent
-								synchronizeContent.push($.cordys.json.js2xmlstring(opts.useTupleProtocol ? wrapInTuple(null,newObject) : wrapInObject(opts.objectName, newObject)));
-
-							}
-						}
-					}
-
-				}
-				this.objectsToBeUpdated = objectsToBeUpdated;
-				return synchronizeContent.join("");
-			}
-		}
-
-		// Handlers and settings for the create part
-		this.createSettings = {
-			parameters : function (settings){
-				return self.defaultUpdateSettings.parameters.call(this, settings, true, false, false);
-			}
-		}
-
-		// Handlers and settings for the update part
-		this.updateSettings = {
-			parameters : function (settings){
-				return self.defaultUpdateSettings.parameters.call(this, settings, false, true, false);
-			}
-		}
-
-
-		// Handlers and settings for the delete part
-		this.deleteSettings = {
-			parameters : function (settings){
-				return self.defaultUpdateSettings.parameters.call(this, settings, false, false, true);
-			}
-		}
-
-		// Handlers and settings for the Sync part
-		this.synchronizeSettings = {
-			parameters : function (settings){
-				return self.defaultUpdateSettings.parameters.call(this, settings, true, true, true);
-			}
-		}
+				this._$Def.resolve(objects, this);
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				this._$Def.reject(jqXHR, textStatus, errorThrown, this);
+			});
+			return readOptions._$Def.promise();
+		};
 
 		// Sends all inserted objects to the backend
 		this.create = function(createSettings) {
-			createSettings._context = (createSettings && createSettings.context) ? createSettings.context : (settings.create ? settings.create.context : null);
+			var options = $.extend(true, {}, settings.defaults, settings.create, createSettings);
+			options.parameters = getUpdateParameters(options, true, false, false);
 
-			createSettings._beforeSend = (createSettings && createSettings.beforeSend) ? createSettings.beforeSend : (settings.create ? settings.create.beforeSend : null);
-			createSettings._success = (createSettings && createSettings.success) ? createSettings.success : (settings.create ? settings.create.success : null);
-			createSettings._error = (createSettings && createSettings.error) ? createSettings.error : (settings.create ? settings.create.error : null);
-
-			var opts = $.extend({}, settings.defaults, settings.create, createSettings, self.defaultUpdateSettings, self.createSettings);
-			opts.context = opts;
-			return $.cordys.ajax(opts);
-		};
-
-		// Sends the get/read request
-		this.read = function(readSettings) {
-			var opts = $.extend(true, {}, settings.defaults, settings.read, readSettings, self.readSettings);
-			opts.context = opts;
-
-			opts._context = (readSettings && readSettings.context) ? readSettings.context : (settings.read ? settings.read.context : null);
-			opts._readSuccess = (readSettings && readSettings.success) ? readSettings.success : (settings.read ? settings.read.success : null);
-			return $.cordys.ajax(opts);
+			return ajaxUpdate(options);
 		};
 
 		// Sends all updated objects to the backend
 		this.update = function(updateSettings) {
-			var opts = $.extend({}, settings.defaults, settings.update, updateSettings, self.defaultUpdateSettings, self.updateSettings);
-			opts.context = opts;
+			var options = $.extend(true, {}, settings.defaults, settings.update, updateSettings);
+			options.parameters = getUpdateParameters(options, false, true, false);
 
-			opts._beforeSend = (updateSettings && updateSettings.beforeSend) ? updateSettings.beforeSend : (settings.update ? settings.update.beforeSend :null);
-			opts._success = (updateSettings && updateSettings.success) ? updateSettings.success : (settings.update ? settings.update.success : null);
-			opts._error = (updateSettings && updateSettings.error) ? updateSettings.error : (settings.update ? settings.update.error : null);  
-
-			return $.cordys.ajax(opts);
+			return ajaxUpdate(options);
 		};
 
 		// Sends all deleted objects to the backend.
 		this['delete'] = function(deleteSettings) {
-			var opts = $.extend({}, settings.defaults, settings['delete'], deleteSettings, self.defaultUpdateSettings, self.deleteSettings);
-			opts.context = opts;
+			var _deleteOpts = $.extend(true, {}, settings.defaults, settings['delete'], deleteSettings);
+			_deleteOpts.parameters = getUpdateParameters(_deleteOpts, false, false, true);
 
-			opts._beforeSend = (deleteSettings && deleteSettings.beforeSend) ? deleteSettings.beforeSend : (settings['delete'] ? settings['delete'].beforeSend :null);
-			opts._success = (deleteSettings && deleteSettings.success) ? deleteSettings.success : (settings['delete'] ? settings['delete'].success : null); 
-			opts._error = (deleteSettings && deleteSettings.error) ? deleteSettings.error : (settings['delete'] ? settings['delete'].error : null); 
-
-			return $.cordys.ajax(opts);
+			return ajaxUpdate(_deleteOpts);
 		};
 
 		// Sends all local changes (inserted, updated, deleted objects) to the backend.
 		this.synchronize = function(synchronizeSettings) {
-			var opts = $.extend({}, settings.defaults, settings.update, synchronizeSettings, self.defaultUpdateSettings, self.synchronizeSettings);
-			opts.context = opts;
+			var options = $.extend(true, {}, settings.defaults, settings.update, synchronizeSettings);
+			options.parameters = getUpdateParameters(options, true, true, true);
 
-			opts._beforeSend = (synchronizeSettings && synchronizeSettings.beforeSend) ? synchronizeSettings.beforeSend : (settings.update ? settings.update.beforeSend : null);
-			opts._success = (synchronizeSettings && synchronizeSettings.success) ? synchronizeSettings.success : (settings.update ? settings.update.success : null);
-			opts._error = (synchronizeSettings && synchronizeSettings.error) ? synchronizeSettings.error : (settings.update ? settings.update.error : null);
-			return $.cordys.ajax(opts);
+			return ajaxUpdate(options);
 		};
+
+		var getUpdateParameters = function (settings, sendInsert, sendUpdate, sendDelete){
+			var synchronizeContent = [];
+			var objectsToBeUpdated = [];
+
+			if (typeof(self[self.objectName]) === "function") { // in case of knockout
+				var objects = self[self.objectName]();
+
+				if (objects){
+					for (var objectKey in objects){
+						var object = objects[objectKey];
+						// check for persistence
+						if (object.lock){
+							// deleted object
+							if (sendDelete && object._destroy === true){
+								objectsToBeUpdated.push(object);
+								// get the old bo from the initial saved state
+								var oldObject = object.lock.getInitialState();
+								// get the corresponding XML for the deleted object and add it to the deleteContent
+								synchronizeContent.push($.cordys.json.js2xmlstring(opts.useTupleProtocol ? wrapInTuple(oldObject,null): wrapInObject(opts.objectName, oldObject)));
+							}
+							else if (sendUpdate && object.lock.isDirty()){
+								objectsToBeUpdated.push(object);
+								// get the old bo from the initial saved state
+								var oldObject = object.lock.getInitialState();
+								// get the new bo by unwrapping the Observable object
+								var newObject = ko.mapping.toJS(object);
+								// get the corresponding XML for the object and add it to the updateContent
+								synchronizeContent.push($.cordys.json.js2xmlstring(opts.useTupleProtocol ? wrapInTuple(oldObject,newObject) : wrapInObject(opts.objectName, newObject)));
+							}	
+						}
+						// not persisted - new
+						else if (sendInsert && object._destroy !== true){
+							// just double check whether it was an object deleted before persisting directly using KO API's
+							objectsToBeUpdated.push(object);
+							// get the new bo by unwrapping the Observable object
+							var newObject = ko.mapping.toJS(object);
+							// get the corresponding XML for the inserted object and add it to the insertContent
+							synchronizeContent.push($.cordys.json.js2xmlstring(opts.useTupleProtocol ? wrapInTuple(null,newObject) : wrapInObject(opts.objectName, newObject)));
+
+						}
+					}
+				}
+
+			}
+			settings.objectsToBeUpdated = objectsToBeUpdated;
+			return synchronizeContent.join("");
+		}
+
+		var ajaxUpdate = function(settings) {
+			settings._$Def = $.Deferred();
+			settings.context = settings; // setting this pointer in all ajax handlers (beforeSend, success, error, done, fail...)
+			if ( self.isReadOnly || (settings.objectsToBeUpdated.length == 0) ) {
+				settings._$Def.reject(null, "canceled", null, settings); // to be compatible with previous version
+			} else {
+				$.cordys.ajax(settings).done(function(data, textStatus, jqXHR) {
+					mergeUpdate(data, this.objectsToBeUpdated);
+					this._$Def.resolve(data, textStatus, this);
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					handleError(jqXHR.error(), this.objectsToBeUpdated);
+					if (this.showError) {
+						showErrorDialog(jqXHR.error(), "Error on Update");
+					}
+					this._$Def.reject(jqXHR, textStatus, errorThrown, this);
+				});
+			}
+			return settings._$Def.promise();
+		}
 
 		// Returns the number of Business Objects
 		this.getSize = function()
@@ -291,7 +206,7 @@
 		// Gets the next set of records
 		this.getNextPage = function(nextPageSettings){
 			if (self.cursor){
-				self.readSettings.parameters = {cursor:self.cursor};
+				nextPageSettings = $.extend(true, {}, nextPageSettings, {parameters:{cursor:self.cursor}});
 			}
 			return this.read(nextPageSettings);
 		}
@@ -301,7 +216,7 @@
 			if (self.cursor){
 				var previousPosition = self.cursor['@position'] - (self.cursor['@numRows'] * 2);
 				self.cursor['@position'] = previousPosition < 0 ? 0 : previousPosition;
-				self.readSettings.parameters = {cursor:self.cursor};
+				previousPageSettings = $.extend(true, {}, previousPageSettings, {parameters:{cursor:self.cursor}});
 			}
 			return this.read(previousPageSettings);
 		}
@@ -387,7 +302,7 @@
 				self[self.objectName].removeAll();
 			}
 			else{
-				self[self.objectName] = {};
+				self[self.objectName] = [];
 			}
 			self.cursor = null;
 		}
@@ -432,13 +347,14 @@
 
 		// merges the response received after insert, update, delete, sync with the current data
 		var mergeUpdate = function (data, objectsToBeUpdated){
+
 			var synchronizedObjects;
-			// let us get the updated tuples if we are using tuple protocol
-			if (opts.useTupleProtocol){
+			if (opts.useTupleProtocol) {
+				// get the updated tuples
 				synchronizedObjects =  $.map($.isArray(data.tuple) ? data.tuple : [data.tuple], function(tuple){
 						return getObjects(tuple['new'] ? tuple['new'] : tuple['old'], self.objectName)
 				});
-			}else{
+			} else {
 				synchronizedObjects = getObjects(data, self.objectName);
 			}
 
@@ -449,30 +365,26 @@
 					// deleted object
 					if (object._destroy === true){
 						self[self.objectName].remove(object);
-					}
-					else if (object.lock.isDirty()){
+					} else if (object.lock.isDirty()){
 						if (opts.useTupleProtocol){
 							var objectAfterUpdation = synchronizedObjects[count];
-							// let us merge the updated object back in case of tuple protocol and update the lock to it
+							// merge the updated object back in case of tuple protocol and update the lock to it
 							object.lock._update(objectAfterUpdation);
-						}
-						else{
-							// other we update the lock to the latest state of the object
+						} else {
+							// update the lock to the latest state of the object
 							object.lock._updateLock();
 						}
 					}
-				}
-				// not persisted - new
-				else if (object._destroy !== true){
+				} else if (object._destroy !== true){
+					// not persisted - new
 					if (opts.useTupleProtocol){
 						var objectAfterInsertion = synchronizedObjects[count];
-						// let us set the lock with the inserted object we get from the backend
+						// set the lock with the inserted object we get from the backend
 						addOptimisticLock(self, opts, objectAfterInsertion, object, false);
-						// let us also update the object with what we got from the backend
+						// update the object with what we got from the backend
 						object.lock._update(objectAfterInsertion);
-					}
-					else{
-						// other we set the lock to the latest state of the object
+					} else {
+						// set the lock to the latest state of the object
 						addOptimisticLock(self, opts, ko.mapping.toJS(object), object, false);
 					}
 				}
@@ -496,6 +408,24 @@
 			var wrappedObject = {};
 			wrappedObject[name] = object;
 			return wrappedObject;
+		}
+
+		var handleCursorAfterRead = function(data, nrObjects) {
+			var cursor = getObjects(data, "cursor")[0];
+			if (typeof(cursor) !== "undefined" && typeof(cursor['@id']) === "undefined" && typeof(self.cursor) !== "undefined" && typeof(self.cursor['@position']) !== "undefined"){
+				if (nrObjects === 0) {
+					cursor['@position'] = parseInt(self.cursor['@position']);
+					self.cursor = cursor;
+					self[self.objectName].valueWillMutate();
+					self[self.objectName].valueHasMutated();
+					return false;
+				} else {
+					// in case we do not have an id copy the cursor position from the earlier one and adjust so that we know how to go previous
+					cursor['@position'] = parseInt(self.cursor['@position']) + parseInt(cursor['@numRows']);
+				}
+			}
+				
+			self.cursor = cursor ? cursor : null;
 		}
 	};
 
