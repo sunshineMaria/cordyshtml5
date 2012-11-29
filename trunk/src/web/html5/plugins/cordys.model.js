@@ -72,8 +72,19 @@
 			readOptions.context = readOptions;
 
 			$.cordys.ajax(readOptions).done(function(data) {
-				var objects = getObjects(data, self.objectName);
+				var objects = self.putData(data);
 				handleCursorAfterRead(data, objects.length);
+				this._$Def.resolve(objects, this);
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				this._$Def.reject(jqXHR, textStatus, errorThrown, this);
+			});
+			return readOptions._$Def.promise();
+		};
+
+		this.putData = function(data) {
+			var objects = getObjects(data, self.objectName);
+			if (objects.length == 0 && (typeof(data) === "object")) objects = [data];
+			if (objects.length > 0) {
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
 					if (self.isReadOnly !== true || opts.template){
 						// make every attribute Observable for identifying changes and add lock if the model is not readOnly
@@ -81,7 +92,7 @@
 							var object = objects[objectKey], 
 								observableObject = mapObject(object, null, opts.template, opts.mappingOptions, self.isReadOnly);
 							if (!self.isReadOnly) {
-								addOptimisticLock(self, readOptions, object, observableObject, false);
+								addOptimisticLock(self, opts, object, observableObject, false);
 							}
 							objects[objectKey] = observableObject;
 						}
@@ -90,12 +101,9 @@
 				} else {
 					self[self.objectName] = objects;
 				}
-				this._$Def.resolve(objects, this);
-			}).fail(function(jqXHR, textStatus, errorThrown) {
-				this._$Def.reject(jqXHR, textStatus, errorThrown, this);
-			});
-			return readOptions._$Def.promise();
-		};
+			}
+			return objects;
+		}
 
 		// Sends all inserted objects to the backend
 		this.create = function(createSettings) {
