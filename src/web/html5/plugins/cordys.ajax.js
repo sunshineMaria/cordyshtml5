@@ -150,12 +150,13 @@
 			//TODO: check if using localStorage is correct. What happens when another user logged in?
 			$.cordys.ajax._organizations = ((typeof(localStorage) !== "undefined") ? (localStorage._organizations && localStorage._organizations.split("#"))	 : null);
 		}
-		if ($.cordys.ajax._organizations){
-			window._$DefOrg.resolve(options.orgDN = matchOrg(organization));
+		if ($.cordys.ajax._organizations && (options.orgDN = matchOrg(organization))){
+			window._$DefOrg.resolve(options.orgDN);
 		} else {
 			// let us fetch the organizations from the server if we do not yet have it or we cannot match from the list
 			var GET_ORGS_REQ = "GetUserDetails", GET_ORGS_NS = "http://schemas.cordys.com/1.0/ldap";
 			if (options.method === GET_ORGS_REQ && options.namespace ===  GET_ORGS_NS){
+				window._$DefOrg.resolve(options.orgDN = "");
 				return null; // stop recursing
 			}
 			// get the orgs
@@ -175,7 +176,14 @@
 				if(typeof(localStorage) !== "undefined"){
 					localStorage._organizations = $.cordys.ajax._organizations.join("#");
 				}
-				if ($.cordys.ajax._organizations) window._$DefOrg.resolve(options.orgDN = matchOrg(organization));
+				if ($.cordys.ajax._organizations && (options.orgDN = matchOrg(organization))){
+					window._$DefOrg.resolve(options.orgDN);
+				}else{
+					// the user will go to the default organization if the organization specified does not exist
+					alert("Could not find Organization '" + organization + "'. Proceeding to default" );
+					window._$DefOrg.resolve(options.orgDN = "");
+				}
+				
 			}).fail(function(error){
 				$.cordys.ajax._organizations = null;
 				// the user will go to the default organization if the organization specified does not exist
