@@ -89,7 +89,7 @@
 				dataType : 'json', // the xml result will be converted into js objects
 				success : function (data) {
 					// Create an array with only the Employees objects, skip the tuple/old structure
-					var orders = $.map(data.tuple, function (tuple, index) {
+					var orders = $.map($.makeArray(data.tuple), function (tuple, index) {
 							return tuple.old.OrderDemo;
 						});
 					var html = $("#ordersTemplate").render(orders);

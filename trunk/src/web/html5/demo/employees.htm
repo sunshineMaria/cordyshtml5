@@ -46,7 +46,7 @@
 				dataType: 'json',	// the xml result will be converted into js objects
 				success: function(data) {
 					// Create an array with only the Employees objects, skip the tuple/old structure
-					var employees = $.map(data.tuple, function(tuple, index) {
+					var employees = $.map($.makeArray(data.tuple), function(tuple, index) {
 						if (tuple.old.Employees.Photo) {
 							// Remove first 104 characters from the Photo, which is header information
 							tuple.old.Employees.Photo = tuple.old.Employees.Photo.substring(104);
