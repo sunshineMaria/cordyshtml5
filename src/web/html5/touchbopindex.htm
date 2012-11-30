@@ -360,7 +360,7 @@
 					}
 				}
 			});
-			userRolesModel.read({success: function(roles) {
+			userRolesModel.read().done(function(roles) {
 					// Get all tasks for all roles
 					taskRolesModel = new $.cordys.model({
 						objectName: "Task",
@@ -372,8 +372,8 @@
 						}
 					});
 					if (roles && roles.length > 0) {
-						taskRolesModel.read({ success: function(tasks) {
-							uiTasksModel.read({success: function(resources) {
+						taskRolesModel.read({ success: function(tasks) {debugger;
+							uiTasksModel.read({success: function(resources) {debugger;
 								if (resources && taskRolesModel.Task().length > 0) {
 									// check for each Mobile app if it is in tasks, if not: remove from mobile apps
 									for (var r=resources.length-1; r>=0; r--) {
@@ -384,8 +384,7 @@
 							}});
 						}});
 					}
-				}
-			});
+				})
 		})
 		.bind( 'pageshow',function(event, ui) {
 			//if (uiTasksModel) uiTasksModel.read();
