@@ -372,8 +372,8 @@
 						}
 					});
 					if (roles && roles.length > 0) {
-						taskRolesModel.read({ success: function(tasks) {debugger;
-							uiTasksModel.read({success: function(resources) {debugger;
+						taskRolesModel.read({ success: function(tasks) {
+							uiTasksModel.read({success: function(resources) {
 								if (resources && taskRolesModel.Task().length > 0) {
 									// check for each Mobile app if it is in tasks, if not: remove from mobile apps
 									for (var r=resources.length-1; r>=0; r--) {
