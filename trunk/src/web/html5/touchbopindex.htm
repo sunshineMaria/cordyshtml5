@@ -254,7 +254,7 @@
 		taskRow = $(taskRow).find("a")[0];
 		var task = ko.dataFor(taskRow);
 		if (task && !$.cordys.workflow.isCaseActivity(task)) {
-			$.cordys.process.getBusinessIdentifiers(task, { success: addIdents(rowNr) });
+			$.cordys.process.getBusinessIdentifiers(task).done( addIdents(rowNr) );
 		} else {
 			showBusinessIdentifiers(rowNr+1);
 		}
@@ -372,8 +372,8 @@
 						}
 					});
 					if (roles && roles.length > 0) {
-						taskRolesModel.read({ success: function(tasks) {
-							uiTasksModel.read({success: function(resources) {
+						taskRolesModel.read().done( function(tasks) {
+							uiTasksModel.read().done( function(resources) {
 								if (resources && taskRolesModel.Task().length > 0) {
 									// check for each Mobile app if it is in tasks, if not: remove from mobile apps
 									for (var r=resources.length-1; r>=0; r--) {
@@ -381,8 +381,8 @@
 										if (!findTaskRoleByID(rId)) uiTasksModel.resource.remove(resources[r]);
 									}
 								}
-							}});
-						}});
+							});
+						});
 					}
 				})
 		})
@@ -422,15 +422,14 @@
 							"@acl": false
 						}
 					},
-					dataType: 'json',
-					success:function(data) {
+					dataType: 'json'
+				}).done( function(data) {
 						var app = $.cordys.json.find(data, "Application");
 						if (app) {
 							document.location = addOrganizationContextToURL(app.url);
 							//$.mobile.changePage( url, { transition: "fade", changeHash: true } );
 						}
-					}
-				});
+					});
 			}
 		}
 	}
