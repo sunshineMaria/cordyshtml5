@@ -1,6 +1,6 @@
 (function (window, $) {
 
-	module("Model Plugin with Templating and Crude Operations Test");
+	module("Model Plugin with Fields and Crude Operations Test");
 
 	var orderDemoModel = new $.cordys.model({
 		objectName: "OrderDemo",
@@ -13,7 +13,7 @@
 				return false;
 			}
 		},
-		template: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", {
+		fields: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", {
 			name: "StatusMessage",
 			type: "string",
 			computed: function () {
@@ -29,7 +29,7 @@
 
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
-		data: /InsertTemplateTestRequest/,
+		data: /InsertFieldsTestRequest/,
 		responseText: {
 			tuple:
 				{
@@ -53,7 +53,7 @@
 
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
-		data: /UpdateTemplateTestRequest/,
+		data: /UpdateFieldsTestRequest/,
 		responseText: {
 			tuple:
 				{
@@ -73,13 +73,13 @@
 		}
 	});
 
-	// Insert a new Business Object using create with the template. See that the observables added from template definition are not send
+		// Insert a new Business Object using create with the fields attribute. See that the observables added from fields definition are not send
 	// The objects that are returned back should get merged with the existing observables
-	// Changes in the observables added by templating should not trigger updates
-	test("Add Business Object with templating", 32, function () {
+	// Changes in the observables added by fields attribute should not trigger updates
+		test("Add Business Object with fields attribute", 32, function () {
 		stop();
 
-		// Insert a new Business Object using create with the template. See that the observables added from template definition are not send
+		// Insert a new Business Object using create with the fields attribute. See that the observables added from fields definition are not send
 		orderDemoModel.addBusinessObject({ OrderID: 160, Customer: "fj", Employee: "ss", Product: "aa", Quantity: "4", Discount: "21", Status: "CREATED", Notes: "Create Order Demo", "OrderDate": "2012-07-10T10:29:16.140000000" });
 		var orders = orderDemoModel.OrderDemo();
 		equal(orders.length, 1, "Added BO, but not synchronized yet. 1 record in the model");
@@ -87,7 +87,7 @@
 		ok(ko.isObservable(orders[0].Cost), "Observable added even if attribute is not present in response");
 		strictEqual(typeof (orders[0].Cost()), "undefined", "Added observable has undefined value");
 
-		ok(ko.isObservable(orders[0].Status), "Observable added even if attribute is not present in template");
+		ok(ko.isObservable(orders[0].Status), "Observable added even if attribute is not present in fields");
 		strictEqual(orders[0].Status(), "CREATED", "Added observable has correct value");
 
 
@@ -100,9 +100,9 @@
 		orders[0].Status("COMPLETED");
 
 		response = orderDemoModel.create({
-			method: "InsertTemplateTestRequest",
+			method: "InsertFieldsTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><InsertTemplateTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>COMPLETED</Status><Notes>Create Order Demo</Notes><OrderDate>2012-07-10T10:29:16.140000000</OrderDate><BirthDate/><Cost/></OrderDemo></new></tuple></InsertTemplateTestRequest></SOAP:Body></SOAP:Envelope>";
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><InsertFieldsTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>COMPLETED</Status><Notes>Create Order Demo</Notes><OrderDate>2012-07-10T10:29:16.140000000</OrderDate><BirthDate/><Cost/></OrderDemo></new></tuple></InsertFieldsTestRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML sent for create");
 			}
 		});
@@ -115,7 +115,7 @@
 		ok(ko.isObservable(orders[0].Cost), "Observable merged even if attribute is not present in response after insert");
 		strictEqual(typeof (orders[0].Cost()), "undefined", "Merged observable has undefined value after insert");
 
-		ok(ko.isObservable(orders[0].Status), "Observable merged even if attribute is not present in template after insert");
+		ok(ko.isObservable(orders[0].Status), "Observable merged even if attribute is not present in fields after insert");
 		strictEqual(orders[0].Status(), "RECOVERED", "Merged observable has correct value after insert");
 
 
@@ -128,22 +128,22 @@
 
 		orders[0].Cost(10000);
 
-		// Changes in the observables added by templating should not trigger updates
+		// Changes in the observables added by fields attribute should not trigger updates
 		/*orderDemoModel.synchronize({
-		method: "UpdateTemplateTestRequest",
+		method: "UpdateFieldsTestRequest",
 		beforeSend: function (jqXHR, settings) {
 		// TODO - Fix this. The object appears changed to KO
-		//ok(false, "Error : Changes in the observables added by templating triggered update");
+		//ok(false, "Error : Changes in the observables added by fields attribute triggered update");
 		}
 		});*/
 
 		orders[0].Status("DISCOVERED");
 
-		// Changes in the observables added by templating should not trigger updates
+		// Changes in the observables added by fields attribute should not trigger updates
 		orderDemoModel.synchronize({
-			method: "UpdateTemplateTestRequest",
+			method: "UpdateFieldsTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateTemplateTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>RECOVERED</Status><Notes>Create Order Demo1</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>DISCOVERED</Status><Notes>Create Order Demo1</Notes><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><BirthDate/><Cost>10000</Cost></OrderDemo></new></tuple></UpdateTemplateTestRequest></SOAP:Body></SOAP:Envelope>";
+				var expectedRequestXML = "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'><SOAP:Body><UpdateFieldsTestRequest xmlns='http://schemas.cordys.com/html5sdk/orderdemo/1.0'><tuple><old><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>RECOVERED</Status><Notes>Create Order Demo1</Notes></OrderDemo></old><new><OrderDemo><OrderID>160</OrderID><Customer>fj</Customer><Employee>ss</Employee><Product>aa</Product><Quantity>4</Quantity><Discount>21</Discount><Status>DISCOVERED</Status><Notes>Create Order Demo1</Notes><OrderDate>2012-07-10T10:29:16.140000001</OrderDate><BirthDate/><Cost>10000</Cost></OrderDemo></new></tuple></UpdateFieldsTestRequest></SOAP:Body></SOAP:Envelope>";
 				equal(compareXML(expectedRequestXML, settings.data), true, "Comparing Request XML sent for update");
 			}
 		});
@@ -158,7 +158,7 @@
 		ok(ko.isObservable(orders[0].Cost), "Observable merged even if attribute is not present in response");
 		strictEqual(typeof (orders[0].Cost()), "undefined", "Merged observable has undefined value after update");
 
-		ok(ko.isObservable(orders[0].Status), "Observable merged even if attribute is not present in template after update");
+		ok(ko.isObservable(orders[0].Status), "Observable merged even if attribute is not present in fields after update");
 		strictEqual(orders[0].Status(), "JUMPED", "Merged observable has correct value after update");
 
 

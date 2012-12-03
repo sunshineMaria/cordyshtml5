@@ -55,10 +55,10 @@
 		opts.mappingOptions = opts.mappingOptions || {};
 		opts.mappingOptions.ignore = opts.mappingOptions.ignore || [];
 		opts.mappingOptions.ignore.push("_destroy");
-		if (opts.template){
+		if (opts.fields){
 			opts.mappingOptions.include = opts.mappingOptions.include || [];
-			$.each(opts.template, function(i, f) {
-				var persisted = typeof(f.persisted) !== "undefined" ? f.persisted : (typeof(f) === "string" || f.isArray || f.template);
+			$.each(opts.fields, function(i, f) {
+				var persisted = typeof(f.persisted) !== "undefined" ? f.persisted : (typeof(f) === "string" || f.isArray || f.fields);
 				if (persisted){
 					opts.mappingOptions.include.push(f);
 				}
@@ -86,11 +86,11 @@
 			if (objects.length == 0 && (typeof(data) === "object")) objects = [data];
 			if (objects.length > 0) {
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
-					if (self.isReadOnly !== true || opts.template){
+					if (self.isReadOnly !== true || opts.fields){
 						// make every attribute Observable for identifying changes and add lock if the model is not readOnly
 						for (var objectKey in objects){
 							var object = objects[objectKey], 
-								observableObject = mapObject(object, null, opts.template, opts.mappingOptions, self.isReadOnly);
+								observableObject = mapObject(object, null, opts.fields, opts.mappingOptions, self.isReadOnly);
 							if (!self.isReadOnly) {
 								addOptimisticLock(self, opts, object, observableObject, false);
 							}
@@ -254,7 +254,7 @@
 		this.addBusinessObject = function(object){
 			if (! object) return null;
 			if (! ko.isObservable(object)){
-				object = mapObject(object, null, opts.template, opts.mappingOptions, self.isReadOnly);
+				object = mapObject(object, null, opts.fields, opts.mappingOptions, self.isReadOnly);
 			}
 			self[self.objectName].push(object);
 			return object;
@@ -477,20 +477,20 @@
 	};
 
 	// Maps a JS object into an observable
-	mapObject = function(dataObject, existingObservable, template, mappingOptions, isReadOnly){
+	mapObject = function(dataObject, existingObservable, fields, mappingOptions, isReadOnly){
 		var mappedObject = isReadOnly ? dataObject : (existingObservable ? ko.mapping.fromJS(dataObject, mappingOptions, existingObservable) : ko.mapping.fromJS(dataObject, mappingOptions));
-		if (template) {
-			mappedObject = mapObjectByTemplate(dataObject, mappedObject, template, null, ! isReadOnly, existingObservable);
+		if (fields) {
+			mappedObject = mapObjectByFields(dataObject, mappedObject, fields, null, ! isReadOnly, existingObservable);
 		}
 
 		return mappedObject;
 	}
 
-	// Create observables from a data object against a template, supporting child objects, arrays, compute, paths and others.
-	mapObjectByTemplate = function(dataObject, mappedObject, objectTemplate, rootObject, createObservables, existingObservable) {
+	// Create observables from a data object against fields, supporting child objects, arrays, compute, paths and others.
+	mapObjectByFields = function(dataObject, mappedObject, objectFields, rootObject, createObservables, existingObservable) {
 		if (!rootObject) rootObject = dataObject;
 
-		$.each(objectTemplate, function(i, f) {
+		$.each(objectFields, function(i, f) {
 		
 			if (typeof(f) === "string") {
 				if (! mappedObject[f]){
@@ -539,13 +539,13 @@
 						}
 					}
 				}
-				if (f.template) {	// recursively map child objects
+				if (f.fields) {	// recursively map child objects
 					if ($.isArray(value)) {
 						for (var i=0; i<value.length; i++) {
-							mapObjectByTemplate(value[i], mappedObject[f.name]()[i], f.template, rootObject, createObservables);
+							mapObjectByFields(value[i], mappedObject[f.name]()[i], f.fields, rootObject, createObservables);
 						}
 					} else {
-						mapObjectByTemplate(value, mappedObject[f.name], f.template, rootObject, createObservables);
+						mapObjectByFields(value, mappedObject[f.name], f.fields, rootObject, createObservables);
 					}
 				}
 			}
@@ -580,7 +580,7 @@
 
 		// Strictly to be used internally. Updates the current state and the lock after successful update/insert
 		result._update = function(newData) {
-			mapObject(newData, observableData, opts.template, opts.mappingOptions, false);
+			mapObject(newData, observableData, opts.fields, opts.mappingOptions, false);
 			this._updateLock(newData);
 		}
 
