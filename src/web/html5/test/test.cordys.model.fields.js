@@ -1,9 +1,9 @@
 (function (window, $) {
 
-	module("Model Plugin with Templating Test");
+	module("Model Plugin with Fields Attribute Test");
 	$.mockjax({
 		url: '*/com.eibus.web.soap.Gateway.wcp',
-		data: /GetTemplateTestRequest/,
+		data: /GetFieldsTestRequest/,
 		responseText: {
 			tuple:
 			[
@@ -63,7 +63,7 @@
 		}
 	});
 
-	var templateTestModel1 = new $.cordys.model({
+	var fieldsTestModel1 = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: true,
 		defaults: {
@@ -74,25 +74,25 @@
 				return false;
 			}
 		},
-		template: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
+		fields: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
 			name: "Discount",
 			type: "string"
 		}]
 	});
 
 	/* Test	
-	1) If Observables gets added if specified in the template or is part of the response
-	2) Observables gets added if specified in the template in both the short and the detailed forms
+	1) If Observables gets added if specified in the fields attribute or is part of the response
+	2) Observables gets added if specified in the fields attribute in both the short and the detailed forms
 	3) Observables gets added with the right value in both cases
 	*/
-	test("Template Attribute Test Without Observables", 7, function () {
+	test("Fields Attribute Test Without Observables", 7, function () {
 		stop();
 
-		templateTestModel1.read({
-			method: "GetTemplateTestRequest"
+		fieldsTestModel1.read({
+			method: "GetFieldsTestRequest"
 		});
 
-		var orders = templateTestModel1.OrderDemo();
+		var orders = fieldsTestModel1.OrderDemo();
 
 		ok(!ko.isObservable(orders[0].Cost), "Object added when model is read only");
 		strictEqual(typeof (orders[0].Cost), "undefined", "Object added even if attribute is not present in response when model is read only");
@@ -108,7 +108,7 @@
 		start();
 	});
 
-	var templateTestModel1Obs = new $.cordys.model({
+	var fieldsTestModel1Obs = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -119,26 +119,26 @@
 				return false;
 			}
 		},
-		template: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
+		fields: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
 			name: "Discount",
 			type: "string"
 		}]
 	});
 
 	/* Test	
-	1) If Observables gets added if specified in the template or is part of the response
-	2) Observables gets added if specified in the template in both the short and the detailed forms
+	1) If Observables gets added if specified in the fields attribute or is part of the response
+	2) Observables gets added if specified in the fields in both the short and the detailed forms
 	3) Observables gets added with the right value in both cases
 	*/
-	test("Template Attribute Test With Observables", 7, function () {
+	test("Fields Attribute Test With Observables", 7, function () {
 		stop();
-		var currentSubscription = templateTestModel1Obs.OrderDemo.subscribe(function (orders) {
+		var currentSubscription = fieldsTestModel1Obs.OrderDemo.subscribe(function (orders) {
 			ok(ko.isObservable(orders[0].Cost), "Observable added even if attribute is not present in response");
 			strictEqual(typeof (orders[0].Cost()), "undefined", "Added observable has undefined value");
 
 			ok(ko.isObservable(orders[1].Status), "Observable added even if attribute is not present in response");
 
-			ok(ko.isObservable(orders[0].Notes), "Observable added if attribute is present in respone even if it is not specified in the template");
+			ok(ko.isObservable(orders[0].Notes), "Observable added if attribute is present in respone even if it is not specified in the attribute");
 			strictEqual(orders[0].Notes(), "test", "Added observable from response has correct value");
 
 			ok(ko.isObservable(orders[0].Discount), "Observable added even if attribute is not present in response");
@@ -146,15 +146,15 @@
 
 			currentSubscription.dispose(currentSubscription);
 		});
-		templateTestModel1Obs.read({
-			method: "GetTemplateTestRequest"
+		fieldsTestModel1Obs.read({
+			method: "GetFieldsTestRequest"
 		});
 
-		// Template definitions should make a change in the original object and set the dirty flag
-		templateTestModel1Obs.synchronize({
-			method: "UpdateTemplateTestRequest",
+		// Fields definitions should make a change in the original object and set the dirty flag
+		fieldsTestModel1Obs.synchronize({
+			method: "UpdateFieldsTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Fields Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
@@ -162,7 +162,7 @@
 	});
 
 
-	var templateTestModel2 = new $.cordys.model({
+	var fieldsTestModel2 = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -173,7 +173,7 @@
 				return false;
 			}
 		},
-		template: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
+		fields: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
 			name: "StatusMessage",
 			type: "string",
 			computed: function () {
@@ -191,9 +191,9 @@
 	2) If the values of the computed observables are correct
 	3) If observables get correctly added with path specified, with the correct values
 	*/
-	test("Template Computed Observables Test", 4, function () {
+	test("Fields Attribute Computed Observables Test", 4, function () {
 		stop();
-		var currentSubscription = templateTestModel2.OrderDemo.subscribe(function (orders) {
+		var currentSubscription = fieldsTestModel2.OrderDemo.subscribe(function (orders) {
 
 			ok(ko.isObservable(orders[1].StatusMessage), "Observable added for computed field");
 			strictEqual(orders[0].StatusMessage(), "160 CREATED", "Computed field has correct value");
@@ -203,15 +203,15 @@
 
 			currentSubscription.dispose(currentSubscription);
 		});
-		templateTestModel2.read({
-			method: "GetTemplateTestRequest"
+		fieldsTestModel2.read({
+			method: "GetFieldsTestRequest"
 		});
 
-		// Template definitions should make a change in the original object and set the dirty flag
-		templateTestModel2.synchronize({
-			method: "UpdateTemplateTestRequest",
+		// Field definitions should make a change in the original object and set the dirty flag
+		fieldsTestModel2.synchronize({
+			method: "UpdateFieldsTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Fields Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
@@ -219,7 +219,7 @@
 	});
 
 
-	var templateTestModel3 = new $.cordys.model({
+	var fieldsTestModel3 = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -230,7 +230,7 @@
 				return false;
 			}
 		},
-		template: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
+		fields: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
 			name: "OrderDemoLines",
 			isArray: true
 		}]
@@ -242,25 +242,25 @@
 	a) In case the response has only a singleton
 	a) In case the response does not have it
 	*/
-	test("Template Array Test", 4, function () {
+	test("Fields Array Test", 4, function () {
 		stop();
-		var currentSubscription = templateTestModel3.OrderDemo.subscribe(function (orders) {
-			ok(ko.isObservable(orders[2].OrderDemoLines), "Observable added for array field if it does not exist");
-			strictEqual($.type(orders[2].OrderDemoLines()), "array", "Observable added for array field is an array");
+		var currentSubscription = fieldsTestModel3.OrderDemo.subscribe(function (orders) {
+			ok(ko.isObservable(orders[2].OrderDemoLines), "Observable added for array fields if it does not exist");
+			strictEqual($.type(orders[2].OrderDemoLines()), "array", "Observable added for array fields is an array");
 
-			strictEqual($.type(orders[0].OrderDemoLines()), "array", "Singleton made into an array for an array field");
+			strictEqual($.type(orders[0].OrderDemoLines()), "array", "Singleton made into an array for an array fields");
 
-			strictEqual($.type(orders[1].OrderDemoLines()), "array", "Array remains an array for an array field");
+			strictEqual($.type(orders[1].OrderDemoLines()), "array", "Array remains an array for an array fields");
 		});
-		templateTestModel3.read({
-			method: "GetTemplateTestRequest"
+		fieldsTestModel3.read({
+			method: "GetFieldsTestRequest"
 		});
 
-		// Template definitions should make a change in the original object and set the dirty flag
-		templateTestModel3.synchronize({
-			method: "UpdateTemplateTestRequest",
+		// Fields definitions should make a change in the original object and set the dirty flag
+		fieldsTestModel3.synchronize({
+			method: "UpdateFieldsTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Fields Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
@@ -268,7 +268,7 @@
 	});
 
 
-	var templateTestModel4 = new $.cordys.model({
+	var fieldsTestModel4 = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -279,9 +279,9 @@
 				return false;
 			}
 		},
-		template: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
+		fields: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
 			name: "OrderDemoLines",
-			template: ["Product", "Quantity", "Dummy", "Price", {
+			fields: ["Product", "Quantity", "Dummy", "Price", {
 				name: "Cost",
 				computed: function () {
 					return new Number(this.Quantity()) * new Number(this.Price());
@@ -295,45 +295,45 @@
 	});
 
 	/* Test	
-	1) Whether recursive templates are working
-	a) Observables gettting added from inner templates, response with the correct values
-	b) Computer Observables gettting added from inner templates with the correct values
+	1) Whether recursive fields attribute is working
+	a) Observables gettting added from nested fields, response with the correct values
+	b) Computer Observables gettting added from nested fields with the correct values
 	*/
-	test("Inner Template Test", 10, function () {
+	test("Nested Fields Test", 10, function () {
 		stop();
-		var currentSubscription = templateTestModel4.OrderDemo.subscribe(function (orders) {
-			ok(ko.isObservable(orders[0].OrderDemoLines.Dummy), "Observable for inner template added even if attribute is not present in response");
+		var currentSubscription = fieldsTestModel4.OrderDemo.subscribe(function (orders) {
+			ok(ko.isObservable(orders[0].OrderDemoLines.Dummy), "Observable for nested fields added even if attribute is not present in response");
 			strictEqual($.type(orders[2].OrderDemoLines.Dummy()), "undefined", "Observable added has value undefined");
 
-			ok(ko.isObservable(orders[0].OrderDemoLines.ShippedFrom), "Observable for inner template added even if attribute is not present in template");
+			ok(ko.isObservable(orders[0].OrderDemoLines.ShippedFrom), "Observable for nested fields added even if attribute is not present in fields");
 			strictEqual(orders[0].OrderDemoLines.ShippedFrom(), "Africa", "Observable added has value as in the response");
 
-			ok(ko.isObservable(orders[0].OrderDemoLines.Cost), "Computed observable for inner template created");
-			strictEqual(orders[0].OrderDemoLines.Cost(), 416000, "Computer observable value for inner template correct");
+			ok(ko.isObservable(orders[0].OrderDemoLines.Cost), "Computed observable for nested fields created");
+			strictEqual(orders[0].OrderDemoLines.Cost(), 416000, "Computer observable value for nested fields correct");
 
-			strictEqual($.type(orders[2].OrderDemoLines), "function", "Observable added for non-existing inner template");
-			strictEqual($.type(orders[2].OrderDemoLines()), "undefined", "Observable added for non-existing inner template returns undefined");
+			strictEqual($.type(orders[2].OrderDemoLines), "function", "Observable added for non-existing nested fields");
+			strictEqual($.type(orders[2].OrderDemoLines()), "undefined", "Observable added for non-existing nested fields returns undefined");
 
 			ok(ko.isObservable(orders[0].OrderDemoLines.ItemName), "Observable added for field with path even if the path does not exist");
 			strictEqual(orders[0].OrderDemoLines.ItemName(), "Tyre", "Field with path has correct value");
 
 		});
-		templateTestModel4.read({
-			method: "GetTemplateTestRequest"
+		fieldsTestModel4.read({
+			method: "GetFieldsTestRequest"
 		});
 
-		// Template definitions should make a change in the original object and set the dirty flag
-		templateTestModel4.synchronize({
-			method: "UpdateTemplateTestRequest",
+		// Fields definitions should make a change in the original object and set the dirty flag
+		fieldsTestModel4.synchronize({
+			method: "UpdateFieldsTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Fields Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
 		start();
 	});
 
-	var templateTestModel5 = new $.cordys.model({
+	var fieldsTestModel5 = new $.cordys.model({
 		objectName: "OrderDemo",
 		isReadOnly: false,
 		defaults: {
@@ -344,10 +344,10 @@
 				return false;
 			}
 		},
-		template: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
+		fields: ["OrderID", "Customer", "Employee", "BirthDate", "Cost", "Status", {
 			name: "OrderDemoLines",
 			isArray: true,
-			template: ["Product", "Quantity", "Dummy", "Price", {
+			fields: ["Product", "Quantity", "Dummy", "Price", {
 				name: "Cost",
 				computed: function () {
 					return new Number(this.Quantity()) * new Number(this.Price());
@@ -361,42 +361,42 @@
 	});
 
 	/* Test	
-	1) Whether recursive templates are working for ones marked arrays
-	a) Observables gettting added from inner templates, response with the correct values
-	b) Computer Observables gettting added from inner templates with the correct values
-	c) Arrays getting added for templates in case of none, singleton and multiple value in the return
+	1) Whether recursive Fields attribute is working for ones marked arrays
+	a) Observables gettting added from inner fields, response with the correct values
+	b) Computer Observables gettting added from inner fields with the correct values
+	c) Arrays getting added for fields in case of none, singleton and multiple value in the return
 	*/
-	test("Inner Template Array Test", 12, function () {
+	test("Inner Fields Array Test", 12, function () {
 		stop();
-		var currentSubscription = templateTestModel5.OrderDemo.subscribe(function (orders) {
+		var currentSubscription = fieldsTestModel5.OrderDemo.subscribe(function (orders) {
 
-			ok(ko.isObservable(orders[1].OrderDemoLines()[0].Dummy), "Observable for inner template added even if attribute is not present in response");
+			ok(ko.isObservable(orders[1].OrderDemoLines()[0].Dummy), "Observable for nested fields added even if attribute is not present in response");
 			strictEqual($.type(orders[1].OrderDemoLines()[0].Dummy()), "undefined", "Observable added has value undefined");
 
-			strictEqual($.type(orders[0].OrderDemoLines), "function", "Observable added for array template for singleton");
-			strictEqual($.type(orders[0].OrderDemoLines()), "array", "Observable added for array template returns array even in case of singleton");
+			strictEqual($.type(orders[0].OrderDemoLines), "function", "Observable added for array fields for singleton");
+			strictEqual($.type(orders[0].OrderDemoLines()), "array", "Observable added for array fields returns array even in case of singleton");
 
-			ok(ko.isObservable(orders[0].OrderDemoLines()[0].ShippedFrom), "Observable for inner template added even if attribute is not present in template");
+			ok(ko.isObservable(orders[0].OrderDemoLines()[0].ShippedFrom), "Observable for nested fields added even if attribute is not present in fields");
 			strictEqual(orders[0].OrderDemoLines()[0].ShippedFrom(), "Africa", "Observable added has value as in the response");
 
-			ok(ko.isObservable(orders[0].OrderDemoLines()[0].Cost), "Computed observable for inner template created");
-			strictEqual(orders[0].OrderDemoLines()[0].Cost(), 416000, "Computer observable value for inner template correct");
+			ok(ko.isObservable(orders[0].OrderDemoLines()[0].Cost), "Computed observable for nested fields created");
+			strictEqual(orders[0].OrderDemoLines()[0].Cost(), 416000, "Computer observable value for nested fields correct");
 
-			strictEqual($.type(orders[2].OrderDemoLines), "function", "Observable added for array template");
-			strictEqual($.type(orders[2].OrderDemoLines()), "array", "Observable added for array template returns array even if it is not there in the response");
+			strictEqual($.type(orders[2].OrderDemoLines), "function", "Observable added for array fields");
+			strictEqual($.type(orders[2].OrderDemoLines()), "array", "Observable added for array fields returns array even if it is not there in the response");
 
 			ok(ko.isObservable(orders[0].OrderDemoLines()[0].ItemName), "Observable added for field with path even if the path does not exist");
 			strictEqual(orders[0].OrderDemoLines()[0].ItemName(), "Tyre", "Field with path has correct value");
 		});
-		templateTestModel5.read({
-			method: "GetTemplateTestRequest"
+		fieldsTestModel5.read({
+			method: "GetFieldsTestRequest"
 		});
 
-		// Template definitions should make a change in the original object and set the dirty flag
-		templateTestModel5.synchronize({
-			method: "UpdateTemplateTestRequest",
+		// Fields definitions should make a change in the original object and set the dirty flag
+		fieldsTestModel5.synchronize({
+			method: "UpdateFieldsTestRequest",
 			beforeSend: function (jqXHR, settings) {
-				ok(false, "Error : Template Definition set a dirty flag causing the request to be sent here");
+				ok(false, "Error : Fields Definition set a dirty flag causing the request to be sent here");
 			}
 		});
 
