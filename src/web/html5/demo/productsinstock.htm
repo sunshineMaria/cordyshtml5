@@ -24,8 +24,10 @@
 						parameters: {
 							fromProductID: "0",
 							toProductID: "99999"
-						},
-						success: function(products) {
+							}
+						}
+				});
+				productsModel.read().done( function(products) {
 							var data = new google.visualization.DataTable();
 							data.addColumn('string', 'Product');
 							data.addColumn('number', 'In Stock');
@@ -41,10 +43,7 @@
 									  hAxis: {title: "In Stock"},
 									 legend: {position:"left"}}
 								);
-						}
-					}
-				});
-				productsModel.read();
+						});
 			}
 
 			google.setOnLoadCallback(drawProductChart);
