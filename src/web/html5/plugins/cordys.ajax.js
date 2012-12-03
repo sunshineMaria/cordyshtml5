@@ -146,7 +146,12 @@
 		};
 
 		// check if we have the list of organizations in $.cordys.ajax._organizations
-		if (!$.cordys.ajax._organizations) {
+		if ($.cordys.ajax._organizations){
+			window._$DefOrg.resolve(options.orgDN = matchOrg(organization));
+			return;
+		}
+		else
+		{
 			//TODO: check if using localStorage is correct. What happens when another user logged in?
 			$.cordys.ajax._organizations = ((typeof(localStorage) !== "undefined") ? (localStorage._organizations && localStorage._organizations.split("#"))	 : null);
 		}
