@@ -32,11 +32,26 @@ function HomeViewModel(parentModel) {
 						$.mobile.changePage('#app');
 					});
 				}).fail(function (e, statusText, errorThrown) {
-					var errorText = (e.error().responseXML && $(e.error().responseXML).find('faultstring,error elem').text()) || e.responseText || errorThrown || statusText;
-					var errorMessage = "Error in prelogin. Error is '" + errorText + "'";
-					console.log(errorMessage);
+					var errorText = (e.responseXML && $(e.responseXML).find("MessageCode").text()) || e.responseText || errorThrown || statusText;
+					var errorMessage = errorText;
+					
+					//When Cordys is down on server
+					if (errorText == "Cordys.WebGateway.Messages.WG_SOAPTransaction_SOAPNodeLookupFailure") {
+						errorMessage = "The message cannot be sent to the Single Sign-On service group. Verify if the corresponding service container is up and running.";
+					}
+
+					//When Gateway is not responding
+					else if (errorText == "Cordys.WebGateway.Messages.CommunicationError") {
+						errorMessage = "The gateway is not responding. Try again after some time";
+					}
+
+					//When there is no connectivity.
+					else if (errorText == "error") {
+						errorMessage = "A connection with the server cannot be established";
+					}
+
 					if (navigator.notification) {
-						navigator.notification.alert(errorMessage);
+						navigator.notification.alert(errorMessage, null, "Login Failed");
 					} else {
 						window.alert(errorMessage);
 					}

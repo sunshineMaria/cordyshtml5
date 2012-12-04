@@ -331,7 +331,7 @@ Server.prototype = {
 			}).fail(function(e) {
 				var messCode = $(e.responseXML).find("MessageCode").text();
 				if (messCode == "Cordys.ESBServer.Messages.invalidCredentials"){
-					var errorMessage = "You have entered an invalid user name and password combination. Do you want to change this?"
+					var errorMessage = "The Username and Password you have provided do not match. Do you want to make any changes?"
 					if (navigator.notification){
 						navigator.notification.confirm(errorMessage, function(buttonIndex) {
 							if (buttonIndex == 1){
