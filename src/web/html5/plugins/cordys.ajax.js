@@ -185,14 +185,14 @@
 					window._$DefOrg.resolve(options.orgDN);
 				}else{
 					// the user will go to the default organization if the organization specified does not exist
-					alert("Could not find Organization '" + organization + "'. Proceeding to default" );
+					alert("The Organization '" + organization + "' does not exist. The Default Organization will be used as the Organization.");
 					window._$DefOrg.resolve(options.orgDN = "");
 				}
 				
 			}).fail(function(error){
 				$.cordys.ajax._organizations = null;
 				// the user will go to the default organization if the organization specified does not exist
-				alert("Could not find Organization '" + organization + "'. Proceeding to default" );
+				alert("The Organization '" + organization + "' does not exist. The Default Organization will be used as the Organization.");
 				window._$DefOrg.resolve(options.orgDN = "");
 			});
 		}
