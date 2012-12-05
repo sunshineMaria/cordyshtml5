@@ -16,7 +16,7 @@
 ;(function (window, $, undefined) {
 
 	if (!$.cordys) $.cordys = {};
-	
+
 	var TESTSWARM_URI = 'http://10.1.29.109:8080';
 
 	$.cordys.mobile = {
@@ -195,6 +195,19 @@
 		return this.loadScriptDeferred.promise();
 	}
 
+	// Globalization methods
+	$.cordys.mobile.globalization = {};
+	$.cordys.mobile.globalization.getLocaleName = function(successCallback, errorCallback) {
+		this.getLocaleNameDeferred = $.Deferred();
+		if (successCallback) this.getLocaleNameDeferred.done(successCallback);
+		if (errorCallback) this.getLocaleNameDeferred.fail(errorCallback);
+
+		postMessageToParent({
+			message: "globalization.getLocaleName"
+		}, $.cordys.mobile.origin);
+		return this.getLocaleNameDeferred.promise();
+	};
+
 	postMessageToParent = function(data, origin){
 		// TODO: Fix this
 		// Temporary hack to communicate through the TestSwarm Runner
@@ -259,6 +272,12 @@
 				break;
 			case "loadScript.onError":
 				$.cordys.mobile.loadScriptDeferred.reject(evt.data.parameters.error);
+				break;
+			case "globalization.getLocaleName.onSuccess":
+				$.cordys.mobile.globalization.getLocaleNameDeferred.resolve(evt.data.parameters.result);
+				break;
+			case "globalization.getLocaleName.onError":
+				$.cordys.mobile.globalization.getLocaleNameDeferred.reject(evt.data.parameters.error);
 				break;
 		}
 	}, false);

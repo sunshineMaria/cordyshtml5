@@ -4,7 +4,8 @@ if (typeof(jQuery) == "undefined") {
 };
 if (!$.cordys) $.cordys = {
 	cookiePath: "/cordys",
-	baseUrlPath: ""
+	baseUrlPath: "",
+	isMobile: getURLParameter(window.location, "startfrom") == "native"
 };
 // In BOP4.2 we need to set the base, as most urls are relative
 //var _baseTag =	document.getElementsByTagName("base")[0] ||
@@ -55,8 +56,7 @@ function deleteAllCookies()
 }
 
 function loginIntoCordys(loginUrl) {
-	var isNative = getURLParameter(window.location, "startfrom");
-	if (isNative && $.cordys.cookie) {
+	if ($.cordys.isMobile && $.cordys.cookie) {
 		$.cordys.cookie.getCookies(getURLParameter(window.location, "serverId"));
 		return;
 	}
@@ -89,3 +89,4 @@ loadScript("/cordys/html5/plugins/cordys.model.js");
 loadScript("/cordys/html5/plugins/cordys.workflow.js");
 loadScript("/cordys/html5/plugins/cordys.process.js");
 loadScript("/cordys/html5/plugins/cordys.case.js");
+loadScript("/cordys/html5/plugins/cordys.translation.js");
