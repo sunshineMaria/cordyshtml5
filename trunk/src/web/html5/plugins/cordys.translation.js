@@ -20,31 +20,60 @@
 	var messageBundles = [];
 
 	$.cordys.translation = {
-		keyRootPath :"/Cordys/WCP/Javascript/translation/"
+		defaultLanguage : "en-US",
+		xmlstoreRootPath : "/Cordys/WCP/Javascript/translation/",
+		nativeRootPath : "translation/"
 	};
 
 	$.cordys.translation.getBundle = function(path, language)
 	{
-		if (!language) language = getRuntimeLanguage();
-		if (path.indexOf('/') == 0 || path.indexOf("\\") == 0)	{
-			path = path.substring(1,path.length);
-		}
-		var key = path + "_" +language;
-		var bundle = messageBundles[key];
-		if(!bundle)
-		{
-			messageBundles[key] = bundle = new messageBundle(key, language);
-		}
-		return bundle;
+		return getRuntimeLanguage(language).then(function(language){
+			path = path.replace(/^[\/\\]/, "");
+			var key = path + "_" +language;
+			var bundle = messageBundles[key];
+			if (!bundle)
+			{
+				messageBundles[key] = bundle = new messageBundle(key, language);
+			}
+			return bundle;
+		});
 	}
-		
-	var getRuntimeLanguage = function() {
-		var language = getURLParameter(window.location, "language");
+
+	var getRuntimeLanguage = function(language) {
+		window._$DefLanguage = window._$DefLanguage || $.Deferred();
+		language = language || window.navigator.language;
+		if (typeof(getURLParameter) != "undefined") language = getURLParameter(window.location, "language");
 		if (!language) {
-			// TODO: call TranslationGateway to get user language
-			language = "en-US";
+			if ($.cordys.isMobile && $.cordys.mobile && $.cordys.mobile.globalization) {
+				$.cordys.mobile.globalization.getLocaleName().done(function(result){
+					_$DefLanguage.resolve(result);
+				}).fail(function(error){
+					// unable to get the language, take default language
+					_$DefLanguage.resolve($.cordys.translation.defaultLanguage);
+				});
+			} else if (typeof($.cordys.ajax) != "undefined") {
+				// call TranslationGateway to get user language
+				$.cordys.ajax({
+					url:"/cordys/com.cordys.translation.gateway.TranslationGateway.wcp",
+					data: "",
+					error: function(){
+						return false; // skip error message
+					}
+				}).done(function(data){
+					var jsData = $.cordys.json.xml2js(data);
+					if (jsData && jsData.browserpreferences) _$DefLanguage.resolve(jsData.browserpreferences.language);
+					else _$DefLanguage.resolve($.cordys.translation.defaultLanguage);
+				}).fail(function(jqXHR, textStatus, errorThrown){
+					// unable to get the language, take default language
+					_$DefLanguage.resolve($.cordys.translation.defaultLanguage);
+				});
+			} else {
+				// unable to get the language, take default language
+				_$DefLanguage.resolve($.cordys.translation.defaultLanguage);
+			}
 		}
-		return language;
+		if (language) _$DefLanguage.resolve(language);
+		return _$DefLanguage.promise();
 	}
 
 	var messageBundle = function(key, language) {
@@ -67,19 +96,47 @@
 			return ttext;
 		}
 
-		// TODO: what if called from native? can we get the resource file from mobile filesystem?
-		return $.cordys.ajax({
-			method: "GetXMLObject",
-			namespace: "http://schemas.cordys.com/1.0/xmlstore",
-			context: self,
-			dataType:"json",
-			parameters: {
-				key:$.cordys.translation.keyRootPath + key + ".mlm"
-			}
-		}).then(function(response) {
-			self.dictionary = $.cordys.json.find(response, "dictionary");
-			return self;
-		});
+		this.translate = function(selector, fp) {
+			if (!selector) selector = "[data-translatable='true']";
+			$(selector).each(function(){
+				var $this = $(this);
+				if (fp) {
+					fp.call(this, self.getMessage($this.is(":input") ? $this.val() : $this.text()));
+				} else {
+					if ($this.is(":input")) {
+						$this.val(self.getMessage($this.val()));
+					} else {
+						$this.text(self.getMessage($this.text()));
+					}
+				}
+			});
+		}
+		
+		if (typeof($.cordys.ajax) != "undefined") {
+			return $.cordys.ajax({
+				method: "GetXMLObject",
+				namespace: "http://schemas.cordys.com/1.0/xmlstore",
+				context: self,
+				dataType:"json",
+				parameters: {
+					key: $.cordys.translation.xmlstoreRootPath + key + ".mlm"
+				}
+			}).then(function(response) {
+				self.dictionary = $.cordys.json.find(response, "dictionary");
+				return self;
+			});
+		} else {
+			// called from native. Try to get the resource file from mobile filesystem
+			return $.ajax({
+				type: "GET",
+				url: $.cordys.translation.nativeRootPath + key + ".xml",
+				async: true,
+				cache: true
+			}).then(function(response) {
+				self.dictionary = $.cordys.json.find($.cordys.json.xml2js(response), "dictionary");
+				return self;
+			});
+		}
 
 	}
 
