@@ -151,6 +151,16 @@ $(document).bind("mobileinit", function() {
     $.mobile.defaultDialogTransition = 'none';
     $.mobile.loadingMessage = false;
     $("a").attr("data-transition", "none");
+    //Disable the auto zoom on iOS when user focus to any input field
+    if(navigator.userAgent.match(/(iPad|iPhone|iPod)/i))
+	{
+		$("input").live("focus", function () {
+			$.mobile.zoom.disable( true );
+		});
+		$("input").live("blur", function () {
+			$.mobile.zoom.enable( true );
+		});
+	}
 });
 </script>
 
