@@ -66,6 +66,14 @@
 					}, Cordys.currentOrigin);
 				}, e.data.parameters.options);
 			},
+			'globalization.getLocaleName': function(e) {
+				postMessageToAppWindow({
+					message: 'globalization.getLocaleName.onSuccess',
+					parameters: {
+						result: navigator.language
+					}
+				}, Cordys.currentOrigin);
+			},
 			'notification.alert': function(e) {
 				if (!navigator.notification) {
 					return;
