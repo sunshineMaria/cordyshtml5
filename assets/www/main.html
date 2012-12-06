@@ -197,6 +197,10 @@ $(document).bind("mobileinit", function() {
 $(function() {
 	$.cordys.translation.getBundle("cordysapp").done(function(mBundle) {
 		mBundle.translate();
+		mBundle.translate("[placeholder]", function() {
+        	var $this = $(this);
+        	$this.attr("placeholder", mBundle.getMessage($this.attr("placeholder")));
+    	});
 	});
 });
 </script>
