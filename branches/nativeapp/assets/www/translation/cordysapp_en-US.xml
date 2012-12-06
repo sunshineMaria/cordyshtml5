@@ -1,0 +1,59 @@
+﻿<dictionary xmlns="http://schemas.cordys.com/1.0/xmlstore" xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <label label_id="At the moment there are no instances stored."" textidentifier="At the moment there are no instances stored.">
+    <en-US>At the moment there are no instances stored.</en-US>
+  </label>
+  <label label_id="Create a new bop instance." textidentifier="Create a new bop instance.">
+    <en-US>Create a new bop instance.</en-US>
+  </label>
+  <label label_id="For getting started, create a demo instance." textidentifier="For getting started, create a demo instance.">
+    <en-US>For getting started, create a demo instance.</en-US>
+  </label>
+  <label label_id="Add a new server" textidentifier="Add a new server">
+    <en-US>Add a new server</en-US>
+  </label>
+  <label label_id="Edit a server" textidentifier="Edit a server">
+    <en-US>Edit a server</en-US>
+  </label>
+  <label label_id="Location:" textidentifier="Location:">
+    <en-US>Location:</en-US>
+  </label>
+  <label label_id="Organization:"" textidentifier="Organization:">
+    <en-US>Organization:"</en-US>
+  </label>
+  <label label_id="User name:" textidentifier="User name:">
+    <en-US>User name:</en-US>
+  </label>
+  <label label_id="Password:" textidentifier="Password:">
+    <en-US>Password:</en-US>
+  </label>
+  <label label_id="Cancel" textidentifier="Cancel">
+    <en-US>Cancel</en-US>
+  </label>
+  <label label_id="Add" textidentifier="Add">
+    <en-US>Add</en-US>
+  </label>
+  <label label_id="No" textidentifier="No">
+    <en-US>No</en-US>
+  </label>
+  <label label_id="Yes" textidentifier="Yes">
+    <en-US>Yes</en-US>
+  </label>
+  <label label_id="Delete" textidentifier="Delete">
+    <en-US>Delete</en-US>
+  </label>
+  <label label_id="Ok" textidentifier="Ok">
+    <en-US>Ok</en-US>
+  </label>
+  <label label_id="Are you sure you want to delete this server?" textidentifier="Are you sure you want to delete this server?">
+    <en-US>Are you sure you want to delete this server?</en-US>
+  </label>
+  <label label_id="App" textidentifier="App">
+    <en-US>App</en-US>
+  </label>
+  <label label_id="Do you want to create a link to our demo server?" textidentifier="Do you want to create a link to our demo server?">
+    <en-US>Do you want to create a link to our demo server?</en-US>
+  </label>
+  <label label_id="- Leave empty for default -" textidentifier="- Leave empty for default -">
+    <en-US>- Leave empty for default -</en-US>
+  </label>
+</dictionary>

@@ -53,4 +53,7 @@
   <label label_id="translated text" textidentifier="Do you want to create a link to our demo server?">
     <nl-NL>Wilt u verbinding maken met ons demo systeem?</nl-NL>
   </label>
+  <label label_id="translated text" textidentifier="- Leave empty for default -">
+    <nl-NL>- Laat leeg voor default -</nl-NL>
+  </label>
 </dictionary>
