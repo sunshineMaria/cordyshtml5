@@ -29,7 +29,7 @@
 	-->
 	<target name="dist" 
 		description="Builds the component completely"
-		depends="clean, init, copy_web, concat_plugins, minify_sdk, updatewebfilesystem, createcap">
+		depends="clean, init, copy_web, concat_plugins, minify_sdk, updatewebfilesystem, copy_messagebundles, createcap">
 	</target>
 
 
@@ -63,6 +63,15 @@
 		</copy>
 	</target>
 	
+	<!-- copy messagebundles -->
+	<target name="copy_messagebundles">
+		<echo message="Copying all js messagebundle to ${build.sdk.jsmessagebundles}" />
+		<copy todir="${build.sdk.jsmessagebundles}">
+			<fileset dir="${src.capcontent.jsmessagebundles}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
 	
 	<target name="concat_plugins" description="Concats all the plugins into the sdk file"
 				depends="copy_web">
@@ -132,6 +141,7 @@
 			<description language="en_US" text="${cap.description}" />
 			<description language="ja_jp" text="${cap.description}" />
 			<capcontent source="${src.capcontent}/webfilesystem.xml" />
+			<capcontent source="${src.capcontent.jsmessagebundle.filesystem.xml}" />
 		</createcap>				
    	</target>
 	
