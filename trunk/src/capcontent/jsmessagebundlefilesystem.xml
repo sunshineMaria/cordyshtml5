@@ -1,0 +1,33 @@
+<artifacts 
+	type="com.cordys.xforms.mlm">
+	<artifact
+		guid="005056C0-0008-11E2-E7ED-E4D7D8CB551C"
+		itempath="/Cordys/WCP/Javascript/translation/html5sdk/sdkmessagebundle_en-US.mlm"
+		name="/Cordys/WCP/Javascript/translation/html5sdk/sdkmessagebundle_en-US.mlm"
+		source="${build.sdk.jsmessagebundles}/sdkmessagebundle_en-US.mlm">
+		<description
+			language="en_US"
+			text="${build.sdk.jsmessagebundles}/sdkmessagebundle_en-US.mlm"
+		/>
+	</artifact>
+	<artifact
+		guid="005056C0-0008-11E2-E7ED-F0B6368B751C"
+		itempath="/Cordys/WCP/Javascript/translation/html5sdk/sdkmessagebundle_ja-JP.mlm"
+		name="/Cordys/WCP/Javascript/translation/html5sdk/sdkmessagebundle_ja-JP.mlm"
+		source="${build.sdk.jsmessagebundles}/sdkmessagebundle_ja-JP.mlm">
+		<description
+			language="ja-JP"
+			text="${build.sdk.jsmessagebundles}/sdkmessagebundle_ja-JP.mlm"
+		/>
+	</artifact>
+	<artifact
+		guid="005056C0-0008-11E2-E7ED-F0B6368B951C"
+		itempath="/Cordys/WCP/Javascript/translation/html5sdk/sdkmessagebundle_nl-NL.mlm"
+		name="/Cordys/WCP/Javascript/translation/html5sdk/sdkmessagebundle_nl-NL.mlm"
+		source="${build.sdk.jsmessagebundles}/sdkmessagebundle_nl-NL.mlm">
+		<description
+			language="nl-NL"
+			text="${build.sdk.jsmessagebundles}/sdkmessagebundle_nl-NL.mlm"
+		/>
+	</artifact>
+</artifacts>
