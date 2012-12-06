@@ -2923,7 +2923,7 @@
 					equal(statusText, "canceled", "Request cancelled as no data to be updated");
 				});
 
-				orderDemoObjectsAfterSync = orderDemoAsyncModel.OrderDemo();
+				var orderDemoObjectsAfterSync = orderDemoAsyncModel.OrderDemo();
 				equal(orderDemoObjects, orderDemoObjectsAfterSync, "BOs same before and after sync");
 				start();
 			},
