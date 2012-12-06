@@ -72,5 +72,53 @@
 		<label xmlns="" label_id="&apos; does not exist. The Default Organization will be used as the Organization." textidentifier="&apos; does not exist. The Default Organization will be used as the Organization.">
 			<en-US xmlns="">' does not exist. The Default Organization will be used as the Organization.</en-US>
 		</label>
+		<label xmlns="" label_id="Employees" textidentifier="Employees">
+			<en-US xmlns="">Employees</en-US>
+		</label>
+		<label xmlns="" label_id="Employee Details" textidentifier="Employee Details">
+			<en-US xmlns="">Employee Details</en-US>
+		</label>
+		<label xmlns="" label_id="Back" textidentifier="Back">
+			<en-US xmlns="">Back</en-US>
+		</label>
+		<label xmlns="" label_id="Title of Courtesy" textidentifier="Title of Courtesy">
+			<en-US xmlns="">Title of Courtesy</en-US>
+		</label>
+		<label xmlns="" label_id="Mr." textidentifier="Mr.">
+			<en-US xmlns="">Mr.</en-US>
+		</label>
+		<label xmlns="" label_id="Mrs." textidentifier="Mrs.">
+			<en-US xmlns="">Mrs.</en-US>
+		</label>
+		<label xmlns="" label_id="Ms." textidentifier="Ms.">
+			<en-US xmlns="">Ms.</en-US>
+		</label>
+		<label xmlns="" label_id="Dr." textidentifier="Dr.">
+			<en-US xmlns="">Dr.</en-US>
+		</label>
+		<label xmlns="" label_id="First Name" textidentifier="First Name">
+			<en-US xmlns="">First Name</en-US>
+		</label>
+		<label xmlns="" label_id="Last Name" textidentifier="Last Name">
+			<en-US xmlns="">Last Name</en-US>
+		</label>
+		<label xmlns="" label_id="Title" textidentifier="Title">
+			<en-US xmlns="">Title</en-US>
+		</label>
+		<label xmlns="" label_id="Phone" textidentifier="Phone">
+			<en-US xmlns="">Phone</en-US>
+		</label>
+		<label xmlns="" label_id="Address" textidentifier="Address">
+			<en-US xmlns="">Address</en-US>
+		</label>
+		<label xmlns="" label_id="City" textidentifier="City">
+			<en-US xmlns="">City</en-US>
+		</label>
+		<label xmlns="" label_id="Country" textidentifier="Country">
+			<en-US xmlns="">Country</en-US>
+		</label>
+		<label xmlns="" label_id="Notes" textidentifier="Notes">
+			<en-US xmlns="">Notes</en-US>
+		</label>
 	</dictionary>
 </MlmContent>
