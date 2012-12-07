@@ -1,59 +1,71 @@
 ﻿<dictionary xmlns="http://schemas.cordys.com/1.0/xmlstore" xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
-  <label label_id="translated text" textidentifier="At the moment there are no instances stored.">
-    <nl-NL>Op dit moment zijn er geen verbindingen opgeslagen.</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Create a new bop instance.">
-    <nl-NL>Maak een nieuwe verbinding.</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="For getting started, create a demo instance.">
-    <nl-NL>Maak verbinding met ons demo systeem.</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Add a new server">
-    <nl-NL>Voeg een nieuwe verbinding toe</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Edit a server">
-    <nl-NL>Wijzig een verbinding</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Location:">
-    <nl-NL>Machine:</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Organization:">
-    <nl-NL>Organizatie:</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="User name:">
-    <nl-NL>Gebruikersnaam:</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Password:">
-    <nl-NL>Wachtwoord:</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Cancel">
-    <nl-NL>Afbreken</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Add">
-    <nl-NL>Toevoegen</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="No">
-    <nl-NL>Nee</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Yes">
-    <nl-NL>Ja</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Delete">
-    <nl-NL>Verwijderen</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Ok">
-    <nl-NL>Ok</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Are you sure you want to delete this server?">
-    <nl-NL>Weet u zeker dat u deze verbinding wilt verwijderen?</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="App">
-    <nl-NL>App</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="Do you want to create a link to our demo server?">
-    <nl-NL>Wilt u verbinding maken met ons demo systeem?</nl-NL>
-  </label>
-  <label label_id="translated text" textidentifier="- Leave empty for default -">
-    <nl-NL>- Laat leeg voor default -</nl-NL>
-  </label>
+	<label label_id="translated text" textidentifier="At the moment there are no instances stored.">
+		<nl-NL>Op dit moment zijn er geen verbindingen opgeslagen.</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Create a new bop instance.">
+		<nl-NL>Maak een nieuwe verbinding.</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="For getting started, create a demo instance.">
+		<nl-NL>Maak verbinding met ons demo systeem.</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Add a new server">
+		<nl-NL>Voeg een nieuwe verbinding toe</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Edit a server">
+		<nl-NL>Wijzig een verbinding</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Location:">
+		<nl-NL>Machine:</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Organization:">
+		<nl-NL>Organizatie:</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="User name:">
+		<nl-NL>Gebruikersnaam:</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Password:">
+		<nl-NL>Wachtwoord:</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Cancel">
+		<nl-NL>Afbreken</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Add">
+		<nl-NL>Toevoegen</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="No">
+		<nl-NL>Nee</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Yes">
+		<nl-NL>Ja</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Delete">
+		<nl-NL>Verwijderen</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Ok">
+		<nl-NL>Ok</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Are you sure you want to delete this server?">
+		<nl-NL>Weet u zeker dat u deze verbinding wilt verwijderen?</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="App">
+		<nl-NL>App</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Do you want to create a link to our demo server?">
+		<nl-NL>Wilt u verbinding maken met ons demo systeem?</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="- Leave empty for default -">
+		<nl-NL>- Laat leeg voor default -</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Enter all the required details">
+		<nl-NL>Voer alle vereiste gegevens</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="Login Failed">
+		<nl-NL>Login mislukt</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="A connection with the server cannot be established">
+		<nl-NL>Een verbinding met de server niet kan worden vastgesteld</nl-NL>
+	</label>
+	<label label_id="translated text" textidentifier="SSO_Unavailable_Error">
+		<nl-NL>Het bericht kan niet worden verzonden naar de Single Sign-On service groep. Controleer of de bijbehorende service container is up and running.</nl-NL>
+	</label>
 </dictionary>

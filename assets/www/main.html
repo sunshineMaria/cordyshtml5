@@ -194,14 +194,20 @@ $(document).bind("mobileinit", function() {
 <script src="js/jquery/jxon.js"></script>
 <script src="js/plugins/cordys.translation.js"></script>
 <script type="text/javascript">
+var messageBundle;
 $(function() {
 	$.cordys.translation.getBundle("cordysapp").done(function(mBundle) {
+		messageBundle = mBundle;
 		mBundle.translate();
 		mBundle.translate("[placeholder]", function() {
         	var $this = $(this);
         	$this.attr("placeholder", mBundle.getMessage($this.attr("placeholder")));
     	});
 	});
+});
+$("#servers").bind("pageshow", function() {
+	if(messageBundle != undefined)
+	messageBundle.translate();
 });
 </script>
 <!-- main -->
