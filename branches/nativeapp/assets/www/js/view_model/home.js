@@ -37,7 +37,7 @@ function HomeViewModel(parentModel) {
 					
 					//When Cordys is down on server
 					if (errorText == "Cordys.WebGateway.Messages.WG_SOAPTransaction_SOAPNodeLookupFailure" || errorText == "Cordys.WebGateway.Messages.WG_SOAPTransaction_ReceiverDetailsInvalid" || errorText == "Cordys.WebGateway.Messages.CommunicationError") {
-						errorMessage = "SSO_UNAVAILABLE_ERROR: The message cannot be sent to the Single Sign-On service group. Verify if the corresponding service container is up and running.";
+						errorMessage = "SSO_Unavailable_Error";
 					}
 
 					//When there is no connectivity.
@@ -46,9 +46,9 @@ function HomeViewModel(parentModel) {
 					}
 
 					if (navigator.notification) {
-						navigator.notification.alert(errorMessage, null, "Login Failed");
+						navigator.notification.alert(messageBundle.getMessage(errorMessage), null, messageBundle.getMessage("Login Failed"));
 					} else {
-						window.alert(errorMessage);
+						window.alert(messageBundle.getMessage(errorMessage));
 					}
 				});
 			} else {

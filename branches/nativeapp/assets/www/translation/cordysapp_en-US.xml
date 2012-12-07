@@ -1,5 +1,5 @@
 ﻿<dictionary xmlns="http://schemas.cordys.com/1.0/xmlstore" xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
-  <label label_id="At the moment there are no instances stored."" textidentifier="At the moment there are no instances stored.">
+  <label label_id="At the moment there are no instances stored." textidentifier="At the moment there are no instances stored.">
     <en-US>At the moment there are no instances stored.</en-US>
   </label>
   <label label_id="Create a new bop instance." textidentifier="Create a new bop instance.">
@@ -55,5 +55,17 @@
   </label>
   <label label_id="- Leave empty for default -" textidentifier="- Leave empty for default -">
     <en-US>- Leave empty for default -</en-US>
+  </label>
+  <label label_id="Enter all the required details" textidentifier="Enter all the required details">
+    <en-US>Enter all the required details</en-US>
+  </label>
+  <label label_id="Login Failed" textidentifier="Login Failed">
+    <en-US>Login Failed</en-US>
+  </label>
+  <label label_id="A connection with the server cannot be established" textidentifier="A connection with the server cannot be established">
+    <en-US>A connection with the server cannot be established</en-US>
+  </label>
+  <label label_id="SSO_Unavailable_Error" textidentifier="SSO_Unavailable_Error">
+    <en-US>The message cannot be sent to the Single Sign-On service group. Verify if the corresponding service container is up and running.</en-US>
   </label>
 </dictionary>

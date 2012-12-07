@@ -24,9 +24,9 @@ function AddInstancePageViewModel(parentModel) {
 				submitEvent.stopPropagation();
 			
 			if (navigator.notification) {
-				navigator.notification.alert("Enter all the required details ");
+				navigator.notification.alert(messageBundle.getMessage("Enter all the required details"));
 			} else {
-				window.alert("Enter all the required details ");
+				window.alert(messageBundle.getMessage("Enter all the required details"));
 			}
 			
 			return;
