@@ -40,9 +40,8 @@
 	}
 
 	var getRuntimeLanguage = function(language) {
-		window._$DefLanguage = window._$DefLanguage || $.Deferred();
-		language = language || window.navigator.language;
-		if (typeof(getURLParameter) != "undefined") language = getURLParameter(window.location, "language");
+		var _$DefLanguage = $.Deferred();
+		language = language || (typeof(getURLParameter) != "undefined" ? getURLParameter(window.location, "language") : "") || window.navigator.language;
 		if (!language) {
 			if ($.cordys.isMobile && $.cordys.mobile && $.cordys.mobile.globalization) {
 				$.cordys.mobile.globalization.getLocaleName().done(function(result){
