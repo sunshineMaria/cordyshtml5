@@ -117,7 +117,7 @@
 							if (window._$DefCookies) {
 								window._$DefCookies.resolve();
 								var prevPage = getStrParam($.mobile.activePage.data("url"), "pageFrom");
-								$.mobile.changePage(prevPage ? ("#"+prevPage) : ("#"+$.mobile.firstPage.data("url")));
+								$.mobile.changePage(prevPage ? $("#"+prevPage) : $.mobile.firstPage);
 							} else {
 								window.location.reload();
 							}
