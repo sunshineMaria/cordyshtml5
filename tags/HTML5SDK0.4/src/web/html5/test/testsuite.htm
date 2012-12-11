@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML5 SDK Test Suite</title>
+	<script src="/cordys/html5/jquery/jquery-1.8.2.min.js" type="text/javascript"></script>
+	<link href="/cordys/html5/test/util/qunit.css" rel="stylesheet" type="text/css"/>
+	<script src="/cordys/html5/test/util/qunit.js" type="text/javascript"></script>
+	<script src="/cordys/html5/test/util/qunitoutputgenerator.js" type="text/javascript"></script>
+
+
+	<script src="/cordys/html5/test/util/inject.js" type="text/javascript"></script>
+
+	<script src="/cordys/html5/test/util/jquery.mockjax.js" type="text/javascript"></script>
+	<script src="/cordys/html5/cordys.html5sdk-0.5.js" type="text/javascript"></script>
+	<script src="/cordys/html5/test/util/test.util.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		/*
+		$.mockjaxSettings.log = function(msg,settings) {
+			if (console && console.log) console.log("MOCK: " + settings.data);
+		};
+		/*/
+		$.mockjaxSettings.log = null; // Switch off logging to have a clean console
+		//*/
+		$.cordys.ajax.defaults.isMock = true;
+	</script>
+
+<!-- The test scripts -->
+	<script src="test.cordys.ajax.js" type="text/javascript"></script>
+	<script src="test.cordys.model.js" type="text/javascript"></script>
+	<script src="test.cordys.model.ntp.js" type="text/javascript"></script>
+	<script src="test.cordys.model.fields.js" type="text/javascript"></script>
+	<script src="test.cordys.model.fields.crud.js" type="text/javascript"></script>
+	<script src="test.cordys.model.cursor.js" type="text/javascript"></script>
+	<script src="test.cordys.workflow.js" type="text/javascript"></script>
+	<script src="test.cordys.case.js" type="text/javascript"></script>
+	<script src="test.cordys.process.js" type="text/javascript"></script>
+	<script src="test.cordys.translation.js" type="text/javascript"></script>
+
+<script>
+	$(window).unload(saveCoverageData);
+
+	function saveCoverageData() {
+		if (typeof(__COVERAGE_REGISTRY__) !== "undefined"){
+			__COVERAGE_SAVE__();
+		}
+	}
+
+	function __COVERAGE_SAVE__() {
+		var report = [];
+
+		report.push("<CoverageData name=\"" + __COVERAGE_INDEX_FILE_NAME + "\" instrumentationTimestamp=\"" + __COVERAGE_INSTRUMENTATION_TIME_STAMP + "\">");
+
+		for (var fileName in __COVERAGE_REGISTRY__) {
+			report.push("<file name=\"" + fileName + "\" hits=\"" + __COVERAGE_REGISTRY__[fileName].hits + "\">");
+			var methods = __COVERAGE_REGISTRY__[fileName].__METHODS__;
+			for (var m in methods) {
+				report.push("<method name=\"" + methods[m].name + "\" id=\"" + m + "\" hits=\"" + methods[m].hits + "\"/>");
+			}
+			report.push("</file>");
+		}
+		report.push("</CoverageData>");
+
+		var report = report.join("");
+		var url = "com.cordys.tools.jscoverage.UploadCoverageReport.wcp";
+
+		$.ajax({
+			url: url,
+			async: false,
+			data: report,
+			datatype: "xml",
+			type: "POST"
+		}).fail(function (jqXHR, textStatus) {
+			console.log("Failed in sending request to save coverage data. Response code : " + textStatus);
+			alert("Failed in sending request to save coverage data. Response code : " + textStatus);
+		});
+		__COVERAGE_REGISTRY__ = []; // Clear Client Side
+	}
+
+</script>
+</head>
+<body>
+	<h1 id="qunit-header">Cordys HTML5 SDK Unit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+</body>
+</html>

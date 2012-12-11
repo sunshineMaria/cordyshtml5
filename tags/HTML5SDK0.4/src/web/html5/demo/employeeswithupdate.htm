@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>Employees</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"/> 
+	<link rel="stylesheet" href="/cordys/html5/jquery/jquery.mobile-1.2.0.min.css" />
+	<script src="/cordys/html5/jquery/jquery-1.8.2.min.js" type="text/javascript"></script>
+	<script src="/cordys/html5/jquery/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>
+	
+	<script src="/cordys/html5/knockout/knockout-2.1.0.js" type="text/javascript"></script>	
+	<script src="/cordys/html5/cordys.html5sdk-0.5.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+	var empModel; // Reference to the model
+	var isViewMode; // True if Details Page is in view mode (Details page can be in view or edit mode).
+
+	// Create a new model on page ready
+	$(function() {
+		empModel = new $.cordys.model({
+			context: document.body,
+			objectName: "Employees", // Name of the Business Object
+			// Common settings for all methods - read, create, update, delete, synchronize
+			defaults: { 
+				namespace: "http://schemas.cordys.com/NW",
+				dataType: "json"
+			},
+			// Settings for the update/synchronize method
+			update: {
+				method: "UpdateEmployees"
+			},
+			// Settings for the read method
+			read: {
+				method: "GetEmployeesObjects",
+				parameters: {
+					fromEmployeeID: "0",
+					toEmployeeID: "99"
+				}
+			}
+		});
+
+		// Call the read method. This would fire the method with the namespace and parameters as specified in the read settings above. 
+		empModel.read();
+	});
+
+	// Called on clicking an Employee
+	function selectEmployee(emp) {
+		return function(data) {
+			// Let us set the currently clicked item as the selected item to show in the detail page
+			empModel.selectedItem(data);
+			// Set the Details Page to View Mode
+			isViewMode = true;
+		}
+	}
+
+	// Called on confirmation of the Delete Dialog
+	function deleteSelectedEmployee() {
+		// Remove the Business Object
+		empModel.removeBusinessObject(empModel.selectedItem());
+		// Synchronize the changes with the backend
+		empModel.synchronize();
+	}
+
+	// Called on clicking the Add Button
+	function addEmployee(){
+		// Create a new Business Object
+		var newEmployee = empModel.addBusinessObject({Address: "",BirthDate: "",City: "",Country: "",Extension: "",FirstName: "",HireDate: "",HomePhone: "",LastName: "",Notes: "",Photo: "",PhotoPath: "",PostalCode: "",Region: "",ReportsTo: "",Title: "",TitleOfCourtesy: ""});
+		// Set the newly added Business Obect as the currently selected item
+		empModel.selectedItem(newEmployee);
+		isViewMode = false;
+	}
+
+	</script>
+
+</head> 
+
+<body> 
+
+	<div data-role="page" id="mainPage">
+		<div data-role="header" data-theme="b">
+			<a style="display:none"></a>
+			<h1>Employees</h1>
+			<a id="btnAdd" data-role="button" data-icon="add" href="#detailsPage" data-bind="click:addEmployee">Add</a>
+		</div>
+
+		<div data-role="content" data-theme="b">
+			<ul id="employeeList" data-role="listview" data-split-icon="delete" data-split-theme="d" data-theme="c" data-inset="true" data-bind="foreach:Employees">
+				<li>
+					<a href="#detailsPage" data-transition="pop" class="ui-link-inherit" data-bind="click:selectEmployee($data)">
+						<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: (Photo && Photo()) ? 'data:image/bmp;base64,' + Photo().substring(104) : '/cordys/html5/demo/images/defaultphoto.jpg' }"/>
+						<h3 class="ui-li-heading"><span data-bind="text:FirstName"></span>&nbsp;<span data-bind="text:LastName"></span></h3>
+						<p class="ui-li-desc" data-bind="text:Address"></p>
+						<p class="ui-li-desc"><span data-bind="text:City"></span>&nbsp;<span data-bind="text:Country"></span></p>
+					</a>
+					<a href="#deleteConfirmation" data-rel="dialog" data-transition="slideup" data-bind="click:selectEmployee($data)">Delete</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div data-role="page" id="deleteConfirmation">
+		<div data-role="header" data-theme="e">
+			<h1>Delete Employee?</h1>
+		</div>
+		<div data-role="content" data-theme="d" data-bind="with: selectedItem">
+			<h4><span>Are you sure you want to delete employee</span><span data-bind="text: ' \'' +FirstName() + ' ' + LastName() + '\''"></span><span>?</span></h4>
+			<a data-role="button" data-inline="true" data-rel="back" data-theme="b" data-bind="click:deleteSelectedEmployee">Yes</a>
+			<a data-role="button" data-inline="true" data-rel="back" data-bind="click:revertChanges">No</a>
+		</div>
+	</div>
+	<div data-role="page" id="detailsPage">
+		<div data-role="header" data-theme="b">
+			<a href="#mainPage" data-role="button" data-icon="back" data-rel="back" data-bind="click:revertChanges">Back</a>
+			<h1>Employee Details</h1>
+			<a data-role="button" id="btnEdit">Edit</a>
+		</div>
+		<div data-role="content" data-theme="c">
+			<ul data-role="listview" id="detailView">
+				<li>
+					<div data-bind="with: selectedItem">
+						<a class="ui-link-inherit">
+							<img class="ui-li-thumb ui-corner-tl" data-bind="attr: {src: (Photo && Photo()) ? 'data:image/bmp;base64,' + Photo().substring(104) : '/cordys/html5/demo/images/defaultphoto.jpg' }"/>
+							<!-- ko if: typeof(EmployeeID)!=="undefined"--> 
+								<h2 class="ui-li-heading" data-bind="text:EmployeeID"></h2>
+							<!-- /ko --> 
+							<h3 class="ui-li-heading"><span data-bind="text:TitleOfCourtesy"></span>&nbsp;<span data-bind="text:FirstName"></span>&nbsp;<span data-bind="text:LastName"></span></h3>
+							<p class="ui-li-desc"><span data-bind="text:Title"></p>
+						</a>
+					</div>
+				</li>
+				<li data-role="fieldcontain">
+					<div  data-bind="with: selectedItem" id="employeeDiv">
+						<div>
+							<label for="fldTitleOfCourtesy" class="select">Title of Courtesy</label>
+							<select id="fldTitleOfCourtesy" data-bind="value:TitleOfCourtesy" data-native-menu="true" data-mini="true" data-theme="c" data-inline="true">
+								<option value="Mr.">Mr.</option>
+								<option value="Mrs.">Mrs.</option>
+								<option value="Ms.">Ms.</option>
+								<option value="Dr.">Dr.</option>
+							</select>
+						</div>
+						<div >
+							<label for="fldFirstName" class="ui-input-text">First Name</label>
+							<input type="text" id="fldFirstName" data-bind="value:FirstName" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div>
+							<label for="fldLastPhone" class="ui-input-text">Last Name</label>
+							<input type="text" id="fldLastName" data-bind="value:LastName" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div >
+							<label for="fldTitle" class="ui-input-text">Title</label>
+							<input type="text" id="fldTitle" data-bind="value:Title" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div >
+							<label for="fldPhone" class="ui-input-text">Phone</label>
+							<input type="text" id="fldPhone" data-bind="value:HomePhone" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div >
+							<label for="fldAddress" class="ui-input-text">Address</label>
+							<input type="text" id="fldAddress" data-bind="value:Address" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div >
+							<label for="fldCity" class="ui-input-text">City</label>
+							<input type="text" id="fldCity" data-bind="value:City" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div >
+							<label for="fldCountry" class="ui-input-text">Country</label>
+							<input type="text" id="fldCountry" data-bind="value:Country" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"/>
+						</div>
+						<div >
+							<label for="fldNotes" class="ui-input-text">Notes</label>
+							<textarea id="fldNotes" data-bind="value:Notes" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset"></textarea>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+<script type="text/javascript">
+	// Add Click handler to the Edit Button on Page Ready
+	$(function(){
+		$("#btnEdit").bind("click", function () {
+			if (isViewMode) {
+				// We are switching to Edit Mode. Let us change the button's text to Done and enable all the fields
+				$(".ui-btn-text", this).text("Done");
+				$("#detailView :input").removeAttr('disabled');
+				$("select", "#detailView").removeAttr('disabled');
+				$("#fldTitleOfCourtesy").select().focus();
+			}
+			else {
+				// We are switching to View Mode. Let us change the button's text to Edit and disable all the fields
+				$(".ui-btn-text", this).text("Edit");
+				$("#detailView :input").attr('disabled', 'disabled');
+				$("select", "#detailView").attr('disabled', 'disabled');
+				empModel.synchronize();
+			}
+			isViewMode = ! isViewMode;
+		});
+	});
+
+	$("#detailsPage").bind( 'pageshow',function(event, ui) {
+		if (isViewMode){
+			// Let us change the button's text to Edit and disable all the fields
+			$("#btnEdit .ui-btn-text").text("Edit");
+			$('#detailView').listview("refresh");
+			$("#detailView :input").attr('disabled','disabled');
+			$("select", "#detailView").attr('disabled','disabled');
+		}
+		else {
+			// Let us change the button's text to Done and enable all the fields
+			$(".ui-btn-text", "#btnEdit").text("Done");
+			$("#detailView :input").removeAttr('disabled');
+			$("select", "#detailView").removeAttr('disabled');
+			$("#fldTitleOfCourtesy").select().focus();
+		}
+	});
+
+	// Called on clicking the back button
+	function revertChanges(){
+		// Revert all changes that are not synchronized to the backend till now
+		empModel.revert();
+	}
+</script>
+
+</body>
+</html>

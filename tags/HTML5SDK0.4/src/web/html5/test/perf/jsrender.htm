@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>JS Render</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+	<link rel="stylesheet" href="/cordys/html5/jquery/jquery.mobile-1.2.0.min.css" />
+	<script src="/cordys/html5/jquery/jquery-1.8.2.min.js" type="text/javascript"></script>
+	<script src="/cordys/html5/jquery/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>
+
+	<script src="/cordys/html5/jquery/jsrender.js" type="text/javascript"></script>
+	
+	<script src="/cordys/html5/cordys.html5sdk-0.5.js" type="text/javascript"></script>
+
+	<style type="text/css">
+		img.photo {
+			position:absolute;
+			top:0px;
+			right:0px;
+			bottom:0px;
+			height:100%;
+		}
+	</style>
+	
+	<script id="perfTemplate" type="text/x-jsrender">
+		<li>
+			<div >
+				<h3 class="ui-li-heading">{{:host}} {{:statusCode}}</h3>
+				<p class="ui-li-desc">{{:resource}}</p>
+				<p class="ui-li-desc">{{:protocol}} {{:byteCount}}</p>
+				<p class="ui-li-desc">{{:status}}</p>
+			</div>
+		</li>
+	</script>
+
+	<script type="text/javascript">
+		$(function () {
+
+			perfModel = new $.cordys.model({
+				objectName: "entry", // Name of the Business Object
+				read: {
+					// Settings for the read method
+					type: "GET",
+					url: "/cordys/html5/test/perf/data/weblog600.xml",
+					dataType: "json",
+					success: function () {
+						//alert(perfModel.entry);
+						var html = $("#perfTemplate").render(perfModel.entry);
+						$('#perfList')
+									.html(html)
+									.listview("refresh");
+				}
+			}
+		});
+
+		// Call the read method. This would fire the method with the namespace and parameters as specified in the read settings above.
+		perfModel.read();
+
+		
+	});
+	</script>
+
+</head> 
+
+<body> 
+
+	<div data-role="page" id="mainPage">
+		<div data-role="header" data-theme="b">
+			<h1>JS Render</h1>
+		</div>
+
+		<div data-role="content" data-theme="b">
+			<ul id="perfList" data-role="listview" data-theme="c" data-inset="true">
+			</ul>
+		</div>
+	</div>
+
+</body>
+</html>
