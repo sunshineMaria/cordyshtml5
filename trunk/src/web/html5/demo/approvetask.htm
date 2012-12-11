@@ -68,7 +68,7 @@
 				});
 				$.cordys.workflow.getTaskDetails(taskId).done(function(task) {
 				//	var pid = tasks[0].ProcessInstanceId;
-					taskDetailModel.Task(task);
+					taskDetailModel.Task($.makeArray(task));
 					$.cordys.process.getBusinessIdentifiers(task)
 						.done(function(identifiers) {
 							taskDetailModel.fields(identifiers);
