@@ -1,0 +1,124 @@
+<MlmContent xmlns="http://schemas.cordys.com/cap/artifact/com.cordys.xforms.mlm/1.0">
+	<dictionary xmlns="" xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+		<label xmlns="" label_id="Tasks" textidentifier="Tasks">
+			<en-US xmlns="">Tasks</en-US>
+		</label>
+		<label xmlns="" label_id="Worklists" textidentifier="Worklists">
+			<en-US xmlns="">Worklists</en-US>
+		</label>
+		<label xmlns="" label_id="Apps" textidentifier="Apps">
+			<en-US xmlns="">Apps</en-US>
+		</label>
+		<label xmlns="" label_id="Activity" textidentifier="Activity">
+			<en-US xmlns="">Activity</en-US>
+		</label>
+		<label xmlns="" label_id="Refresh" textidentifier="Refresh">
+			<en-US xmlns="">Refresh</en-US>
+		</label>
+		<label xmlns="" label_id="Logout" textidentifier="Logout">
+			<en-US xmlns="">Logout</en-US>
+		</label>
+		<label xmlns="" label_id="Tasklist" textidentifier="Tasklist">
+			<en-US xmlns="">Tasklist</en-US>
+		</label>
+		<label xmlns="" label_id="Task" textidentifier="Task">
+			<en-US xmlns="">Task</en-US>
+		</label>
+		<label xmlns="" label_id="Process" textidentifier="Process">
+			<en-US xmlns="">Process</en-US>
+		</label>
+		<label xmlns="" label_id="State" textidentifier="State">
+			<en-US xmlns="">State</en-US>
+		</label>
+		<label xmlns="" label_id="Assignee" textidentifier="Assignee">
+			<en-US xmlns="">Assignee</en-US>
+		</label>
+		<label xmlns="" label_id="Start Date" textidentifier="Start Date">
+			<en-US xmlns="">Start Date</en-US>
+		</label>
+		<label xmlns="" label_id="Start" textidentifier="Start">
+			<en-US xmlns="">Start</en-US>
+		</label>
+		<label xmlns="" label_id="Stop" textidentifier="Stop">
+			<en-US xmlns="">Stop</en-US>
+		</label>
+		<label xmlns="" label_id="Pause" textidentifier="Pause">
+			<en-US xmlns="">Pause</en-US>
+		</label>
+		<label xmlns="" label_id="Complete" textidentifier="Complete">
+			<en-US xmlns="">Complete</en-US>
+		</label>
+		<label xmlns="" label_id="Skip" textidentifier="Skip">
+			<en-US xmlns="">Skip</en-US>
+		</label>
+		<label xmlns="" label_id="Worklist" textidentifier="Worklist">
+			<en-US xmlns="">Worklist</en-US>
+		</label>
+		<label xmlns="" label_id="Tasks by worklist" textidentifier="Tasks by worklist">
+			<en-US xmlns="">Tasks by worklist</en-US>
+		</label>
+		<label xmlns="" label_id="User Name" textidentifier="User Name">
+			<en-US xmlns="">User Name</en-US>
+		</label>
+		<label xmlns="" label_id="Password" textidentifier="Password">
+			<en-US xmlns="">Password</en-US>
+		</label>
+		<label xmlns="" label_id="Login" textidentifier="Login">
+			<en-US xmlns="">Login</en-US>
+		</label>
+		<label xmlns="" label_id="The Organization &apos;" textidentifier="The Organization &apos;">
+			<en-US xmlns="">The Organization '</en-US>
+		</label>
+		<label xmlns="" label_id="&apos; does not exist. The Default Organization will be used as the Organization." textidentifier="&apos; does not exist. The Default Organization will be used as the Organization.">
+			<en-US xmlns="">' does not exist. The Default Organization will be used as the Organization.</en-US>
+		</label>
+		<label xmlns="" label_id="Employees" textidentifier="Employees">
+			<en-US xmlns="">Employees</en-US>
+		</label>
+		<label xmlns="" label_id="Employee Details" textidentifier="Employee Details">
+			<en-US xmlns="">Employee Details</en-US>
+		</label>
+		<label xmlns="" label_id="Back" textidentifier="Back">
+			<en-US xmlns="">Back</en-US>
+		</label>
+		<label xmlns="" label_id="Title of Courtesy" textidentifier="Title of Courtesy">
+			<en-US xmlns="">Title of Courtesy</en-US>
+		</label>
+		<label xmlns="" label_id="Mr." textidentifier="Mr.">
+			<en-US xmlns="">Mr.</en-US>
+		</label>
+		<label xmlns="" label_id="Mrs." textidentifier="Mrs.">
+			<en-US xmlns="">Mrs.</en-US>
+		</label>
+		<label xmlns="" label_id="Ms." textidentifier="Ms.">
+			<en-US xmlns="">Ms.</en-US>
+		</label>
+		<label xmlns="" label_id="Dr." textidentifier="Dr.">
+			<en-US xmlns="">Dr.</en-US>
+		</label>
+		<label xmlns="" label_id="First Name" textidentifier="First Name">
+			<en-US xmlns="">First Name</en-US>
+		</label>
+		<label xmlns="" label_id="Last Name" textidentifier="Last Name">
+			<en-US xmlns="">Last Name</en-US>
+		</label>
+		<label xmlns="" label_id="Title" textidentifier="Title">
+			<en-US xmlns="">Title</en-US>
+		</label>
+		<label xmlns="" label_id="Phone" textidentifier="Phone">
+			<en-US xmlns="">Phone</en-US>
+		</label>
+		<label xmlns="" label_id="Address" textidentifier="Address">
+			<en-US xmlns="">Address</en-US>
+		</label>
+		<label xmlns="" label_id="City" textidentifier="City">
+			<en-US xmlns="">City</en-US>
+		</label>
+		<label xmlns="" label_id="Country" textidentifier="Country">
+			<en-US xmlns="">Country</en-US>
+		</label>
+		<label xmlns="" label_id="Notes" textidentifier="Notes">
+			<en-US xmlns="">Notes</en-US>
+		</label>
+	</dictionary>
+</MlmContent>

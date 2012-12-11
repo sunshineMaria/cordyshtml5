@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Photo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="/cordys/html5/jquery/jquery.mobile-1.2.0.min.css" />
+	<script src="/cordys/html5/jquery/jquery-1.8.2.min.js"></script>
+	<script src="/cordys/html5/jquery/jquery.mobile-1.2.0.min.js"></script>
+
+	<script src="/cordys/html5/cordys.html5sdk-0.4.js"></script>
+	<script src="/cordys/html5/plugins/cordys.mobile.js"></script>
+</head>
+
+<body>
+	<div data-role="page" id="photoPage">
+		<div data-role="header" data-theme="b">
+			<h1>Take a picture</h1>
+		</div>
+		<div data-role="content" data-theme="d">
+			<button id="btnTakePhoto" type="submit" data-theme="b">Click Here</button>
+			<img id="imgPhoto" class="photo" style="width: 300px; height: 300px" />
+		</div>
+		<script>
+			$("#photoPage").on("pageinit", function() {
+				$("#btnTakePhoto").bind("click", takePhoto);
+			})
+
+			function takePhoto() {
+				try {
+					$.cordys.mobile.camera.getPicture(function(parameters) {
+						$("#imgPhoto")[0].src = "data:image/jpeg;base64," + parameters.imageData;
+					}, function(parameters) {
+						alert("failed: " + parameters.message);
+					}, {
+						quality: 50, 
+						destinationType: $.cordys.mobile.camera.DestinationType.DATA_URL
+					});
+				} catch (e) {
+					alert("error catched: " + e);
+				}
+			}
+		</script>
+	</div>
+</body>
+</html>
