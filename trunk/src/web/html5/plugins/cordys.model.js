@@ -72,8 +72,10 @@
 			readOptions.context = readOptions;
 
 			$.cordys.ajax(readOptions).done(function(data) {
-				var objects = self.putData(data);
+				var objects = getObjects(data, self.objectName);
 				handleCursorAfterRead(data, objects.length);
+				objects = self.putData(objects);
+				
 				this._$Def.resolve(objects, this);
 			}).fail(function(jqXHR, textStatus, errorThrown) {
 				this._$Def.reject(jqXHR, textStatus, errorThrown, this);
@@ -82,7 +84,7 @@
 		};
 
 		this.putData = function(data) {
-			var objects = getObjects(data, self.objectName);
+			var objects = ($.isArray(data)) ? data : getObjects(data, self.objectName);
 			if (objects.length == 0 && (typeof(data) === "object")) objects = [data];
 			if (objects.length > 0) {
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
