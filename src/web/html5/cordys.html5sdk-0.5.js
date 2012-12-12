@@ -65,7 +65,7 @@ function loginIntoCordys(loginUrl) {
 		$.mobile.changePage( loginUrl || baseUrl + "mobilelogin.htm", { 
 			transition: "pop", 
 			changeHash: false,
-			data: "pageFrom=" + $.mobile.activePage.attr("id")
+			data: "pageFrom=" + ($.mobile.activePage ? $.mobile.activePage.attr("id") : $("[data-role='page']").attr("id"))
 		});
 	} else {
 		window.showModalDialog(loginUrl || baseUrl + "login.htm");
