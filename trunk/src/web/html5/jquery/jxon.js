@@ -1,12 +1,18 @@
 ﻿;(function (window, $, undefined) {
 
-	var	sValueProp = "text", sAttributesProp = "keyAttributes", sAttrPref = "@", /* you can customize these values */ 
-		aCache = [], rIsNull = /^\s*$/, rIsBool = /^(?:true|false)$/i;
+	var	aCache = [], rIsNull = /^\s*$/, rIsBool = /^(?:true|false)$/i;
 
 	if (!$.cordys) $.cordys = {};
 	$.cordys.json = {};
+	$.cordys.json.defaults = {
+		valueProperty: "text",
+		attributesProperty: "keyAttributes",
+		attributePrefix:"@",
+		defaultVerbosity:1
+	}
+
 	$.cordys.json.xml2js = function (oXMLParent, nVerbosity /* optional */, bFreeze /* optional */, bNesteAttributes /* optional */) {
-		var _nVerb = arguments.length > 1 && typeof nVerbosity === "number" ? nVerbosity & 3 : /* put here the default verbosity level: */ 1;
+		var _nVerb = arguments.length > 1 && typeof nVerbosity === "number" ? nVerbosity & 3 : $.cordys.json.defaults.defaultVerbosity;
 		return createObjTree(oXMLParent, _nVerb, bFreeze || false, arguments.length > 3 ? bNesteAttributes : _nVerb === 3);
 	};
 	
@@ -136,7 +142,7 @@
 
 		if (bAttributes) {
 			var	nAttrLen = oParentNode.attributes.length,
-				sAPrefix = bNesteAttr ? "" : sAttrPref, oAttrParent = bNesteAttr ? {} : vResult;
+				sAPrefix = bNesteAttr ? "" : $.cordys.json.defaults.attributePrefix, oAttrParent = bNesteAttr ? {} : vResult;
 
 			for (var oAttrib, nAttrib = 0; nAttrib < nAttrLen; nLength++, nAttrib++) {
 				oAttrib = oParentNode.attributes.item(nAttrib);
@@ -145,13 +151,13 @@
 
 			if (bNesteAttr) {
 				if (bFreeze) { Object.freeze(oAttrParent); }
-				vResult[sAttributesProp] = oAttrParent;
+				vResult[$.cordys.json.defaults.attributesProperty] = oAttrParent;
 				nLength -= nAttrLen - 1;
 			}
 		}
 
 		if (nVerb === 3 || (nVerb === 2 || nVerb === 1 && nLength > 0) && sCollectedTxt) {
-			vResult[sValueProp] = vBuiltVal;
+			vResult[$.cordys.json.defaults.valueProperty] = vBuiltVal;
 		} else if (!bHighVerb && nLength === 0 && sCollectedTxt) {
 			vResult = vBuiltVal;
 		}
@@ -176,13 +182,13 @@
 			if (isFinite(sName)) { continue; } /* verbosity level is 0 */
 			vValue = oParentObj[sName];
 			if (typeof(vValue) === "function") vValue = vValue(); // in case of KO, value can be an observable.
-			if (sName === sValueProp) {
+			if (sName === $.cordys.json.defaults.valueProperty) {
 				if (vValue !== null && vValue !== true) { 
 					oParentEl.appendChild(oXMLDoc.createTextNode(vValue.constructor === Date ? vValue.toGMTString() : String(vValue)));
 				}
-			} else if (sName === sAttributesProp) { /* verbosity level is 3 */
+			} else if (sName === $.cordys.json.defaults.attributesProperty) { /* verbosity level is 3 */
 				for (var sAttrib in vValue) { oParentEl.setAttribute(sAttrib, vValue[sAttrib]); }
-			} else if (sName.charAt(0) === sAttrPref) {
+			} else if (sName.charAt(0) === $.cordys.json.defaults.attributePrefix) {
 				oParentEl.setAttribute(sName.slice(1), new String(vValue)); //For IE 
 			} else if (typeof(vValue) === "undefined"){
 				oParentEl.appendChild(oXMLDoc.createElement(sName));
