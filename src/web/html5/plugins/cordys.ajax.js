@@ -215,6 +215,8 @@
 				var saCookie = getCookie("\\w*_SAMLart");
 				if (!saCookie) {
 					loginIntoCordys(options.loginUrl);
+				} else {
+					window._$DefCookies.resolve();
 				}
 			}
 		}
