@@ -528,7 +528,7 @@
 						value = [];
 					}
 					if ($.isArray(mappedObject[f.name])){
-						mappedObject[f.name](value);
+						createObservables ? mappedObject[f.name](value) : mappedObject[f.name] = value;
 					}else{
 						mappedObject[f.name] = createObservables ? ko.observableArray(value) : value;
 					}
@@ -544,7 +544,7 @@
 				if (f.fields) {	// recursively map child objects
 					if ($.isArray(value)) {
 						for (var i=0; i<value.length; i++) {
-							mapObjectByFields(value[i], mappedObject[f.name]()[i], f.fields, rootObject, createObservables);
+							mapObjectByFields(value[i], createObservables ? mappedObject[f.name]()[i] : mappedObject[f.name][i], f.fields, rootObject, createObservables);
 						}
 					} else {
 						mapObjectByFields(value, mappedObject[f.name], f.fields, rootObject, createObservables);
