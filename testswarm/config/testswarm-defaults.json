@@ -40,11 +40,13 @@
 			"Chrome|23",
 			"Chrome|24",
 			"Chrome|25",
+			"Chrome|26",
 			"Firefox|13",
 			"Firefox|14",
 			"Firefox|15",
 			"Firefox|16",
 			"Firefox|17",
+			"Firefox|18",
 			"IE|7",
 			"IE|8",
 			"IE|9",
@@ -73,7 +75,8 @@
 			"Opera Mobile",
 			"BlackBerry|6",
 			"BlackBerry|7|0",
-			"BlackBerry|7|1"
+			"BlackBerry|7|1",
+			"Mobile Safari|5|0"
 		],
 		"desktop": [
 			"Chrome|20",
@@ -82,11 +85,13 @@
 			"Chrome|23",
 			"Chrome|24",
 			"Chrome|25",
+			"Chrome|26",
 			"Firefox|13",
 			"Firefox|14",
 			"Firefox|15",
 			"Firefox|16",
 			"Firefox|17",
+			"Firefox|18",
 			"IE|7",
 			"IE|8",
 			"IE|9",
@@ -117,7 +122,8 @@
 			"Opera Mobile",
 			"BlackBerry|6",
 			"BlackBerry|7|0",
-			"BlackBerry|7|1"
+			"BlackBerry|7|1",
+			"Mobile Safari|5|0"
 		],
 		"native": [		
 			"Android|2|2",
