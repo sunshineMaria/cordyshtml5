@@ -85,7 +85,7 @@
 
 		this.putData = function(data) {
 			var objects = ($.isArray(data)) ? data : getObjects(data, self.objectName);
-			if (objects.length == 0 && (typeof(data) === "object")) objects = [data];
+			if (objects.length == 0 && (typeof(data) === "object")) objects = (data.length) ? [data] : [];
 			if (objects.length > 0) {
 				if (typeof(self[self.objectName]) === "function") { // in case of knockout
 					if (self.isReadOnly !== true || opts.fields){
